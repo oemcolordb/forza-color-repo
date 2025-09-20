@@ -1,0 +1,5 @@
+{
+  "name": "Forza Color Repo",
+  "description": "A web application to visualize car colors from a comprehensive spreadsheet, designed with an aesthetic inspired by the Forza Horizon 5 user interface. Users can browse, search, and filter a vast collection of realistic car colors.",
+  "requestFramePermissions": []
+}
