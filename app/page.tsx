@@ -40,7 +40,7 @@ export default function HomePage() {
     const loadColors = async () => {
       try {
         const colorData = await measureAsync('Load Color Data', async () => {
-          const { default: data } = await import('../../services/colorData')
+          const { default: data } = await import('../services/colorData')
           return data
         })
         
