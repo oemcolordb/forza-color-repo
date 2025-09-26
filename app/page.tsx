@@ -10,6 +10,7 @@ import ShareButton from './components/ShareButton'
 import ExportButton from './components/ExportButton'
 import { SecurityHeaders } from './components/SecurityHeaders'
 import { useAnalytics } from './hooks/useAnalytics'
+import LazyColorGrid from './components/LazyColorGrid'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -261,26 +262,13 @@ export default function HomePage() {
         
         {displayedColors.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {displayedColors.map((color, index) => {
-                const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`
-                return (
-                  <div 
-                    key={`${colorId}-${index}`}
-                    className="animate-fade-in"
-                    style={{ animationDelay: `${(index % ITEMS_PER_PAGE) * 50}ms` }}
-                  >
-                    <ColorCard 
-                      color={color} 
-                      onSelect={handleColorSelect}
-                      isFavorite={favorites.includes(colorId)}
-                      onToggleFavorite={() => toggleFavorite(colorId)}
-                      isDarkMode={isDarkMode}
-                    />
-                  </div>
-                )
-              })}
-            </div>
+            <LazyColorGrid
+              colors={displayedColors}
+              favorites={favorites}
+              onColorSelect={handleColorSelect}
+              onToggleFavorite={toggleFavorite}
+              isDarkMode={isDarkMode}
+            />
             
             {/* Loading indicator */}
             {hasMore && (

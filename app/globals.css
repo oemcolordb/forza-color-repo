@@ -1,4 +1,4 @@
-@tailwind base;
+@import './critical.css';
 @tailwind components;
 @tailwind utilities;
 

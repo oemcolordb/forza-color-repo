@@ -30,11 +30,11 @@ const ColorCard: React.FC<ColorCardProps> = ({
   const yearDisplay = color.year && color.year > 0 ? ` (${color.year})` : ''
 
   return (
-    <div className={`rounded-lg shadow-lg overflow-hidden transition-all duration-500 group flex flex-col hover:scale-105 hover:-translate-y-2 animate-fade-in ${
+    <div className={`rounded-lg shadow-lg overflow-hidden transition-transform duration-300 group flex flex-col will-change-transform hover:scale-105 animate-fade-in ${
       isDarkMode 
-        ? 'bg-slate-800/80 border border-slate-700 hover:shadow-slate-700/50 hover:shadow-2xl' 
-        : 'bg-white border border-gray-200 hover:shadow-gray-300/50 hover:shadow-2xl'
-    } hover:shadow-xl hover:border-fuchsia-500/30`}>
+        ? 'bg-slate-800/80 border border-slate-700' 
+        : 'bg-white border border-gray-200'
+    }`}>
       <div className="h-32 w-full relative overflow-hidden group-hover:animate-pulse" style={{ background: gradient }}>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
       </div>

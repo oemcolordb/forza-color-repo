@@ -8,7 +8,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_GEMINI_API_KEY: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
   },
-  // Enable build caching
+  // Performance optimizations
   experimental: {
     turbo: {
       rules: {
@@ -18,6 +18,26 @@ const nextConfig = {
         },
       },
     },
+    optimizeCss: true,
+    scrollRestoration: true,
+  },
+  // Bundle optimization
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      }
+    }
+    
+    // Tree shaking optimization
+    config.optimization = {
+      ...config.optimization,
+      usedExports: true,
+      sideEffects: false,
+    }
+    
+    return config
   },
 }
 
