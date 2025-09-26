@@ -49,7 +49,7 @@ export default function HomePage() {
   }, [isDarkMode])
 
   const makes = useMemo(() => {
-    const uniqueMakes = [...new Set(colors.map(color => color.make))]
+    const uniqueMakes = Array.from(new Set(colors.map(color => color.make)))
     return uniqueMakes.sort()
   }, [colors])
 
