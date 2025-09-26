@@ -18,7 +18,6 @@ const nextConfig = {
         },
       },
     },
-    optimizeCss: true,
     scrollRestoration: true,
   },
   // Bundle optimization
