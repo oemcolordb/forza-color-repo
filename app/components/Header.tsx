@@ -17,10 +17,10 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
       >
         {isDarkMode ? '☀️' : '🌙'}
       </button>
-      <h1 className={`text-4xl md:text-6xl font-bold tracking-tight ${
+      <h1 className={`text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up ${
         isDarkMode ? 'text-slate-100' : 'text-gray-900'
       }`}>
-        <span className="bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-transparent bg-clip-text">
+        <span className="bg-gradient-to-r from-fuchsia-500 via-purple-500 to-cyan-400 bg-[length:200%_200%] animate-gradient text-transparent bg-clip-text">
           Forza Color Universe
         </span>
       </h1>

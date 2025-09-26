@@ -160,14 +160,19 @@ export default function HomePage() {
               {paginatedColors.map((color, index) => {
                 const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`
                 return (
-                  <ColorCard 
-                    key={`${colorId}-${index}-${currentPage}`} 
-                    color={color} 
-                    onSelect={setSelectedColor}
-                    isFavorite={favorites.includes(colorId)}
-                    onToggleFavorite={() => toggleFavorite(colorId)}
-                    isDarkMode={isDarkMode}
-                  />
+                  <div 
+                    key={`${colorId}-${index}-${currentPage}`}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <ColorCard 
+                      color={color} 
+                      onSelect={setSelectedColor}
+                      isFavorite={favorites.includes(colorId)}
+                      onToggleFavorite={() => toggleFavorite(colorId)}
+                      isDarkMode={isDarkMode}
+                    />
+                  </div>
                 )
               })}
             </div>
@@ -224,11 +229,11 @@ export default function HomePage() {
       {/* Simple Modal */}
       {selectedColor && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 animate-fade-in"
           onClick={() => setSelectedColor(null)}
         >
           <div 
-            className="bg-slate-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative p-8 border border-slate-700"
+            className="bg-slate-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative p-8 border border-slate-700 animate-bounce-in"
             onClick={(e) => e.stopPropagation()}
           >
             <button 
