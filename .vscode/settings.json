@@ -14,5 +14,11 @@
         "amazonQChatPairProgramming": true,
         "amazonQSelectDeveloperProfile": true
     },
-    "amazonQ.telemetry": false
+    "amazonQ.telemetry": true,
+    "amazonQ.mcpServers": {
+        "context7": {
+            "command": "npx",
+            "args": ["@upstash/context7-mcp"]
+        }
+    }
 }
