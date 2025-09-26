@@ -11,14 +11,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Forza Color Universe',
+    default: 'Forza Color Universe - 10,000+ Official Automotive Paint Colors',
     template: '%s | Forza Color Universe'
   },
-  description: 'Explore 10,000+ official automotive colors from Forza racing games. Interactive color catalog with detailed information about paint colors, manufacturers, and visual representations.',
-  keywords: ['Forza', 'colors', 'automotive', 'paint', 'racing', 'cars', 'color palette'],
-  authors: [{ name: 'ResinRonin' }],
+  description: 'Discover and explore over 10,000 official automotive paint colors from Forza racing games. Search by manufacturer, model, year, or upload images to find matching car colors. Complete HSB color data included.',
+  keywords: [
+    'Forza colors', 'automotive paint colors', 'car colors', 'racing game colors',
+    'paint codes', 'automotive color database', 'car paint matching', 'HSB color values',
+    'Ferrari colors', 'Porsche colors', 'BMW colors', 'Mercedes colors',
+    'color picker', 'automotive design', 'car customization', 'paint reference'
+  ],
+  authors: [{ name: 'ResinRonin', url: 'https://github.com/ResinRonin' }],
   creator: 'ResinRonin',
-  publisher: 'ResinRonin',
+  publisher: 'Forza Color Universe',
+  category: 'Automotive Tools',
   robots: {
     index: true,
     follow: true,
@@ -33,20 +39,32 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_APP_URL,
-    title: 'Forza Color Universe',
-    description: 'Explore 10,000+ official automotive colors from Forza racing games',
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app',
+    title: 'Forza Color Universe - 10,000+ Official Automotive Paint Colors',
+    description: 'Discover and explore over 10,000 official automotive paint colors from Forza racing games. Search, filter, and find matching colors with our advanced tools.',
     siteName: 'Forza Color Universe',
+    images: [{
+      url: '/og-image.jpg',
+      width: 1200,
+      height: 630,
+      alt: 'Forza Color Universe - Automotive Color Database'
+    }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Forza Color Universe',
-    description: 'Explore 10,000+ official automotive colors from Forza racing games',
+    title: 'Forza Color Universe - 10,000+ Official Automotive Paint Colors',
+    description: 'Discover and explore over 10,000 official automotive paint colors from Forza racing games.',
     creator: '@ResinRonin',
+    images: ['/og-image.jpg']
   },
-  verification: {
-    google: 'your-google-verification-code',
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'
   },
+  other: {
+    'application-name': 'Forza Color Universe',
+    'apple-mobile-web-app-title': 'Forza Colors',
+    'msapplication-TileColor': '#0f172a'
+  }
 }
 
 export const viewport: Viewport = {
@@ -65,6 +83,32 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Forza Color Universe",
+    "description": "Discover and explore over 10,000 official automotive paint colors from Forza racing games",
+    "url": process.env.NEXT_PUBLIC_APP_URL || "https://forza-colors.netlify.app",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Person",
+      "name": "ResinRonin"
+    },
+    "featureList": [
+      "10,000+ automotive paint colors",
+      "Image color matching",
+      "Advanced search and filtering",
+      "HSB color values",
+      "Manufacturer and model data"
+    ]
+  }
+
   return (
     <html lang="en" className={inter.variable}>
       <head>
@@ -72,6 +116,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       <body className={`${inter.className} antialiased`}>
         <ErrorBoundary>

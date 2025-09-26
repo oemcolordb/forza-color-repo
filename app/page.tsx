@@ -15,6 +15,7 @@ import LazyColorGrid from './components/LazyColorGrid'
 import ModelBrowser from './components/ModelBrowser'
 import LoadingSpinner from './components/LoadingSpinner'
 import ImageColorExtractor from './components/ImageColorExtractor'
+import Breadcrumbs from './components/Breadcrumbs'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -265,8 +266,14 @@ export default function HomePage() {
       <SecurityHeaders />
       <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
       
+      {/* SEO Content */}
+      <section className="sr-only">
+        <h1>Forza Color Universe - Official Automotive Paint Colors Database</h1>
+        <p>Explore over 10,000 official automotive paint colors from Forza racing games. Search by manufacturer like Ferrari, Porsche, BMW, Mercedes, and more. Find exact HSB color values, upload images for color matching, and discover the perfect automotive paint for your project.</p>
+      </section>
+      
       {/* Filter Controls */}
-      <div className={`p-4 ${isDarkMode ? 'bg-slate-900/50' : 'bg-white/80'} backdrop-blur-sm sticky top-0 z-10`}>
+      <nav className={`p-4 ${isDarkMode ? 'bg-slate-900/50' : 'bg-white/80'} backdrop-blur-sm sticky top-0 z-10`} role="search" aria-label="Color search and filters">
         <div className="container mx-auto flex flex-col sm:flex-row gap-4 items-center">
           <div className="relative w-full sm:w-1/3">
             <input
@@ -339,14 +346,21 @@ export default function HomePage() {
             🎨 Image Match
           </button>
         </div>
-      </div>
+      </nav>
 
-      <main className="container mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="container mx-auto p-4 sm:p-6 lg:p-8" role="main">
+        <Breadcrumbs 
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Automotive Colors', current: true }
+          ]}
+          isDarkMode={isDarkMode}
+        />
         {/* Recently Viewed Colors */}
         {colorHistory.length > 0 && (
-          <div className="mb-8">
-            <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              🕒 Recently Viewed
+          <section className="mb-8" aria-labelledby="recent-colors-heading">
+            <h2 id="recent-colors-heading" className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+              🕒 Recently Viewed Colors
             </h2>
             <div className="flex gap-3 overflow-x-auto pb-2">
               {colorHistory.slice(0, 10).map((color, index) => {
@@ -372,14 +386,14 @@ export default function HomePage() {
                 )
               })}
             </div>
-          </div>
+          </section>
         )}
         
         {/* Image Color Extractor */}
         {showImageExtractor && (
-          <div className="mb-8">
-            <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              🎨 Image Color Matching
+          <section className="mb-8" aria-labelledby="image-extractor-heading">
+            <h2 id="image-extractor-heading" className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+              🎨 Image Color Matching Tool
             </h2>
             <ImageColorExtractor
               colors={colors}
@@ -388,15 +402,15 @@ export default function HomePage() {
               showTutorial={showTutorial}
               onTutorialClose={handleTutorialClose}
             />
-          </div>
+          </section>
         )}
         
         {/* Image Match Results */}
         {imageMatchedColors.length > 0 && (
-          <div className="mb-8">
+          <section className="mb-8" aria-labelledby="matched-colors-heading">
             <div className="flex items-center justify-between mb-4">
-              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-                🎯 Matched Colors ({imageMatchedColors.length} found)
+              <h2 id="matched-colors-heading" className={`text-xl font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+                🎯 Matched Automotive Colors ({imageMatchedColors.length} found)
               </h2>
               <button
                 onClick={clearImageResults}
@@ -409,30 +423,32 @@ export default function HomePage() {
                 Clear Results
               </button>
             </div>
-          </div>
+          </section>
         )}
         
         {/* Color Statistics */}
         {!loading && colors.length > 0 && (
-          <div className="mb-8">
+          <section className="mb-8" aria-labelledby="color-stats-heading">
+            <h2 id="color-stats-heading" className="sr-only">Color Database Statistics</h2>
             <ColorStats 
               colors={colors}
               favorites={favorites}
               colorHistory={colorHistory}
               isDarkMode={isDarkMode}
             />
-          </div>
+          </section>
         )}
         
         {/* Model Browser */}
         {!loading && colors.length > 0 && (
-          <div className="mb-8">
+          <section className="mb-8" aria-labelledby="model-browser-heading">
+            <h2 id="model-browser-heading" className="sr-only">Browse Colors by Vehicle Model</h2>
             <ModelBrowser 
               colors={colors}
               isDarkMode={isDarkMode}
               onModelSelect={handleModelSelect}
             />
-          </div>
+          </section>
         )}
         
         {displayedColors.length > 0 ? (
