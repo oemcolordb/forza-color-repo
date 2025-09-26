@@ -30,7 +30,7 @@ export const getMakes = async (): Promise<string[]> => {
   }
 
   const colors = await getColorData();
-  const uniqueMakes = [...new Set(colors.map(color => color.make))];
+  const uniqueMakes = Array.from(new Set(colors.map(color => color.make)));
   makesCache = uniqueMakes.sort();
   return makesCache;
 };
