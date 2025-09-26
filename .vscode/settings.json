@@ -1,24 +1,12 @@
 {
-    "CodeGPT.apiKey": "Google AI Studio",
-    "amazonQ.suppressPrompts": {
-        "createCredentialsProfile": true,
-        "codeWhispererNewWelcomeMessage": true,
-        "codeWhispererConnectionExpired": true,
-        "amazonQWelcomePage": true,
-        "amazonQSessionConfigurationMessage": true,
-        "minIdeVersion": true,
-        "ssoCacheError": true,
-        "amazonQLspManifestMessage": true,
-        "amazonQWorkspaceLspManifestMessage": true,
-        "amazonQChatDisclaimer": true,
-        "amazonQChatPairProgramming": true,
-        "amazonQSelectDeveloperProfile": true
-    },
-    "amazonQ.telemetry": true,
-    "amazonQ.mcpServers": {
-        "context7": {
-            "command": "npx",
-            "args": ["@upstash/context7-mcp"]
-        }
+  "mcp.servers": {
+    "forza-color-server": {
+      "command": "node",
+      "args": ["server.js"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "timeout": 30000
     }
+  }
 }

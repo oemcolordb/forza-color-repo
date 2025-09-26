@@ -1,29 +1,71 @@
 /* Critical CSS - Above the fold styles only */
 @tailwind base;
 
-/* Essential layout */
-.min-h-screen { min-height: 100vh; }
-.font-sans { font-family: ui-sans-serif, system-ui, sans-serif; }
-.transition-colors { transition-property: color, background-color, border-color; }
-.duration-300 { transition-duration: 300ms; }
+/* Custom CSS variables for theme consistency */
+:root {
+  --color-primary: #3b82f6;
+  --color-secondary: #8b5cf6;
+  --color-accent: #06b6d4;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+}
 
-/* Header styles */
-.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-.text-6xl { font-size: 3.75rem; line-height: 1; }
-.font-bold { font-weight: 700; }
-.tracking-tight { letter-spacing: -0.025em; }
-.text-center { text-align: center; }
-.py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+/* Dark mode variables */
+.dark {
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+}
 
-/* Background colors */
-.bg-slate-900 { background-color: rgb(15 23 42); }
-.bg-gray-50 { background-color: rgb(249 250 251); }
-.text-white { color: rgb(255 255 255); }
-.text-gray-900 { color: rgb(17 24 39); }
+/* Light mode variables */
+.light {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+}
 
-/* Gradient */
-.bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
-.from-fuchsia-500 { --tw-gradient-from: #d946ef; --tw-gradient-to: rgb(217 70 239 / 0); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
-.to-cyan-400 { --tw-gradient-to: #22d3ee; }
-.text-transparent { color: transparent; }
-.bg-clip-text { background-clip: text; }
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for accessibility */
+.focus-visible:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Error states */
+.error {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}

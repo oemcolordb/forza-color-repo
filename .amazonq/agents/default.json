@@ -1,0 +1,53 @@
+{
+  "name": "q_ide_default",
+  "description": "Default agent configuration",
+  "prompt": "",
+  "mcpServers": {
+    "forza-color-repo": {
+      "command": "mcp-server-filesystem",
+      "disabled": false,
+      "timeout": 30000000,
+      "args": [
+        "c:\\Users\\B1lliBong\\Documents\\forza-color-repo"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "MCP_ROOT_PATH": "c:\\Users\\B1lliBong\\Documents\\forza-color-repo"
+      }
+    }
+  },
+  "tools": [
+    "fs_read",
+    "execute_bash",
+    "fs_write",
+    "report_issue",
+    "use_aws",
+    "@forza-color-repo"
+  ],
+  "toolAliases": {},
+  "allowedTools": [
+    "fs_read",
+    "report_issue",
+    "use_aws",
+    "execute_bash",
+    "fs_write"
+  ],
+  "toolsSettings": {
+    "use_aws": {
+      "preset": "readOnly"
+    },
+    "execute_bash": {
+      "preset": "readOnly"
+    }
+  },
+  "resources": [
+    "file://AmazonQ.md",
+    "file://README.md",
+    "file://.amazonq/rules/**/*.md"
+  ],
+  "hooks": {
+    "agentSpawn": [],
+    "userPromptSubmit": []
+  },
+  "useLegacyMcpJson": true
+}

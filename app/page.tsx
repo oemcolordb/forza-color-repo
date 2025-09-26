@@ -10,8 +10,10 @@ import ShareButton from './components/ShareButton'
 import ExportButton from './components/ExportButton'
 import { SecurityHeaders } from './components/SecurityHeaders'
 import { useAnalytics } from './hooks/useAnalytics'
+import { usePerformance } from './hooks/usePerformance'
 import LazyColorGrid from './components/LazyColorGrid'
 import ModelBrowser from './components/ModelBrowser'
+import LoadingSpinner from './components/LoadingSpinner'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -29,11 +31,16 @@ export default function HomePage() {
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 50
   const { track } = useAnalytics()
+  const { measureAsync } = usePerformance()
 
   useEffect(() => {
     const loadColors = async () => {
       try {
-        const { default: colorData } = await import('../services/colorData')
+        const colorData = await measureAsync('Load Color Data', async () => {
+          const { default: data } = await import('../../services/colorData')
+          return data
+        })
+        
         setColors(colorData)
         setDisplayedColors(colorData.slice(0, ITEMS_PER_PAGE))
         setHasMore(colorData.length > ITEMS_PER_PAGE)
@@ -201,10 +208,11 @@ export default function HomePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-fuchsia-500 mx-auto mb-4"></div>
-          <p>Loading colors...</p>
-        </div>
+        <LoadingSpinner 
+          size="lg" 
+          color="white" 
+          text="Loading 10,000+ colors..." 
+        />
       </div>
     )
   }
