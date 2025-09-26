@@ -222,8 +222,13 @@ export default function HomePage() {
             </h2>
             <div className="flex gap-3 overflow-x-auto pb-2">
               {colorHistory.slice(0, 10).map((color, index) => {
-                const [h1, s1, l1] = [color.color1.h * 360, color.color1.s * 100, color.color1.b * 100]
-                const [h2, s2, l2] = [color.color2.h * 360, color.color2.s * 100, color.color2.b * 100]
+                const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => {
+                  const l = b * (1 - s / 2)
+                  const newS = l === 0 || l === 1 ? 0 : (b - l) / Math.min(l, 1 - l)
+                  return [h * 360, newS * 100, l * 100]
+                }
+                const [h1, s1, l1] = hsbToHsl(color.color1.h, color.color1.s, color.color1.b)
+                const [h2, s2, l2] = hsbToHsl(color.color2.h, color.color2.s, color.color2.b)
                 const gradient = `linear-gradient(45deg, hsl(${h1}, ${s1}%, ${l1}%), hsl(${h2}, ${s2}%, ${l2}%))`
                 
                 return (
