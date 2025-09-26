@@ -5,6 +5,8 @@ interface ImageColorExtractorProps {
   colors: CarColor[]
   onColorsFound: (matchedColors: CarColor[]) => void
   isDarkMode: boolean
+  showTutorial?: boolean
+  onTutorialClose?: () => void
 }
 
 interface ExtractedColor {
@@ -20,7 +22,9 @@ interface ExtractedColor {
 const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   colors,
   onColorsFound,
-  isDarkMode
+  isDarkMode,
+  showTutorial = false,
+  onTutorialClose
 }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
@@ -163,7 +167,41 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   }, [processImage])
 
   return (
-    <div className={`p-6 rounded-lg border-2 border-dashed transition-colors ${
+    <>
+      {/* Tutorial Overlay */}
+      {showTutorial && (
+        <div className={`mb-4 p-4 rounded-lg border-l-4 ${
+          isDarkMode 
+            ? 'bg-blue-900/30 border-blue-400 text-blue-100' 
+            : 'bg-blue-50 border-blue-400 text-blue-800'
+        }`}>
+          <div className="flex items-start justify-between">
+            <div>
+              <h4 className="font-semibold mb-2">How to use Image Color Matching:</h4>
+              <ol className="text-sm space-y-1 list-decimal list-inside">
+                <li>Upload a photo (car, color swatch, or any image)</li>
+                <li>We'll extract the dominant colors automatically</li>
+                <li>See matching automotive paint colors from 10,000+ options</li>
+                <li>Click any result to view detailed color information</li>
+              </ol>
+            </div>
+            {onTutorialClose && (
+              <button
+                onClick={onTutorialClose}
+                className={`ml-4 text-sm px-2 py-1 rounded ${
+                  isDarkMode 
+                    ? 'text-blue-300 hover:bg-blue-800' 
+                    : 'text-blue-600 hover:bg-blue-100'
+                } transition-colors`}
+              >
+                Got it
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+      
+      <div className={`p-6 rounded-lg border-2 border-dashed transition-colors ${
       dragActive 
         ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-900/20' 
         : isDarkMode 
@@ -234,8 +272,9 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             </div>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

@@ -32,6 +32,7 @@ export default function HomePage() {
   const [page, setPage] = useState(1)
   const [imageMatchedColors, setImageMatchedColors] = useState<CarColor[]>([])
   const [showImageExtractor, setShowImageExtractor] = useState(false)
+  const [showTutorial, setShowTutorial] = useState(false)
   const ITEMS_PER_PAGE = 50
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
@@ -88,6 +89,12 @@ export default function HomePage() {
     
     const theme = localStorage.getItem('forza-theme')
     setIsDarkMode(theme === 'dark')
+    
+    // Show tutorial on first image extractor use
+    const hasSeenTutorial = localStorage.getItem('forza-image-tutorial')
+    if (!hasSeenTutorial) {
+      setShowTutorial(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -217,6 +224,21 @@ export default function HomePage() {
     setPage(1)
   }, [filteredColors])
 
+  const handleTutorialClose = useCallback(() => {
+    setShowTutorial(false)
+    localStorage.setItem('forza-image-tutorial', 'seen')
+  }, [])
+
+  const toggleImageExtractor = useCallback(() => {
+    const newState = !showImageExtractor
+    setShowImageExtractor(newState)
+    
+    // Show tutorial when opening for first time
+    if (newState && !localStorage.getItem('forza-image-tutorial')) {
+      setShowTutorial(true)
+    }
+  }, [showImageExtractor])
+
   const themeClasses = isDarkMode 
     ? 'text-blue-100' 
     : 'text-blue-900'
@@ -303,7 +325,7 @@ export default function HomePage() {
           </div>
           <ExportButton favorites={favorites} isDarkMode={isDarkMode} />
           <button
-            onClick={() => setShowImageExtractor(!showImageExtractor)}
+            onClick={toggleImageExtractor}
             className={`px-4 py-2 rounded-md transition-colors ${
               showImageExtractor
                 ? isDarkMode
@@ -363,6 +385,8 @@ export default function HomePage() {
               colors={colors}
               onColorsFound={handleImageColorsFound}
               isDarkMode={isDarkMode}
+              showTutorial={showTutorial}
+              onTutorialClose={handleTutorialClose}
             />
           </div>
         )}
