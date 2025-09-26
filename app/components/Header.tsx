@@ -18,23 +18,23 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
         {isDarkMode ? '☀️' : '🌙'}
       </button>
       <h1 className={`text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up ${
-        isDarkMode ? 'text-slate-100' : 'text-gray-900'
+        isDarkMode ? 'text-blue-100' : 'text-blue-900'
       }`}>
-        <span className="bg-gradient-to-r from-fuchsia-500 via-purple-500 to-cyan-400 bg-[length:200%_200%] animate-gradient text-transparent bg-clip-text">
+        <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 bg-[length:200%_200%] animate-gradient text-transparent bg-clip-text">
           Forza Color Universe
         </span>
       </h1>
       <p className={`mt-4 text-lg max-w-2xl mx-auto ${
-        isDarkMode ? 'text-slate-300' : 'text-gray-600'
+        isDarkMode ? 'text-blue-200' : 'text-blue-700'
       }`}>
         10 Thousand official manufacturer colors
       </p>
       <div className={`mt-6 text-center ${
-        isDarkMode ? 'text-slate-400' : 'text-gray-500'
+        isDarkMode ? 'text-blue-300' : 'text-blue-600'
       }`}>
         <p className="text-sm">
           Created by{' '}
-          <span className="font-bold text-fuchsia-500">
+          <span className="font-bold text-blue-400">
             ResinRonin
           </span>
         </p>

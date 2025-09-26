@@ -24,6 +24,7 @@ export default function HomePage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [colorHistory, setColorHistory] = useState<CarColor[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [backgroundColors, setBackgroundColors] = useState({ dark: '', light: '' })
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 50
   const { track } = useAnalytics()
@@ -35,6 +36,24 @@ export default function HomePage() {
         setColors(colorData)
         setDisplayedColors(colorData.slice(0, ITEMS_PER_PAGE))
         setHasMore(colorData.length > ITEMS_PER_PAGE)
+        
+        // Generate random background colors from color data
+        const randomColor1 = colorData[Math.floor(Math.random() * colorData.length)]
+        const randomColor2 = colorData[Math.floor(Math.random() * colorData.length)]
+        
+        const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => {
+          const l = b * (1 - s / 2)
+          const newS = l === 0 || l === 1 ? 0 : (b - l) / Math.min(l, 1 - l)
+          return [h * 360, newS * 100, l * 100]
+        }
+        
+        const [h1, s1, l1] = hsbToHsl(randomColor1.color1.h, randomColor1.color1.s, randomColor1.color1.b)
+        const [h2, s2, l2] = hsbToHsl(randomColor2.color1.h, randomColor2.color1.s, randomColor2.color1.b)
+        
+        setBackgroundColors({
+          dark: `hsl(${h1}, ${Math.min(s1, 30)}%, ${Math.min(l1, 15)}%)`,
+          light: `linear-gradient(135deg, hsl(${h1}, ${Math.min(s1, 60)}%, ${Math.max(l1, 85)}%), hsl(${h2}, ${Math.min(s2, 60)}%, ${Math.max(l2, 85)}%))`
+        })
       } catch (error) {
         console.error('Failed to load colors:', error)
       } finally {
@@ -164,8 +183,13 @@ export default function HomePage() {
   }, [addToHistory, track])
 
   const themeClasses = isDarkMode 
-    ? 'bg-slate-900 text-white' 
-    : 'bg-gray-50 text-gray-900'
+    ? 'text-blue-100' 
+    : 'text-blue-900'
+    
+  const backgroundStyle = {
+    background: isDarkMode ? backgroundColors.dark : backgroundColors.light,
+    minHeight: '100vh'
+  }
 
   if (loading) {
     return (
@@ -179,7 +203,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-300 ${themeClasses}`}>
+    <div className={`font-sans transition-all duration-500 ${themeClasses}`} style={backgroundStyle}>
       <SecurityHeaders />
       <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
       
