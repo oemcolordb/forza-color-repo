@@ -11,6 +11,7 @@ import ExportButton from './components/ExportButton'
 import { SecurityHeaders } from './components/SecurityHeaders'
 import { useAnalytics } from './hooks/useAnalytics'
 import LazyColorGrid from './components/LazyColorGrid'
+import ModelBrowser from './components/ModelBrowser'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -182,6 +183,12 @@ export default function HomePage() {
     track({ action: 'view', colorName: color.colorName, make: color.make })
   }, [addToHistory, track])
 
+  const handleModelSelect = useCallback((make: string, model: string) => {
+    setSelectedMake(make)
+    setSelectedModel(model)
+    setSearchQuery('')
+  }, [])
+
   const themeClasses = isDarkMode 
     ? 'text-blue-100' 
     : 'text-blue-900'
@@ -311,6 +318,17 @@ export default function HomePage() {
               favorites={favorites}
               colorHistory={colorHistory}
               isDarkMode={isDarkMode}
+            />
+          </div>
+        )}
+        
+        {/* Model Browser */}
+        {!loading && colors.length > 0 && (
+          <div className="mb-8">
+            <ModelBrowser 
+              colors={colors}
+              isDarkMode={isDarkMode}
+              onModelSelect={handleModelSelect}
             />
           </div>
         )}
