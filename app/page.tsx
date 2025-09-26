@@ -17,6 +17,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMake, setSelectedMake] = useState('')
+  const [selectedModel, setSelectedModel] = useState('')
   const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
   const [hasMore, setHasMore] = useState(true)
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null)
@@ -73,6 +74,12 @@ export default function HomePage() {
     return uniqueMakes.sort()
   }, [colors])
 
+  const models = useMemo(() => {
+    const filteredByMake = selectedMake ? colors.filter(color => color.make === selectedMake) : colors
+    const uniqueModels = Array.from(new Set(filteredByMake.map(color => color.model)))
+    return uniqueModels.sort()
+  }, [colors, selectedMake])
+
   const filteredColors = useMemo(() => {
     return colors.filter(color => {
       const searchLower = searchQuery.toLowerCase()
@@ -84,10 +91,15 @@ export default function HomePage() {
         (color.colorType && color.colorType.toLowerCase().includes(searchLower))
 
       const matchesMake = !selectedMake || color.make === selectedMake
+      const matchesModel = !selectedModel || color.model === selectedModel
 
-      return matchesSearch && matchesMake
+      return matchesSearch && matchesMake && matchesModel
     })
   }, [colors, searchQuery, selectedMake])
+
+  useEffect(() => {
+    setSelectedModel('') // Reset model when make changes
+  }, [selectedMake])
 
   useEffect(() => {
     setPage(1)
@@ -174,7 +186,7 @@ export default function HomePage() {
       {/* Filter Controls */}
       <div className={`p-4 ${isDarkMode ? 'bg-slate-900/50' : 'bg-white/80'} backdrop-blur-sm sticky top-0 z-10`}>
         <div className="container mx-auto flex flex-col sm:flex-row gap-4 items-center">
-          <div className="relative w-full sm:w-1/2">
+          <div className="relative w-full sm:w-1/3">
             <input
               type="text"
               placeholder="Search by color, make, model..."
@@ -192,7 +204,7 @@ export default function HomePage() {
               isDarkMode ? 'text-slate-400' : 'text-gray-500'
             }`}>🔍</span>
           </div>
-          <div className="relative w-full sm:w-1/2">
+          <div className="relative w-full sm:w-1/3">
             <select
               value={selectedMake}
               onChange={(e) => setSelectedMake(e.target.value)}
@@ -207,6 +219,25 @@ export default function HomePage() {
               <option value="">All Manufacturers</option>
               {makes.map(make => (
                 <option key={make} value={make}>{make}</option>
+              ))}
+            </select>
+          </div>
+          <div className="relative w-full sm:w-1/3">
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              disabled={!selectedMake}
+              className={`w-full ${
+                isDarkMode 
+                  ? 'bg-slate-800 border-slate-700 text-slate-100' 
+                  : 'bg-white border-gray-300 text-gray-900'
+              } border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 ${
+                isDarkMode ? 'focus:ring-fuchsia-500 focus:border-fuchsia-500' : 'focus:ring-blue-500 focus:border-blue-500'
+              } transition-colors disabled:opacity-50`}
+            >
+              <option value="">{selectedMake ? 'All Models' : 'Select Make First'}</option>
+              {models.map(model => (
+                <option key={model} value={model}>{model}</option>
               ))}
             </select>
           </div>
