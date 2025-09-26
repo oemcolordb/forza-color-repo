@@ -30,7 +30,17 @@
     "report_issue",
     "use_aws",
     "execute_bash",
-    "fs_write"
+    "fs_write",
+    "@forza-color-repo/read_file",
+    "@forza-color-repo/read_text_file",
+    "@forza-color-repo/read_media_file",
+    "@forza-color-repo/read_multiple_files",
+    "@forza-color-repo/list_directory",
+    "@forza-color-repo/list_directory_with_sizes",
+    "@forza-color-repo/directory_tree",
+    "@forza-color-repo/search_files",
+    "@forza-color-repo/get_file_info",
+    "@forza-color-repo/list_allowed_directories"
   ],
   "toolsSettings": {
     "use_aws": {

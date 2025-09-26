@@ -20,8 +20,8 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
       <h1 className={`text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up ${
         isDarkMode ? 'text-blue-100' : 'text-blue-900'
       }`}>
-        <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 bg-[length:200%_200%] animate-gradient text-transparent bg-clip-text">
-          Forza Color Universe
+        <span className="bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 bg-[length:200%_200%] animate-gradient text-transparent bg-clip-text hover:animate-pulse transition-all duration-300">
+          🎨 Forza Color Universe
         </span>
       </h1>
       <p className={`mt-4 text-lg max-w-2xl mx-auto ${

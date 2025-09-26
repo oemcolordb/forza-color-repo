@@ -15,6 +15,9 @@ import ModelBrowser from './components/ModelBrowser'
 import LoadingSpinner from './components/LoadingSpinner'
 import ImageColorExtractor from './components/ImageColorExtractor'
 import Breadcrumbs from './components/Breadcrumbs'
+import ColorRandomizer from './components/ColorRandomizer'
+import ColorPalette from './components/ColorPalette'
+import ColorTrends from './components/ColorTrends'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -438,7 +441,21 @@ export default function HomePage() {
           </section>
         )}
         
-        {/* Model Browser */}
+        {/* Fun Features Section */}
+          <div className="grid lg:grid-cols-3 gap-6 mb-8">
+            <ColorRandomizer 
+              colors={filteredColors} 
+              onColorSelect={(color) => {
+                setSelectedColor(color)
+                track({ action: 'view', colorName: color.colorName, make: color.make })
+              }}
+              isDarkMode={isDarkMode} 
+            />
+            <ColorPalette colors={colors} isDarkMode={isDarkMode} />
+            <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
+          </div>
+
+          {/* Model Browser */}
         {!loading && colors.length > 0 && (
           <section className="mb-8" aria-labelledby="model-browser-heading">
             <h2 id="model-browser-heading" className="sr-only">Browse Colors by Vehicle Model</h2>
