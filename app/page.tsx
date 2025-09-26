@@ -15,6 +15,7 @@ export default function HomePage() {
   const [hasMore, setHasMore] = useState(true)
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
+  const [colorHistory, setColorHistory] = useState<CarColor[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 50
@@ -38,6 +39,9 @@ export default function HomePage() {
   useEffect(() => {
     const saved = localStorage.getItem('forza-favorites')
     if (saved) setFavorites(JSON.parse(saved))
+    
+    const history = localStorage.getItem('forza-history')
+    if (history) setColorHistory(JSON.parse(history))
     
     const theme = localStorage.getItem('forza-theme')
     setIsDarkMode(theme === 'dark')
@@ -118,6 +122,22 @@ export default function HomePage() {
     setIsDarkMode(prev => !prev)
   }, [])
 
+  const addToHistory = useCallback((color: CarColor) => {
+    setColorHistory(prev => {
+      const filtered = prev.filter(c => 
+        !(c.make === color.make && c.model === color.model && c.colorName === color.colorName && c.year === color.year)
+      )
+      const newHistory = [color, ...filtered].slice(0, 20) // Keep last 20
+      localStorage.setItem('forza-history', JSON.stringify(newHistory))
+      return newHistory
+    })
+  }, [])
+
+  const handleColorSelect = useCallback((color: CarColor) => {
+    addToHistory(color)
+    setSelectedColor(color)
+  }, [addToHistory])
+
   const themeClasses = isDarkMode 
     ? 'bg-slate-900 text-white' 
     : 'bg-gray-50 text-gray-900'
@@ -180,6 +200,34 @@ export default function HomePage() {
       </div>
 
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
+        {/* Recently Viewed Colors */}
+        {colorHistory.length > 0 && (
+          <div className="mb-8">
+            <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+              🕒 Recently Viewed
+            </h2>
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {colorHistory.slice(0, 10).map((color, index) => {
+                const [h1, s1, l1] = [color.color1.h * 360, color.color1.s * 100, color.color1.b * 100]
+                const [h2, s2, l2] = [color.color2.h * 360, color.color2.s * 100, color.color2.b * 100]
+                const gradient = `linear-gradient(45deg, hsl(${h1}, ${s1}%, ${l1}%), hsl(${h2}, ${s2}%, ${l2}%))`
+                
+                return (
+                  <button
+                    key={`history-${index}`}
+                    onClick={() => handleColorSelect(color)}
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg border-2 transition-all hover:scale-110 ${
+                      isDarkMode ? 'border-slate-600 hover:border-fuchsia-400' : 'border-gray-300 hover:border-fuchsia-500'
+                    }`}
+                    style={{ background: gradient }}
+                    title={`${color.colorName} - ${color.make}`}
+                  />
+                )
+              })}
+            </div>
+          </div>
+        )}
+        
         {displayedColors.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -193,7 +241,7 @@ export default function HomePage() {
                   >
                     <ColorCard 
                       color={color} 
-                      onSelect={setSelectedColor}
+                      onSelect={handleColorSelect}
                       isFavorite={favorites.includes(colorId)}
                       onToggleFavorite={() => toggleFavorite(colorId)}
                       isDarkMode={isDarkMode}
