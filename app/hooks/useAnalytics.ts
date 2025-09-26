@@ -47,7 +47,7 @@ export const useAnalytics = () => {
         }, {})
       
       return Object.entries(colorViews)
-        .sort(([,a], [,b]) => b - a)
+        .sort(([,a], [,b]) => (b as number) - (a as number))
         .slice(0, 20)
     } catch {
       return []

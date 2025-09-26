@@ -6,6 +6,9 @@ import Header from './components/Header'
 import ColorCard from './components/ColorCard'
 import Footer from './components/Footer'
 import ColorStats from './components/ColorStats'
+import ShareButton from './components/ShareButton'
+import ExportButton from './components/ExportButton'
+import { SecurityHeaders } from './components/SecurityHeaders'
 import { useAnalytics } from './hooks/useAnalytics'
 
 export default function HomePage() {
@@ -164,6 +167,7 @@ export default function HomePage() {
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-300 ${themeClasses}`}>
+      <SecurityHeaders />
       <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
       
       {/* Filter Controls */}
@@ -205,6 +209,7 @@ export default function HomePage() {
               ))}
             </select>
           </div>
+          <ExportButton favorites={favorites} isDarkMode={isDarkMode} />
         </div>
       </div>
 
@@ -314,12 +319,15 @@ export default function HomePage() {
             className="bg-slate-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative p-8 border border-slate-700 animate-bounce-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
-              onClick={() => setSelectedColor(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
-            >
-              ✕
-            </button>
+            <div className="absolute top-4 right-4 flex gap-2">
+              <ShareButton color={selectedColor} isDarkMode={isDarkMode} />
+              <button 
+                onClick={() => setSelectedColor(null)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
             <h2 className="text-3xl font-bold text-slate-100 bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-transparent bg-clip-text mb-2">
               {selectedColor.colorName}
             </h2>
