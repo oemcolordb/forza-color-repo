@@ -1,10 +1,9 @@
-const colorData = require('../../services/colorData')
-
 exports.handler = async (event, context) => {
   const { query, make, page = 1, limit = 50 } = event.queryStringParameters || {}
   
   try {
-    let filtered = colorData.default || colorData
+    const { default: colorData } = await import('../../services/colorData.js')
+    let filtered = colorData
     
     if (query || make) {
       const searchLower = query?.toLowerCase() || ''

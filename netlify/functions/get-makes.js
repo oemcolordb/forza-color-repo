@@ -1,8 +1,7 @@
-const colorData = require('../../services/colorData')
-
 exports.handler = async (event, context) => {
   try {
-    const colors = colorData.default || colorData
+    const { default: colorData } = await import('../../services/colorData.js')
+    const colors = colorData
     const uniqueMakes = Array.from(new Set(colors.map(color => color.make)))
     const sortedMakes = uniqueMakes.sort()
     

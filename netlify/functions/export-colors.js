@@ -1,10 +1,9 @@
-const colorData = require('../../services/colorData')
-
 exports.handler = async (event, context) => {
   const { format = 'json', favorites } = event.queryStringParameters || {}
   
   try {
-    let colors = colorData.default || colorData
+    const { default: colorData } = await import('../../services/colorData.js')
+    let colors = colorData
     
     // Filter to favorites if provided
     if (favorites) {
