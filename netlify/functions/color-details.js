@@ -19,18 +19,16 @@ exports.handler = async (event, context) => {
   }
   
   try {
-    const { GoogleGenAI } = require('@google/genai')
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+    const { GoogleGenerativeAI } = require('@google/generative-ai')
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
     
     const carInfo = `${make}${model ? ` ${model}` : ''}${year && year > 0 ? ` (${year})` : ''}`
     const prompt = `Brief fact about "${colorName}" color on ${carInfo}. Max 40 words.`
     
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: [{ parts: [{ text: prompt }] }],
-    })
-    
-    const details = response.text || 'No details available'
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+    const result = await model.generateContent(prompt)
+    const response = await result.response
+    const details = response.text() || 'No details available'
     
     return {
       statusCode: 200,
