@@ -1,0 +1,819 @@
+{
+  "title": "Classic Library",
+  "bodyText": "CONTACT US:\n858-909-2110\nSUPPORT@AUTOCOLORLIBRARY.COM\n $0.00\nCLASSIC LIBRARY\n\nSelect your cars year and make to search color books\n\nSelect Year\n1950\n1951\n1952\n1953\n1954\n1955\n1956\n1957\n1958\n1959\n1960\n1961\n1962\n1963\n1964\n1965\n1966\n1967\n1968\n1969\n1970\n1971\n1972\n1973\n1974\n1975\n1976\n1977\nOnline chips are for reference only.\nActual color may vary\n\n\nRESET SEARCH\nOur History\n\nTCP Global’s Auto Color Library is the world’s largest online auto paint color reference library in the world. The Auto Color Library Slogan “Where yesterday’s colors come alive today” is true! They provide the actual automotive paint color standard reference chips for nearly all makes and models since automobiles were made, all the way back to the year 1900 and all the way up to the current automobiles made now.\n\nContact\n6251 Howdy Wells Ave.\nLas Vegas, NV 89115\n\n858-909-2110\nsupport@autocolorlibrary.com\nCustomer Support\n\nMonday thru Friday: 7am to 5pm\nSaturday: 7am to 4pm\n\nInformation Links\nSupport Information\nPrivacy Policy\nReturns/Disclaimer\n\nAll Sales Final - Please verify all color information prior to placing order. All mixed paint colors are considered custom and are not returnable. TCP Global assumes no liability for color match problems after the coating has been applied.\n\nOnline chip pages are for reference only, actualy color may vary.\n\nTech Sheets\nAcrylic Enamel Tech Sheet\nAcrylic Urethane Tech Sheet\nAcrylic Lacquer Tech Sheet\nUrethane Basecoat Tech Sheet\nUBLV Tech Sheet\nSDS Sheets\nAcrylic Enamel SDS Sheet\nAcrylic Urethane SDS Sheet\nAcrylic Lacquer SDS Sheet\nUrethane Basecoat SDS Sheet\nUBLV SDS Sheet\nUrethane Metallic Colors MSDS Sheet\nUrethane Pearl Colors MSDS Sheet\nOUR OTHER SITES:\nTCP GLOBAL\nCUSTOM SHOP\nRESTORATION SHOP\nMASTER AIRBRUSH\nDURA GOLD",
+  "allLinks": [
+    {
+      "text": "858-909-2110",
+      "href": "tel:858-909-2110",
+      "className": ""
+    },
+    {
+      "text": "SUPPORT@AUTOCOLORLIBRARY.COM",
+      "href": "mailto:support@autocolorlibrary.com",
+      "className": ""
+    },
+    {
+      "text": "",
+      "href": "https://www.autocolorlibrary.com/",
+      "className": ""
+    },
+    {
+      "text": "",
+      "href": "https://www.autocolorlibrary.com/cart",
+      "className": "price"
+    },
+    {
+      "text": "$0.00",
+      "href": "https://www.autocolorlibrary.com/cart",
+      "className": ""
+    },
+    {
+      "text": "",
+      "href": "https://www.autocolorlibrary.com/",
+      "className": ""
+    },
+    {
+      "text": "Reset Search",
+      "href": "https://www.autocolorlibrary.com/",
+      "className": ""
+    },
+    {
+      "text": "858-909-2110",
+      "href": "tel:858-909-2110",
+      "className": ""
+    },
+    {
+      "text": "support@autocolorlibrary.com",
+      "href": "mailto:support@autocolorlibrary.com",
+      "className": ""
+    },
+    {
+      "text": "Support Information",
+      "href": "https://tcpglobal.com/pages/support-information",
+      "className": ""
+    },
+    {
+      "text": "Privacy Policy",
+      "href": "https://tcpglobal.com/pages/privacy-policy",
+      "className": ""
+    },
+    {
+      "text": "Acrylic Enamel Tech Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-AE_TDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Acrylic Urethane Tech Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-AU_TDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Acrylic Lacquer Tech Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-AL_TDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Urethane Basecoat Tech Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-UB_TDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "UBLV Tech Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-UBLV_TDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Acrylic Enamel SDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-AE_SDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Acrylic Urethane SDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-AU_SDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Acrylic Lacquer SDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-AL_SDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Urethane Basecoat SDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-UB_SDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "UBLV SDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-UBLV_SDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Urethane Metallic Colors MSDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-UB-MET_MSDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "Urethane Pearl Colors MSDS Sheet",
+      "href": "https://images.tcpglobal.com/sds-sheets/RSP/RSP-UB-PEARL_MSDS.pdf",
+      "className": ""
+    },
+    {
+      "text": "TCP GLOBAL",
+      "href": "https://tcpglobal.com/",
+      "className": ""
+    },
+    {
+      "text": "CUSTOM SHOP",
+      "href": "https://tcpglobal.com/pages/brand-custom-shop",
+      "className": ""
+    },
+    {
+      "text": "RESTORATION SHOP",
+      "href": "https://tcpglobal.com/pages/restoration-shop",
+      "className": ""
+    },
+    {
+      "text": "MASTER AIRBRUSH",
+      "href": "https://tcpglobal.com/pages/brand-master-airbrush",
+      "className": ""
+    },
+    {
+      "text": "DURA GOLD",
+      "href": "https://tcpglobal.com/pages/brand-dura-gold",
+      "className": ""
+    }
+  ],
+  "allElements": [
+    {
+      "tag": "TITLE",
+      "className": "",
+      "id": "",
+      "text": "Classic Library",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "",
+      "text": "window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.start');",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "shopify-features",
+      "text": "{\"accessToken\":\"878fe99c1964c1fb0822c5fe68c1a9e8\",\"betas\":[\"rich-media-storefront-analytics\"],\"domain\":\"www.autocolorlibrary.com\",\"predictiveSearch\":true,\"shopId\":4013129763,\"locale\":\"en\"}",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "",
+      "text": "!function(o){(o.Shopify=o.Shopify||{}).modules=!0}(window);",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "",
+      "text": "!function(o){function n(){var o=[];function n(){o.push(Array.prototype.slice.apply(arguments))}return n.q=o,n}var t=o.Shopify=o.Shopify||{};t.loadFeatures=n(),t.autoloadFeatures=n()}(window);",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "",
+      "text": "window.ShopifyPay = window.ShopifyPay || {};\n  window.ShopifyPay.apiHost = \"shop.app\\/pay\";\n  window.ShopifyPay.redirectState = null;",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "shop-js-analytics",
+      "text": "{\"pageType\":\"page\"}",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "",
+      "text": "window.ShopifyPaypalV4VisibilityTracking = true;",
+      "hasHref": false
+    },
+    {
+      "tag": "SCRIPT",
+      "className": "",
+      "id": "",
+      "text": "window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.end');",
+      "hasHref": false
+    },
+    {
+      "tag": "NOSCRIPT",
+      "className": "",
+      "id": "",
+      "text": "<iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-NZWWNX6D\"\nheight=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe>",
+      "hasHref": false
+    },
+    {
+      "tag": "DIV",
+      "className": "top-bar align-center",
+      "id": "",
+      "text": "CONTACT US:\n    858-909-2110\n    SUPPORT@AUTOCOLORLIBRARY.COM",
+      "hasHref": false
+    },
+    {
+      "tag": "UL",
+      "className": "menu align-center",
+      "id": "",
+      "text": "CONTACT US:\n    858-909-2110\n    SUPPORT@AUTOCOLORLIBRARY.COM",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "CONTACT US:",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "CONTACT US:",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "858-909-2110",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "858-909-2110",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "SUPPORT@AUTOCOLORLIBRARY.COM",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "SUPPORT@AUTOCOLORLIBRARY.COM",
+      "hasHref": true
+    },
+    {
+      "tag": "DIV",
+      "className": "border-title",
+      "id": "",
+      "text": "Classic Library",
+      "hasHref": false
+    },
+    {
+      "tag": "H2",
+      "className": "",
+      "id": "",
+      "text": "Classic Library",
+      "hasHref": false
+    },
+    {
+      "tag": "P",
+      "className": "page-title",
+      "id": "",
+      "text": "Select your cars year and make to search color books",
+      "hasHref": false
+    },
+    {
+      "tag": "DIV",
+      "className": "options",
+      "id": "",
+      "text": "Select Year\n1950\n1951\n1952\n1953\n1954\n1955\n1956\n1957\n1958\n1959\n1960\n1961\n1962\n1963\n1964\n1965\n1966\n1967\n1968\n1969\n1970\n1971\n1972\n1973\n1974\n1975\n1976\n1977",
+      "hasHref": false
+    },
+    {
+      "tag": "SELECT",
+      "className": "custom-select form-control-sm product",
+      "id": "",
+      "text": "Select Year\n1950\n1951\n1952\n1953\n1954\n1955\n1956\n1957\n1958\n1959\n1960\n1961\n1962\n1963\n1964\n1965\n1966\n1967\n1968\n1969\n1970\n1971\n1972\n1973\n1974\n1975\n1976\n1977",
+      "hasHref": false
+    },
+    {
+      "tag": "OPTION",
+      "className": "",
+      "id": "",
+      "text": "Select Year",
+      "hasHref": false
+    },
+    {
+      "tag": "SPAN",
+      "className": "",
+      "id": "",
+      "text": "Online chips are for reference only. Actual color may vary",
+      "hasHref": false
+    },
+    {
+      "tag": "STRONG",
+      "className": "",
+      "id": "",
+      "text": "Online chips are for reference only. Actual color may vary",
+      "hasHref": false
+    },
+    {
+      "tag": "CENTER",
+      "className": "",
+      "id": "",
+      "text": "Reset Search",
+      "hasHref": false
+    },
+    {
+      "tag": "BUTTON",
+      "className": "btn",
+      "id": "",
+      "text": "Reset Search",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Reset Search",
+      "hasHref": true
+    },
+    {
+      "tag": "H4",
+      "className": "",
+      "id": "",
+      "text": "Our History",
+      "hasHref": false
+    },
+    {
+      "tag": "H4",
+      "className": "",
+      "id": "",
+      "text": "Contact",
+      "hasHref": false
+    },
+    {
+      "tag": "ADDRESS",
+      "className": "",
+      "id": "",
+      "text": "6251 Howdy Wells Ave.\n            Las Vegas, NV 89115\n          \n          858-909-2110\n    \t  support@autocolorlibrary.com",
+      "hasHref": false
+    },
+    {
+      "tag": "UL",
+      "className": "footer-service",
+      "id": "",
+      "text": "858-909-2110\n    \t  support@autocolorlibrary.com",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "858-909-2110",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "858-909-2110",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "support@autocolorlibrary.com",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "support@autocolorlibrary.com",
+      "hasHref": true
+    },
+    {
+      "tag": "H5",
+      "className": "",
+      "id": "",
+      "text": "Customer Support",
+      "hasHref": false
+    },
+    {
+      "tag": "P",
+      "className": "",
+      "id": "",
+      "text": "Monday thru Friday: 7am to 5pm\n          Saturday: 7am to 4pm",
+      "hasHref": false
+    },
+    {
+      "tag": "H4",
+      "className": "",
+      "id": "",
+      "text": "Information Links",
+      "hasHref": false
+    },
+    {
+      "tag": "UL",
+      "className": "footer-service",
+      "id": "",
+      "text": "Support Information\n          Privacy Policy",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Support Information",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Support Information",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Privacy Policy",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Privacy Policy",
+      "hasHref": true
+    },
+    {
+      "tag": "H5",
+      "className": "",
+      "id": "",
+      "text": "Returns/Disclaimer",
+      "hasHref": false
+    },
+    {
+      "tag": "STRONG",
+      "className": "",
+      "id": "",
+      "text": "Returns/Disclaimer",
+      "hasHref": false
+    },
+    {
+      "tag": "EM",
+      "className": "",
+      "id": "",
+      "text": "Returns/Disclaimer",
+      "hasHref": false
+    },
+    {
+      "tag": "STRONG",
+      "className": "",
+      "id": "",
+      "text": "All Sales Final",
+      "hasHref": false
+    },
+    {
+      "tag": "H4",
+      "className": "",
+      "id": "",
+      "text": "Tech Sheets",
+      "hasHref": false
+    },
+    {
+      "tag": "UL",
+      "className": "tech-sheets",
+      "id": "",
+      "text": "Acrylic Enamel Tech Sheet\n          Acrylic Urethane Tech Sheet\n          Acrylic Lacquer Tech Sheet\n          Urethane Basecoat Tech Sheet\n          UBLV Tech Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Enamel Tech Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Enamel Tech Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Urethane Tech Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Urethane Tech Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Lacquer Tech Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Lacquer Tech Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Urethane Basecoat Tech Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Urethane Basecoat Tech Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "UBLV Tech Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "UBLV Tech Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "H4",
+      "className": "",
+      "id": "",
+      "text": "SDS Sheets",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Enamel SDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Enamel SDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Urethane SDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Urethane SDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Lacquer SDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Acrylic Lacquer SDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Urethane Basecoat SDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Urethane Basecoat SDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "UBLV SDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "UBLV SDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Urethane Metallic Colors MSDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Urethane Metallic Colors MSDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "Urethane Pearl Colors MSDS Sheet",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "Urethane Pearl Colors MSDS Sheet",
+      "hasHref": true
+    },
+    {
+      "tag": "DIV",
+      "className": "bottom-bar align-center",
+      "id": "",
+      "text": "OUR OTHER SITES:\n    TCP GLOBAL\n    CUSTOM SHOP\n    RESTORATION SHOP\n    MASTER AIRBRUSH\n    DURA GOLD",
+      "hasHref": false
+    },
+    {
+      "tag": "UL",
+      "className": "menu align-center",
+      "id": "",
+      "text": "OUR OTHER SITES:\n    TCP GLOBAL\n    CUSTOM SHOP\n    RESTORATION SHOP\n    MASTER AIRBRUSH\n    DURA GOLD",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "OUR OTHER SITES:",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "OUR OTHER SITES:",
+      "hasHref": false
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "TCP GLOBAL",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "TCP GLOBAL",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "CUSTOM SHOP",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "CUSTOM SHOP",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "RESTORATION SHOP",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "RESTORATION SHOP",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "MASTER AIRBRUSH",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "MASTER AIRBRUSH",
+      "hasHref": true
+    },
+    {
+      "tag": "LI",
+      "className": "",
+      "id": "",
+      "text": "DURA GOLD",
+      "hasHref": false
+    },
+    {
+      "tag": "A",
+      "className": "",
+      "id": "",
+      "text": "DURA GOLD",
+      "hasHref": true
+    },
+    {
+      "tag": "STYLE",
+      "className": "",
+      "id": "",
+      "text": ".tech-sheets li {\n   font-size: .9em;\n\n}",
+      "hasHref": false
+    }
+  ],
+  "scripts": [
+    "https://www.clarity.ms/tag/s5othfot7b?ref=gtm",
+    "https://scripts.clarity.ms/0.8.30/clarity.js",
+    "https://www.clarity.ms/tag/s5othfot7b?ref=gtm",
+    "https://www.clarity.ms/tag/s5othfot7b?ref=gtm",
+    "https://www.googletagmanager.com/gtag/js?id=G-GHEH6TDJLS&cx=c&gtm=4e59n2",
+    "https://www.clarity.ms/tag/s5othfot7b?ref=gtm",
+    "https://www.clarity.ms/tag/s5othfot7b?ref=gtm",
+    "https://www.clarity.ms/tag/s5othfot7b?ref=gtm",
+    "https://www.autocolorlibrary.com/cdn/s/trekkie.storefront.ae499d7c18801354d4ba37cec962a2ab045df942.min.js",
+    "https://www.googletagmanager.com/gtm.js?id=GTM-NZWWNX6D",
+    "https://www.autocolorlibrary.com/checkouts/internal/preloads.js?locale=en-US",
+    "https://shop.app/checkouts/internal/preloads.js?locale=en-US&shop_id=4013129763",
+    "https://www.autocolorlibrary.com/cdn/shopifycloud/shop-js/modules/v2/client.init-shop-cart-sync_DN_eQ4h7.en.esm.js",
+    "https://www.autocolorlibrary.com/cdn/shopifycloud/shop-js/modules/v2/chunk.common_DPl_Tb2O.esm.js",
+    "https://www.autocolorlibrary.com/cdn/shopifycloud/storefront/assets/storefront/load_feature-81c60534.js",
+    "https://www.autocolorlibrary.com/cdn/shopifycloud/storefront/assets/shopify_pay/storefront-65b4c6d7.js?v=20250812",
+    "https://www.autocolorlibrary.com/cdn/wpm/ba678f985wf512d8e4p074b229bma05a5fb0l.js",
+    "https://www.autocolorlibrary.com/cdn/shopifycloud/storefront/assets/shop_events_listener-abeef7a0.js",
+    "https://www.autocolorlibrary.com/cdn/shopifycloud/perf-kit/shopify-perf-kit-2.0.8.min.js",
+    "https://www.autocolorlibrary.com/web-pixels@a678f985wf512d8e4p074b229bma05a5fb0/app/web-pixel-229605411@b2a88bafab3e21179ed38636efcd8a93/pixel.legacy.js",
+    "https://www.autocolorlibrary.com/cdn/shop/t/5/assets/jquery.js?v=146653844047132007351573844442",
+    "https://www.autocolorlibrary.com/cdn/shop/t/5/assets/easyResponsiveTabs.js?v=128628909891489378101573844445",
+    "https://www.autocolorlibrary.com/cdn/shop/t/5/assets/main.js?v=157995929724725536161577228925",
+    "https://www.autocolorlibrary.com/cdn/shop/t/5/assets/scripts.js?v=48074346221110806341744735956",
+    "https://www.googletagmanager.com/gtag/js?id=G-GHEH6TDJLS"
+  ],
+  "forms": [
+    {
+      "action": "https://www.autocolorlibrary.com/pages/classic-library",
+      "method": "post",
+      "inputs": []
+    }
+  ]
+}

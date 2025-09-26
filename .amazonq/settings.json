@@ -1,0 +1,12 @@
+{
+  "contextWindow": {
+    "maxTokens": 100000,
+    "prioritizeRecent": true,
+    "autoTruncate": true
+  },
+  "memoryOptimization": {
+    "enableLazyLoading": true,
+    "chunkSize": 1000,
+    "maxFileSize": "50KB"
+  }
+}
