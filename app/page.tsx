@@ -5,6 +5,8 @@ import type { CarColor } from './types/color'
 import Header from './components/Header'
 import ColorCard from './components/ColorCard'
 import Footer from './components/Footer'
+import ColorStats from './components/ColorStats'
+import { useAnalytics } from './hooks/useAnalytics'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -19,6 +21,7 @@ export default function HomePage() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [page, setPage] = useState(1)
   const ITEMS_PER_PAGE = 50
+  const { track } = useAnalytics()
 
   useEffect(() => {
     const loadColors = async () => {
@@ -34,6 +37,11 @@ export default function HomePage() {
       }
     }
     loadColors()
+    
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+    }
   }, [])
 
   useEffect(() => {
@@ -136,7 +144,8 @@ export default function HomePage() {
   const handleColorSelect = useCallback((color: CarColor) => {
     addToHistory(color)
     setSelectedColor(color)
-  }, [addToHistory])
+    track({ action: 'view', colorName: color.colorName, make: color.make })
+  }, [addToHistory, track])
 
   const themeClasses = isDarkMode 
     ? 'bg-slate-900 text-white' 
@@ -225,6 +234,18 @@ export default function HomePage() {
                 )
               })}
             </div>
+          </div>
+        )}
+        
+        {/* Color Statistics */}
+        {!loading && colors.length > 0 && (
+          <div className="mb-8">
+            <ColorStats 
+              colors={colors}
+              favorites={favorites}
+              colorHistory={colorHistory}
+              isDarkMode={isDarkMode}
+            />
           </div>
         )}
         
