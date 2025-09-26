@@ -14,6 +14,7 @@ import { usePerformance } from './hooks/usePerformance'
 import LazyColorGrid from './components/LazyColorGrid'
 import ModelBrowser from './components/ModelBrowser'
 import LoadingSpinner from './components/LoadingSpinner'
+import ImageColorExtractor from './components/ImageColorExtractor'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -29,6 +30,8 @@ export default function HomePage() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [backgroundColors, setBackgroundColors] = useState({ dark: '', light: '' })
   const [page, setPage] = useState(1)
+  const [imageMatchedColors, setImageMatchedColors] = useState<CarColor[]>([])
+  const [showImageExtractor, setShowImageExtractor] = useState(false)
   const ITEMS_PER_PAGE = 50
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
@@ -129,26 +132,29 @@ export default function HomePage() {
   }, [selectedMake])
 
   useEffect(() => {
-    setPage(1)
-    setDisplayedColors(filteredColors.slice(0, ITEMS_PER_PAGE))
-    setHasMore(filteredColors.length > ITEMS_PER_PAGE)
-  }, [filteredColors])
+    if (imageMatchedColors.length === 0) {
+      setPage(1)
+      setDisplayedColors(filteredColors.slice(0, ITEMS_PER_PAGE))
+      setHasMore(filteredColors.length > ITEMS_PER_PAGE)
+    }
+  }, [filteredColors, imageMatchedColors.length])
 
   const loadMore = useCallback(() => {
     if (!hasMore || loading) return
     
     const nextPage = page + 1
     const startIndex = (nextPage - 1) * ITEMS_PER_PAGE
-    const newColors = filteredColors.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+    const sourceColors = imageMatchedColors.length > 0 ? imageMatchedColors : filteredColors
+    const newColors = sourceColors.slice(startIndex, startIndex + ITEMS_PER_PAGE)
     
     if (newColors.length > 0) {
       setDisplayedColors(prev => [...prev, ...newColors])
       setPage(nextPage)
-      setHasMore(startIndex + ITEMS_PER_PAGE < filteredColors.length)
+      setHasMore(startIndex + ITEMS_PER_PAGE < sourceColors.length)
     } else {
       setHasMore(false)
     }
-  }, [filteredColors, page, hasMore, loading])
+  }, [filteredColors, imageMatchedColors, page, hasMore, loading])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -195,6 +201,21 @@ export default function HomePage() {
     setSelectedModel(model)
     setSearchQuery('')
   }, [])
+
+  const handleImageColorsFound = useCallback((matchedColors: CarColor[]) => {
+    setImageMatchedColors(matchedColors)
+    setDisplayedColors(matchedColors.slice(0, ITEMS_PER_PAGE))
+    setHasMore(matchedColors.length > ITEMS_PER_PAGE)
+    setPage(1)
+    track({ action: 'image_color_match', colorsFound: matchedColors.length })
+  }, [track])
+
+  const clearImageResults = useCallback(() => {
+    setImageMatchedColors([])
+    setDisplayedColors(filteredColors.slice(0, ITEMS_PER_PAGE))
+    setHasMore(filteredColors.length > ITEMS_PER_PAGE)
+    setPage(1)
+  }, [filteredColors])
 
   const themeClasses = isDarkMode 
     ? 'text-blue-100' 
@@ -281,6 +302,20 @@ export default function HomePage() {
             </select>
           </div>
           <ExportButton favorites={favorites} isDarkMode={isDarkMode} />
+          <button
+            onClick={() => setShowImageExtractor(!showImageExtractor)}
+            className={`px-4 py-2 rounded-md transition-colors ${
+              showImageExtractor
+                ? isDarkMode
+                  ? 'bg-fuchsia-600 text-white'
+                  : 'bg-fuchsia-500 text-white'
+                : isDarkMode
+                  ? 'bg-slate-700 text-slate-200 hover:bg-slate-600'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            🎨 Image Match
+          </button>
         </div>
       </div>
 
@@ -314,6 +349,41 @@ export default function HomePage() {
                   />
                 )
               })}
+            </div>
+          </div>
+        )}
+        
+        {/* Image Color Extractor */}
+        {showImageExtractor && (
+          <div className="mb-8">
+            <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+              🎨 Image Color Matching
+            </h2>
+            <ImageColorExtractor
+              colors={colors}
+              onColorsFound={handleImageColorsFound}
+              isDarkMode={isDarkMode}
+            />
+          </div>
+        )}
+        
+        {/* Image Match Results */}
+        {imageMatchedColors.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+                🎯 Matched Colors ({imageMatchedColors.length} found)
+              </h2>
+              <button
+                onClick={clearImageResults}
+                className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                  isDarkMode
+                    ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                Clear Results
+              </button>
             </div>
           </div>
         )}

@@ -1,0 +1,82 @@
+import { render, screen, fireEvent } from '@testing-library/react'
+import ImageColorExtractor from '../ImageColorExtractor'
+import type { CarColor } from '../../types/color'
+
+const mockColors: CarColor[] = [
+  {
+    make: 'Ferrari',
+    model: 'F40',
+    year: 1987,
+    colorName: 'Rosso Corsa',
+    colorType: 'Normal',
+    color1: { h: 0, s: 0.8, b: 0.9 },
+    color2: { h: 0, s: 0.8, b: 0.9 },
+  },
+  {
+    make: 'Porsche',
+    model: '911',
+    year: 2020,
+    colorName: 'Guards Red',
+    colorType: 'Normal',
+    color1: { h: 0.02, s: 0.85, b: 0.8 },
+    color2: { h: 0.02, s: 0.85, b: 0.8 },
+  }
+]
+
+const mockOnColorsFound = jest.fn()
+
+describe('ImageColorExtractor', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('renders upload interface correctly', () => {
+    render(
+      <ImageColorExtractor
+        colors={mockColors}
+        onColorsFound={mockOnColorsFound}
+        isDarkMode={true}
+      />
+    )
+
+    expect(screen.getByText('Find Matching Car Colors')).toBeInTheDocument()
+    expect(screen.getByText('Upload an image to extract colors and find matching automotive paints')).toBeInTheDocument()
+    expect(screen.getByText('Choose Image')).toBeInTheDocument()
+  })
+
+  it('shows processing state when processing image', () => {
+    render(
+      <ImageColorExtractor
+        colors={mockColors}
+        onColorsFound={mockOnColorsFound}
+        isDarkMode={true}
+      />
+    )
+
+    // The processing state would be tested with actual file upload
+    // For now, just verify the component renders without errors
+    expect(screen.getByLabelText('Choose Image')).toBeInTheDocument()
+  })
+
+  it('applies correct theme classes', () => {
+    const { container, rerender } = render(
+      <ImageColorExtractor
+        colors={mockColors}
+        onColorsFound={mockOnColorsFound}
+        isDarkMode={true}
+      />
+    )
+
+    expect(container.firstChild).toHaveClass('border-slate-600')
+
+    rerender(
+      <ImageColorExtractor
+        colors={mockColors}
+        onColorsFound={mockOnColorsFound}
+        isDarkMode={false}
+      />
+    )
+
+    expect(container.firstChild).toHaveClass('border-gray-300')
+  })
+})

@@ -1,0 +1,242 @@
+import React, { useState, useCallback } from 'react'
+import type { CarColor } from '../types/color'
+
+interface ImageColorExtractorProps {
+  colors: CarColor[]
+  onColorsFound: (matchedColors: CarColor[]) => void
+  isDarkMode: boolean
+}
+
+interface ExtractedColor {
+  r: number
+  g: number
+  b: number
+  h: number
+  s: number
+  l: number
+  count: number
+}
+
+const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
+  colors,
+  onColorsFound,
+  isDarkMode
+}) => {
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
+  const [dragActive, setDragActive] = useState(false)
+
+  const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => {
+    r /= 255
+    g /= 255
+    b /= 255
+    const max = Math.max(r, g, b)
+    const min = Math.min(r, g, b)
+    let h = 0, s = 0, l = (max + min) / 2
+
+    if (max !== min) {
+      const d = max - min
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break
+        case g: h = (b - r) / d + 2; break
+        case b: h = (r - g) / d + 4; break
+      }
+      h /= 6
+    }
+    return [h, s, l]
+  }
+
+  const extractColorsFromImage = (imageData: ImageData): ExtractedColor[] => {
+    const colorMap = new Map<string, number>()
+    const data = imageData.data
+
+    // Sample every 4th pixel for performance
+    for (let i = 0; i < data.length; i += 16) {
+      const r = data[i]
+      const g = data[i + 1]
+      const b = data[i + 2]
+      const alpha = data[i + 3]
+
+      if (alpha < 128) continue // Skip transparent pixels
+
+      const key = `${Math.floor(r/10)*10}-${Math.floor(g/10)*10}-${Math.floor(b/10)*10}`
+      colorMap.set(key, (colorMap.get(key) || 0) + 1)
+    }
+
+    return Array.from(colorMap.entries())
+      .map(([key, count]) => {
+        const [r, g, b] = key.split('-').map(Number)
+        const [h, s, l] = rgbToHsl(r, g, b)
+        return { r, g, b, h, s, l, count }
+      })
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10)
+  }
+
+  const findMatchingColors = (extractedColors: ExtractedColor[]): CarColor[] => {
+    const matches: Array<{ color: CarColor; score: number }> = []
+
+    extractedColors.forEach(extracted => {
+      colors.forEach(carColor => {
+        // Convert HSB to HSL for comparison
+        const carH = carColor.color1.h
+        const carS = carColor.color1.s
+        const carB = carColor.color1.b
+        const carL = carB * (1 - carS / 2)
+        const carSHsl = carL === 0 || carL === 1 ? 0 : (carB - carL) / Math.min(carL, 1 - carL)
+
+        // Calculate color distance
+        const hDiff = Math.min(Math.abs(extracted.h - carH), 1 - Math.abs(extracted.h - carH))
+        const sDiff = Math.abs(extracted.s - carSHsl)
+        const lDiff = Math.abs(extracted.l - carL)
+
+        const distance = Math.sqrt(hDiff * hDiff + sDiff * sDiff + lDiff * lDiff)
+        const score = (1 - distance) * extracted.count
+
+        if (distance < 0.3) { // Threshold for similarity
+          matches.push({ color: carColor, score })
+        }
+      })
+    })
+
+    return matches
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 20)
+      .map(match => match.color)
+  }
+
+  const processImage = useCallback(async (file: File) => {
+    setIsProcessing(true)
+    
+    try {
+      const img = new Image()
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')!
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve
+        img.onerror = reject
+        img.src = URL.createObjectURL(file)
+      })
+
+      // Resize for performance
+      const maxSize = 200
+      const scale = Math.min(maxSize / img.width, maxSize / img.height)
+      canvas.width = img.width * scale
+      canvas.height = img.height * scale
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
+      const extracted = extractColorsFromImage(imageData)
+      setExtractedColors(extracted)
+
+      const matchedColors = findMatchingColors(extracted)
+      onColorsFound(matchedColors)
+
+      URL.revokeObjectURL(img.src)
+    } catch (error) {
+      console.error('Error processing image:', error)
+    } finally {
+      setIsProcessing(false)
+    }
+  }, [colors, onColorsFound])
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setDragActive(false)
+    
+    const files = Array.from(e.dataTransfer.files)
+    const imageFile = files.find(file => file.type.startsWith('image/'))
+    
+    if (imageFile) {
+      processImage(imageFile)
+    }
+  }, [processImage])
+
+  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      processImage(file)
+    }
+  }, [processImage])
+
+  return (
+    <div className={`p-6 rounded-lg border-2 border-dashed transition-colors ${
+      dragActive 
+        ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-900/20' 
+        : isDarkMode 
+          ? 'border-slate-600 bg-slate-800/50' 
+          : 'border-gray-300 bg-gray-50'
+    }`}
+      onDrop={handleDrop}
+      onDragOver={(e) => { e.preventDefault(); setDragActive(true) }}
+      onDragLeave={() => setDragActive(false)}
+    >
+      <div className="text-center">
+        <div className={`mx-auto w-12 h-12 mb-4 rounded-full flex items-center justify-center ${
+          isDarkMode ? 'bg-slate-700' : 'bg-gray-200'
+        }`}>
+          🎨
+        </div>
+        
+        <h3 className={`text-lg font-semibold mb-2 ${
+          isDarkMode ? 'text-slate-200' : 'text-gray-800'
+        }`}>
+          Find Matching Car Colors
+        </h3>
+        
+        <p className={`text-sm mb-4 ${
+          isDarkMode ? 'text-slate-400' : 'text-gray-600'
+        }`}>
+          Upload an image to extract colors and find matching automotive paints
+        </p>
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileInput}
+          className="hidden"
+          id="image-upload"
+          disabled={isProcessing}
+        />
+        
+        <label
+          htmlFor="image-upload"
+          className={`inline-block px-4 py-2 rounded-md cursor-pointer transition-colors ${
+            isProcessing
+              ? 'bg-gray-400 cursor-not-allowed'
+              : isDarkMode
+                ? 'bg-fuchsia-600 hover:bg-fuchsia-700 text-white'
+                : 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
+          }`}
+        >
+          {isProcessing ? 'Processing...' : 'Choose Image'}
+        </label>
+
+        {extractedColors.length > 0 && (
+          <div className="mt-4">
+            <p className={`text-sm mb-2 ${
+              isDarkMode ? 'text-slate-300' : 'text-gray-700'
+            }`}>
+              Extracted Colors:
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {extractedColors.slice(0, 6).map((color, index) => (
+                <div
+                  key={index}
+                  className="w-8 h-8 rounded border-2 border-white shadow-sm"
+                  style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})` }}
+                  title={`RGB(${color.r}, ${color.g}, ${color.b})`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default ImageColorExtractor
