@@ -73,7 +73,7 @@ const ColorDetailsModal: React.FC<ColorDetailsModalProps> = ({ color, onClose })
             contents: [{ parts: [{ text: prompt }] }],
         });
 
-        const responseText = response.text;
+        const responseText = response.text || 'No details available';
         setDetails(responseText);
         
         // Cache the response
