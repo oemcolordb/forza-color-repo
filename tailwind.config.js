@@ -112,16 +112,9 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/aspect-ratio'),
-  ],
+  plugins: [],
   // Production optimizations
   future: {
     hoverOnlyWhenSupported: true,
-  },
-  experimental: {
-    optimizeUniversalDefaults: true,
   },
 }

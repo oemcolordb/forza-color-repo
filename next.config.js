@@ -18,9 +18,6 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
-    legacyBrowsers: false,
-    browsersListForSwc: true,
-    cpus: Math.max(1, (require('os').cpus() || { length: 1 }).length - 1),
   },
   // Compiler optimizations
   compiler: {
