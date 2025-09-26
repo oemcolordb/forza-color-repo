@@ -10,7 +10,7 @@ export const SecurityHeaders = () => {
 
     // Prevent clickjacking
     if (window.self !== window.top) {
-      window.top!.location = window.self.location
+      window.top!.location.href = window.self.location.href
     }
 
     return () => {
