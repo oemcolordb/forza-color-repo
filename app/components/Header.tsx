@@ -29,6 +29,19 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
       }`}>
         10 Thousand official manufacturer colors
       </p>
+      <div className={`mt-6 text-center ${
+        isDarkMode ? 'text-slate-400' : 'text-gray-500'
+      }`}>
+        <p className="text-sm">
+          Created by{' '}
+          <span className="font-bold text-fuchsia-500">
+            ResinRonin
+          </span>
+        </p>
+        <p className="text-xs mt-1 opacity-75">
+          Original Forza color data extraction and curation
+        </p>
+      </div>
     </header>
   )
 }

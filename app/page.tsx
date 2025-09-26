@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import type { CarColor } from './types/color'
 import Header from './components/Header'
 import ColorCard from './components/ColorCard'
+import Footer from './components/Footer'
 
 const ITEMS_PER_PAGE = 50
 
@@ -217,6 +218,8 @@ export default function HomePage() {
           </div>
         )}
       </main>
+      
+      <Footer isDarkMode={isDarkMode} />
 
       {/* Simple Modal */}
       {selectedColor && (
