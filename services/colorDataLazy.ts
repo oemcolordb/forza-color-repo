@@ -15,7 +15,7 @@ export const getColorData = (): Promise<CarColor[]> => {
 
   colorDataPromise = import('./colorData').then(module => {
     colorDataCache = module.default;
-    return colorDataCache;
+    return colorDataCache || [];
   });
 
   return colorDataPromise;
