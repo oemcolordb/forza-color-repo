@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import FilterControls from './components/FilterControls';
 import ColorCard from './components/ColorCard';
@@ -14,6 +14,14 @@ const App: React.FC = () => {
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const saved = localStorage.getItem('forza-favorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('forza-theme');
+    return saved === 'dark';
+  });
 
   const makes = useMemo(() => {
     const uniqueMakes = [...new Set(colorData.map((color) => color.make))];
@@ -40,18 +48,46 @@ const App: React.FC = () => {
     setCurrentPage(1);
   }, [searchQuery, selectedMake]);
 
+  useEffect(() => {
+    localStorage.setItem('forza-favorites', JSON.stringify(favorites));
+  }, [favorites]);
+
+  useEffect(() => {
+    localStorage.setItem('forza-theme', isDarkMode ? 'dark' : 'light');
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
+
+  const toggleFavorite = useCallback((colorId: string) => {
+    setFavorites(prev => 
+      prev.includes(colorId) 
+        ? prev.filter(id => id !== colorId)
+        : [...prev, colorId]
+    );
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setIsDarkMode(prev => !prev);
+  }, []);
+
   const totalPages = Math.ceil(filteredColors.length / ITEMS_PER_PAGE);
   const paginatedColors = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredColors.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredColors, currentPage]);
 
+  const themeClasses = isDarkMode 
+    ? 'bg-slate-900 text-white' 
+    : 'bg-gray-50 text-gray-900';
+    
+  const backgroundClasses = isDarkMode 
+    ? 'bg-slate-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)]'
+    : 'bg-gray-100 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)]';
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white font-sans">
-        <div className="absolute inset-0 -z-10 h-full w-full bg-slate-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+    <div className={`min-h-screen font-sans transition-colors duration-300 ${themeClasses}`}>
+      <div className={`absolute inset-0 -z-10 h-full w-full ${backgroundClasses} bg-[size:14px_24px]`}></div>
 
-      <Header />
+      <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
       <FilterControls
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -64,13 +100,19 @@ const App: React.FC = () => {
         {paginatedColors.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {paginatedColors.map((color, index) => (
-                <ColorCard 
-                  key={`${color.make}-${color.model}-${color.colorName}-${color.year}-${index}-${currentPage}`} 
-                  color={color} 
-                  onSelect={setSelectedColor}
-                />
-              ))}
+              {paginatedColors.map((color, index) => {
+                const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`;
+                return (
+                  <ColorCard 
+                    key={`${colorId}-${index}-${currentPage}`} 
+                    color={color} 
+                    onSelect={setSelectedColor}
+                    isFavorite={favorites.includes(colorId)}
+                    onToggleFavorite={() => toggleFavorite(colorId)}
+                    isDarkMode={isDarkMode}
+                  />
+                );
+              })}
             </div>
             <Pagination
               currentPage={currentPage}
@@ -80,15 +122,19 @@ const App: React.FC = () => {
           </>
         ) : (
           <div className="text-center py-20">
-            <h2 className="text-2xl font-semibold text-slate-400">No Colors Found</h2>
-            <p className="text-slate-500 mt-2">Try adjusting your search or filters.</p>
+            <h2 className={`text-2xl font-semibold ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+              No Colors Found
+            </h2>
+            <p className={`mt-2 ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
+              Try adjusting your search or filters.
+            </p>
           </div>
         )}
       </main>
       
       {selectedColor && <ColorDetailsModal color={selectedColor} onClose={() => setSelectedColor(null)} />}
 
-      <footer className="text-center py-6 text-slate-500 text-sm">
+      <footer className={`text-center py-6 text-sm ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
         <p>Forza Color Universe | Data sourced from community spreadsheets.</p>
       </footer>
     </div>

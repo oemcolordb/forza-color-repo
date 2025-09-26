@@ -10,7 +10,7 @@ const Header: React.FC = () => {
           </span>
         </h1>
         <p className="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">
-          Explore the official manufacturer colors found in the world of Forza.
+          10 Thousand official manufacturer colors thnx to Terronium-12,Frizbe,LazyLeaf420,ResinRonin
         </p>
     </header>
   );

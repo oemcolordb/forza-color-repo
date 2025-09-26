@@ -4,6 +4,9 @@ import type { CarColor } from '../types';
 interface ColorCardProps {
   color: CarColor;
   onSelect: (color: CarColor) => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+  isDarkMode?: boolean;
 }
 
 const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => {
@@ -18,7 +21,13 @@ const InfoIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
   </svg>
 );
 
-const ColorCard: React.FC<ColorCardProps> = ({ color, onSelect }) => {
+const ColorCard: React.FC<ColorCardProps> = ({ 
+  color, 
+  onSelect, 
+  isFavorite = false, 
+  onToggleFavorite,
+  isDarkMode = true 
+}) => {
   const [h1, s1, l1] = hsbToHsl(color.color1.h, color.color1.s, color.color1.b);
   const [h2, s2, l2] = hsbToHsl(color.color2.h, color.color2.s, color.color2.b);
 
@@ -29,7 +38,11 @@ const ColorCard: React.FC<ColorCardProps> = ({ color, onSelect }) => {
 
   return (
     <div 
-      className="rounded-lg shadow-lg bg-slate-800/80 border border-slate-700 overflow-hidden transition-shadow duration-300 group flex flex-col"
+      className={`rounded-lg shadow-lg overflow-hidden transition-all duration-300 group flex flex-col hover:scale-105 ${
+        isDarkMode 
+          ? 'bg-slate-800/80 border border-slate-700 hover:shadow-slate-700/50' 
+          : 'bg-white border border-gray-200 hover:shadow-gray-300/50'
+      } hover:shadow-xl`}
     >
       <div 
         className="h-32 w-full"
@@ -37,18 +50,54 @@ const ColorCard: React.FC<ColorCardProps> = ({ color, onSelect }) => {
       ></div>
       <div className="p-4 flex-grow flex flex-col justify-between">
         <div>
-          <h3 className="text-base font-bold text-slate-100 truncate">{color.colorName}</h3>
-          <p className="text-sm text-slate-400 truncate">{color.make}{modelDisplay}{yearDisplay}</p>
+          <h3 className={`text-base font-bold truncate ${
+            isDarkMode ? 'text-slate-100' : 'text-gray-900'
+          }`}>{color.colorName}</h3>
+          <p className={`text-sm truncate ${
+            isDarkMode ? 'text-slate-400' : 'text-gray-600'
+          }`}>{color.make}{modelDisplay}{yearDisplay}</p>
         </div>
         <div className="flex justify-between items-center mt-4 min-h-[26px]">
-          {color.colorType && <span className="text-xs bg-slate-700 text-cyan-400 font-semibold px-2 py-1 rounded-full">{color.colorType}</span>}
-          <button
-            onClick={() => onSelect(color)}
-            className="text-slate-500 hover:text-fuchsia-400 transition-colors ml-auto"
-            aria-label={`Learn more about ${color.colorName}`}
-          >
-            <InfoIcon className="w-6 h-6"/>
-          </button>
+          {color.colorType && (
+            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+              isDarkMode 
+                ? 'bg-slate-700 text-cyan-400' 
+                : 'bg-gray-100 text-blue-600'
+            }`}>
+              {color.colorType}
+            </span>
+          )}
+          <div className="flex items-center gap-2 ml-auto">
+            {onToggleFavorite && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleFavorite();
+                }}
+                className={`transition-colors ${
+                  isFavorite 
+                    ? 'text-red-500 hover:text-red-600' 
+                    : isDarkMode 
+                      ? 'text-slate-500 hover:text-red-400' 
+                      : 'text-gray-400 hover:text-red-500'
+                }`}
+                aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {isFavorite ? '❤️' : '🤍'}
+              </button>
+            )}
+            <button
+              onClick={() => onSelect(color)}
+              className={`transition-colors ${
+                isDarkMode 
+                  ? 'text-slate-500 hover:text-fuchsia-400' 
+                  : 'text-gray-500 hover:text-blue-600'
+              }`}
+              aria-label={`Learn more about ${color.colorName}`}
+            >
+              <InfoIcon className="w-6 h-6"/>
+            </button>
+          </div>
         </div>
       </div>
     </div>
