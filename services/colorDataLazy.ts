@@ -1,4 +1,4 @@
-import type { CarColor } from '../types';
+import type { CarColor } from '../app/types/color';
 
 // Lazy loading wrapper for the large color data
 let colorDataCache: CarColor[] | null = null;
