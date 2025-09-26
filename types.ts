@@ -7,7 +7,7 @@ export interface ColorLayer {
 export interface CarColor {
   make: string;
   model: string;
-  year?: number;
+  year?: number | null;
   colorName: string;
   color1: ColorLayer;
   color2: ColorLayer;
