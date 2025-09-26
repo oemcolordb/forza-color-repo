@@ -1,11 +1,12 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from './components/Header';
 import FilterControls from './components/FilterControls';
 import ColorCard from './components/ColorCard';
+import ColorCardSkeleton from './components/ColorCardSkeleton';
 import ColorDetailsModal from './components/ColorDetailsModal';
-import Pagination from './components/Pagination';
-import colorData from './services/colorData';
-import type { CarColor } from './types';
+import { getPaginatedColorData, getMakes } from './services/colorDataManager';
+import { useDebounce } from './hooks/useDebounce';
+import type { CarColor } from './types.ts';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -13,7 +14,16 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [colors, setColors] = useState<CarColor[]>([]);
+  const [makes, setMakes] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const lastColorRef = useRef<HTMLDivElement | null>(null);
+  
+  // Debounce search query to reduce API calls
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [favorites, setFavorites] = useState<string[]>(() => {
     const saved = localStorage.getItem('forza-favorites');
     return saved ? JSON.parse(saved) : [];
@@ -23,30 +33,88 @@ const App: React.FC = () => {
     return saved === 'dark';
   });
 
-  const makes = useMemo(() => {
-    const uniqueMakes = [...new Set(colorData.map((color) => color.make))];
-    return uniqueMakes.sort();
+  // Load makes on component mount
+  useEffect(() => {
+    const loadMakes = async () => {
+      try {
+        const makesList = await getMakes();
+        setMakes(makesList);
+      } catch (error) {
+        console.error('Error loading makes:', error);
+      }
+    };
+    loadMakes();
   }, []);
 
-  const filteredColors = useMemo(() => {
-    return colorData.filter((color) => {
-      const searchLower = searchQuery.toLowerCase();
-      const matchesSearch =
-        color.colorName.toLowerCase().includes(searchLower) ||
-        color.make.toLowerCase().includes(searchLower) ||
-        color.model.toLowerCase().includes(searchLower) ||
-        (color.year && color.year.toString().includes(searchLower)) ||
-        (color.colorType && color.colorType.toLowerCase().includes(searchLower));
-
-      const matchesMake = selectedMake ? color.make === selectedMake : true;
-
-      return matchesSearch && matchesMake;
-    });
-  }, [searchQuery, selectedMake]);
-
+  // Load initial data and reset on filter changes
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedMake]);
+    const loadData = async () => {
+      setLoading(true);
+      setPage(1);
+      try {
+        const result = await getPaginatedColorData(
+          debouncedSearchQuery,
+          selectedMake,
+          1,
+          ITEMS_PER_PAGE
+        );
+        setColors(result.colors);
+        setHasMore(result.colors.length === ITEMS_PER_PAGE);
+      } catch (error) {
+        console.error('Error loading color data:', error);
+        setColors([]);
+        setHasMore(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [debouncedSearchQuery, selectedMake]);
+
+  // Load more data
+  const loadMore = useCallback(async () => {
+    if (loading || !hasMore) return;
+    
+    setLoading(true);
+    try {
+      const nextPage = page + 1;
+      const result = await getPaginatedColorData(
+        debouncedSearchQuery,
+        selectedMake,
+        nextPage,
+        ITEMS_PER_PAGE
+      );
+      setColors(prev => [...prev, ...result.colors]);
+      setPage(nextPage);
+      setHasMore(result.colors.length === ITEMS_PER_PAGE);
+    } catch (error) {
+      console.error('Error loading more colors:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, page, debouncedSearchQuery, selectedMake]);
+
+  // Intersection observer for infinite scroll
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+    
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (lastColorRef.current) {
+      observerRef.current.observe(lastColorRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) observerRef.current.disconnect();
+    };
+  }, [loadMore, hasMore, loading]);
 
   useEffect(() => {
     localStorage.setItem('forza-favorites', JSON.stringify(favorites));
@@ -69,12 +137,6 @@ const App: React.FC = () => {
     setIsDarkMode(prev => !prev);
   }, []);
 
-  const totalPages = Math.ceil(filteredColors.length / ITEMS_PER_PAGE);
-  const paginatedColors = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredColors.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredColors, currentPage]);
-
   const themeClasses = isDarkMode 
     ? 'bg-slate-900 text-white' 
     : 'bg-gray-50 text-gray-900';
@@ -94,32 +156,37 @@ const App: React.FC = () => {
         selectedMake={selectedMake}
         setSelectedMake={setSelectedMake}
         makes={makes}
+        isDarkMode={isDarkMode}
       />
 
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
-        {paginatedColors.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {paginatedColors.map((color, index) => {
-                const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`;
-                return (
+        {colors.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {colors.map((color, index) => {
+              const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`;
+              const isLast = index === colors.length - 1;
+              return (
+                <div 
+                  key={`${colorId}-${index}`}
+                  ref={isLast ? lastColorRef : null}
+                >
                   <ColorCard 
-                    key={`${colorId}-${index}-${currentPage}`} 
                     color={color} 
                     onSelect={setSelectedColor}
                     isFavorite={favorites.includes(colorId)}
                     onToggleFavorite={() => toggleFavorite(colorId)}
                     isDarkMode={isDarkMode}
                   />
-                );
-              })}
-            </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </>
+                </div>
+              );
+            })}
+          </div>
+        ) : loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
+              <ColorCardSkeleton key={index} isDarkMode={isDarkMode} />
+            ))}
+          </div>
         ) : (
           <div className="text-center py-20">
             <h2 className={`text-2xl font-semibold ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
@@ -128,6 +195,16 @@ const App: React.FC = () => {
             <p className={`mt-2 ${isDarkMode ? 'text-slate-500' : 'text-gray-500'}`}>
               Try adjusting your search or filters.
             </p>
+          </div>
+        )}
+        
+        {loading && colors.length > 0 && (
+          <div className="flex justify-center py-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <ColorCardSkeleton key={`loading-${index}`} isDarkMode={isDarkMode} />
+              ))}
+            </div>
           </div>
         )}
       </main>

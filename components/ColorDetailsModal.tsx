@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { CarColor, ColorLayer } from '../types';
 import { GoogleGenAI } from '@google/genai';
+import { getCachedResponse, setCachedResponse, generateCacheKey } from '../services/aiCache';
 
 interface ColorDetailsModalProps {
   color: CarColor;
@@ -47,25 +48,36 @@ const ColorDetailsModal: React.FC<ColorDetailsModalProps> = ({ color, onClose })
       setDetails('');
 
       if (!process.env.API_KEY) {
-        // Silently fail if no API key is present, as it's an optional feature.
         setLoading(false);
         setDetails('Gemini API key not configured. This feature is unavailable.');
         return;
       }
 
       try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        const modelDisplay = color.model ? ` ${color.model}` : '';
-        const yearDisplay = color.year && color.year > 0 ? ` from ${color.year}` : '';
+        // Check cache first
+        const cacheKey = generateCacheKey(color.make, color.model, color.colorName, color.year);
+        const cachedResponse = getCachedResponse(cacheKey);
+        
+        if (cachedResponse) {
+          setDetails(cachedResponse);
+          setLoading(false);
+          return;
+        }
 
-        const prompt = `Tell me one interesting fact about the color "${color.colorName}" for the car "${color.make}${modelDisplay}${yearDisplay}". Keep the response concise and engaging, under 50 words.`;
+        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const carInfo = `${color.make}${color.model ? ` ${color.model}` : ''}${color.year && color.year > 0 ? ` (${color.year})` : ''}`;
+        const prompt = `Brief fact about "${color.colorName}" color on ${carInfo}. Max 40 words.`;
         
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
-            contents: prompt,
+            contents: [{ parts: [{ text: prompt }] }],
         });
 
-        setDetails(response.text);
+        const responseText = response.text;
+        setDetails(responseText);
+        
+        // Cache the response
+        setCachedResponse(cacheKey, responseText);
       } catch (e) {
         console.error("Gemini API Error:", e);
         setError("Could not fetch details from the Gemini API.");

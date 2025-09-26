@@ -7,6 +7,7 @@ interface FilterControlsProps {
   selectedMake: string;
   setSelectedMake: (make: string) => void;
   makes: string[];
+  isDarkMode?: boolean;
 }
 
 const SearchIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
@@ -22,9 +23,15 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   selectedMake,
   setSelectedMake,
   makes,
+  isDarkMode = true,
 }) => {
+  const bgClass = isDarkMode ? 'bg-slate-900/50' : 'bg-white/80';
+  const inputBgClass = isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-100 placeholder-slate-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500';
+  const iconClass = isDarkMode ? 'text-slate-400' : 'text-gray-500';
+  const focusClass = isDarkMode ? 'focus:ring-fuchsia-500 focus:border-fuchsia-500' : 'focus:ring-blue-500 focus:border-blue-500';
+  
   return (
-    <div className="p-4 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
+    <div className={`p-4 ${bgClass} backdrop-blur-sm sticky top-0 z-10`}>
       <div className="container mx-auto flex flex-col sm:flex-row gap-4 items-center">
         <div className="relative w-full sm:w-1/2">
           <input
@@ -32,15 +39,15 @@ const FilterControls: React.FC<FilterControlsProps> = ({
             placeholder="Search by color, make, model..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-800 border-2 border-slate-700 text-slate-100 placeholder-slate-400 rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 transition-colors"
+            className={`w-full ${inputBgClass} border-2 rounded-md py-2 pl-10 pr-4 focus:outline-none focus:ring-2 ${focusClass} transition-colors`}
           />
-           <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+           <SearchIcon className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${iconClass}`} />
         </div>
         <div className="relative w-full sm:w-1/2">
           <select
             value={selectedMake}
             onChange={(e) => setSelectedMake(e.target.value)}
-            className="w-full bg-slate-800 border-2 border-slate-700 text-slate-100 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-colors appearance-none"
+            className={`w-full ${inputBgClass} border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 ${focusClass} transition-colors appearance-none`}
           >
             <option value="">All Manufacturers</option>
             {makes.map((make) => (
@@ -49,7 +56,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
               </option>
             ))}
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+          <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${iconClass}`}>
             <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
           </div>
         </div>
