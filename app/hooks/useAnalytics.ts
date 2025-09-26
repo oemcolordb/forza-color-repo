@@ -30,7 +30,7 @@ export const useAnalytics = () => {
           body: JSON.stringify(event)
         }).catch(() => {})
       }
-    } catch (error) {
+    } catch {
       // Fail silently
     }
   }, [])

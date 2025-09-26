@@ -36,7 +36,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     b /= 255
     const max = Math.max(r, g, b)
     const min = Math.min(r, g, b)
-    let h = 0, s = 0, l = (max + min) / 2
+    let h = 0, s = 0
+    const l = (max + min) / 2
 
     if (max !== min) {
       const d = max - min
@@ -145,7 +146,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     } finally {
       setIsProcessing(false)
     }
-  }, [colors, onColorsFound])
+  }, [onColorsFound, extractColorsFromImage, findMatchingColors])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()

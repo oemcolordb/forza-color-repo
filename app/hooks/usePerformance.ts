@@ -1,10 +1,4 @@
-import { useEffect, useCallback } from 'react'
-
-interface PerformanceMetrics {
-  name: string
-  duration: number
-  timestamp: number
-}
+import { useCallback } from 'react'
 
 export const usePerformance = () => {
   const measureAsync = useCallback(async <T>(name: string, fn: () => Promise<T>): Promise<T> => {
@@ -15,7 +9,7 @@ export const usePerformance = () => {
       const duration = end - start
       
       if (process.env.NODE_ENV === 'development') {
-        console.log(`Performance: ${name} took ${duration.toFixed(2)}ms`)
+        console.warn(`Performance: ${name} took ${duration.toFixed(2)}ms`)
       }
       
       return result

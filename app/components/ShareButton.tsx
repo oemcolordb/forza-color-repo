@@ -14,7 +14,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ color, isDarkMode }) => {
     if (navigator.share) {
       try {
         await navigator.share({ title: text, url })
-      } catch (error) {
+      } catch {
         copyToClipboard(url)
       }
     } else {

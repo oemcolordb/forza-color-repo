@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import type { CarColor } from './types/color'
 import Header from './components/Header'
-import ColorCard from './components/ColorCard'
 import Footer from './components/Footer'
 import ColorStats from './components/ColorStats'
 import ShareButton from './components/ShareButton'
@@ -79,7 +78,7 @@ export default function HomePage() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
     }
-  }, [])
+  }, [measureAsync])
 
   useEffect(() => {
     const saved = localStorage.getItem('forza-favorites')
@@ -133,7 +132,7 @@ export default function HomePage() {
 
       return matchesSearch && matchesMake && matchesModel
     })
-  }, [colors, searchQuery, selectedMake])
+  }, [colors, searchQuery, selectedMake, selectedModel])
 
   useEffect(() => {
     setSelectedModel('') // Reset model when make changes
@@ -215,7 +214,7 @@ export default function HomePage() {
     setDisplayedColors(matchedColors.slice(0, ITEMS_PER_PAGE))
     setHasMore(matchedColors.length > ITEMS_PER_PAGE)
     setPage(1)
-    track({ action: 'image_color_match', colorsFound: matchedColors.length })
+    track({ action: 'search', query: `image_match_${matchedColors.length}_colors` })
   }, [track])
 
   const clearImageResults = useCallback(() => {

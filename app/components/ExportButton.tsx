@@ -20,7 +20,7 @@ const ExportButton: React.FC<ExportButtonProps> = ({ favorites, isDarkMode }) =>
       a.click()
       document.body.removeChild(a)
       window.URL.revokeObjectURL(url)
-    } catch (error) {
+    } catch {
       alert('Export failed. Please try again.')
     }
   }

@@ -96,7 +96,7 @@ const ModelBrowser: React.FC<ModelBrowserProps> = ({ colors, isDarkMode, onModel
             Browse by Manufacturer
           </h3>
           <div className="space-y-2 max-h-64 overflow-y-auto">
-            {modelData.slice(0, 10).map(({ make, models, colorCount }) => (
+            {modelData.slice(0, 10).map(({ make, models, colorCount: _colorCount }) => (
               <div key={make} className={`p-2 rounded ${
                 isDarkMode ? 'bg-slate-700' : 'bg-gray-50'
               }`}>
