@@ -6,23 +6,26 @@ import Header from './components/Header'
 import ColorCard from './components/ColorCard'
 import Footer from './components/Footer'
 
-const ITEMS_PER_PAGE = 50
-
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMake, setSelectedMake] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
+  const [hasMore, setHasMore] = useState(true)
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [page, setPage] = useState(1)
+  const ITEMS_PER_PAGE = 50
 
   useEffect(() => {
     const loadColors = async () => {
       try {
         const { default: colorData } = await import('../services/colorData')
         setColors(colorData)
+        setDisplayedColors(colorData.slice(0, ITEMS_PER_PAGE))
+        setHasMore(colorData.length > ITEMS_PER_PAGE)
       } catch (error) {
         console.error('Failed to load colors:', error)
       } finally {
@@ -71,14 +74,37 @@ export default function HomePage() {
   }, [colors, searchQuery, selectedMake])
 
   useEffect(() => {
-    setCurrentPage(1)
-  }, [searchQuery, selectedMake])
+    setPage(1)
+    setDisplayedColors(filteredColors.slice(0, ITEMS_PER_PAGE))
+    setHasMore(filteredColors.length > ITEMS_PER_PAGE)
+  }, [filteredColors])
 
-  const totalPages = Math.ceil(filteredColors.length / ITEMS_PER_PAGE)
-  const paginatedColors = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
-    return filteredColors.slice(startIndex, startIndex + ITEMS_PER_PAGE)
-  }, [filteredColors, currentPage])
+  const loadMore = useCallback(() => {
+    if (!hasMore || loading) return
+    
+    const nextPage = page + 1
+    const startIndex = (nextPage - 1) * ITEMS_PER_PAGE
+    const newColors = filteredColors.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+    
+    if (newColors.length > 0) {
+      setDisplayedColors(prev => [...prev, ...newColors])
+      setPage(nextPage)
+      setHasMore(startIndex + ITEMS_PER_PAGE < filteredColors.length)
+    } else {
+      setHasMore(false)
+    }
+  }, [filteredColors, page, hasMore, loading])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1000) {
+        loadMore()
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [loadMore])
 
   const toggleFavorite = useCallback((colorId: string) => {
     setFavorites(prev => 
@@ -154,16 +180,16 @@ export default function HomePage() {
       </div>
 
       <main className="container mx-auto p-4 sm:p-6 lg:p-8">
-        {paginatedColors.length > 0 ? (
+        {displayedColors.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {paginatedColors.map((color, index) => {
+              {displayedColors.map((color, index) => {
                 const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`
                 return (
                   <div 
-                    key={`${colorId}-${index}-${currentPage}`}
+                    key={`${colorId}-${index}`}
                     className="animate-fade-in"
-                    style={{ animationDelay: `${index * 50}ms` }}
+                    style={{ animationDelay: `${(index % ITEMS_PER_PAGE) * 50}ms` }}
                   >
                     <ColorCard 
                       color={color} 
@@ -177,38 +203,21 @@ export default function HomePage() {
               })}
             </div>
             
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center space-x-4 py-8">
-                <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                  disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    currentPage === 1
-                      ? 'opacity-50 cursor-not-allowed'
-                      : isDarkMode
-                        ? 'bg-slate-800 hover:bg-slate-700 text-slate-100'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
-                  }`}
-                >
-                  Previous
-                </button>
-                <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>
-                  Page {currentPage} of {totalPages}
+            {/* Loading indicator */}
+            {hasMore && (
+              <div className="flex justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fuchsia-500"></div>
+                <span className={`ml-3 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                  Loading more colors...
                 </span>
-                <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                  disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    currentPage === totalPages
-                      ? 'opacity-50 cursor-not-allowed'
-                      : isDarkMode
-                        ? 'bg-slate-800 hover:bg-slate-700 text-slate-100'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
-                  }`}
-                >
-                  Next
-                </button>
+              </div>
+            )}
+            
+            {!hasMore && displayedColors.length > 0 && (
+              <div className="text-center py-8">
+                <p className={`${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                  🎨 You've seen all {displayedColors.length} colors!
+                </p>
               </div>
             )}
           </>
