@@ -50,6 +50,7 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors, isDarkMode }) => {
   }
 
   const getRandomColor = () => {
+    if (colors.length === 0) return
     const randomIndex = Math.floor(Math.random() * colors.length)
     setSelectedColor(colors[randomIndex])
   }
@@ -67,8 +68,11 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors, isDarkMode }) => {
       <div className="text-center mb-4">
         <button
           onClick={getRandomColor}
+          disabled={colors.length === 0}
           className={`px-4 py-2 rounded-lg font-medium transition-all ${
-            isDarkMode
+            colors.length === 0
+              ? 'bg-gray-400 cursor-not-allowed text-gray-600'
+              : isDarkMode
               ? 'bg-blue-600 hover:bg-blue-500 text-white'
               : 'bg-blue-500 hover:bg-blue-600 text-white'
           } transform hover:scale-105`}
