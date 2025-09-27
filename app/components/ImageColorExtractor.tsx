@@ -52,7 +52,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     return [h, s, l]
   }
 
-  const extractColorsFromImage = (imageData: ImageData): ExtractedColor[] => {
+  const extractColorsFromImage = useCallback((imageData: ImageData): ExtractedColor[] => {
     const colorMap = new Map<string, number>()
     const data = imageData.data
 
@@ -77,9 +77,9 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       })
       .sort((a, b) => b.count - a.count)
       .slice(0, 10)
-  }
+  }, [])
 
-  const findMatchingColors = (extractedColors: ExtractedColor[]): CarColor[] => {
+  const findMatchingColors = useCallback((extractedColors: ExtractedColor[]): CarColor[] => {
     const matches: Array<{ color: CarColor; score: number }> = []
 
     extractedColors.forEach(extracted => {
@@ -109,7 +109,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       .sort((a, b) => b.score - a.score)
       .slice(0, 20)
       .map(match => match.color)
-  }
+  }, [colors])
 
   const processImage = useCallback(async (file: File) => {
     setIsProcessing(true)
