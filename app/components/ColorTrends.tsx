@@ -160,7 +160,7 @@ const ColorTrends: React.FC<ColorTrendsProps> = ({ colors, favorites, isDarkMode
           : 'bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200'
       }`}>
         <p className={`text-sm font-medium ${isDarkMode ? 'text-purple-200' : 'text-purple-800'}`}>
-          💡 Fun Fact: You have enough colors to paint {Math.floor(trends.totalColors / 100)} cars with unique colors each!
+          💡 Fun Fact: White is the world's most popular car color, accounting for 35% of all vehicles globally!
         </p>
       </div>
     </div>
