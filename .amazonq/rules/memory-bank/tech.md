@@ -2,129 +2,112 @@
 
 ## Core Technologies
 
-### Frontend Framework & Runtime
-- **Next.js 15.1.3** - React framework with App Router for modern web development
-- **React 19.0.0** - Latest React with concurrent features and improved performance
-- **TypeScript 5.8.2** - Type-safe JavaScript development with strict mode enabled
-- **Node.js 18.0+** - JavaScript runtime environment (minimum requirement)
+### Frontend Framework
+- **Next.js 15.1.3** - React framework with App Router
+- **React 19.0.0** - UI library with latest features
+- **TypeScript 5.8.2** - Type-safe JavaScript development
 
-### Styling & Design System
-- **Tailwind CSS 3.4.17** - Utility-first CSS framework with custom configuration
-- **PostCSS 8.5.1** - CSS processing and transformation pipeline
-- **Autoprefixer 10.4.20** - Automatic CSS vendor prefix management
-- **Inter Font** - Google Fonts integration with display swap optimization
-
-### Testing & Quality Assurance
-- **Jest 29.7.0** - JavaScript testing framework with comprehensive coverage
-- **Testing Library React 16.3.0** - React component testing utilities
-- **Testing Library Jest DOM 6.8.0** - Custom Jest matchers for DOM testing
-- **Jest Environment JSDOM 29.7.0** - Browser environment simulation for tests
-- **ESLint 9.17.0** - Code linting and quality enforcement
-- **ESLint Config Next 15.1.3** - Next.js specific linting rules and configurations
+### Styling & UI
+- **Tailwind CSS 3.4.17** - Utility-first CSS framework
+- **PostCSS 8.5.1** - CSS processing and optimization
+- **Autoprefixer 10.4.20** - CSS vendor prefix automation
 
 ### AI & External Services
-- **Google Generative AI 0.21.0** - Gemini API integration for AI-powered features
-- **Netlify Platform** - Hosting, edge functions, and serverless deployment
+- **Google Generative AI 0.21.0** - AI-powered color analysis and extraction
+- **Critters 0.0.23** - Critical CSS extraction for performance
 
-## Build System & Configuration
+### Development Tools
+- **ESLint 9.17.0** - Code linting and quality enforcement
+- **Jest 29.7.0** - Testing framework
+- **Testing Library** - React component testing utilities
+  - `@testing-library/react 16.3.0`
+  - `@testing-library/jest-dom 6.8.0`
 
-### Next.js Configuration Features
-- **Static Export**: `output: 'export'` for static site generation and CDN optimization
-- **Image Optimization**: Multi-format support (WebP, AVIF) with responsive sizing
-- **Performance Optimizations**: CSS optimization, scroll restoration, modern browser targeting
-- **Bundle Splitting**: Vendor chunk separation and intelligent cache optimization
-- **Security Headers**: Comprehensive security header configuration (CSP, HSTS, etc.)
-- **Webpack Customization**: Custom webpack configuration for advanced optimizations
+## Build System & Dependencies
 
-### Environment Configuration
-```env
-NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
-NEXT_PUBLIC_APP_NAME=Forza Color Universe
-NEXT_PUBLIC_APP_DESCRIPTION=Explore 10,000+ automotive colors
-NEXT_PUBLIC_APP_URL=https://your-domain.com
+### Package Management
+- **npm** - Primary package manager
+- **Node.js 18.0+** - Runtime requirement (specified in .nvmrc)
+
+### Build Configuration
+- **next.config.js** - Next.js build configuration
+- **tailwind.config.js** - Tailwind CSS customization
+- **postcss.config.js** - PostCSS processing setup
+- **tsconfig.json** - TypeScript compiler configuration
+
+### Testing Setup
+- **jest.config.js** - Jest testing configuration
+- **jest.setup.js** - Test environment setup
+- **jest-environment-jsdom** - DOM testing environment
+
+## Development Commands
+
+### Core Development
+```bash
+npm run dev          # Start development server (Next.js dev mode)
+npm run build        # Build for production (Next.js build + export)
+npm run start        # Start production server
 ```
 
-### TypeScript Configuration
-- **Strict Mode**: Enabled for maximum type safety
-- **Path Mapping**: Configured for clean import statements
-- **JSX Transform**: React 18+ JSX transform enabled
-- **Module Resolution**: Node.js module resolution strategy
+### Code Quality
+```bash
+npm run lint         # Run ESLint code analysis
+npm run test         # Run Jest test suite
+npm run test:watch   # Run tests in watch mode
+```
+
+### Environment Setup
+```bash
+npm install          # Install all dependencies
+cp .env.local.example .env.local  # Setup environment variables
+```
+
+## Deployment & Infrastructure
+
+### Hosting Platform
+- **Netlify** - Primary deployment platform
+- **Edge Functions** - Serverless computing at the edge
+- **Build Settings**:
+  - Build command: `npm run build`
+  - Publish directory: `out`
+
+### Environment Variables
+- `NEXT_PUBLIC_GEMINI_API_KEY` - Google AI API key
+- `NEXT_PUBLIC_APP_URL` - Application base URL
+
+### Performance Optimizations
+- **Static Site Generation (SSG)** - Pre-built pages for performance
+- **Edge Functions** - Geographically distributed computing
+- **Service Worker** - Offline functionality and caching
+- **Critical CSS** - Above-the-fold CSS optimization
+
+## Data Processing Tools
+
+### Scraping & Data Collection
+- **Node.js Scripts** - Custom data extraction tools
+- **autocolorlibrary-*.json** - Processed color datasets
+- **scrape-*.js** - Web scraping utilities for color data
+
+### Data Management
+- **JSON-based Storage** - Structured color data files
+- **Script-based Processing** - Automated data cleaning and organization
+- **Duplicate Detection** - Data quality assurance tools
 
 ## Development Workflow
 
-### Core Development Commands
-```bash
-npm run dev          # Start development server (localhost:3000)
-npm run build        # Build optimized production bundle
-npm run start        # Start production server
-npm run lint         # Run ESLint code quality checks
-npm run test         # Execute Jest test suite
-npm run test:watch   # Run tests in watch mode for development
-```
+### Local Development
+1. Clone repository
+2. Install dependencies with `npm install`
+3. Setup environment variables
+4. Run `npm run dev` for development server
+5. Access application at `http://localhost:3000`
 
-### Development Server Features
-- **Hot Module Replacement**: Instant updates during development
-- **Fast Refresh**: React component state preservation during updates
-- **TypeScript Integration**: Real-time type checking and error reporting
-- **Automatic Port Detection**: Fallback ports if 3000 is occupied
+### Testing Strategy
+- **Unit Tests** - Component and utility function testing
+- **Integration Tests** - Service and API endpoint testing
+- **Performance Tests** - Virtual scrolling and rendering optimization
 
-## Deployment & Hosting
-
-### Netlify Deployment Configuration
-- **Build Command**: `npm run build`
-- **Publish Directory**: `out` (Next.js static export output)
-- **Node Version**: Specified in `.nvmrc` for consistent builds
-- **Environment Variables**: Configured in Netlify dashboard for security
-
-### Performance Optimizations
-- **Static Site Generation**: Pre-built HTML for optimal loading performance
-- **Edge Functions**: Global edge computing for reduced latency
-- **CDN Integration**: Automatic global content distribution
-- **Image Optimization**: Responsive images with modern format support
-- **Bundle Analysis**: Webpack bundle analyzer integration for optimization
-
-### Serverless Architecture
-- **Netlify Functions**: API endpoints deployed as serverless functions
-- **Edge Functions**: Performance-critical operations at the edge
-- **Automatic Scaling**: Serverless auto-scaling based on demand
-- **Global Distribution**: Functions deployed across multiple regions
-
-## File Structure Standards
-
-### CSS Architecture
-- **Global Styles**: `globals.css` for application-wide base styles
-- **Critical CSS**: `critical.css` for above-the-fold content optimization
-- **Animation Definitions**: `animations.css` for custom keyframes and transitions
-- **Tailwind Integration**: Utility-first approach with custom theme extensions
-
-### Testing Configuration
-- **Jest Setup**: `jest.config.js` with JSDOM environment and custom matchers
-- **Global Test Setup**: `jest.setup.js` for browser API mocks and utilities
-- **Component Tests**: Co-located in `__tests__` directories for organization
-- **Coverage Reporting**: Configured for comprehensive test coverage analysis
-
-### Build Optimizations
-- **Tree Shaking**: Automatic dead code elimination
-- **Code Splitting**: Route-based and component-based splitting
-- **Minification**: JavaScript and CSS minification for production
-- **Compression**: Gzip and Brotli compression support
-
-## API Integration & Services
-
-### Google Gemini AI Integration
-- **Service Architecture**: Centralized AI service with caching layer
-- **Error Handling**: Comprehensive error boundaries for AI feature failures
-- **Rate Limiting**: Built-in rate limiting for API usage optimization
-- **Caching Strategy**: Multi-layer caching to reduce API calls and costs
-
-### Data Management Services
-- **Color Data Service**: Centralized color data management with lazy loading
-- **Performance Monitoring**: Custom hooks for performance measurement and analytics
-- **Local Storage Integration**: Persistent user preferences and favorites
-- **Export Services**: Multiple format support for color data export
-
-### Netlify Functions API
-- **Analytics Endpoint**: Server-side analytics data collection and processing
-- **Color Search API**: Optimized search functionality with filtering capabilities
-- **Data Export API**: Server-side color data export with format conversion
-- **Rate Limiting**: API protection and usage management across endpoints
+### Code Quality Standards
+- **TypeScript** - Strict type checking enabled
+- **ESLint** - Enforced code style and best practices
+- **Prettier** - Consistent code formatting (implied by ESLint config)

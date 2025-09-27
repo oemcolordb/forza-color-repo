@@ -1,246 +1,173 @@
-# Development Guidelines & Standards
+# Development Guidelines & Patterns
 
 ## Code Quality Standards
 
-### TypeScript Implementation
-- **Strict Type Safety**: All components use TypeScript with comprehensive type definitions
-- **Interface Definitions**: Clear props interfaces for every component (e.g., `VirtualGridProps`, `CarColor`)
-- **Type Imports**: Consistent use of `import type` for type-only imports to optimize bundle size
-- **Null Safety**: Proper handling of nullable values with optional chaining and null checks
+### TypeScript Usage
+- **Strict Type Safety**: All components use explicit TypeScript interfaces
+- **Interface Definitions**: Centralized type definitions in `app/types/color.ts`
+- **Type Imports**: Use `import type` for type-only imports
+- **Generic Constraints**: Proper use of generics with constraints where needed
 
-### Component Architecture Patterns
-- **Functional Components**: All React components use functional components with hooks exclusively
-- **Props Interface**: Every component has explicitly defined props interface with TypeScript
-- **Component Composition**: Modular design with clear separation of concerns and reusable components
-- **Error Boundaries**: Comprehensive error handling with ErrorBoundary wrapper in layout
+### Component Architecture
+- **Functional Components**: All React components use function syntax with hooks
+- **Props Interface**: Every component has a dedicated props interface
+- **Default Props**: Use default parameters in function signatures
+- **Component Naming**: PascalCase for components, camelCase for functions
 
-### File Naming & Organization
-- **Components**: PascalCase with descriptive names (e.g., `ColorCard.tsx`, `VirtualGrid.tsx`, `LazyColorGrid.tsx`)
-- **Hooks**: camelCase with `use` prefix (e.g., `useAnalytics.ts`, `usePerformance.ts`)
-- **Services**: camelCase descriptive names (e.g., `colorData.ts`, `colorDataLazy.ts`)
-- **Types**: camelCase in dedicated types directory (e.g., `color.ts`)
-- **Tests**: Component name + `.test.tsx` pattern (e.g., `ColorCard.test.tsx`)
+### State Management Patterns
+- **useState Hook**: Local component state with proper typing
+- **useEffect Dependencies**: Exhaustive dependency arrays with proper cleanup
+- **useCallback/useMemo**: Performance optimization for expensive operations
+- **Custom Hooks**: Extracted logic into reusable hooks (`useAnalytics`, `usePerformance`)
 
-### Import Organization Standards
+## Structural Conventions
+
+### File Organization
+- **Component Structure**: Each component in its own file with matching name
+- **Test Colocation**: Tests in `__tests__` subdirectories next to components
+- **Type Definitions**: Centralized in `types/` directory
+- **Service Layer**: Business logic separated into `services/` directory
+
+### Import Patterns
 ```typescript
-// 1. React and React-related imports
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-
-// 2. Type-only imports
+// External libraries first
+import React, { useState, useCallback } from 'react'
 import type { CarColor } from '../types/color'
 
-// 3. Component imports (alphabetical)
-import ColorCard from './ColorCard'
+// Internal components and utilities
 import Header from './components/Header'
-
-// 4. Hook imports
 import { useAnalytics } from './hooks/useAnalytics'
-
-// 5. Service and utility imports
-import { getColorData } from '../services/colorDataLazy'
 ```
 
-## Performance Optimization Patterns
+### Export Patterns
+- **Default Exports**: For main component/function per file
+- **Named Exports**: For utilities and secondary functions
+- **Type Exports**: Separate type-only exports when needed
 
-### React Performance Strategies
-- **useMemo**: Expensive calculations cached with dependency arrays (filtering, sorting, transformations)
-- **useCallback**: Event handlers wrapped to prevent unnecessary re-renders
-- **Virtual Scrolling**: Implemented for large datasets (10,000+ items) with calculated visible items
-- **Lazy Loading**: Dynamic imports for large data files and optional components
+## Styling Standards
 
-### Data Management Optimization
-- **Multi-Layer Caching**: Service-level caching with null checks and promise caching
-- **Pagination**: Client-side pagination with `ITEMS_PER_PAGE = 50` constant
-- **Efficient Filtering**: Memoized filtering with lowercase comparisons and multiple criteria
-- **Lazy Data Loading**: Progressive loading with `colorDataLazy.ts` service pattern
+### Tailwind CSS Usage
+- **Utility-First**: Extensive use of Tailwind utility classes
+- **Conditional Classes**: Template literals for dynamic styling
+- **Dark Mode**: Systematic dark mode support with `isDarkMode` props
+- **Responsive Design**: Mobile-first responsive classes
 
-### Bundle & Performance Optimization
+### Theme Implementation
 ```typescript
-// Lazy loading pattern
-const colorData = await measureAsync('Load Color Data', async () => {
-  const { default: data } = await import('../../services/colorData')
-  return data
-})
-
-// Memoized filtering
-const filteredColors = useMemo(() => {
-  return colors.filter(color => {
-    const searchLower = searchQuery.toLowerCase()
-    return matchesSearch && matchesMake && matchesModel
-  })
-}, [colors, searchQuery, selectedMake])
-```
-
-## State Management Patterns
-
-### Local State Management
-- **useState**: Component-specific state with descriptive names and proper typing
-- **useEffect**: Side effects with proper dependency arrays and cleanup functions
-- **Custom Hooks**: Extracted reusable logic for analytics, performance monitoring
-
-### State Naming Conventions
-```typescript
-// Consistent state variable naming
-const [colors, setColors] = useState<CarColor[]>([])
-const [loading, setLoading] = useState(true)
-const [searchQuery, setSearchQuery] = useState('')
-const [selectedMake, setSelectedMake] = useState('')
-const [isDarkMode, setIsDarkMode] = useState(true)
-```
-
-### Persistence & Synchronization
-- **localStorage Integration**: Automatic sync for favorites, theme preferences, and history
-- **Error Handling**: Graceful fallbacks for localStorage failures with try-catch blocks
-- **State Synchronization**: useEffect hooks for syncing state with localStorage
-
-## Styling & Design Standards
-
-### Tailwind CSS Implementation
-- **Utility-First Approach**: Consistent use of Tailwind utility classes throughout components
-- **Custom Theme Extension**: Extended color palette with primary, secondary, accent color scales
-- **Dark Mode Strategy**: Class-based dark mode with `'class'` strategy and theme toggles
-- **Responsive Design**: Mobile-first responsive design with breakpoint prefixes
-
-### Theme Implementation Pattern
-```typescript
-// Consistent theme class patterns
 const themeClasses = isDarkMode 
   ? 'bg-slate-800 text-slate-100' 
   : 'bg-white text-gray-900'
-
-// Conditional styling with theme awareness
-className={`w-full ${
-  isDarkMode 
-    ? 'bg-slate-800 border-slate-700 text-slate-100' 
-    : 'bg-white border-gray-300 text-gray-900'
-} border-2 rounded-md`}
 ```
 
-### Animation & Interaction Standards
-- **Custom Animations**: Defined in `tailwind.config.js` with hardware acceleration
-- **Performance-Conscious**: Use of `transform3d` for GPU acceleration
-- **Accessibility**: Respects user preferences for reduced motion
-- **Consistent Timing**: Standardized animation durations and easing functions
+### Animation Classes
+- **Custom Animations**: Defined in `tailwind.config.js`
+- **Performance**: CSS-based animations over JavaScript
+- **Accessibility**: Respect user motion preferences
 
-## Testing Standards & Patterns
+## Performance Patterns
 
-### Test Structure & Organization
-- **Describe Blocks**: Organized by component with clear test grouping
-- **beforeEach Setup**: Consistent mock cleanup with `jest.clearAllMocks()`
-- **Mock Data**: Comprehensive mock objects that match TypeScript interfaces
-- **Descriptive Tests**: Clear test descriptions that explain expected behavior
+### Optimization Techniques
+- **Virtual Scrolling**: Implemented in `VirtualGrid.tsx` for large datasets
+- **Lazy Loading**: Dynamic imports and component-level lazy loading
+- **Memoization**: Strategic use of `React.memo`, `useMemo`, `useCallback`
+- **Code Splitting**: Route-based and component-based splitting
 
-### Testing Implementation Patterns
+### Data Handling
+- **Pagination**: Incremental loading with `ITEMS_PER_PAGE` constant
+- **Filtering**: Client-side filtering with `useMemo` optimization
+- **Caching**: Service worker and browser caching strategies
+
+## Error Handling
+
+### Error Boundaries
+- **Component Wrapping**: `ErrorBoundary` component wraps main application
+- **Graceful Degradation**: Fallback UI for component failures
+- **Error Logging**: Console error logging with context
+
+### Validation Patterns
 ```typescript
-// Mock setup pattern
-const mockColor: CarColor = {
-  make: 'Ferrari',
-  model: 'F40',
-  year: 1987,
-  colorName: 'Rosso Corsa',
-  colorType: 'Normal',
-  color1: { h: 0, s: 0.8, b: 0.9 },
-  color2: { h: 0, s: 0.8, b: 0.9 },
-}
-
-// Event testing pattern
-fireEvent.click(screen.getByLabelText('Add to favorites'))
-expect(mockOnToggleFavorite).toHaveBeenCalled()
-
-// Theme testing pattern
-expect(container.firstChild).toHaveClass('bg-slate-800/80')
-```
-
-### Test Environment Configuration
-- **Jest Setup**: Comprehensive browser API mocks in `jest.setup.js`
-- **DOM Testing**: IntersectionObserver, ResizeObserver, matchMedia mocks
-- **localStorage Mocking**: Complete localStorage mock implementation
-- **Component Testing**: React Testing Library for user-centric testing
-
-## Error Handling & Resilience
-
-### Component-Level Error Handling
-- **Error Boundaries**: Comprehensive ErrorBoundary implementation in layout
-- **Try-Catch Blocks**: Async operations wrapped with proper error handling
-- **Graceful Degradation**: Fallback UI states for error conditions
-- **Loading States**: Proper loading indicators during async operations
-
-### Service-Level Error Handling
-```typescript
-// Async error handling pattern
-try {
-  const colorData = await measureAsync('Load Color Data', async () => {
-    const { default: data } = await import('../../services/colorData')
-    return data
-  })
-} catch (error) {
-  console.error('Failed to load colors:', error)
-} finally {
-  setLoading(false)
-}
-```
-
-## Performance Monitoring & Analytics
-
-### Custom Hook Integration
-- **useAnalytics**: Event tracking with structured data and user interactions
-- **usePerformance**: Timing measurements with `measureAsync` for operations
-- **Performance Metrics**: Monitoring of data loading, filtering, and rendering performance
-
-### Virtual Scrolling Implementation
-```typescript
-// Virtual scrolling calculation pattern
-const { visibleItems, totalHeight } = useMemo(() => {
-  const totalRows = Math.ceil(colors.length / ITEMS_PER_ROW)
-  const startRow = Math.floor(scrollTop / (ITEM_HEIGHT + GAP))
-  const endRow = Math.min(totalRows, startRow + Math.ceil(containerHeight / (ITEM_HEIGHT + GAP)) + 2)
-  
-  // Calculate visible items with positioning
-  const visibleItems = []
-  for (let row = Math.max(0, startRow - 1); row < endRow; row++) {
-    // Item positioning logic
+const validateFile = useCallback((file: File): string | null => {
+  if (!validTypes.includes(file.type)) {
+    return 'Please upload a valid image file'
   }
-  
-  return { visibleItems, totalHeight }
-}, [colors, scrollTop, containerHeight])
+  return null
+}, [])
 ```
 
-## Data Processing & Transformation
+## Testing Standards
 
-### Color Data Processing
-- **HSB to HSL Conversion**: Standardized color space conversion functions
-- **Data Validation**: Input validation and sanitization for color data
-- **Pattern Matching**: Sophisticated pattern matching for automotive color names
-- **Deduplication**: Array deduplication with complex object comparison
+### Test Structure
+- **Jest + Testing Library**: Primary testing framework
+- **Component Testing**: Focus on user interactions and behavior
+- **Mock Functions**: Proper mocking of callbacks and external dependencies
+- **Accessibility Testing**: Screen reader and keyboard navigation tests
 
-### Service Architecture Patterns
+### Test Patterns
 ```typescript
-// Lazy loading service pattern
-let colorDataCache: CarColor[] | null = null
-let colorDataPromise: Promise<CarColor[]> | null = null
-
-export const getColorData = (): Promise<CarColor[]> => {
-  if (colorDataCache) return Promise.resolve(colorDataCache)
-  if (colorDataPromise) return colorDataPromise
-  
-  colorDataPromise = import('./colorData').then(module => {
-    colorDataCache = module.default
-    return colorDataCache || []
+describe('ComponentName', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
-  
-  return colorDataPromise
+
+  it('renders correctly', () => {
+    // Test implementation
+  })
+})
+```
+
+## API & Data Patterns
+
+### Color Data Structure
+```typescript
+interface CarColor {
+  make: string
+  model: string
+  year: number | null
+  colorName: string
+  colorType: string
+  color1: { h: number; s: number; b: number }
+  color2: { h: number; s: number; b: number }
 }
 ```
 
-## Security & Best Practices
+### Service Layer
+- **Data Services**: Centralized data management in `services/`
+- **Async Operations**: Proper async/await usage with error handling
+- **Type Safety**: All service functions properly typed
 
-### Content Security & Headers
-- **Security Headers**: Comprehensive security header configuration in Next.js
-- **XSS Prevention**: Proper data sanitization and validation
-- **Environment Variables**: Secure handling with `NEXT_PUBLIC_` prefix for client-side variables
+## Accessibility Standards
 
-### Accessibility Standards
-- **ARIA Labels**: Comprehensive aria-label usage for interactive elements
-- **Semantic HTML**: Proper semantic element usage throughout components
-- **Keyboard Navigation**: Full keyboard accessibility support
-- **Screen Reader Support**: Proper labeling and role attributes for assistive technology
+### ARIA Implementation
+- **Semantic HTML**: Proper use of semantic elements
+- **ARIA Labels**: Descriptive labels for interactive elements
+- **Keyboard Navigation**: Full keyboard accessibility
+- **Screen Reader Support**: Proper heading hierarchy and descriptions
+
+### Focus Management
+- **Focus Indicators**: Visible focus states for all interactive elements
+- **Tab Order**: Logical tab sequence through interface
+- **Skip Links**: Navigation shortcuts for screen readers
+
+## Performance Monitoring
+
+### Analytics Integration
+- **Custom Hooks**: `useAnalytics` for event tracking
+- **Performance Metrics**: `usePerformance` for timing measurements
+- **User Interactions**: Track color views, searches, and favorites
+
+### Optimization Strategies
+- **Bundle Analysis**: Regular bundle size monitoring
+- **Image Optimization**: Proper image formats and lazy loading
+- **Critical CSS**: Above-the-fold CSS optimization
+
+## Security Practices
+
+### Input Validation
+- **File Upload**: Strict file type and size validation
+- **XSS Prevention**: Proper sanitization of user inputs
+- **Content Security**: Security headers implementation
+
+### Data Protection
+- **Local Storage**: Safe handling of user preferences and favorites
+- **Environment Variables**: Proper secret management
+- **API Security**: Rate limiting and input validation

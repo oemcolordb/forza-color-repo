@@ -136,7 +136,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     setIsProcessing(true)
     setError(null)
     
-    // Validate file first
+    // Enhanced file validation
     const validationError = validateFile(file)
     if (validationError) {
       setError(validationError)
@@ -144,46 +144,144 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       return
     }
     
-    try {
+    let objectUrl: string | null = null
+    let dataUrl: string | null = null
+    
+    const loadImageWithFallback = async (): Promise<HTMLImageElement> => {
       const img = new Image()
+      
+      // Strategy 1: Try with object URL
+      try {
+        objectUrl = URL.createObjectURL(file)
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('timeout')), 8000)
+          img.onload = () => { clearTimeout(timeout); resolve() }
+          img.onerror = () => { clearTimeout(timeout); reject(new Error('object_url_failed')) }
+          img.src = objectUrl!
+        })
+        return img
+      } catch (error) {
+        console.log('Object URL failed, trying FileReader...')
+      }
+      
+      // Strategy 2: Try with FileReader (data URL)
+      try {
+        dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = (e) => resolve(e.target?.result as string)
+          reader.onerror = () => reject(new Error('FileReader failed'))
+          reader.readAsDataURL(file)
+        })
+        
+        const img2 = new Image()
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('timeout')), 8000)
+          img2.onload = () => { clearTimeout(timeout); resolve() }
+          img2.onerror = () => { clearTimeout(timeout); reject(new Error('data_url_failed')) }
+          img2.src = dataUrl!
+        })
+        return img2
+      } catch (error) {
+        console.log('FileReader failed, trying ArrayBuffer...')
+      }
+      
+      // Strategy 3: Try with ArrayBuffer
+      try {
+        const arrayBuffer = await file.arrayBuffer()
+        const blob = new Blob([arrayBuffer], { type: file.type })
+        const url = URL.createObjectURL(blob)
+        
+        const img3 = new Image()
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error('timeout')), 8000)
+          img3.onload = () => { clearTimeout(timeout); resolve() }
+          img3.onerror = () => { clearTimeout(timeout); reject(new Error('arraybuffer_failed')) }
+          img3.crossOrigin = 'anonymous'
+          img3.src = url
+        })
+        
+        URL.revokeObjectURL(url)
+        return img3
+      } catch (error) {
+        throw new Error('All image loading strategies failed. Please try a different image format (JPEG/PNG recommended).')
+      }
+    }
+    
+    try {
+      const img = await loadImageWithFallback()
+      
+      // Validate image
+      if (!img.width || !img.height || img.width > 10000 || img.height > 10000) {
+        throw new Error('Invalid image dimensions. Please use images between 1x1 and 10000x10000 pixels.')
+      }
+      
+      // Create canvas with fallback
       const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
+      const ctx = canvas.getContext('2d', { willReadFrequently: true })
       
       if (!ctx) {
-        throw new Error('Canvas context not available')
+        throw new Error('Canvas not supported in this browser')
       }
-
-      await new Promise((resolve, reject) => {
-        img.onload = resolve
-        img.onerror = () => reject(new Error('Failed to load image'))
-        img.src = URL.createObjectURL(file)
-      })
-
+      
       // Resize for performance
-      const maxSize = 200
-      const scale = Math.min(maxSize / img.width, maxSize / img.height)
+      const maxSize = 300
+      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
       canvas.width = Math.max(1, Math.floor(img.width * scale))
       canvas.height = Math.max(1, Math.floor(img.height * scale))
-
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-
+      
+      // Draw with error handling
+      try {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      } catch (drawError) {
+        throw new Error('Failed to draw image. The image may be corrupted.')
+      }
+      
+      // Extract image data with validation
+      let imageData: ImageData
+      try {
+        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      } catch (getDataError) {
+        throw new Error('Failed to extract image data. Try a different image.')
+      }
+      
+      if (!imageData?.data?.length) {
+        throw new Error('No pixel data found in image')
+      }
+      
+      // Extract colors with enhanced algorithm
       const extracted = extractColorsFromImage(imageData)
       if (extracted.length === 0) {
-        throw new Error('No colors found in image')
+        throw new Error('No distinct colors found. Try an image with more varied colors.')
       }
       
       setExtractedColors(extracted)
-
+      
+      // Find matches
       const matchedColors = findMatchingColors(extracted)
-      onColorsFound(matchedColors)
-
-      URL.revokeObjectURL(img.src)
+      if (matchedColors.length === 0) {
+        setError('No matching automotive colors found. Try an image with more common car colors.')
+      } else {
+        onColorsFound(matchedColors)
+      }
+      
     } catch (error) {
-      console.error('Error processing image:', error)
-      const errorMsg = error instanceof Error ? error.message : 'Unknown error'
-      setError(`Processing failed: ${errorMsg}`)
+      console.error('Image processing error:', error)
+      
+      let userMessage = 'Failed to process image'
+      if (error instanceof Error) {
+        userMessage = error.message
+      }
+      
+      // Add helpful suggestions based on error type
+      if (userMessage.includes('loading') || userMessage.includes('failed')) {
+        userMessage += '. Try: 1) A different image format (JPEG/PNG), 2) A smaller file size, 3) Re-saving the image.'
+      }
+      
+      setError(userMessage)
     } finally {
+      // Cleanup
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
       setIsProcessing(false)
     }
   }, [onColorsFound, extractColorsFromImage, findMatchingColors, validateFile])
@@ -246,7 +344,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       dragActive 
         ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-900/20' 
         : isDarkMode 
-          ? 'border-slate-600 bg-slate-800/50' 
+          ? 'border-slate-600 bg-slate-800' 
           : 'border-gray-300 bg-gray-50'
     }`}
       onDrop={handleDrop}

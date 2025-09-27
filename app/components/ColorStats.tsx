@@ -12,7 +12,6 @@ const ColorStats: React.FC<ColorStatsProps> = ({ colors, favorites, colorHistory
   const [currentFactIndex, setCurrentFactIndex] = useState(0)
   
   const funFacts = useMemo(() => [
-    { text: "The most expensive car color is often white, as it requires multiple layers of paint!", duration: 8000 },
     { text: "Red cars are statistically more likely to get speeding tickets.", duration: 6000 },
     { text: "Ferrari's signature red is called 'Rosso Corsa' - Italian for 'Racing Red'.", duration: 7000 },
     { text: "Lamborghini's famous orange is officially named 'Arancio Borealis'.", duration: 7000 },
@@ -26,7 +25,33 @@ const ColorStats: React.FC<ColorStatsProps> = ({ colors, favorites, colorHistory
     { text: "The human eye can distinguish over 10 million different colors!", duration: 7000 },
     { text: "Forza Horizon games feature over 700 different car models with thousands of paint options.", duration: 9000 },
     { text: "JDM cars popularized many unique color combinations like purple with gold flakes.", duration: 8000 },
-    { text: "Drift cars often use bright colors for better visibility during competitions.", duration: 8000 }
+    { text: "Drift cars often use bright colors for better visibility during competitions.", duration: 8000 },
+    { text: "Porsche's 'Guards Red' was originally created for fire trucks and emergency vehicles.", duration: 8000 },
+    { text: "BMW's 'Estoril Blue' is named after the famous Portuguese racing circuit.", duration: 7000 },
+    { text: "Audi's 'Nardo Grey' gets its name from the high-speed test track in Italy.", duration: 7000 },
+    { text: "Mercedes' 'Designo' colors can add over $8,000 to a car's price.", duration: 7000 },
+    { text: "Koenigsegg offers a 'Naked Carbon' option that shows the raw carbon fiber weave.", duration: 8000 },
+    { text: "Pagani hand-paints each car, taking over 2 weeks per vehicle.", duration: 7000 },
+    { text: "Rolls-Royce will match any color sample you bring them, no matter how unusual.", duration: 8000 },
+    { text: "Bentley's 'Mulliner' division offers over 100 standard paint colors.", duration: 7000 },
+    { text: "Lamborghini's 'Verde Mantis' glows under UV light due to special pigments.", duration: 8000 },
+    { text: "Ford's 'Grabber Blue' was inspired by 1960s muscle car culture.", duration: 7000 },
+    { text: "Chevrolet's 'Hugger Orange' was designed to stand out on the Camaro.", duration: 7000 },
+    { text: "Dodge's 'Plum Crazy' purple was one of the most popular muscle car colors.", duration: 8000 },
+    { text: "Honda's 'Championship White' was exclusive to Type R models for years.", duration: 7000 },
+    { text: "Toyota's 'Solar Shift' paint changes color depending on the viewing angle.", duration: 8000 },
+    { text: "Nissan's 'Midnight Purple' contains special flakes that shimmer in darkness.", duration: 8000 },
+    { text: "Subaru's 'World Rally Blue' became iconic through their WRC racing success.", duration: 8000 },
+    { text: "Mazda's 'Soul Red Crystal' uses a unique three-layer painting process.", duration: 7000 },
+    { text: "Acura's 'Indy Yellow Pearl' was inspired by their IndyCar racing heritage.", duration: 8000 },
+    { text: "Lexus' 'Structural Blue' mimics the wing structure of morpho butterflies.", duration: 8000 },
+    { text: "Infiniti's 'Liquid Copper' appears to flow like molten metal in sunlight.", duration: 8000 },
+    { text: "Tesla's 'Pearl White Multi-Coat' has 7 layers including a protective clear coat.", duration: 8000 },
+    { text: "Rivian's 'Launch Green' was specifically created for their electric truck debut.", duration: 8000 },
+    { text: "Lucid's 'Stellar White' contains glass flakes for a starlike sparkle effect.", duration: 8000 },
+    { text: "Polestar's 'Thunder' grey changes from light to dark based on lighting conditions.", duration: 9000 },
+    { text: "Genesis' 'Himalayan Grey' was inspired by the natural stone formations.", duration: 8000 },
+    { text: "Cadillac's 'Electric Blue' uses electroluminescent particles for extra depth.", duration: 8000 }
   ], [])
   
   useEffect(() => {

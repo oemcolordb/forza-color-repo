@@ -2,125 +2,91 @@
 
 ## Directory Organization
 
-### Core Application (`/app/`)
-- **`page.tsx`** - Main application entry point with color grid and search functionality
-- **`layout.tsx`** - Root layout with global providers, metadata, and font configuration
-- **`globals.css`** - Global styles, CSS variables, and base styling
-- **`critical.css`** - Critical path CSS for above-the-fold content optimization
-- **`animations.css`** - Custom animation definitions and keyframes
-- **`error.tsx`** - Global error page component
-- **`not-found.tsx`** - 404 error page component
+### Core Application (`/app`)
+- **`components/`** - React UI components with specialized functionality
+  - `ColorCard.tsx` - Individual color display component
+  - `VirtualGrid.tsx` - Performance-optimized grid rendering
+  - `ImageColorExtractor.tsx` - AI-powered color extraction from images
+  - `LazyColorGrid.tsx` - Lazy-loaded color grid implementation
+  - `__tests__/` - Component unit tests
+- **`hooks/`** - Custom React hooks for shared logic
+  - `useAnalytics.ts` - Analytics tracking functionality
+  - `usePerformance.ts` - Performance monitoring utilities
+- **`types/`** - TypeScript type definitions
+  - `color.ts` - Color data structure definitions
+- **`layout.tsx`** - Root application layout
+- **`page.tsx`** - Main application entry point
 
-### Components (`/app/components/`)
-- **`ColorCard.tsx`** - Individual color display component with interaction handlers
-- **`ColorStats.tsx`** - Color analytics and statistics dashboard
-- **`VirtualGrid.tsx`** - Virtual scrolling grid for performance optimization
-- **`LazyColorGrid.tsx`** - Lazy-loaded color grid implementation
-- **`ModelBrowser.tsx`** - Vehicle model browsing and selection interface
-- **`Header.tsx`** - Application header with navigation and theme toggle
-- **`Footer.tsx`** - Application footer with links and information
-- **`LoadingSpinner.tsx`** - Reusable loading state component
-- **`ErrorBoundary.tsx`** - React error boundary for error handling
-- **`ExportButton.tsx`** - Color data export functionality
-- **`ShareButton.tsx`** - Color sharing functionality with social integration
-- **`SecurityHeaders.tsx`** - Security header management component
+### Data Services (`/services`)
+- **`colorData.ts`** - Primary color data management
+- **`colorDataLazy.ts`** - Lazy loading implementation for color data
+- **`colorDataManager.ts`** - Advanced color data operations
+- **`aiCache.ts`** - AI service caching layer
 
-### Hooks (`/app/hooks/`)
-- **`useAnalytics.ts`** - Analytics tracking and event management
-- **`usePerformance.ts`** - Performance monitoring and measurement utilities
+### Data Processing (`/scripts`)
+- **Color Data Management**
+  - `updateColorData.js` - Update existing color database
+  - `addNewColorsToDatabase.js` - Add new colors to database
+  - `matchColorToModels.js` - Match colors to vehicle models
+- **Data Quality**
+  - `removeDuplicateColors.js` - Remove duplicate entries
+  - `fixDuplicateKeys.js` - Fix data integrity issues
+  - `analyzeColorTypes.js` - Analyze color type distribution
 
-### Types (`/app/types/`)
-- **`color.ts`** - TypeScript type definitions for color data structures
-
-### Services (`/services/`)
-- **`colorData.ts`** - Core color data management and storage
-- **`colorDataLazy.ts`** - Lazy loading color data service with caching
-- **`colorDataManager.ts`** - Advanced color data operations and utilities
-- **`aiCache.ts`** - AI service caching layer for Gemini API
-
-### Scripts (`/scripts/`)
-- **`matchColorToModels.js`** - Color-to-model matching utilities and algorithms
-- **`updateColorData.js`** - Data update and maintenance automation scripts
-
-### Netlify Functions (`/netlify/`)
+### Deployment (`/netlify`)
 - **`functions/`** - Serverless API endpoints
-  - `analytics.js` - Analytics data collection and processing
-  - `color-details.js` - Color detail retrieval API
-  - `export-colors.js` - Color export functionality
-  - `get-makes.js` - Vehicle manufacturer data API
-  - `search-colors.js` - Color search API with filtering
-- **`edge-functions/`** - Edge computing functions for global performance
-  - `ab-test.js` - A/B testing logic and routing
-  - `color-cache.js` - Color data caching at the edge
-  - `geolocation.js` - Location-based features and routing
-  - `rate-limit.js` - API rate limiting and protection
-  - `security-headers.js` - Security header injection
+  - `search-colors.js` - Color search functionality
+  - `color-details.js` - Individual color data retrieval
+  - `export-colors.js` - Color data export functionality
+- **`edge-functions/`** - Edge computing functions
+  - `color-cache.js` - Color data caching
+  - `security-headers.js` - Security header management
+  - `rate-limit.js` - API rate limiting
 
-### Testing (`/app/components/__tests__/`)
-- **`ColorCard.test.tsx`** - Component unit tests with comprehensive coverage
-- **`jest.config.js`** - Jest testing configuration and setup
-- **`jest.setup.js`** - Test environment setup and global mocks
-
-### Data Files (Root Level)
-- **`autocolorlibrary-*.json`** - Color database files from various sources
-- **`scrape-*.js`** - Data scraping and extraction automation scripts
+### Static Assets (`/public`)
+- `manifest.json` - PWA manifest
+- `sw.js` - Service worker for offline functionality
+- `robots.txt` - Search engine directives
 
 ## Architectural Patterns
 
 ### Component Architecture
-- **Functional Components**: All components use React functional components with hooks
-- **Component Composition**: Modular, reusable components with clear separation of concerns
-- **Error Boundaries**: Comprehensive error handling at multiple component levels
-- **Performance Optimization**: Virtual scrolling, lazy loading, and React.memo usage
+- **Atomic Design**: Components organized by complexity (atoms → molecules → organisms)
+- **Container/Presentational**: Clear separation between data logic and UI presentation
+- **Compound Components**: Complex components built from smaller, reusable parts
 
-### Data Management Architecture
-- **Service Layer**: Centralized data services for color management and operations
-- **Lazy Loading Strategy**: Progressive data loading for large datasets (10,000+ colors)
-- **Multi-Layer Caching**: Service-level caching, AI cache, and edge function caching
-- **Type Safety**: Full TypeScript coverage for all data structures and operations
+### Data Flow
+- **Unidirectional Data Flow**: Props down, events up pattern
+- **Service Layer**: Centralized data management through services
+- **Lazy Loading**: On-demand data loading for performance optimization
+- **Virtual Scrolling**: Efficient rendering of large datasets
 
-### Performance Architecture
-- **Virtual Scrolling**: Efficient rendering of large color grids without DOM bloat
-- **Code Splitting**: Automatic bundle splitting with Next.js App Router
-- **Image Optimization**: Next.js image optimization with WebP/AVIF formats
-- **Edge Computing**: Netlify edge functions for global low-latency performance
+### Performance Patterns
+- **Code Splitting**: Dynamic imports for route-based splitting
+- **Memoization**: React.memo and useMemo for expensive computations
+- **Virtualization**: Virtual grid for handling 10,000+ color items
+- **Caching**: Multi-layer caching (browser, edge, service worker)
 
-### Deployment Architecture
-- **Static Export**: Next.js static export for optimal hosting and CDN distribution
-- **Serverless Functions**: API endpoints deployed as serverless functions
-- **Edge Functions**: Global edge computing for performance-critical operations
-- **Progressive Web App**: PWA capabilities with service worker for offline usage
+### State Management
+- **Local State**: React hooks for component-specific state
+- **Shared State**: Context API for cross-component state
+- **Persistent State**: localStorage for user preferences and favorites
+- **Server State**: Netlify functions for dynamic data
 
-## Key Relationships & Data Flow
+## Key Relationships
 
-### Component Hierarchy
-```
-Layout (Root)
-├── Header (Navigation & Theme)
-├── Page (Main Content)
-│   ├── Filter Controls
-│   ├── ColorStats (Analytics)
-│   ├── ModelBrowser (Navigation)
-│   ├── LazyColorGrid (Display)
-│   │   └── ColorCard (Individual Items)
-│   └── Loading/Error States
-└── Footer (Information)
-```
-
-### Data Flow Architecture
-1. **Color Data Loading**: Services → Lazy Loading → Component State
-2. **User Interactions**: UI Events → Hooks → State Updates → Re-rendering
-3. **Search & Filtering**: Input → Service Layer → Filtered Results → UI Update
-4. **Performance Monitoring**: Hooks → Analytics Service → External Tracking
+### Component Dependencies
+- `VirtualGrid` → `ColorCard` (renders individual color items)
+- `ImageColorExtractor` → AI services (color analysis)
+- `LazyColorGrid` → `colorData` services (data fetching)
 
 ### Service Dependencies
-- **Color Services** ← JSON Data Files ← Scraping Scripts
-- **AI Services** ← Google Gemini API ← Caching Layer
-- **Analytics Services** ← Performance Hooks ← Component Events
-- **Export/Share Services** ← Color Data Services ← User Selections
+- `colorDataManager` → `colorData` (extends base functionality)
+- `aiCache` → Google Generative AI (caching layer)
+- Netlify functions → `colorData` services (API endpoints)
 
-### State Management Flow
-- **Local State**: Component-level state with useState and useEffect
-- **Derived State**: Computed values with useMemo for performance
-- **Persistent State**: localStorage integration for favorites and preferences
-- **Global State**: Context-free architecture with prop drilling for simplicity
+### Build Dependencies
+- Next.js App Router for routing and SSR
+- Tailwind CSS for styling system
+- TypeScript for type safety
+- Jest for testing framework

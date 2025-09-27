@@ -407,7 +407,7 @@ export default function HomePage() {
                 
                 return (
                   <button
-                    key={`history-${index}`}
+                    key={`history-${color.make}-${color.colorName}-${color.year || 'unknown'}-${index}`}
                     onClick={() => handleColorSelect(color)}
                     className={`flex-shrink-0 w-16 h-16 rounded-lg border-2 transition-all hover:scale-110 ${
                       isDarkMode ? 'border-slate-600 hover:border-fuchsia-400' : 'border-gray-300 hover:border-fuchsia-500'

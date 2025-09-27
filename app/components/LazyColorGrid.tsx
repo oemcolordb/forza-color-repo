@@ -20,10 +20,11 @@ const LazyColorGrid: React.FC<LazyColorGridProps> = memo(({
 }) => {
   const colorItems = useMemo(() => 
     colors.map((color, index) => {
-      const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year}`
+      const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year || 'unknown'}`
+      const uniqueKey = `${colorId}-${index}` // Add index to ensure uniqueness
       return (
         <div 
-          key={colorId}
+          key={uniqueKey}
           className="animate-fade-in"
           style={{ animationDelay: `${(index % 50) * 20}ms` }}
         >

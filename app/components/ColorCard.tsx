@@ -32,7 +32,7 @@ const ColorCard: React.FC<ColorCardProps> = ({
   return (
     <div className={`rounded-lg shadow-lg overflow-hidden transition-transform duration-300 group flex flex-col will-change-transform hover:scale-105 animate-fade-in ${
       isDarkMode 
-        ? 'bg-slate-800/80 border border-slate-700' 
+        ? 'bg-slate-800 border border-slate-700' 
         : 'bg-white border border-gray-200'
     }`}>
       <div className="h-32 w-full relative overflow-hidden group-hover:animate-pulse" style={{ background: gradient }}>
