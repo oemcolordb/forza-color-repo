@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import type { CarColor } from '../types/color'
 
 interface ColorStatsProps {
@@ -9,6 +9,34 @@ interface ColorStatsProps {
 }
 
 const ColorStats: React.FC<ColorStatsProps> = ({ colors, favorites, colorHistory, isDarkMode }) => {
+  const [currentFactIndex, setCurrentFactIndex] = useState(0)
+  
+  const funFacts = useMemo(() => [
+    { text: "The most expensive car color is often white, as it requires multiple layers of paint!", duration: 8000 },
+    { text: "Red cars are statistically more likely to get speeding tickets.", duration: 6000 },
+    { text: "Ferrari's signature red is called 'Rosso Corsa' - Italian for 'Racing Red'.", duration: 7000 },
+    { text: "Lamborghini's famous orange is officially named 'Arancio Borealis'.", duration: 7000 },
+    { text: "McLaren's signature color 'Papaya Orange' was inspired by their 1960s F1 cars.", duration: 8000 },
+    { text: "Bugatti uses over 20 layers of paint to achieve their signature finish.", duration: 7000 },
+    { text: "The rarest car color is often considered to be true purple.", duration: 6000 },
+    { text: "Matte finishes require special care - they can't be polished like regular paint!", duration: 8000 },
+    { text: "Pearlescent paints contain actual crushed pearls or mica flakes.", duration: 7000 },
+    { text: "Chrome paint can cost over $10,000 to apply professionally.", duration: 6000 },
+    { text: "Color-changing paints use thermochromic pigments that react to temperature.", duration: 9000 },
+    { text: "The human eye can distinguish over 10 million different colors!", duration: 7000 },
+    { text: "Forza Horizon games feature over 700 different car models with thousands of paint options.", duration: 9000 },
+    { text: "JDM cars popularized many unique color combinations like purple with gold flakes.", duration: 8000 },
+    { text: "Drift cars often use bright colors for better visibility during competitions.", duration: 8000 }
+  ], [])
+  
+  useEffect(() => {
+    const currentFact = funFacts[currentFactIndex]
+    const timer = setTimeout(() => {
+      setCurrentFactIndex((prev) => (prev + 1) % funFacts.length)
+    }, currentFact.duration)
+    
+    return () => clearTimeout(timer)
+  }, [currentFactIndex, funFacts])
   const stats = useMemo(() => {
     const makeCount = colors.reduce((acc, color) => {
       acc[color.make] = (acc[color.make] || 0) + 1
@@ -67,7 +95,7 @@ const ColorStats: React.FC<ColorStatsProps> = ({ colors, favorites, colorHistory
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 mb-6">
         <div>
           <h3 className={`font-semibold mb-2 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
             Top Manufacturers
@@ -90,6 +118,36 @@ const ColorStats: React.FC<ColorStatsProps> = ({ colors, favorites, colorHistory
               <span className={`text-sm font-mono ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>{count}</span>
             </div>
           ))}
+        </div>
+      </div>
+      
+      {/* Dynamic Fun Facts */}
+      <div className={`p-4 rounded-lg border-l-4 border-l-fuchsia-500 ${
+        isDarkMode ? 'bg-slate-700/50' : 'bg-blue-50'
+      }`}>
+        <h3 className={`font-semibold mb-2 flex items-center ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
+          💡 Fun Fact
+        </h3>
+        <p className={`text-sm leading-relaxed transition-all duration-500 ${
+          isDarkMode ? 'text-slate-300' : 'text-gray-700'
+        }`}>
+          {funFacts[currentFactIndex].text}
+        </p>
+        <div className="mt-2 flex justify-center">
+          <div className="flex space-x-1">
+            {funFacts.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentFactIndex
+                    ? 'bg-fuchsia-500 scale-125'
+                    : isDarkMode
+                      ? 'bg-slate-600'
+                      : 'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -18,6 +18,7 @@ import Breadcrumbs from './components/Breadcrumbs'
 import ColorRandomizer from './components/ColorRandomizer'
 import ColorPalette from './components/ColorPalette'
 import ColorTrends from './components/ColorTrends'
+import TokyoBackground from './components/TokyoBackground'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -290,8 +291,10 @@ export default function HomePage() {
   }
 
   return (
-    <div className={`font-sans transition-all duration-500 ${themeClasses}`} style={backgroundStyle}>
-      <SecurityHeaders />
+    <div className={`font-sans transition-all duration-500 ${themeClasses} relative`} style={backgroundStyle}>
+      <TokyoBackground isDarkMode={isDarkMode} />
+      <div className="relative z-10">
+        <SecurityHeaders />
       <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
       
       {/* SEO Content */}
@@ -659,6 +662,7 @@ export default function HomePage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }
