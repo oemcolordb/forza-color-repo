@@ -29,6 +29,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   const [isProcessing, setIsProcessing] = useState(false)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [dragActive, setDragActive] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => {
     r /= 255
@@ -111,8 +112,37 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       .map(match => match.color)
   }, [colors])
 
+  const validateFile = useCallback((file: File): string | null => {
+    // Check file type - support all common image formats
+    const validTypes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 
+      'image/bmp', 'image/tiff', 'image/svg+xml', 'image/avif', 'image/heic'
+    ]
+    
+    if (!validTypes.includes(file.type)) {
+      return 'Please upload a valid image file (JPEG, PNG, GIF, WebP, BMP, TIFF, SVG, AVIF, HEIC)'
+    }
+    
+    // Check file size - allow up to 50MB for large images
+    const maxSize = 50 * 1024 * 1024 // 50MB
+    if (file.size > maxSize) {
+      return 'File size too large. Please upload an image smaller than 50MB.'
+    }
+    
+    return null
+  }, [])
+
   const processImage = useCallback(async (file: File) => {
     setIsProcessing(true)
+    setError(null)
+    
+    // Validate file first
+    const validationError = validateFile(file)
+    if (validationError) {
+      setError(validationError)
+      setIsProcessing(false)
+      return
+    }
     
     try {
       const img = new Image()
@@ -147,7 +177,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     } finally {
       setIsProcessing(false)
     }
-  }, [onColorsFound, extractColorsFromImage, findMatchingColors])
+  }, [onColorsFound, extractColorsFromImage, findMatchingColors, validateFile])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -235,12 +265,18 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
 
         <input
           type="file"
-          accept="image/*"
+          accept="image/*,.heic,.avif"
           onChange={handleFileInput}
           className="hidden"
           id="image-upload"
           disabled={isProcessing}
         />
+        
+        {error && (
+          <div className={`mb-4 p-3 rounded-lg ${isDarkMode ? 'bg-red-900/30 text-red-200' : 'bg-red-50 text-red-800'}`}>
+            {error}
+          </div>
+        )}
         
         <label
           htmlFor="image-upload"
