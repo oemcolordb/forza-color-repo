@@ -4,6 +4,7 @@ import type { CarColor } from '../types/color'
 interface ImageColorExtractorProps {
   colors: CarColor[]
   onColorsFound: (matchedColors: CarColor[]) => void
+  onColorSelect?: (color: CarColor) => void
   isDarkMode: boolean
   showTutorial?: boolean
   onTutorialClose?: () => void
@@ -22,6 +23,7 @@ interface ExtractedColor {
 const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   colors,
   onColorsFound,
+  onColorSelect,
   isDarkMode,
   showTutorial = false,
   onTutorialClose
@@ -57,16 +59,17 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     const colorMap = new Map<string, number>()
     const data = imageData.data
 
-    // Sample every 4th pixel for performance
-    for (let i = 0; i < data.length; i += 16) {
+    // Sample every pixel for better accuracy
+    for (let i = 0; i < data.length; i += 4) {
       const r = data[i]
       const g = data[i + 1]
       const b = data[i + 2]
       const alpha = data[i + 3]
 
-      if (alpha < 128) continue // Skip transparent pixels
+      if (alpha < 200) continue // Skip transparent/semi-transparent pixels
 
-      const key = `${Math.floor(r/10)*10}-${Math.floor(g/10)*10}-${Math.floor(b/10)*10}`
+      // Use smaller grouping for better color accuracy
+      const key = `${Math.floor(r/5)*5}-${Math.floor(g/5)*5}-${Math.floor(b/5)*5}`
       colorMap.set(key, (colorMap.get(key) || 0) + 1)
     }
 
@@ -77,7 +80,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         return { r, g, b, h, s, l, count }
       })
       .sort((a, b) => b.count - a.count)
-      .slice(0, 10)
+      .filter(color => color.count > 5) // Filter out noise
+      .slice(0, 12)
   }, [])
 
   const findMatchingColors = useCallback((extractedColors: ExtractedColor[]): CarColor[] => {
@@ -406,20 +410,45 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               🎨 Extracted Colors
             </h4>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
-              {extractedColors.map((color, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <div
-                    className="w-12 h-12 rounded-lg border-2 border-white shadow-lg transition-transform hover:scale-110"
-                    style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})` }}
-                    title={`RGB(${color.r}, ${color.g}, ${color.b})`}
-                  />
-                  <span className={`text-xs mt-1 ${
-                    isDarkMode ? 'text-slate-400' : 'text-gray-600'
-                  }`}>
-                    #{color.r.toString(16).padStart(2,'0')}{color.g.toString(16).padStart(2,'0')}{color.b.toString(16).padStart(2,'0')}
-                  </span>
-                </div>
-              ))}
+              {extractedColors.map((color, index) => {
+                const hexCode = `#${color.r.toString(16).padStart(2,'0')}${color.g.toString(16).padStart(2,'0')}${color.b.toString(16).padStart(2,'0')}`
+                
+                // Convert HSL back to HSB for proper display
+                const hslToHsb = (h: number, s: number, l: number): { h: number; s: number; b: number } => {
+                  const b = l + s * Math.min(l, 1 - l)
+                  const newS = b === 0 ? 0 : 2 * (1 - l / b)
+                  return { h, s: newS, b }
+                }
+                
+                const hsbColor = hslToHsb(color.h, color.s, color.l)
+                
+                // Convert extracted color to CarColor format
+                const carColor: CarColor = {
+                  make: 'Extracted',
+                  model: 'Image Color',
+                  year: null,
+                  colorName: `Color ${index + 1} (${hexCode.toUpperCase()})`,
+                  colorType: 'Extracted',
+                  color1: hsbColor,
+                  color2: hsbColor
+                }
+                
+                return (
+                  <div key={index} className="flex flex-col items-center">
+                    <button
+                      className="w-12 h-12 rounded-lg border-2 border-white shadow-lg transition-all hover:scale-110 hover:shadow-xl cursor-pointer"
+                      style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})` }}
+                      onClick={() => onColorSelect?.(carColor)}
+                      title={`Click to view details - RGB(${color.r}, ${color.g}, ${color.b})`}
+                    />
+                    <span className={`text-xs mt-1 ${
+                      isDarkMode ? 'text-slate-400' : 'text-gray-600'
+                    }`}>
+                      {hexCode}
+                    </span>
+                  </div>
+                )
+              })}
             </div>
             <label
               htmlFor="image-upload"

@@ -430,6 +430,7 @@ export default function HomePage() {
             <ImageColorExtractor
               colors={colors}
               onColorsFound={handleImageColorsFound}
+              onColorSelect={handleColorSelect}
               isDarkMode={isDarkMode}
               showTutorial={showTutorial}
               onTutorialClose={handleTutorialClose}
