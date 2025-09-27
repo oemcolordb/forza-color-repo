@@ -18,30 +18,47 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors, isDarkMode }) => {
     const analogous2H = (baseH - 0.083 + 1) % 1 // -30 degrees
     const triadicH = (baseH + 0.333) % 1 // +120 degrees
 
-    const findClosestColor = (targetH: number) => {
+    const findClosestColor = (targetH: number, excludeColors: CarColor[] = []) => {
       if (colors.length === 0) return baseColor
       
-      // Filter out the base color to avoid duplicates
+      // Filter out the base color and already selected colors to avoid duplicates
       const availableColors = colors.filter(c => 
-        !(c.make === baseColor.make && c.model === baseColor.model && c.colorName === baseColor.colorName)
+        !(c.make === baseColor.make && c.model === baseColor.model && c.colorName === baseColor.colorName) &&
+        !excludeColors.some(exc => exc.make === c.make && exc.model === c.model && exc.colorName === c.colorName) &&
+        c.color1.s > 0.1 && c.color1.b > 0.2 // Avoid very desaturated or dark colors
       )
       
       if (availableColors.length === 0) return baseColor
       
-      return availableColors.reduce((closest, color) => {
+      // Find colors with good hue match and visual distinction
+      const candidates = availableColors.map(color => {
         const colorH = color.color1.h
-        const currentDiff = Math.min(Math.abs(colorH - targetH), 1 - Math.abs(colorH - targetH))
-        const closestDiff = Math.min(Math.abs(closest.color1.h - targetH), 1 - Math.abs(closest.color1.h - targetH))
-        return currentDiff < closestDiff ? color : closest
-      }, availableColors[0])
+        const hueDiff = Math.min(Math.abs(colorH - targetH), 1 - Math.abs(colorH - targetH))
+        const saturation = color.color1.s
+        const brightness = color.color1.b
+        
+        // Score based on hue match, but prefer more saturated and brighter colors
+        const score = (1 - hueDiff) * 0.6 + saturation * 0.2 + brightness * 0.2
+        
+        return { color, score, hueDiff }
+      })
+      
+      // Sort by score and return the best match
+      candidates.sort((a, b) => b.score - a.score)
+      return candidates[0]?.color || baseColor
     }
+
+    const complementary = findClosestColor(complementaryH)
+    const analogous1 = findClosestColor(analogous1H, [complementary])
+    const analogous2 = findClosestColor(analogous2H, [complementary, analogous1])
+    const triadic = findClosestColor(triadicH, [complementary, analogous1, analogous2])
 
     return {
       base: baseColor,
-      complementary: findClosestColor(complementaryH),
-      analogous1: findClosestColor(analogous1H),
-      analogous2: findClosestColor(analogous2H),
-      triadic: findClosestColor(triadicH)
+      complementary,
+      analogous1,
+      analogous2,
+      triadic
     }
   }, [colors])
 
