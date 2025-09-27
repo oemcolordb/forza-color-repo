@@ -143,6 +143,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       URL.revokeObjectURL(img.src)
     } catch (error) {
       console.error('Error processing image:', error)
+      setError('Failed to process image. Please try a different image.')
     } finally {
       setIsProcessing(false)
     }
