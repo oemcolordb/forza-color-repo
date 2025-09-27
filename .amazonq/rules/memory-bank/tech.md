@@ -1,113 +1,125 @@
 # Technology Stack & Development
 
-## Core Technologies
+## Programming Languages & Versions
+
+### Core Languages
+- **TypeScript 5.8.2**: Primary language for type-safe development
+- **JavaScript**: Used in configuration files and scripts
+- **CSS**: Global styles and animations
+- **HTML**: JSX/TSX templates in React components
+
+### Runtime Environment
+- **Node.js**: Version specified in .nvmrc file
+- **React 19.0.0**: Latest React with concurrent features
+- **Next.js 15.1.3**: Full-stack React framework with App Router
+
+## Framework & Libraries
 
 ### Frontend Framework
-- **Next.js 15.1.3** - React framework with App Router
-- **React 19.0.0** - UI library with latest features
-- **TypeScript 5.8.2** - Type-safe JavaScript development
+- **Next.js 15.1.3**: 
+  - App Router for file-based routing
+  - Static site generation (SSG) with export
+  - Image optimization and performance features
+  - Edge runtime support
 
-### Styling & UI
-- **Tailwind CSS 3.4.17** - Utility-first CSS framework
-- **PostCSS 8.5.1** - CSS processing and optimization
-- **Autoprefixer 10.4.20** - CSS vendor prefix automation
+### UI & Styling
+- **Tailwind CSS 3.4.17**: Utility-first CSS framework
+- **PostCSS 8.5.1**: CSS processing and optimization
+- **Autoprefixer 10.4.20**: CSS vendor prefixing
+- **Critters 0.0.23**: Critical CSS inlining
 
-### AI & External Services
-- **Google Generative AI 0.21.0** - AI-powered color analysis and extraction
-- **Critters 0.0.23** - Critical CSS extraction for performance
+### AI & External APIs
+- **Google Generative AI 0.21.0**: Gemini API integration for enhanced features
 
-### Development Tools
-- **ESLint 9.17.0** - Code linting and quality enforcement
-- **Jest 29.7.0** - Testing framework
-- **Testing Library** - React component testing utilities
-  - `@testing-library/react 16.3.0`
-  - `@testing-library/jest-dom 6.8.0`
+## Development Tools & Testing
 
-## Build System & Dependencies
+### Code Quality
+- **ESLint 9.17.0**: Code linting and style enforcement
+- **TypeScript Compiler**: Type checking and compilation
+- **Prettier**: Code formatting (implied by project structure)
 
-### Package Management
-- **npm** - Primary package manager
-- **Node.js 18.0+** - Runtime requirement (specified in .nvmrc)
+### Testing Framework
+- **Jest 29.7.0**: JavaScript testing framework
+- **Testing Library React 16.3.0**: React component testing utilities
+- **Testing Library Jest DOM 6.8.0**: Custom Jest matchers
+- **Jest Environment JSDOM 29.7.0**: DOM testing environment
 
-### Build Configuration
-- **next.config.js** - Next.js build configuration
-- **tailwind.config.js** - Tailwind CSS customization
-- **postcss.config.js** - PostCSS processing setup
-- **tsconfig.json** - TypeScript compiler configuration
+### Type Definitions
+- **@types/node 22.14.0**: Node.js type definitions
+- **@types/react 19.0.1**: React type definitions
+- **@types/react-dom 19.0.1**: React DOM type definitions
+- **@types/jest 29.5.14**: Jest type definitions
 
-### Testing Setup
-- **jest.config.js** - Jest testing configuration
-- **jest.setup.js** - Test environment setup
-- **jest-environment-jsdom** - DOM testing environment
+## Build System & Configuration
+
+### Build Tools
+- **Next.js Build System**: Webpack-based with optimizations
+- **TypeScript Compiler**: Type checking and transpilation
+- **PostCSS**: CSS processing pipeline
+- **Bundle Analyzer**: Development bundle analysis
+
+### Configuration Files
+- **next.config.js**: Next.js configuration with performance optimizations
+- **tailwind.config.js**: Tailwind CSS customization
+- **tsconfig.json**: TypeScript compiler configuration
+- **jest.config.js**: Jest testing configuration
+- **eslint.json**: ESLint rules and configuration
+- **postcss.config.js**: PostCSS plugin configuration
+
+### Environment Configuration
+- **Environment Variables**: API keys and app configuration
+- **Netlify Configuration**: Deployment and edge function settings
+- **Package Scripts**: Development, build, and test commands
 
 ## Development Commands
 
-### Core Development
+### Core Commands
 ```bash
-npm run dev          # Start development server (Next.js dev mode)
-npm run build        # Build for production (Next.js build + export)
-npm run start        # Start production server
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start           # Start production server
+npm run lint        # Run ESLint
+npm test            # Run Jest tests
+npm run test:watch  # Run tests in watch mode
 ```
 
-### Code Quality
-```bash
-npm run lint         # Run ESLint code analysis
-npm run test         # Run Jest test suite
-npm run test:watch   # Run tests in watch mode
-```
+### Development Workflow
+1. **Development**: `npm run dev` for hot reloading
+2. **Testing**: `npm test` for unit tests
+3. **Linting**: `npm run lint` for code quality
+4. **Building**: `npm run build` for production
+5. **Deployment**: Automatic via Netlify on git push
 
-### Environment Setup
-```bash
-npm install          # Install all dependencies
-cp .env.local.example .env.local  # Setup environment variables
-```
+## Performance Optimizations
+
+### Next.js Optimizations
+- **Static Export**: Pre-built static files for fast loading
+- **Image Optimization**: WebP/AVIF formats with responsive sizing
+- **Bundle Splitting**: Vendor chunks and code splitting
+- **Tree Shaking**: Unused code elimination
+- **CSS Optimization**: Critical CSS inlining with Critters
+
+### Runtime Optimizations
+- **Edge Functions**: Netlify edge computing for caching and security
+- **Virtual Scrolling**: Efficient rendering of large color lists
+- **Lazy Loading**: On-demand component and data loading
+- **Service Worker**: PWA caching strategies
+
+### Development Optimizations
+- **TypeScript**: Compile-time error catching
+- **ESLint**: Code quality enforcement
+- **Hot Reloading**: Fast development iteration
+- **Bundle Analysis**: Performance monitoring in development
 
 ## Deployment & Infrastructure
 
 ### Hosting Platform
-- **Netlify** - Primary deployment platform
-- **Edge Functions** - Serverless computing at the edge
-- **Build Settings**:
-  - Build command: `npm run build`
-  - Publish directory: `out`
+- **Netlify**: Static site hosting with edge functions
+- **CDN**: Global content delivery network
+- **Edge Computing**: Geolocation and caching optimization
 
-### Environment Variables
-- `NEXT_PUBLIC_GEMINI_API_KEY` - Google AI API key
-- `NEXT_PUBLIC_APP_URL` - Application base URL
-
-### Performance Optimizations
-- **Static Site Generation (SSG)** - Pre-built pages for performance
-- **Edge Functions** - Geographically distributed computing
-- **Service Worker** - Offline functionality and caching
-- **Critical CSS** - Above-the-fold CSS optimization
-
-## Data Processing Tools
-
-### Scraping & Data Collection
-- **Node.js Scripts** - Custom data extraction tools
-- **autocolorlibrary-*.json** - Processed color datasets
-- **scrape-*.js** - Web scraping utilities for color data
-
-### Data Management
-- **JSON-based Storage** - Structured color data files
-- **Script-based Processing** - Automated data cleaning and organization
-- **Duplicate Detection** - Data quality assurance tools
-
-## Development Workflow
-
-### Local Development
-1. Clone repository
-2. Install dependencies with `npm install`
-3. Setup environment variables
-4. Run `npm run dev` for development server
-5. Access application at `http://localhost:3000`
-
-### Testing Strategy
-- **Unit Tests** - Component and utility function testing
-- **Integration Tests** - Service and API endpoint testing
-- **Performance Tests** - Virtual scrolling and rendering optimization
-
-### Code Quality Standards
-- **TypeScript** - Strict type checking enabled
-- **ESLint** - Enforced code style and best practices
-- **Prettier** - Consistent code formatting (implied by ESLint config)
+### CI/CD Pipeline
+- **Git Integration**: Automatic deployment on push
+- **Build Process**: Next.js static export
+- **Environment Variables**: Secure configuration management
+- **Performance Monitoring**: Built-in analytics and optimization

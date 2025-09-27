@@ -151,7 +151,7 @@ const ColorStats: React.FC<ColorStatsProps> = ({ colors, favorites, colorHistory
         isDarkMode ? 'bg-slate-700/50' : 'bg-blue-50'
       }`}>
         <h3 className={`font-semibold mb-2 flex items-center ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-          💡 Fun Fact
+          💡 Automotive Paint Facts
         </h3>
         <p className={`text-sm leading-relaxed transition-all duration-500 ${
           isDarkMode ? 'text-slate-300' : 'text-gray-700'

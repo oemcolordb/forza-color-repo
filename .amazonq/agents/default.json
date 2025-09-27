@@ -2,13 +2,27 @@
   "name": "q_ide_default",
   "description": "Default agent configuration",
   "prompt": "",
-  "mcpServers": {},
+  "mcpServers": {
+    "forza-color-repo": {
+      "command": "mcp-server-filesystem",
+      "disabled": false,
+      "timeout": 60000000,
+      "args": [
+        "c:\\Users\\B1lliBong\\Documents\\forza-color-repo"
+      ],
+      "env": {
+        "NODE_ENV": "development",
+        "MCP_ROOT_PATH": "c:\\Users\\B1lliBong\\Documents\\forza-color-repo"
+      }
+    }
+  },
   "tools": [
     "fs_read",
     "execute_bash",
     "fs_write",
     "report_issue",
-    "use_aws"
+    "use_aws",
+    "@forza-color-repo"
   ],
   "toolAliases": {},
   "allowedTools": [

@@ -3,90 +3,104 @@
 ## Directory Organization
 
 ### Core Application (`/app`)
-- **`components/`** - React UI components with specialized functionality
-  - `ColorCard.tsx` - Individual color display component
-  - `VirtualGrid.tsx` - Performance-optimized grid rendering
-  - `ImageColorExtractor.tsx` - AI-powered color extraction from images
-  - `LazyColorGrid.tsx` - Lazy-loaded color grid implementation
-  - `__tests__/` - Component unit tests
-- **`hooks/`** - Custom React hooks for shared logic
-  - `useAnalytics.ts` - Analytics tracking functionality
-  - `usePerformance.ts` - Performance monitoring utilities
-- **`types/`** - TypeScript type definitions
-  - `color.ts` - Color data structure definitions
-- **`layout.tsx`** - Root application layout
-- **`page.tsx`** - Main application entry point
+- **`/components`**: React components organized by functionality
+  - UI components (ColorCard, Header, Footer)
+  - Feature components (ColorPalette, ModelBrowser, VirtualGrid)
+  - Utility components (LoadingSpinner, ErrorBoundary)
+  - Test files in `__tests__/` subdirectory
+- **`/hooks`**: Custom React hooks for analytics and performance
+- **`/types`**: TypeScript type definitions for color data structures
+- **`/lib`**: Utility libraries and helper functions
+- **Root files**: Layout, page components, global styles, and error handling
 
-### Data Services (`/services`)
-- **`colorData.ts`** - Primary color data management
-- **`colorDataLazy.ts`** - Lazy loading implementation for color data
-- **`colorDataManager.ts`** - Advanced color data operations
-- **`aiCache.ts`** - AI service caching layer
+### Services Layer (`/services`)
+- **`colorData.ts`**: Main color data service and management
+- **`colorDataLazy.ts`**: Lazy loading implementation for color data
+- **`colorDataManager.ts`**: Advanced color data operations
+- **`aiCache.ts`**: AI-powered caching and optimization
+
+### Deployment & Functions (`/netlify`)
+- **`/edge-functions`**: Edge computing functions for performance
+  - A/B testing, caching, geolocation, rate limiting, security
+- **`/functions`**: Serverless functions for API endpoints
+  - Analytics, color details, export, search functionality
 
 ### Data Processing (`/scripts`)
-- **Color Data Management**
-  - `updateColorData.js` - Update existing color database
-  - `addNewColorsToDatabase.js` - Add new colors to database
-  - `matchColorToModels.js` - Match colors to vehicle models
-- **Data Quality**
-  - `removeDuplicateColors.js` - Remove duplicate entries
-  - `fixDuplicateKeys.js` - Fix data integrity issues
-  - `analyzeColorTypes.js` - Analyze color type distribution
-
-### Deployment (`/netlify`)
-- **`functions/`** - Serverless API endpoints
-  - `search-colors.js` - Color search functionality
-  - `color-details.js` - Individual color data retrieval
-  - `export-colors.js` - Color data export functionality
-- **`edge-functions/`** - Edge computing functions
-  - `color-cache.js` - Color data caching
-  - `security-headers.js` - Security header management
-  - `rate-limit.js` - API rate limiting
+- Color data processing and manipulation scripts
+- Database update and maintenance utilities
+- Color matching and deduplication tools
+- Data analysis and type generation scripts
 
 ### Static Assets (`/public`)
-- `manifest.json` - PWA manifest
-- `sw.js` - Service worker for offline functionality
-- `robots.txt` - Search engine directives
+- Images, icons, and media files
+- PWA manifest and service worker
+- SEO and metadata files
+
+## Core Components & Relationships
+
+### Data Flow Architecture
+```
+Color Data (JSON) → Services Layer → React Components → User Interface
+                 ↓
+              Edge Functions → Caching → Performance Optimization
+```
+
+### Component Hierarchy
+- **Layout** (app/layout.tsx)
+  - **Header** (navigation, search, theme toggle)
+  - **Main Content** (page-specific components)
+    - **ColorGrid** (virtual scrolling, lazy loading)
+    - **ColorCard** (individual color display)
+    - **Filters** (search, manufacturer, type filters)
+  - **Footer** (links, information)
+
+### Service Integration
+- **ColorData Service**: Centralized color data management
+- **Performance Hooks**: Analytics and performance monitoring
+- **Edge Functions**: Caching, security, and optimization
+- **AI Integration**: Google Gemini API for enhanced features
 
 ## Architectural Patterns
 
-### Component Architecture
-- **Atomic Design**: Components organized by complexity (atoms → molecules → organisms)
-- **Container/Presentational**: Clear separation between data logic and UI presentation
-- **Compound Components**: Complex components built from smaller, reusable parts
+### Next.js App Router Pattern
+- File-based routing with app directory structure
+- Server and client component separation
+- Static site generation with export configuration
+- Edge runtime optimization
 
-### Data Flow
-- **Unidirectional Data Flow**: Props down, events up pattern
-- **Service Layer**: Centralized data management through services
-- **Lazy Loading**: On-demand data loading for performance optimization
-- **Virtual Scrolling**: Efficient rendering of large datasets
+### Component Architecture
+- Functional components with React hooks
+- TypeScript for type safety
+- Modular component design with single responsibility
+- Test-driven development with Jest and Testing Library
 
 ### Performance Patterns
-- **Code Splitting**: Dynamic imports for route-based splitting
-- **Memoization**: React.memo and useMemo for expensive computations
-- **Virtualization**: Virtual grid for handling 10,000+ color items
-- **Caching**: Multi-layer caching (browser, edge, service worker)
+- Virtual scrolling for large datasets
+- Lazy loading and code splitting
+- Image optimization with Next.js Image component
+- Bundle optimization with webpack configuration
 
-### State Management
-- **Local State**: React hooks for component-specific state
-- **Shared State**: Context API for cross-component state
-- **Persistent State**: localStorage for user preferences and favorites
-- **Server State**: Netlify functions for dynamic data
+### Data Management
+- JSON-based color database
+- Client-side caching and local storage
+- Edge function caching for API responses
+- Lazy loading strategies for large datasets
 
-## Key Relationships
+### Styling Architecture
+- Tailwind CSS utility-first approach
+- CSS modules for component-specific styles
+- Dark/light theme system with CSS variables
+- Responsive design with mobile-first approach
 
-### Component Dependencies
-- `VirtualGrid` → `ColorCard` (renders individual color items)
-- `ImageColorExtractor` → AI services (color analysis)
-- `LazyColorGrid` → `colorData` services (data fetching)
+## Key Integrations
 
-### Service Dependencies
-- `colorDataManager` → `colorData` (extends base functionality)
-- `aiCache` → Google Generative AI (caching layer)
-- Netlify functions → `colorData` services (API endpoints)
+### External Services
+- **Google Gemini AI**: Enhanced color analysis and features
+- **Netlify**: Hosting, edge functions, and deployment
+- **Analytics**: Performance and usage tracking
 
-### Build Dependencies
-- Next.js App Router for routing and SSR
-- Tailwind CSS for styling system
-- TypeScript for type safety
-- Jest for testing framework
+### Development Tools
+- **TypeScript**: Type safety and developer experience
+- **ESLint**: Code quality and consistency
+- **Jest**: Unit testing and test coverage
+- **Tailwind CSS**: Utility-first styling framework

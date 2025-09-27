@@ -10921,7 +10921,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Carbon Fibre",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.5,
       "s": 0.01,
@@ -31338,7 +31338,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Carbon Fibre",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0,
       "s": 0,
@@ -31576,7 +31576,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Exposed Carbon Fiber",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.71,
       "s": 0.13,
@@ -32596,7 +32596,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Royal Blue Carbon",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.57,
       "s": 0.64,
@@ -99814,7 +99814,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Blue-Tint Carbon Fibre",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.57,
       "s": 0.64,
@@ -99831,7 +99831,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Burgundy Carbon",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.97,
       "s": 0.88,
@@ -99899,7 +99899,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Clear Carbon",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0,
       "s": 0,
@@ -99984,7 +99984,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Green Carbon",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.43,
       "s": 0.54,
@@ -100137,7 +100137,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Naked Carbon",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.61,
       "s": 0.08,
@@ -100171,7 +100171,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Purple Carbon",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.79,
       "s": 0.36,
@@ -104965,7 +104965,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Belize Green",
-    "colorType": "Normal ",
+    "colorType": "Normal",
     "color1": {
       "h": 0.41,
       "s": 0.53,
@@ -140189,7 +140189,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Liquid Kinetic Grey (layers)",
-    "colorType": "N/A",
+    "colorType": "Normal",
     "color1": {
       "h": 0.61,
       "s": 0.04,
@@ -144796,7 +144796,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Exposed Carbon Fiber",
-    "colorType": "Carbon Fibre Polished",
+    "colorType": "Carbon Fiber Polished",
     "color1": {
       "h": 0.57,
       "s": 0.09,

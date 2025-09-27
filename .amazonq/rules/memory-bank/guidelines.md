@@ -3,171 +3,144 @@
 ## Code Quality Standards
 
 ### TypeScript Usage
-- **Strict Type Safety**: All components use explicit TypeScript interfaces
-- **Interface Definitions**: Centralized type definitions in `app/types/color.ts`
-- **Type Imports**: Use `import type` for type-only imports
-- **Generic Constraints**: Proper use of generics with constraints where needed
+- **Strict Type Safety**: All components use explicit TypeScript interfaces and types
+- **Interface Definitions**: Comprehensive interfaces for data structures (e.g., `CarColor`, `ExtractedColor`)
+- **Type Imports**: Use `import type` for type-only imports to optimize bundle size
+- **Generic Types**: Leverage generics for reusable components and functions
+- **Null Safety**: Explicit handling of nullable values with optional chaining
 
 ### Component Architecture
-- **Functional Components**: All React components use function syntax with hooks
-- **Props Interface**: Every component has a dedicated props interface
-- **Default Props**: Use default parameters in function signatures
-- **Component Naming**: PascalCase for components, camelCase for functions
-
-### State Management Patterns
-- **useState Hook**: Local component state with proper typing
-- **useEffect Dependencies**: Exhaustive dependency arrays with proper cleanup
-- **useCallback/useMemo**: Performance optimization for expensive operations
-- **Custom Hooks**: Extracted logic into reusable hooks (`useAnalytics`, `usePerformance`)
-
-## Structural Conventions
+- **Functional Components**: Exclusively use React functional components with hooks
+- **React.memo**: Performance optimization for components that receive stable props
+- **Custom Hooks**: Extract reusable logic into custom hooks (`useAnalytics`, `usePerformance`)
+- **Props Interface**: Every component has a well-defined props interface
+- **Display Names**: Set displayName for memo components for better debugging
 
 ### File Organization
-- **Component Structure**: Each component in its own file with matching name
-- **Test Colocation**: Tests in `__tests__` subdirectories next to components
-- **Type Definitions**: Centralized in `types/` directory
-- **Service Layer**: Business logic separated into `services/` directory
+- **Barrel Exports**: Use index files for clean imports
+- **Test Colocation**: Tests in `__tests__` directories alongside components
+- **Type Definitions**: Centralized in `/types` directory
+- **Service Layer**: Separate business logic in `/services` directory
+- **Hook Extraction**: Custom hooks in dedicated `/hooks` directory
 
-### Import Patterns
-```typescript
-// External libraries first
-import React, { useState, useCallback } from 'react'
-import type { CarColor } from '../types/color'
+## Coding Patterns & Conventions
 
-// Internal components and utilities
-import Header from './components/Header'
-import { useAnalytics } from './hooks/useAnalytics'
-```
+### State Management
+- **useState Hook**: Local component state with proper typing
+- **useEffect Dependencies**: Exhaustive dependency arrays with ESLint compliance
+- **useCallback**: Memoize event handlers and functions passed as props
+- **useMemo**: Expensive computations and derived state optimization
+- **Local Storage Integration**: Persistent state with localStorage sync patterns
 
-### Export Patterns
-- **Default Exports**: For main component/function per file
-- **Named Exports**: For utilities and secondary functions
-- **Type Exports**: Separate type-only exports when needed
+### Event Handling
+- **Callback Props**: Consistent naming pattern (`onSelect`, `onToggleFavorite`, `onColorsFound`)
+- **Event Delegation**: Efficient event handling for large lists
+- **Async Operations**: Proper error handling with try-catch blocks
+- **Loading States**: Explicit loading state management for async operations
 
-## Styling Standards
+### Performance Optimization
+- **Virtual Scrolling**: Implemented for large datasets (10,000+ items)
+- **Lazy Loading**: Dynamic imports for large data files
+- **Memoization**: React.memo and useMemo for expensive operations
+- **Bundle Splitting**: Code splitting with dynamic imports
+- **Image Optimization**: WebP/AVIF formats with responsive sizing
+
+### Error Handling
+- **Error Boundaries**: Comprehensive error catching with ErrorBoundary component
+- **Graceful Degradation**: Fallback strategies for failed operations
+- **User Feedback**: Clear error messages with actionable suggestions
+- **Validation**: Input validation with helpful error messages
+- **Try-Catch Blocks**: Proper async error handling throughout
+
+## Styling & UI Patterns
 
 ### Tailwind CSS Usage
-- **Utility-First**: Extensive use of Tailwind utility classes
-- **Conditional Classes**: Template literals for dynamic styling
-- **Dark Mode**: Systematic dark mode support with `isDarkMode` props
-- **Responsive Design**: Mobile-first responsive classes
+- **Utility-First**: Consistent use of Tailwind utility classes
+- **Responsive Design**: Mobile-first responsive patterns
+- **Dark Mode**: Class-based dark mode with system preference detection
+- **Custom Animations**: Extended Tailwind config with custom keyframes
+- **Color System**: Structured color palette with semantic naming
 
-### Theme Implementation
-```typescript
-const themeClasses = isDarkMode 
-  ? 'bg-slate-800 text-slate-100' 
-  : 'bg-white text-gray-900'
-```
+### Component Styling
+- **Conditional Classes**: Dynamic class application based on props/state
+- **Theme Consistency**: Consistent dark/light mode implementations
+- **Animation Patterns**: Smooth transitions and micro-interactions
+- **Accessibility**: WCAG compliant styling with proper contrast ratios
+- **Loading States**: Visual feedback for async operations
 
-### Animation Classes
-- **Custom Animations**: Defined in `tailwind.config.js`
-- **Performance**: CSS-based animations over JavaScript
-- **Accessibility**: Respect user motion preferences
+### Layout Patterns
+- **Grid Systems**: CSS Grid and Flexbox for responsive layouts
+- **Container Patterns**: Consistent container and spacing patterns
+- **Modal Overlays**: Standardized modal and overlay implementations
+- **Navigation**: Sticky navigation with backdrop blur effects
 
-## Performance Patterns
+## Data Management Patterns
 
-### Optimization Techniques
-- **Virtual Scrolling**: Implemented in `VirtualGrid.tsx` for large datasets
-- **Lazy Loading**: Dynamic imports and component-level lazy loading
-- **Memoization**: Strategic use of `React.memo`, `useMemo`, `useCallback`
-- **Code Splitting**: Route-based and component-based splitting
+### API Integration
+- **Service Layer**: Centralized data fetching in service files
+- **Caching Strategy**: Multi-level caching (memory, localStorage, edge functions)
+- **Lazy Loading**: On-demand data loading for performance
+- **Error Recovery**: Retry mechanisms and fallback strategies
+- **Type Safety**: Strongly typed API responses and data structures
 
-### Data Handling
-- **Pagination**: Incremental loading with `ITEMS_PER_PAGE` constant
-- **Filtering**: Client-side filtering with `useMemo` optimization
-- **Caching**: Service worker and browser caching strategies
+### State Synchronization
+- **localStorage Sync**: Automatic persistence of user preferences
+- **URL State**: Search parameters for shareable application state
+- **Derived State**: Computed values using useMemo for efficiency
+- **State Normalization**: Efficient data structures for large datasets
 
-## Error Handling
-
-### Error Boundaries
-- **Component Wrapping**: `ErrorBoundary` component wraps main application
-- **Graceful Degradation**: Fallback UI for component failures
-- **Error Logging**: Console error logging with context
-
-### Validation Patterns
-```typescript
-const validateFile = useCallback((file: File): string | null => {
-  if (!validTypes.includes(file.type)) {
-    return 'Please upload a valid image file'
-  }
-  return null
-}, [])
-```
+### Performance Patterns
+- **Pagination**: Efficient data loading with virtual scrolling
+- **Filtering**: Client-side filtering with debounced search
+- **Memoization**: Expensive computations cached appropriately
+- **Bundle Optimization**: Code splitting and tree shaking
 
 ## Testing Standards
 
 ### Test Structure
-- **Jest + Testing Library**: Primary testing framework
-- **Component Testing**: Focus on user interactions and behavior
-- **Mock Functions**: Proper mocking of callbacks and external dependencies
+- **Jest Configuration**: Comprehensive test setup with jsdom environment
+- **Testing Library**: React Testing Library for component testing
+- **Mock Functions**: Proper mocking of external dependencies
+- **Test Coverage**: Comprehensive test coverage for critical components
 - **Accessibility Testing**: Screen reader and keyboard navigation tests
 
 ### Test Patterns
-```typescript
-describe('ComponentName', () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
-  })
+- **Arrange-Act-Assert**: Clear test structure and organization
+- **User-Centric Tests**: Testing user interactions rather than implementation
+- **Mock Cleanup**: Proper cleanup between test runs
+- **Edge Cases**: Testing error conditions and edge cases
+- **Integration Tests**: Testing component interactions and data flow
 
-  it('renders correctly', () => {
-    // Test implementation
-  })
-})
-```
-
-## API & Data Patterns
-
-### Color Data Structure
-```typescript
-interface CarColor {
-  make: string
-  model: string
-  year: number | null
-  colorName: string
-  colorType: string
-  color1: { h: number; s: number; b: number }
-  color2: { h: number; s: number; b: number }
-}
-```
-
-### Service Layer
-- **Data Services**: Centralized data management in `services/`
-- **Async Operations**: Proper async/await usage with error handling
-- **Type Safety**: All service functions properly typed
-
-## Accessibility Standards
-
-### ARIA Implementation
-- **Semantic HTML**: Proper use of semantic elements
-- **ARIA Labels**: Descriptive labels for interactive elements
-- **Keyboard Navigation**: Full keyboard accessibility
-- **Screen Reader Support**: Proper heading hierarchy and descriptions
-
-### Focus Management
-- **Focus Indicators**: Visible focus states for all interactive elements
-- **Tab Order**: Logical tab sequence through interface
-- **Skip Links**: Navigation shortcuts for screen readers
-
-## Performance Monitoring
-
-### Analytics Integration
-- **Custom Hooks**: `useAnalytics` for event tracking
-- **Performance Metrics**: `usePerformance` for timing measurements
-- **User Interactions**: Track color views, searches, and favorites
-
-### Optimization Strategies
-- **Bundle Analysis**: Regular bundle size monitoring
-- **Image Optimization**: Proper image formats and lazy loading
-- **Critical CSS**: Above-the-fold CSS optimization
-
-## Security Practices
+## Security & Best Practices
 
 ### Input Validation
-- **File Upload**: Strict file type and size validation
+- **File Upload Security**: Comprehensive file type and size validation
 - **XSS Prevention**: Proper sanitization of user inputs
-- **Content Security**: Security headers implementation
+- **CSRF Protection**: Security headers and proper request handling
+- **Content Security Policy**: Strict CSP headers for security
 
-### Data Protection
-- **Local Storage**: Safe handling of user preferences and favorites
-- **Environment Variables**: Proper secret management
-- **API Security**: Rate limiting and input validation
+### Performance Security
+- **Bundle Analysis**: Regular bundle size monitoring
+- **Memory Management**: Proper cleanup of event listeners and intervals
+- **Resource Loading**: Efficient resource loading and caching strategies
+- **Error Logging**: Secure error logging without sensitive data exposure
+
+## Development Workflow
+
+### Code Organization
+- **Single Responsibility**: Components and functions with clear, single purposes
+- **DRY Principle**: Reusable utilities and shared components
+- **Separation of Concerns**: Clear separation between UI, logic, and data layers
+- **Consistent Naming**: Descriptive and consistent naming conventions
+
+### Documentation
+- **JSDoc Comments**: Comprehensive function and component documentation
+- **README Files**: Clear setup and usage instructions
+- **Type Documentation**: Self-documenting code through TypeScript interfaces
+- **Change Logs**: Detailed change tracking and version management
+
+### Build & Deployment
+- **Static Generation**: Next.js static export for optimal performance
+- **Environment Configuration**: Proper environment variable management
+- **CI/CD Pipeline**: Automated testing and deployment workflows
+- **Performance Monitoring**: Built-in analytics and performance tracking
