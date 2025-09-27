@@ -299,6 +299,7 @@ export default function HomePage() {
             <select
               value={selectedMake}
               onChange={(e) => setSelectedMake(e.target.value)}
+              aria-label="Filter by car manufacturer"
               className={`w-full ${
                 isDarkMode 
                   ? 'bg-slate-800 border-slate-700 text-slate-100' 
@@ -318,6 +319,7 @@ export default function HomePage() {
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
               disabled={!selectedMake}
+              aria-label="Filter by car model"
               className={`w-full ${
                 isDarkMode 
                   ? 'bg-slate-800 border-slate-700 text-slate-100' 
