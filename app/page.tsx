@@ -31,7 +31,7 @@ export default function HomePage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [colorHistory, setColorHistory] = useState<CarColor[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const [backgroundColors, setBackgroundColors] = useState({ dark: '', light: '' })
+  const [tokyoBackground, setTokyoBackground] = useState('')
   const [page, setPage] = useState(1)
   const [imageMatchedColors, setImageMatchedColors] = useState<CarColor[]>([])
   const [showImageExtractor, setShowImageExtractor] = useState(false)
@@ -52,23 +52,48 @@ export default function HomePage() {
         setDisplayedColors(colorData.slice(0, ITEMS_PER_PAGE))
         setHasMore(colorData.length > ITEMS_PER_PAGE)
         
-        // Generate random background colors from color data
-        const randomColor1 = colorData[Math.floor(Math.random() * colorData.length)]
-        const randomColor2 = colorData[Math.floor(Math.random() * colorData.length)]
-        
-        const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => {
-          const l = b * (1 - s / 2)
-          const newS = l === 0 || l === 1 ? 0 : (b - l) / Math.min(l, 1 - l)
-          return [h * 360, newS * 100, l * 100]
+        // Generate Tokyo-style dynamic background
+        const generateTokyoBackground = () => {
+          const tokyoThemes = [
+            // Neon Tokyo Night
+            'radial-gradient(circle at 20% 80%, #ff0080 0%, transparent 50%), radial-gradient(circle at 80% 20%, #00ffff 0%, transparent 50%), radial-gradient(circle at 40% 40%, #ff4000 0%, transparent 50%), linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a1a1a 100%)',
+            // Cyberpunk Skyline
+            'linear-gradient(180deg, #ff006e 0%, #8338ec 25%, #3a86ff 50%, #06ffa5 75%, #ffbe0b 100%), linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)',
+            // Tokyo Sunset
+            'radial-gradient(ellipse at top, #ff9a9e 0%, #fecfef 50%, #fecfef 100%), linear-gradient(180deg, #ff9a9e 0%, #fad0c4 100%)',
+            // Shibuya Lights
+            'conic-gradient(from 180deg at 50% 50%, #ff0080, #00ffff, #ff4000, #8000ff, #ff0080), radial-gradient(circle, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)',
+            // Harajuku Dreams
+            'linear-gradient(45deg, #ff9a9e 0%, #fecfef 25%, #fecfef 50%, #ff9a9e 75%, #fad0c4 100%)',
+            // Tokyo Rain
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%), radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+            // Akihabara Electric
+            'radial-gradient(circle at 25% 25%, #ff0080 0%, transparent 50%), radial-gradient(circle at 75% 75%, #00ff80 0%, transparent 50%), linear-gradient(45deg, #000428 0%, #004e92 100%)',
+            // Tokyo Tower Night
+            'linear-gradient(180deg, #ff416c 0%, #ff4b2b 100%), radial-gradient(circle at 50% 20%, rgba(255,255,255,0.2) 0%, transparent 50%)',
+            // Shinjuku Neon
+            'conic-gradient(from 90deg at 50% 50%, #ff0080, #8000ff, #0080ff, #00ff80, #ff8000, #ff0080), linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8))',
+            // Cherry Blossom Tech
+            'radial-gradient(circle at 20% 80%, #ffecd2 0%, transparent 50%), radial-gradient(circle at 80% 20%, #fcb69f 0%, transparent 50%), linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+          ]
+          
+          // Change background every 30 minutes based on timestamp
+          const now = new Date()
+          const thirtyMinuteSlots = Math.floor(now.getTime() / (30 * 60 * 1000))
+          const themeIndex = thirtyMinuteSlots % tokyoThemes.length
+          
+          return tokyoThemes[themeIndex]
         }
         
-        const [h1, s1, l1] = hsbToHsl(randomColor1.color1.h, randomColor1.color1.s, randomColor1.color1.b)
-        const [h2, s2, l2] = hsbToHsl(randomColor2.color1.h, randomColor2.color1.s, randomColor2.color1.b)
+        setTokyoBackground(generateTokyoBackground())
         
-        setBackgroundColors({
-          dark: `hsl(${h1}, ${Math.min(s1, 30)}%, ${Math.min(l1, 15)}%)`,
-          light: `linear-gradient(135deg, hsl(${h1}, ${Math.min(s1, 60)}%, ${Math.max(l1, 85)}%), hsl(${h2}, ${Math.min(s2, 60)}%, ${Math.max(l2, 85)}%))`
-        })
+        // Set up interval to change background every 30 minutes
+        const backgroundInterval = setInterval(() => {
+          setTokyoBackground(generateTokyoBackground())
+        }, 30 * 60 * 1000) // 30 minutes
+        
+        // Cleanup interval on unmount
+        return () => clearInterval(backgroundInterval)
       } catch (error) {
         console.error('Failed to load colors:', error)
       } finally {
@@ -245,8 +270,11 @@ export default function HomePage() {
     : 'text-blue-900'
     
   const backgroundStyle = {
-    background: isDarkMode ? backgroundColors.dark : backgroundColors.light,
-    minHeight: '100vh'
+    background: tokyoBackground || (isDarkMode ? '#0a0a0a' : '#ffffff'),
+    minHeight: '100vh',
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
   }
 
   if (loading) {
@@ -508,14 +536,14 @@ export default function HomePage() {
       
       <Footer isDarkMode={isDarkMode} />
 
-      {/* Simple Modal */}
+      {/* Enhanced Color Modal */}
       {selectedColor && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 animate-fade-in"
           onClick={() => setSelectedColor(null)}
         >
           <div 
-            className="bg-slate-900 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative p-8 border border-slate-700 animate-bounce-in"
+            className="bg-slate-900 rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative p-8 border border-slate-700 animate-bounce-in"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute top-4 right-4 flex gap-2">
@@ -533,26 +561,97 @@ export default function HomePage() {
             <p className="text-lg text-slate-400 mb-6">
               {selectedColor.make} {selectedColor.model} {selectedColor.year && `(${selectedColor.year})`}
             </p>
+            
+            {/* Color Swatches */}
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-cyan-400 mb-3">🎨 Color Preview</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Color 1 Swatch */}
+                <div className="space-y-2">
+                  <div 
+                    className="w-full h-24 rounded-lg border-2 border-slate-600 shadow-lg"
+                    style={{ 
+                      backgroundColor: `hsl(${selectedColor.color1.h * 360}, ${selectedColor.color1.s * 100}%, ${selectedColor.color1.b * (1 - selectedColor.color1.s / 2) * 100}%)` 
+                    }}
+                  />
+                  <p className="text-sm text-slate-300 text-center font-medium">Primary Color</p>
+                </div>
+                
+                {/* Color 2 Swatch */}
+                <div className="space-y-2">
+                  <div 
+                    className="w-full h-24 rounded-lg border-2 border-slate-600 shadow-lg"
+                    style={{ 
+                      backgroundColor: `hsl(${selectedColor.color2.h * 360}, ${selectedColor.color2.s * 100}%, ${selectedColor.color2.b * (1 - selectedColor.color2.s / 2) * 100}%)` 
+                    }}
+                  />
+                  <p className="text-sm text-slate-300 text-center font-medium">Secondary Color</p>
+                </div>
+              </div>
+              
+              {/* Combined Gradient */}
+              <div className="mt-4">
+                <div 
+                  className="w-full h-16 rounded-lg border-2 border-slate-600 shadow-lg"
+                  style={{ 
+                    background: `linear-gradient(45deg, hsl(${selectedColor.color1.h * 360}, ${selectedColor.color1.s * 100}%, ${selectedColor.color1.b * (1 - selectedColor.color1.s / 2) * 100}%), hsl(${selectedColor.color2.h * 360}, ${selectedColor.color2.s * 100}%, ${selectedColor.color2.b * (1 - selectedColor.color2.s / 2) * 100}%))` 
+                  }}
+                />
+                <p className="text-sm text-slate-300 text-center font-medium mt-2">Combined Gradient</p>
+              </div>
+            </div>
+            
             <div className="space-y-4">
               {selectedColor.colorType && (
                 <p className="text-slate-300">
                   <span className="font-semibold text-slate-100">Type:</span> {selectedColor.colorType}
                 </p>
               )}
+              
+              {/* Enhanced Color Values */}
               <div>
-                <h4 className="text-lg font-semibold text-cyan-400 mb-2">Color Values</h4>
-                <div className="grid grid-cols-2 gap-4 text-sm bg-slate-800 p-3 rounded-md">
-                  <div>
-                    <strong>Color 1:</strong><br/>
-                    H: {selectedColor.color1.h.toFixed(3)}<br/>
-                    S: {selectedColor.color1.s.toFixed(3)}<br/>
-                    B: {selectedColor.color1.b.toFixed(3)}
+                <h4 className="text-lg font-semibold text-cyan-400 mb-3">📊 Color Values</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Color 1 Values */}
+                  <div className="bg-slate-800 p-4 rounded-lg">
+                    <h5 className="font-semibold text-fuchsia-400 mb-3">Primary Color</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <strong className="text-slate-300">HSB:</strong><br/>
+                          <span className="text-slate-400">H: {(selectedColor.color1.h * 360).toFixed(1)}°</span><br/>
+                          <span className="text-slate-400">S: {(selectedColor.color1.s * 100).toFixed(1)}%</span><br/>
+                          <span className="text-slate-400">B: {(selectedColor.color1.b * 100).toFixed(1)}%</span>
+                        </div>
+                        <div>
+                          <strong className="text-slate-300">RGB:</strong><br/>
+                          <span className="text-slate-400">R: {Math.round(selectedColor.color1.b * 255 * (1 - selectedColor.color1.s + selectedColor.color1.s * Math.max(0, Math.cos((selectedColor.color1.h * 360) * Math.PI / 180))))}</span><br/>
+                          <span className="text-slate-400">G: {Math.round(selectedColor.color1.b * 255 * (1 - selectedColor.color1.s + selectedColor.color1.s * Math.max(0, Math.cos(((selectedColor.color1.h * 360) - 120) * Math.PI / 180))))}</span><br/>
+                          <span className="text-slate-400">B: {Math.round(selectedColor.color1.b * 255 * (1 - selectedColor.color1.s + selectedColor.color1.s * Math.max(0, Math.cos(((selectedColor.color1.h * 360) + 120) * Math.PI / 180))))}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <strong>Color 2:</strong><br/>
-                    H: {selectedColor.color2.h.toFixed(3)}<br/>
-                    S: {selectedColor.color2.s.toFixed(3)}<br/>
-                    B: {selectedColor.color2.b.toFixed(3)}
+                  
+                  {/* Color 2 Values */}
+                  <div className="bg-slate-800 p-4 rounded-lg">
+                    <h5 className="font-semibold text-cyan-400 mb-3">Secondary Color</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <strong className="text-slate-300">HSB:</strong><br/>
+                          <span className="text-slate-400">H: {(selectedColor.color2.h * 360).toFixed(1)}°</span><br/>
+                          <span className="text-slate-400">S: {(selectedColor.color2.s * 100).toFixed(1)}%</span><br/>
+                          <span className="text-slate-400">B: {(selectedColor.color2.b * 100).toFixed(1)}%</span>
+                        </div>
+                        <div>
+                          <strong className="text-slate-300">RGB:</strong><br/>
+                          <span className="text-slate-400">R: {Math.round(selectedColor.color2.b * 255 * (1 - selectedColor.color2.s + selectedColor.color2.s * Math.max(0, Math.cos((selectedColor.color2.h * 360) * Math.PI / 180))))}</span><br/>
+                          <span className="text-slate-400">G: {Math.round(selectedColor.color2.b * 255 * (1 - selectedColor.color2.s + selectedColor.color2.s * Math.max(0, Math.cos(((selectedColor.color2.h * 360) - 120) * Math.PI / 180))))}</span><br/>
+                          <span className="text-slate-400">B: {Math.round(selectedColor.color2.b * 255 * (1 - selectedColor.color2.s + selectedColor.color2.s * Math.max(0, Math.cos(((selectedColor.color2.h * 360) + 120) * Math.PI / 180))))}</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
