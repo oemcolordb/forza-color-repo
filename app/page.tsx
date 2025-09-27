@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import type { CarColor } from './types/color'
+import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import ColorStats from './components/ColorStats'
@@ -396,14 +397,7 @@ export default function HomePage() {
             </h2>
             <div className="flex gap-3 overflow-x-auto pb-2">
               {colorHistory.slice(0, 10).map((color, index) => {
-                const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => {
-                  const l = b * (1 - s / 2)
-                  const newS = l === 0 || l === 1 ? 0 : (b - l) / Math.min(l, 1 - l)
-                  return [h * 360, newS * 100, l * 100]
-                }
-                const [h1, s1, l1] = hsbToHsl(color.color1.h, color.color1.s, color.color1.b)
-                const [h2, s2, l2] = hsbToHsl(color.color2.h, color.color2.s, color.color2.b)
-                const gradient = `linear-gradient(45deg, hsl(${h1}, ${s1}%, ${l1}%), hsl(${h2}, ${s2}%, ${l2}%))`
+                const gradient = createForzaGradient(color.color1, color.color2)
                 
                 return (
                   <button
@@ -575,7 +569,7 @@ export default function HomePage() {
                   <div 
                     className="w-full h-24 rounded-lg border-2 border-slate-600 shadow-lg"
                     style={{ 
-                      backgroundColor: `hsl(${selectedColor.color1.h * 360}, ${selectedColor.color1.s * 100}%, ${selectedColor.color1.b * (1 - selectedColor.color1.s / 2) * 100}%)` 
+                      backgroundColor: hsbToCSS(selectedColor.color1)
                     }}
                   />
                   <p className="text-sm text-slate-300 text-center font-medium">Primary Color</p>
@@ -586,7 +580,7 @@ export default function HomePage() {
                   <div 
                     className="w-full h-24 rounded-lg border-2 border-slate-600 shadow-lg"
                     style={{ 
-                      backgroundColor: `hsl(${selectedColor.color2.h * 360}, ${selectedColor.color2.s * 100}%, ${selectedColor.color2.b * (1 - selectedColor.color2.s / 2) * 100}%)` 
+                      backgroundColor: hsbToCSS(selectedColor.color2)
                     }}
                   />
                   <p className="text-sm text-slate-300 text-center font-medium">Secondary Color</p>
@@ -598,10 +592,10 @@ export default function HomePage() {
                 <div 
                   className="w-full h-16 rounded-lg border-2 border-slate-600 shadow-lg"
                   style={{ 
-                    background: `linear-gradient(45deg, hsl(${selectedColor.color1.h * 360}, ${selectedColor.color1.s * 100}%, ${selectedColor.color1.b * (1 - selectedColor.color1.s / 2) * 100}%), hsl(${selectedColor.color2.h * 360}, ${selectedColor.color2.s * 100}%, ${selectedColor.color2.b * (1 - selectedColor.color2.s / 2) * 100}%))` 
+                    background: createForzaGradient(selectedColor.color1, selectedColor.color2)
                   }}
                 />
-                <p className="text-sm text-slate-300 text-center font-medium mt-2">Combined Gradient</p>
+                <p className="text-sm text-slate-300 text-center font-medium mt-2">Forza 5 Mixed Color</p>
               </div>
             </div>
             
@@ -612,26 +606,31 @@ export default function HomePage() {
                 </p>
               )}
               
-              {/* Enhanced Color Values */}
+              {/* Forza 5 HSB Color Values */}
               <div>
-                <h4 className="text-lg font-semibold text-cyan-400 mb-3">📊 Color Values</h4>
+                <h4 className="text-lg font-semibold text-cyan-400 mb-3">📊 Forza 5 Color Values</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Color 1 Values */}
                   <div className="bg-slate-800 p-4 rounded-lg">
                     <h5 className="font-semibold text-fuchsia-400 mb-3">Primary Color</h5>
-                    <div className="space-y-2 text-sm">
-                      <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-3 text-sm">
+                      <div className="text-center">
+                        <div className="text-lg font-mono text-slate-200">
+                          {formatHSBValues(selectedColor.color1)}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-center">
                         <div>
-                          <strong className="text-slate-300">HSB:</strong><br/>
-                          <span className="text-slate-400">H: {(selectedColor.color1.h * 360).toFixed(1)}°</span><br/>
-                          <span className="text-slate-400">S: {(selectedColor.color1.s * 100).toFixed(1)}%</span><br/>
-                          <span className="text-slate-400">B: {(selectedColor.color1.b * 100).toFixed(1)}%</span>
+                          <div className="text-xs text-slate-400">Hue</div>
+                          <div className="text-lg font-bold text-fuchsia-400">{(selectedColor.color1.h * 360).toFixed(0)}°</div>
                         </div>
                         <div>
-                          <strong className="text-slate-300">RGB:</strong><br/>
-                          <span className="text-slate-400">R: {Math.round(selectedColor.color1.b * 255 * (1 - selectedColor.color1.s + selectedColor.color1.s * Math.max(0, Math.cos((selectedColor.color1.h * 360) * Math.PI / 180))))}</span><br/>
-                          <span className="text-slate-400">G: {Math.round(selectedColor.color1.b * 255 * (1 - selectedColor.color1.s + selectedColor.color1.s * Math.max(0, Math.cos(((selectedColor.color1.h * 360) - 120) * Math.PI / 180))))}</span><br/>
-                          <span className="text-slate-400">B: {Math.round(selectedColor.color1.b * 255 * (1 - selectedColor.color1.s + selectedColor.color1.s * Math.max(0, Math.cos(((selectedColor.color1.h * 360) + 120) * Math.PI / 180))))}</span>
+                          <div className="text-xs text-slate-400">Saturation</div>
+                          <div className="text-lg font-bold text-cyan-400">{(selectedColor.color1.s * 100).toFixed(0)}%</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-slate-400">Brightness</div>
+                          <div className="text-lg font-bold text-yellow-400">{(selectedColor.color1.b * 100).toFixed(0)}%</div>
                         </div>
                       </div>
                     </div>
@@ -640,19 +639,24 @@ export default function HomePage() {
                   {/* Color 2 Values */}
                   <div className="bg-slate-800 p-4 rounded-lg">
                     <h5 className="font-semibold text-cyan-400 mb-3">Secondary Color</h5>
-                    <div className="space-y-2 text-sm">
-                      <div className="grid grid-cols-2 gap-2">
+                    <div className="space-y-3 text-sm">
+                      <div className="text-center">
+                        <div className="text-lg font-mono text-slate-200">
+                          {formatHSBValues(selectedColor.color2)}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 text-center">
                         <div>
-                          <strong className="text-slate-300">HSB:</strong><br/>
-                          <span className="text-slate-400">H: {(selectedColor.color2.h * 360).toFixed(1)}°</span><br/>
-                          <span className="text-slate-400">S: {(selectedColor.color2.s * 100).toFixed(1)}%</span><br/>
-                          <span className="text-slate-400">B: {(selectedColor.color2.b * 100).toFixed(1)}%</span>
+                          <div className="text-xs text-slate-400">Hue</div>
+                          <div className="text-lg font-bold text-fuchsia-400">{(selectedColor.color2.h * 360).toFixed(0)}°</div>
                         </div>
                         <div>
-                          <strong className="text-slate-300">RGB:</strong><br/>
-                          <span className="text-slate-400">R: {Math.round(selectedColor.color2.b * 255 * (1 - selectedColor.color2.s + selectedColor.color2.s * Math.max(0, Math.cos((selectedColor.color2.h * 360) * Math.PI / 180))))}</span><br/>
-                          <span className="text-slate-400">G: {Math.round(selectedColor.color2.b * 255 * (1 - selectedColor.color2.s + selectedColor.color2.s * Math.max(0, Math.cos(((selectedColor.color2.h * 360) - 120) * Math.PI / 180))))}</span><br/>
-                          <span className="text-slate-400">B: {Math.round(selectedColor.color2.b * 255 * (1 - selectedColor.color2.s + selectedColor.color2.s * Math.max(0, Math.cos(((selectedColor.color2.h * 360) + 120) * Math.PI / 180))))}</span>
+                          <div className="text-xs text-slate-400">Saturation</div>
+                          <div className="text-lg font-bold text-cyan-400">{(selectedColor.color2.s * 100).toFixed(0)}%</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-slate-400">Brightness</div>
+                          <div className="text-lg font-bold text-yellow-400">{(selectedColor.color2.b * 100).toFixed(0)}%</div>
                         </div>
                       </div>
                     </div>

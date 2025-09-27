@@ -1,5 +1,6 @@
 import React from 'react'
 import type { CarColor } from '../types/color'
+import { createForzaGradient } from '../lib/colorUtils'
 
 interface ColorCardProps {
   color: CarColor
@@ -7,12 +8,6 @@ interface ColorCardProps {
   isFavorite?: boolean
   onToggleFavorite?: () => void
   isDarkMode?: boolean
-}
-
-const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => {
-  const l = b * (1 - s / 2)
-  const newS = l === 0 || l === 1 ? 0 : (b - l) / Math.min(l, 1 - l)
-  return [h * 360, newS * 100, l * 100]
 }
 
 const ColorCard: React.FC<ColorCardProps> = React.memo(({ 
@@ -23,9 +18,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
   isDarkMode = true 
 }) => {
   const gradient = React.useMemo(() => {
-    const [h1, s1, l1] = hsbToHsl(color.color1.h, color.color1.s, color.color1.b)
-    const [h2, s2, l2] = hsbToHsl(color.color2.h, color.color2.s, color.color2.b)
-    return `linear-gradient(45deg, hsl(${h1}, ${s1}%, ${l1}%), hsl(${h2}, ${s2}%, ${l2}%))`
+    return createForzaGradient(color.color1, color.color2)
   }, [color.color1, color.color2])
   
   const displayText = React.useMemo(() => {
