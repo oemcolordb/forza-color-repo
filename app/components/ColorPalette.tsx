@@ -19,12 +19,14 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors, isDarkMode }) => {
     const triadicH = (baseH + 0.333) % 1 // +120 degrees
 
     const findClosestColor = (targetH: number) => {
+      if (colors.length === 0) return baseColor
+      
       return colors.reduce((closest, color) => {
         const colorH = color.color1.h
         const currentDiff = Math.min(Math.abs(colorH - targetH), 1 - Math.abs(colorH - targetH))
         const closestDiff = Math.min(Math.abs(closest.color1.h - targetH), 1 - Math.abs(closest.color1.h - targetH))
         return currentDiff < closestDiff ? color : closest
-      })
+      }, colors[0])
     }
 
     return {
