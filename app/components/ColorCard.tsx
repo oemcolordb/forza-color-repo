@@ -15,19 +15,24 @@ const hsbToHsl = (h: number, s: number, b: number): [number, number, number] => 
   return [h * 360, newS * 100, l * 100]
 }
 
-const ColorCard: React.FC<ColorCardProps> = ({ 
+const ColorCard: React.FC<ColorCardProps> = React.memo(({ 
   color, 
   onSelect, 
   isFavorite = false, 
   onToggleFavorite,
   isDarkMode = true 
 }) => {
-  const [h1, s1, l1] = hsbToHsl(color.color1.h, color.color1.s, color.color1.b)
-  const [h2, s2, l2] = hsbToHsl(color.color2.h, color.color2.s, color.color2.b)
-  const gradient = `linear-gradient(45deg, hsl(${h1}, ${s1}%, ${l1}%), hsl(${h2}, ${s2}%, ${l2}%))`
+  const gradient = React.useMemo(() => {
+    const [h1, s1, l1] = hsbToHsl(color.color1.h, color.color1.s, color.color1.b)
+    const [h2, s2, l2] = hsbToHsl(color.color2.h, color.color2.s, color.color2.b)
+    return `linear-gradient(45deg, hsl(${h1}, ${s1}%, ${l1}%), hsl(${h2}, ${s2}%, ${l2}%))`
+  }, [color.color1, color.color2])
   
-  const modelDisplay = color.model ? ` ${color.model}` : ''
-  const yearDisplay = color.year && color.year > 0 ? ` (${color.year})` : ''
+  const displayText = React.useMemo(() => {
+    const modelDisplay = color.model ? ` ${color.model}` : ''
+    const yearDisplay = color.year && color.year > 0 ? ` (${color.year})` : ''
+    return `${color.make}${modelDisplay}${yearDisplay}`
+  }, [color.make, color.model, color.year])
 
   return (
     <div className={`rounded-lg shadow-lg overflow-hidden transition-transform duration-300 group flex flex-col will-change-transform hover:scale-105 animate-fade-in ${
@@ -44,7 +49,7 @@ const ColorCard: React.FC<ColorCardProps> = ({
             {color.colorName}
           </h3>
           <p className={`text-sm truncate ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-            {color.make}{modelDisplay}{yearDisplay}
+            {displayText}
           </p>
         </div>
         <div className="flex justify-between items-center mt-4 min-h-[26px]">
@@ -85,6 +90,8 @@ const ColorCard: React.FC<ColorCardProps> = ({
       </div>
     </div>
   )
-}
+})
+
+ColorCard.displayName = 'ColorCard'
 
 export default ColorCard

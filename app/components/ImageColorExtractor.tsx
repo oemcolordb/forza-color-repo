@@ -351,7 +351,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       onDragOver={(e) => { e.preventDefault(); setDragActive(true) }}
       onDragLeave={() => setDragActive(false)}
     >
-      <div className="text-center">
+      <div className={`text-center ${extractedColors.length > 0 ? 'text-left' : ''}`}>
         <div className={`mx-auto w-12 h-12 mb-4 rounded-full flex items-center justify-center ${
           isDarkMode ? 'bg-slate-700' : 'bg-gray-200'
         }`}>
@@ -385,36 +385,52 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
           </div>
         )}
         
-        <label
-          htmlFor="image-upload"
-          className={`inline-block px-4 py-2 rounded-md cursor-pointer transition-colors ${
-            isProcessing
-              ? 'bg-gray-400 cursor-not-allowed'
-              : isDarkMode
-                ? 'bg-fuchsia-600 hover:bg-fuchsia-700 text-white'
-                : 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
-          }`}
-        >
-          {isProcessing ? 'Processing...' : 'Choose Image'}
-        </label>
-
-        {extractedColors.length > 0 && (
-          <div className="mt-4">
-            <p className={`text-sm mb-2 ${
-              isDarkMode ? 'text-slate-300' : 'text-gray-700'
+        {extractedColors.length === 0 ? (
+          <label
+            htmlFor="image-upload"
+            className={`inline-block px-4 py-2 rounded-md cursor-pointer transition-colors ${
+              isProcessing
+                ? 'bg-gray-400 cursor-not-allowed'
+                : isDarkMode
+                  ? 'bg-fuchsia-600 hover:bg-fuchsia-700 text-white'
+                  : 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
+            }`}
+          >
+            {isProcessing ? 'Processing...' : 'Choose Image'}
+          </label>
+        ) : (
+          <div className="w-full">
+            <h4 className={`text-lg font-semibold mb-4 ${
+              isDarkMode ? 'text-slate-200' : 'text-gray-800'
             }`}>
-              Extracted Colors:
-            </p>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {extractedColors.slice(0, 6).map((color, index) => (
-                <div
-                  key={index}
-                  className="w-8 h-8 rounded border-2 border-white shadow-sm"
-                  style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})` }}
-                  title={`RGB(${color.r}, ${color.g}, ${color.b})`}
-                />
+              🎨 Extracted Colors
+            </h4>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
+              {extractedColors.map((color, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <div
+                    className="w-12 h-12 rounded-lg border-2 border-white shadow-lg transition-transform hover:scale-110"
+                    style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})` }}
+                    title={`RGB(${color.r}, ${color.g}, ${color.b})`}
+                  />
+                  <span className={`text-xs mt-1 ${
+                    isDarkMode ? 'text-slate-400' : 'text-gray-600'
+                  }`}>
+                    #{color.r.toString(16).padStart(2,'0')}{color.g.toString(16).padStart(2,'0')}{color.b.toString(16).padStart(2,'0')}
+                  </span>
+                </div>
               ))}
             </div>
+            <label
+              htmlFor="image-upload"
+              className={`inline-block px-3 py-1 text-sm rounded-md cursor-pointer transition-colors ${
+                isDarkMode
+                  ? 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
+            >
+              Try Different Image
+            </label>
           </div>
         )}
         </div>
