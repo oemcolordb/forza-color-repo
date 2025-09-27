@@ -147,24 +147,33 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     try {
       const img = new Image()
       const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d')
+      
+      if (!ctx) {
+        throw new Error('Canvas context not available')
+      }
 
       await new Promise((resolve, reject) => {
         img.onload = resolve
-        img.onerror = reject
+        img.onerror = () => reject(new Error('Failed to load image'))
+        img.crossOrigin = 'anonymous'
         img.src = URL.createObjectURL(file)
       })
 
       // Resize for performance
       const maxSize = 200
       const scale = Math.min(maxSize / img.width, maxSize / img.height)
-      canvas.width = img.width * scale
-      canvas.height = img.height * scale
+      canvas.width = Math.max(1, Math.floor(img.width * scale))
+      canvas.height = Math.max(1, Math.floor(img.height * scale))
 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
       const extracted = extractColorsFromImage(imageData)
+      if (extracted.length === 0) {
+        throw new Error('No colors found in image')
+      }
+      
       setExtractedColors(extracted)
 
       const matchedColors = findMatchingColors(extracted)
@@ -173,7 +182,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       URL.revokeObjectURL(img.src)
     } catch (error) {
       console.error('Error processing image:', error)
-      setError('Failed to process image. Please try a different image.')
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error'
+      setError(`Processing failed: ${errorMsg}`)
     } finally {
       setIsProcessing(false)
     }
