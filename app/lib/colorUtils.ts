@@ -73,11 +73,11 @@ export function getPrimaryColor(color1: HSBColor, color2: HSBColor): string {
 }
 
 /**
- * Format HSB values for display (no RGB conversion)
+ * Format HSB values for display (Forza Horizon 5 format)
  */
 export function formatHSBValues(hsb: HSBColor): string {
   const h = Math.round(hsb.h * 360)
   const s = Math.round(hsb.s * 100)
   const b = Math.round(hsb.b * 100)
-  return `H:${h}° S:${s}% B:${b}%`
+  return `${h}, ${s}, ${b}`
 }

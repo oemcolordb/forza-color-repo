@@ -622,15 +622,15 @@ export default function HomePage() {
                       <div className="grid grid-cols-3 gap-2 text-center">
                         <div>
                           <div className="text-xs text-slate-400">Hue</div>
-                          <div className="text-lg font-bold text-fuchsia-400">{(selectedColor.color1.h * 360).toFixed(0)}°</div>
+                          <div className="text-lg font-bold text-fuchsia-400">{Math.round(selectedColor.color1.h * 360)}</div>
                         </div>
                         <div>
                           <div className="text-xs text-slate-400">Saturation</div>
-                          <div className="text-lg font-bold text-cyan-400">{(selectedColor.color1.s * 100).toFixed(0)}%</div>
+                          <div className="text-lg font-bold text-cyan-400">{Math.round(selectedColor.color1.s * 100)}</div>
                         </div>
                         <div>
                           <div className="text-xs text-slate-400">Brightness</div>
-                          <div className="text-lg font-bold text-yellow-400">{(selectedColor.color1.b * 100).toFixed(0)}%</div>
+                          <div className="text-lg font-bold text-yellow-400">{Math.round(selectedColor.color1.b * 100)}</div>
                         </div>
                       </div>
                     </div>
@@ -648,15 +648,15 @@ export default function HomePage() {
                       <div className="grid grid-cols-3 gap-2 text-center">
                         <div>
                           <div className="text-xs text-slate-400">Hue</div>
-                          <div className="text-lg font-bold text-fuchsia-400">{(selectedColor.color2.h * 360).toFixed(0)}°</div>
+                          <div className="text-lg font-bold text-fuchsia-400">{Math.round(selectedColor.color2.h * 360)}</div>
                         </div>
                         <div>
                           <div className="text-xs text-slate-400">Saturation</div>
-                          <div className="text-lg font-bold text-cyan-400">{(selectedColor.color2.s * 100).toFixed(0)}%</div>
+                          <div className="text-lg font-bold text-cyan-400">{Math.round(selectedColor.color2.s * 100)}</div>
                         </div>
                         <div>
                           <div className="text-xs text-slate-400">Brightness</div>
-                          <div className="text-lg font-bold text-yellow-400">{(selectedColor.color2.b * 100).toFixed(0)}%</div>
+                          <div className="text-lg font-bold text-yellow-400">{Math.round(selectedColor.color2.b * 100)}</div>
                         </div>
                       </div>
                     </div>
