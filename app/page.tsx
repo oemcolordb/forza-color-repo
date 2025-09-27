@@ -24,7 +24,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMake, setSelectedMake] = useState('')
-  const [selectedModel, setSelectedModel] = useState('')
+  const [selectedColorType, setSelectedColorType] = useState('')
   const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
   const [hasMore, setHasMore] = useState(true)
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null)
@@ -114,11 +114,10 @@ export default function HomePage() {
     return uniqueMakes.sort()
   }, [colors])
 
-  const models = useMemo(() => {
-    const filteredByMake = selectedMake ? colors.filter(color => color.make === selectedMake) : colors
-    const uniqueModels = Array.from(new Set(filteredByMake.map(color => color.model)))
-    return uniqueModels.sort()
-  }, [colors, selectedMake])
+  const colorTypes = useMemo(() => {
+    const uniqueTypes = Array.from(new Set(colors.map(color => color.colorType || 'Unknown')))
+    return uniqueTypes.sort()
+  }, [colors])
 
   const filteredColors = useMemo(() => {
     return colors.filter(color => {
@@ -131,14 +130,14 @@ export default function HomePage() {
         (color.colorType && color.colorType.toLowerCase().includes(searchLower))
 
       const matchesMake = !selectedMake || color.make === selectedMake
-      const matchesModel = !selectedModel || color.model === selectedModel
+      const matchesColorType = !selectedColorType || color.colorType === selectedColorType
 
-      return matchesSearch && matchesMake && matchesModel
+      return matchesSearch && matchesMake && matchesColorType
     })
-  }, [colors, searchQuery, selectedMake, selectedModel])
+  }, [colors, searchQuery, selectedMake, selectedColorType])
 
   useEffect(() => {
-    setSelectedModel('') // Reset model when make changes
+    setSelectedColorType('') // Reset color type when make changes
   }, [selectedMake])
 
   useEffect(() => {
@@ -206,9 +205,8 @@ export default function HomePage() {
     track({ action: 'view', colorName: color.colorName, make: color.make })
   }, [addToHistory, track])
 
-  const handleModelSelect = useCallback((make: string, model: string) => {
-    setSelectedMake(make)
-    setSelectedModel(model)
+  const handleColorTypeSelect = useCallback((colorType: string) => {
+    setSelectedColorType(colorType)
     setSearchQuery('')
   }, [])
 
@@ -316,21 +314,20 @@ export default function HomePage() {
           </div>
           <div className="relative w-full sm:w-1/3">
             <select
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              disabled={!selectedMake}
-              aria-label="Filter by car model"
+              value={selectedColorType}
+              onChange={(e) => setSelectedColorType(e.target.value)}
+              aria-label="Filter by color type"
               className={`w-full ${
                 isDarkMode 
                   ? 'bg-slate-800 border-slate-700 text-slate-100' 
                   : 'bg-white border-gray-300 text-gray-900'
               } border-2 rounded-md py-2 px-4 focus:outline-none focus:ring-2 ${
                 isDarkMode ? 'focus:ring-fuchsia-500 focus:border-fuchsia-500' : 'focus:ring-blue-500 focus:border-blue-500'
-              } transition-colors disabled:opacity-50`}
+              } transition-colors`}
             >
-              <option value="">{selectedMake ? 'All Models' : 'Select Make First'}</option>
-              {models.map(model => (
-                <option key={model} value={model}>{model}</option>
+              <option value="">All Color Types</option>
+              {colorTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
               ))}
             </select>
           </div>
@@ -457,14 +454,14 @@ export default function HomePage() {
             <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
           </div>
 
-          {/* Model Browser */}
+          {/* Color Type Browser */}
         {!loading && colors.length > 0 && (
-          <section className="mb-8" aria-labelledby="model-browser-heading">
-            <h2 id="model-browser-heading" className="sr-only">Browse Colors by Vehicle Model</h2>
+          <section className="mb-8" aria-labelledby="color-type-browser-heading">
+            <h2 id="color-type-browser-heading" className="sr-only">Browse Colors by Type</h2>
             <ModelBrowser 
               colors={colors}
               isDarkMode={isDarkMode}
-              onModelSelect={handleModelSelect}
+              onColorTypeSelect={handleColorTypeSelect}
             />
           </section>
         )}
