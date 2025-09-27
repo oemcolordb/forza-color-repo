@@ -21,12 +21,19 @@ const ColorPalette: React.FC<ColorPaletteProps> = ({ colors, isDarkMode }) => {
     const findClosestColor = (targetH: number) => {
       if (colors.length === 0) return baseColor
       
-      return colors.reduce((closest, color) => {
+      // Filter out the base color to avoid duplicates
+      const availableColors = colors.filter(c => 
+        !(c.make === baseColor.make && c.model === baseColor.model && c.colorName === baseColor.colorName)
+      )
+      
+      if (availableColors.length === 0) return baseColor
+      
+      return availableColors.reduce((closest, color) => {
         const colorH = color.color1.h
         const currentDiff = Math.min(Math.abs(colorH - targetH), 1 - Math.abs(colorH - targetH))
         const closestDiff = Math.min(Math.abs(closest.color1.h - targetH), 1 - Math.abs(closest.color1.h - targetH))
         return currentDiff < closestDiff ? color : closest
-      }, colors[0])
+      }, availableColors[0])
     }
 
     return {
