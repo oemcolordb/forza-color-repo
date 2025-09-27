@@ -164,8 +164,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
           img.src = objectUrl!
         })
         return img
-      } catch (error) {
-        console.log('Object URL failed, trying FileReader...')
+      } catch {
+        console.warn('Object URL failed, trying FileReader...')
       }
       
       // Strategy 2: Try with FileReader (data URL)
@@ -185,8 +185,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
           img2.src = dataUrl!
         })
         return img2
-      } catch (error) {
-        console.log('FileReader failed, trying ArrayBuffer...')
+      } catch {
+        console.warn('FileReader failed, trying ArrayBuffer...')
       }
       
       // Strategy 3: Try with ArrayBuffer
@@ -237,7 +237,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       try {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      } catch (drawError) {
+      } catch {
         throw new Error('Failed to draw image. The image may be corrupted.')
       }
       
@@ -245,7 +245,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       let imageData: ImageData
       try {
         imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      } catch (getDataError) {
+      } catch {
         throw new Error('Failed to extract image data. Try a different image.')
       }
       

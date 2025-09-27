@@ -63,7 +63,7 @@ const VirtualGrid: React.FC<VirtualGridProps> = React.memo(({
     }
     
     return { visibleItems, totalHeight }
-  }, [colors.length, scrollTop, containerHeight])
+  }, [colors, scrollTop, containerHeight])
 
   const handleScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
     setScrollTop(e.currentTarget.scrollTop)
