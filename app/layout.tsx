@@ -10,6 +10,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'),
   title: {
     default: 'Forza Color Universe - 10,000+ Official Automotive Paint Colors',
     template: '%s | Forza Color Universe'
