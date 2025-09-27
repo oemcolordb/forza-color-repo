@@ -20,6 +20,7 @@ import ColorRandomizer from './components/ColorRandomizer'
 import ColorPalette from './components/ColorPalette'
 import ColorTrends from './components/ColorTrends'
 import TokyoBackground from './components/TokyoBackground'
+import MusicPlayer from './components/MusicPlayer'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -533,6 +534,9 @@ export default function HomePage() {
       </main>
       
       <Footer isDarkMode={isDarkMode} />
+      
+      {/* Music Player */}
+      <MusicPlayer isDarkMode={isDarkMode} />
 
       {/* Enhanced Color Modal */}
       {selectedColor && (
