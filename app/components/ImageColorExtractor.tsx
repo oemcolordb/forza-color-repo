@@ -156,7 +156,6 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       await new Promise((resolve, reject) => {
         img.onload = resolve
         img.onerror = () => reject(new Error('Failed to load image'))
-        img.crossOrigin = 'anonymous'
         img.src = URL.createObjectURL(file)
       })
 
