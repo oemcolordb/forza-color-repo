@@ -21,7 +21,7 @@ const HARMONY_MODES = {
   'Brand Harmony': { icon: '🏷️', desc: 'Colors from same manufacturer' }
 }
 
-const CATEGORIES = {
+const CATEGORIES: Record<string, { makes: string[], colors: string[] }> = {
   'All Colors': { makes: [], colors: [] },
   'Supercars': { makes: ['Ferrari', 'Lamborghini', 'McLaren', 'Bugatti'], colors: [] },
   'Luxury': { makes: ['Mercedes-Benz', 'BMW', 'Audi', 'Porsche'], colors: [] },
@@ -37,7 +37,7 @@ const ColorRouletteHarmony: React.FC<ColorRouletteHarmonyProps> = ({
   onHarmonyGenerated
 }) => {
   const [harmonyMode, setHarmonyMode] = useState<keyof typeof HARMONY_MODES>('Random Roulette')
-  const [category, setCategory] = useState<keyof typeof CATEGORIES>('All Colors')
+  const [category, setCategory] = useState<string>('All Colors')
   const [harmonySize, setHarmonySize] = useState(5)
   const [isSpinning, setIsSpinning] = useState(false)
   const [currentHarmony, setCurrentHarmony] = useState<CarColor[]>([])
@@ -177,7 +177,7 @@ const ColorRouletteHarmony: React.FC<ColorRouletteHarmonyProps> = ({
             </label>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value as keyof typeof CATEGORIES)}
+              onChange={(e) => setCategory(e.target.value)}
               className={`w-full p-2 text-sm rounded border ${
                 isDarkMode 
                   ? 'bg-slate-700 border-slate-600 text-white' 
