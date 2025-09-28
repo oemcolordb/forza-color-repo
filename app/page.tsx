@@ -28,6 +28,7 @@ import HSBVisualizer from './components/HSBVisualizer'
 import ColorRouletteHarmony from './components/ColorRouletteHarmony'
 import { AuthProvider } from './components/AuthProvider'
 import AuthModal from './components/AuthModal'
+import CollapsibleSection from './components/CollapsibleSection'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -427,10 +428,12 @@ export default function HomePage() {
         />
         {/* Recently Viewed Colors */}
         {colorHistory.length > 0 && (
-          <section className="mb-8" aria-labelledby="recent-colors-heading">
-            <h2 id="recent-colors-heading" className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              🕒 Recently Viewed Colors
-            </h2>
+          <CollapsibleSection 
+            title="Recently Viewed Colors" 
+            icon="🕒" 
+            isDarkMode={isDarkMode}
+            defaultOpen={false}
+          >
             <div className="flex gap-3 overflow-x-auto pb-2">
               {colorHistory.slice(0, 10).map((color, index) => {
                 const gradient = createForzaGradient(color.color1, color.color2)
@@ -448,15 +451,16 @@ export default function HomePage() {
                 )
               })}
             </div>
-          </section>
+          </CollapsibleSection>
         )}
         
         {/* Image Color Extractor */}
         {showImageExtractor && (
-          <section className="mb-8" aria-labelledby="image-extractor-heading">
-            <h2 id="image-extractor-heading" className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              🎨 Image Color Matching Tool
-            </h2>
+          <CollapsibleSection 
+            title="Image Color Matching Tool" 
+            icon="🎨" 
+            isDarkMode={isDarkMode}
+          >
             <ImageColorExtractor
               colors={colors}
               onColorsFound={handleImageColorsFound}
@@ -465,7 +469,7 @@ export default function HomePage() {
               showTutorial={showTutorial}
               onTutorialClose={handleTutorialClose}
             />
-          </section>
+          </CollapsibleSection>
         )}
         
         {/* Image Match Results */}
@@ -491,8 +495,12 @@ export default function HomePage() {
         
         {/* Color Statistics */}
         {!loading && colors.length > 0 && (
-          <section className="mb-8" aria-labelledby="color-stats-heading">
-            <h2 id="color-stats-heading" className="sr-only">Color Database Statistics</h2>
+          <CollapsibleSection 
+            title="Color Database Statistics" 
+            icon="📊" 
+            isDarkMode={isDarkMode}
+            defaultOpen={false}
+          >
             {isMobile ? (
               <MobileColorStats 
                 colors={colors}
@@ -508,46 +516,61 @@ export default function HomePage() {
                 isDarkMode={isDarkMode}
               />
             )}
-          </section>
+          </CollapsibleSection>
         )}
         
         {/* Fun Features Section - Hide on mobile */}
         {!isMobile && (
           <>
-            <div className="grid lg:grid-cols-3 gap-6 mb-8">
-              <ColorRouletteHarmony 
-                colors={filteredColors}
-                isDarkMode={isDarkMode}
-                onColorSelect={(color) => {
-                  setSelectedColor(color)
-                  track({ action: 'view', colorName: color.colorName, make: color.make })
-                }}
-                onHarmonyGenerated={(harmony) => {
-                  setDisplayedColors(harmony)
-                  setHasMore(false)
-                  setPage(1)
-                  track({ action: 'harmony_generated', count: harmony.length })
-                }}
-              />
-              <ColorPalette colors={colors} isDarkMode={isDarkMode} />
-              <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
-            </div>
-            <div className="mb-8">
+            <CollapsibleSection 
+              title="Color Tools & Analytics" 
+              icon="🎲" 
+              isDarkMode={isDarkMode}
+            >
+              <div className="grid lg:grid-cols-3 gap-6">
+                <ColorRouletteHarmony 
+                  colors={filteredColors}
+                  isDarkMode={isDarkMode}
+                  onColorSelect={(color) => {
+                    setSelectedColor(color)
+                    track({ action: 'view', colorName: color.colorName, make: color.make })
+                  }}
+                  onHarmonyGenerated={(harmony) => {
+                    setDisplayedColors(harmony)
+                    setHasMore(false)
+                    setPage(1)
+                    track({ action: 'harmony_generated', count: harmony.length })
+                  }}
+                />
+                <ColorPalette colors={colors} isDarkMode={isDarkMode} />
+                <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
+              </div>
+            </CollapsibleSection>
+            <CollapsibleSection 
+              title="HSB Color Space Visualization" 
+              icon="🌈" 
+              isDarkMode={isDarkMode}
+              defaultOpen={false}
+            >
               <HSBVisualizer colors={filteredColors} isDarkMode={isDarkMode} />
-            </div>
+            </CollapsibleSection>
           </>
         )}
 
         {/* Color Type Browser - Hide on mobile */}
         {!loading && colors.length > 0 && !isMobile && (
-          <section className="mb-8" aria-labelledby="color-type-browser-heading">
-            <h2 id="color-type-browser-heading" className="sr-only">Browse Colors by Type</h2>
+          <CollapsibleSection 
+            title="Browse Colors by Type" 
+            icon="🏷️" 
+            isDarkMode={isDarkMode}
+            defaultOpen={false}
+          >
             <ModelBrowser 
               colors={colors}
               isDarkMode={isDarkMode}
               onColorTypeSelect={handleColorTypeSelect}
             />
-          </section>
+          </CollapsibleSection>
         )}
         
         {displayedColors.length > 0 ? (
