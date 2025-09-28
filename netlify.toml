@@ -1,11 +1,8 @@
 [build]
-  command = "npm ci && npm run build"
+  command = "npm cache clean --force && npm ci && npm run build"
   publish = "out"
 
-[[plugins]]
-  package = "netlify-plugin-cache"
-  [plugins.inputs]
-    paths = ["node_modules", ".next/cache"]
+# Removed cache plugin to fix webpack cache issues
 
 # Removed vulnerable plugins - using Next.js built-in optimizations instead
 
