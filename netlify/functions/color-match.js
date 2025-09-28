@@ -1,4 +1,4 @@
-const colorData = require('../../services/colorData.js')
+const colorData = require('../../services/colorData')
 
 // Color distance calculation
 const colorDistance = (c1, c2) => {
