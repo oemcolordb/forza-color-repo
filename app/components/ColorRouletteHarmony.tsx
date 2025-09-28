@@ -74,7 +74,7 @@ const ColorRouletteHarmony: React.FC<ColorRouletteHarmonyProps> = ({
         const complementary = filteredColors
           .filter(c => Math.abs((c.color1.h * 360) - compHue) < 30)
           .sort(() => Math.random() - 0.5)[0]
-        harmony = [baseColor, complementary].filter(Boolean)
+        harmony = complementary ? [baseColor, complementary] : [baseColor]
         break
 
       case 'Triadic':
@@ -82,7 +82,7 @@ const ColorRouletteHarmony: React.FC<ColorRouletteHarmonyProps> = ({
         const tri2 = (baseHue + 240) % 360
         const triad1 = filteredColors.find(c => Math.abs((c.color1.h * 360) - tri1) < 30)
         const triad2 = filteredColors.find(c => Math.abs((c.color1.h * 360) - tri2) < 30)
-        harmony = [baseColor, triad1, triad2].filter(Boolean)
+        harmony = [baseColor, ...(triad1 ? [triad1] : []), ...(triad2 ? [triad2] : [])]
         break
 
       case 'Analogous':
