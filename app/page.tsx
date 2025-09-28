@@ -31,6 +31,7 @@ import AuthModal from './components/AuthModal'
 import CollapsibleSection from './components/CollapsibleSection'
 import Car3DViewer from './components/Car3DViewer'
 import PaintEffect3D from './components/PaintEffect3D'
+import DiscordIntegration from './components/DiscordIntegration'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -770,12 +771,11 @@ export default function HomePage() {
                 <Car3DViewer color={selectedColor} isDarkMode={isDarkMode} />
               </div>
               
-              {/* Mobile Share Button */}
-              {isMobile && (
-                <div className="flex justify-center pt-2">
-                  <ShareButton color={selectedColor} isDarkMode={isDarkMode} />
-                </div>
-              )}
+              {/* Discord & Share Buttons */}
+              <div className={`flex ${isMobile ? 'flex-col gap-2' : 'justify-between items-center'} pt-2`}>
+                <DiscordIntegration selectedColor={selectedColor} isDarkMode={isDarkMode} />
+                <ShareButton color={selectedColor} isDarkMode={isDarkMode} />
+              </div>
             </div>
           </div>
         </div>
