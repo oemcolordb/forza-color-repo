@@ -541,7 +541,7 @@ export default function HomePage() {
                     setDisplayedColors(harmony)
                     setHasMore(false)
                     setPage(1)
-                    track({ action: 'harmony_generated', count: harmony.length })
+                    track({ action: 'view', colorName: `harmony_${harmony.length}_colors`, make: 'Generated' })
                   }}
                 />
                 <ColorPalette colors={colors} isDarkMode={isDarkMode} />
