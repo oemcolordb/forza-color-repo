@@ -25,6 +25,7 @@ import MobileOptimizedBackground from './components/MobileOptimizedBackground'
 import MusicPlayer from './components/MusicPlayer'
 import PaletteGenerator from './components/PaletteGenerator'
 import HSBVisualizer from './components/HSBVisualizer'
+import ColorRouletteHarmony from './components/ColorRouletteHarmony'
 import { AuthProvider } from './components/AuthProvider'
 import AuthModal from './components/AuthModal'
 
@@ -513,26 +514,23 @@ export default function HomePage() {
         {/* Fun Features Section - Hide on mobile */}
         {!isMobile && (
           <>
-            <div className="grid lg:grid-cols-4 gap-6 mb-8">
-              <ColorRandomizer 
-                colors={filteredColors} 
+            <div className="grid lg:grid-cols-3 gap-6 mb-8">
+              <ColorRouletteHarmony 
+                colors={filteredColors}
+                isDarkMode={isDarkMode}
                 onColorSelect={(color) => {
                   setSelectedColor(color)
                   track({ action: 'view', colorName: color.colorName, make: color.make })
                 }}
-                isDarkMode={isDarkMode} 
+                onHarmonyGenerated={(harmony) => {
+                  setDisplayedColors(harmony)
+                  setHasMore(false)
+                  setPage(1)
+                  track({ action: 'harmony_generated', count: harmony.length })
+                }}
               />
               <ColorPalette colors={colors} isDarkMode={isDarkMode} />
               <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
-              <PaletteGenerator 
-                colors={colors} 
-                isDarkMode={isDarkMode}
-                onPaletteGenerated={(palette) => {
-                  setDisplayedColors(palette)
-                  setHasMore(false)
-                  setPage(1)
-                }}
-              />
             </div>
             <div className="mb-8">
               <HSBVisualizer colors={filteredColors} isDarkMode={isDarkMode} />
