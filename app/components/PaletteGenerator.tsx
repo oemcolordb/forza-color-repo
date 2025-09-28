@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { CarColor } from '../types/CarColor'
+import { CarColor } from '../types/color'
 
 interface PaletteGeneratorProps {
   colors: CarColor[]
