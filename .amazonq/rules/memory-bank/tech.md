@@ -3,157 +3,147 @@
 ## Core Technologies
 
 ### Frontend Framework
-- **Next.js 15.1.3**: React framework with App Router, SSG, and performance optimizations
-- **React 19.0.0**: Latest React with concurrent features and improved hooks
-- **TypeScript 5.8.2**: Type safety and enhanced developer experience
+- **Next.js 15.1.3**: React framework with App Router, static generation, and ISR
+- **React 19.0.0**: Latest React with concurrent features and improved performance
+- **TypeScript 5.8.2**: Type safety, enhanced IDE support, and compile-time error checking
 
 ### Styling & UI
 - **Tailwind CSS 3.4.17**: Utility-first CSS framework for rapid UI development
-- **PostCSS 8.5.1**: CSS processing and optimization
-- **Autoprefixer 10.4.20**: Automatic vendor prefix handling
-- **Custom CSS**: Animations and critical styles for performance
+- **PostCSS 8.5.1**: CSS processing, autoprefixing, and optimization
+- **Custom CSS**: Animations, critical styles, and performance-optimized stylesheets
 
-### Build System & Optimization
-- **Webpack**: Module bundling with custom optimization configurations
-- **Critters 0.0.23**: Critical CSS inlining for performance
-- **Bundle Analysis**: Development-time bundle size analysis
-- **Code Splitting**: Automatic and manual code splitting strategies
+### Development Tools
+- **ESLint 9.17.0**: Code linting with Next.js configuration
+- **Jest 29.7.0**: Testing framework with jsdom environment
+- **React Testing Library 16.3.0**: Component testing utilities
 
-## Development Tools
+## Multi-Platform Support
 
-### Testing Framework
-- **Jest 29.7.0**: JavaScript testing framework
-- **@testing-library/react 16.3.0**: React component testing utilities
-- **@testing-library/jest-dom 6.8.0**: Custom Jest matchers for DOM testing
-- **jsdom**: Browser environment simulation for testing
+### Desktop Applications
+- **Electron 38.2.0**: Cross-platform desktop apps with web technologies
+- **Tauri 2.8.4**: Lightweight native desktop apps with Rust backend
+- **Electron Builder 26.0.12**: Desktop app packaging and distribution
 
-### Code Quality
-- **ESLint 9.17.0**: JavaScript/TypeScript linting
-- **eslint-config-next 15.1.3**: Next.js specific ESLint configuration
-- **TypeScript Compiler**: Static type checking and compilation
+### Web Deployment
+- **Netlify**: Primary hosting with edge functions and CDN
+- **Netlify Functions**: Serverless backend for API endpoints
+- **Edge Functions**: Performance optimization at edge locations
 
-### AI Integration
-- **@google/generative-ai 0.21.0**: Google Gemini API for color analysis and recommendations
+## AI & External Services
+- **Google Generative AI 0.21.0**: Gemini API integration for color analysis
+- **Sharp 0.34.4**: High-performance image processing and optimization
+- **Critters 0.0.23**: Critical CSS extraction and inlining
 
-## Deployment & Infrastructure
+## Development Commands
 
-### Hosting Platform
-- **Netlify**: Static site hosting with edge functions and CDN
-- **Static Export**: Next.js static export for optimal performance
-- **Edge Functions**: JavaScript functions running at edge locations
-
-### Performance Configuration
-```javascript
-// Next.js optimizations
-output: 'export'
-trailingSlash: true
-images: { unoptimized: true }
-experimental: {
-  optimizeCss: true,
-  scrollRestoration: true
-}
-```
-
-### Build Commands
+### Primary Development
 ```bash
-npm run dev          # Development server (Next.js dev)
-npm run build        # Production build (Next.js build)
-npm run start        # Production server (Next.js start)
-npm run lint         # ESLint code analysis
-npm run test         # Jest test suite
-npm run test:watch   # Jest in watch mode
+npm run dev          # Start development server (localhost:3000)
+npm run build        # Production build with static export
+npm run start        # Start production server
+npm run lint         # Run ESLint code analysis
 ```
 
-## Environment Configuration
+### Testing & Quality
+```bash
+npm run test         # Run Jest test suite
+npm run test:watch   # Run tests in watch mode
+```
 
-### Required Environment Variables
+### Desktop Applications
+```bash
+npm run electron     # Start Electron desktop app
+npm run electron:build  # Build Electron app for distribution
+npm run tauri        # Start Tauri development
+npm run tauri:build  # Build native Tauri application
+npm run dist         # Build and package Tauri app
+```
+
+## Build Configuration
+
+### Next.js Configuration (`next.config.js`)
+- Static export for deployment compatibility
+- Image optimization with Sharp
+- Performance optimizations and bundle analysis
+- Custom webpack configurations for multi-platform builds
+
+### TypeScript Configuration (`tsconfig.json`)
+- Strict type checking enabled
+- Path mapping for clean imports
+- Next.js App Router support
+- Incremental compilation for faster builds
+
+### Tailwind Configuration (`tailwind.config.js`)
+- Custom color palette extensions
+- Responsive breakpoints
+- Animation utilities
+- Dark mode support with class strategy
+
+## Testing Setup
+
+### Jest Configuration (`jest.config.js`)
+- jsdom environment for DOM testing
+- TypeScript support with ts-jest
+- Module path mapping
+- Setup files for testing utilities
+
+### Testing Libraries
+- **@testing-library/jest-dom**: Custom Jest matchers for DOM
+- **@testing-library/react**: React component testing utilities
+- **Jest Environment jsdom**: Browser-like environment for tests
+
+## Environment Variables
+
+### Required Configuration (`.env.local`)
 ```env
 NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_APP_NAME=Forza Color Universe
-NEXT_PUBLIC_APP_DESCRIPTION=Explore automotive colors
 ```
 
 ### Development Setup
-1. **Node.js**: Version 18.0+ (specified in .nvmrc)
-2. **Package Manager**: npm or yarn
-3. **Environment**: Copy .env.local.example to .env.local
+1. Copy `.env.local.example` to `.env.local`
+2. Configure Gemini API key for AI features
+3. Set application URL for proper routing
 
 ## Performance Optimizations
 
-### Bundle Optimization
-- **Vendor Chunking**: Separate vendor libraries into dedicated chunks
-- **Tree Shaking**: Elimination of unused code
-- **Minification**: Code compression for production builds
-- **Console Removal**: Production console.log removal (except errors/warnings)
+### Build Optimizations
+- **Tree Shaking**: Automatic dead code elimination
+- **Code Splitting**: Dynamic imports for non-critical components
+- **Bundle Analysis**: Webpack bundle analyzer integration
+- **Static Generation**: Pre-rendered pages for optimal performance
 
-### Image Optimization
-- **Multiple Formats**: WebP and AVIF support
-- **Responsive Images**: Device-specific image sizes
-- **Lazy Loading**: Intersection Observer-based lazy loading
-- **Unoptimized Mode**: Static export compatibility
+### Runtime Optimizations
+- **Virtual Scrolling**: Efficient large dataset rendering
+- **Lazy Loading**: On-demand component and data loading
+- **Image Optimization**: Next.js Image with Sharp processing
+- **Caching**: Multi-level caching strategy (memory, localStorage, CDN)
 
-### Runtime Performance
-- **Virtual Scrolling**: Efficient rendering of large datasets
-- **Lazy Components**: Dynamic component loading
-- **Memoization**: React.memo and useMemo optimizations
-- **Service Worker**: Offline caching and background sync
+## Development Requirements
 
-## Development Workflow
+### System Requirements
+- **Node.js**: Version 18.0 or higher (specified in `.nvmrc`)
+- **npm**: Package manager (or yarn alternative)
+- **Git**: Version control and repository management
 
-### Local Development
-```bash
-# Install dependencies
-npm install
+### IDE Recommendations
+- **VS Code**: Recommended with TypeScript and ESLint extensions
+- **TypeScript**: Enhanced IntelliSense and error detection
+- **Tailwind CSS IntelliSense**: Class name autocompletion
 
-# Start development server
-npm run dev
+## Deployment Targets
 
-# Run tests
-npm run test
+### Web Deployment
+- **Netlify**: Primary deployment with automatic builds
+- **Static Export**: Compatible with any static hosting provider
+- **CDN**: Global content delivery for optimal performance
 
-# Lint code
-npm run lint
-```
+### Desktop Distribution
+- **Electron**: Windows, macOS, and Linux desktop applications
+- **Tauri**: Native performance with smaller bundle sizes
+- **Portable**: Self-contained server for offline usage
 
-### Production Build
-```bash
-# Build for production
-npm run build
-
-# Test production build locally
-npm run start
-```
-
-### Testing Strategy
-- **Unit Tests**: Component and utility function testing
-- **Integration Tests**: Component interaction testing
-- **Performance Tests**: Bundle size and runtime performance monitoring
-- **Accessibility Tests**: WCAG compliance verification
-
-## Browser Support
-
-### Target Browsers
-- **Modern Browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **Mobile Browsers**: iOS Safari 14+, Chrome Mobile 90+
-- **Progressive Enhancement**: Graceful degradation for older browsers
-
-### Web APIs Used
-- **Intersection Observer**: Lazy loading and virtual scrolling
-- **Web Share API**: Native sharing functionality
-- **Service Worker**: Offline capabilities and caching
-- **Local Storage**: User preferences and favorites
-- **Canvas API**: Image color extraction
-- **File API**: Image upload and processing
-
-## Security Considerations
-
-### Content Security Policy
-- **Strict CSP**: Implemented via Netlify edge functions
-- **XSS Protection**: Input sanitization and output encoding
-- **HTTPS Only**: Secure connection enforcement
-
-### Data Privacy
-- **No Personal Data**: No collection of personally identifiable information
-- **Local Storage**: User preferences stored locally only
-- **Analytics**: Privacy-focused analytics implementation
+### Mobile Support
+- **PWA**: Progressive Web App capabilities
+- **Responsive Design**: Mobile-optimized interface
+- **Touch Interactions**: Optimized for touch devices
