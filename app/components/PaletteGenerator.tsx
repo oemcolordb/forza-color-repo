@@ -10,14 +10,16 @@ interface PaletteGeneratorProps {
 }
 
 const PALETTE_CATEGORIES = {
-  'Ferrari Reds': { makes: ['Ferrari'], colorNames: ['rosso', 'red', 'rouge'] },
-  'Racing Blues': { makes: ['BMW', 'Ford', 'Subaru'], colorNames: ['blue', 'bleu', 'blu'] },
-  'Luxury Blacks': { makes: ['Mercedes-Benz', 'Audi', 'BMW'], colorNames: ['black', 'noir', 'nero'] },
-  'Supercar Yellows': { makes: ['Lamborghini', 'Ferrari', 'Porsche'], colorNames: ['yellow', 'giallo', 'gelb'] },
-  'JDM Classics': { makes: ['Honda', 'Toyota', 'Nissan', 'Mazda'], colorNames: ['white', 'silver', 'black'] },
-  'German Engineering': { makes: ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche'], colorNames: [] },
-  'British Racing': { makes: ['McLaren', 'Aston Martin', 'Jaguar'], colorNames: ['green', 'racing'] },
-  'American Muscle': { makes: ['Ford', 'Chevrolet', 'Dodge'], colorNames: ['red', 'blue', 'orange'] }
+  'Ferrari Reds': { makes: ['Ferrari'], colorNames: ['rosso', 'red', 'rouge'], icon: '🏎️' },
+  'Racing Blues': { makes: ['BMW', 'Ford', 'Subaru'], colorNames: ['blue', 'bleu', 'blu'], icon: '🏁' },
+  'Luxury Blacks': { makes: ['Mercedes-Benz', 'Audi', 'BMW'], colorNames: ['black', 'noir', 'nero'], icon: '💎' },
+  'Supercar Yellows': { makes: ['Lamborghini', 'Ferrari', 'Porsche'], colorNames: ['yellow', 'giallo', 'gelb'], icon: '⚡' },
+  'JDM Classics': { makes: ['Honda', 'Toyota', 'Nissan', 'Mazda'], colorNames: ['white', 'silver', 'black'], icon: '🗾' },
+  'German Engineering': { makes: ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche'], colorNames: [], icon: '🔧' },
+  'British Racing': { makes: ['McLaren', 'Aston Martin', 'Jaguar'], colorNames: ['green', 'racing'], icon: '🇬🇧' },
+  'American Muscle': { makes: ['Ford', 'Chevrolet', 'Dodge'], colorNames: ['red', 'blue', 'orange'], icon: '🦅' },
+  'Exotic Supercars': { makes: ['Bugatti', 'Koenigsegg', 'Pagani'], colorNames: [], icon: '🚀' },
+  'Rally Legends': { makes: ['Subaru', 'Mitsubishi', 'Lancia'], colorNames: ['rally', 'wrc'], icon: '🏔️' }
 }
 
 const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({
@@ -49,8 +51,12 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({
   const handleGenerate = () => {
     if (!selectedCategory) return
     const palette = generatePalette(selectedCategory)
+    setLastGenerated(palette)
     onPaletteGenerated(palette)
   }
+
+  const [generationMode, setGenerationMode] = useState<'random' | 'balanced' | 'trending'>('random')
+  const [lastGenerated, setLastGenerated] = useState<CarColor[]>([])
 
   const hsbToHex = (h: number, s: number, b: number) => {
     const c = b * s
@@ -93,9 +99,28 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({
             }`}
           >
             <option value="">Select a category...</option>
-            {Object.keys(PALETTE_CATEGORIES).map(category => (
-              <option key={category} value={category}>{category}</option>
+            {Object.entries(PALETTE_CATEGORIES).map(([category, config]) => (
+              <option key={category} value={category}>{config.icon} {category}</option>
             ))}
+          </select>
+        </div>
+
+        <div>
+          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            Generation Mode
+          </label>
+          <select
+            value={generationMode}
+            onChange={(e) => setGenerationMode(e.target.value as any)}
+            className={`w-full p-2 rounded border ${
+              isDarkMode 
+                ? 'bg-slate-700 border-slate-600 text-white' 
+                : 'bg-white border-gray-300 text-gray-900'
+            }`}
+          >
+            <option value="random">🎲 Random</option>
+            <option value="balanced">⚖️ Balanced Spectrum</option>
+            <option value="trending">📈 Trending</option>
           </select>
         </div>
 
@@ -113,17 +138,52 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({
           />
         </div>
 
-        <button
-          onClick={handleGenerate}
-          disabled={!selectedCategory}
-          className={`w-full py-2 px-4 rounded font-medium transition-colors ${
-            selectedCategory
-              ? 'bg-blue-600 hover:bg-blue-700 text-white'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-        >
-          Generate Palette
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleGenerate}
+            disabled={!selectedCategory}
+            className={`flex-1 py-2 px-4 rounded font-medium transition-colors ${
+              selectedCategory
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            🎨 Generate
+          </button>
+          {lastGenerated.length > 0 && (
+            <button
+              onClick={() => onPaletteGenerated(lastGenerated)}
+              className={`px-3 py-2 rounded font-medium transition-colors ${
+                isDarkMode
+                  ? 'bg-slate-600 hover:bg-slate-500 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
+              title="Show last palette"
+            >
+              🔄
+            </button>
+          )}
+        </div>
+
+        {lastGenerated.length > 0 && (
+          <div className="mt-4">
+            <h4 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Preview ({lastGenerated.length} colors)
+            </h4>
+            <div className="flex gap-1 overflow-x-auto">
+              {lastGenerated.map((color, index) => (
+                <div
+                  key={index}
+                  className="w-8 h-8 rounded border flex-shrink-0"
+                  style={{
+                    background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 50}%)`
+                  }}
+                  title={`${color.colorName} - ${color.make}`}
+                />
+              ))}
+            </div>
+          </div>
+        )
       </div>
     </div>
   )
