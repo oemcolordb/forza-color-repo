@@ -34,6 +34,45 @@
     </div>
     
     <div class="endpoint">
+        <h3><span class="method">POST</span> /color-match</h3>
+        <p>Find similar colors based on HSB values</p>
+        <h4>Body:</h4>
+        <pre>{ "h": 0, "s": 80, "b": 90, "limit": 5 }</pre>
+        <h4>Example:</h4>
+        <pre>POST /color-match</pre>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">GET</span> /palette</h3>
+        <p>Generate themed color palettes</p>
+        <h4>Parameters:</h4>
+        <ul>
+            <li><code>theme</code> - ferrari, racing, luxury, supercar, jdm, british, american</li>
+            <li><code>size</code> - Number of colors (default: 6)</li>
+        </ul>
+        <h4>Example:</h4>
+        <pre>GET /palette?theme=ferrari&size=8</pre>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">GET</span> /random</h3>
+        <p>Get random colors</p>
+        <h4>Parameters:</h4>
+        <ul><li><code>count</code> - Number of colors (default: 1, max: 50)</li></ul>
+        <h4>Example:</h4>
+        <pre>GET /random?count=5</pre>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">POST</span> /convert</h3>
+        <p>Convert HSB to RGB/Hex</p>
+        <h4>Body:</h4>
+        <pre>{ "h": 0, "s": 0.8, "b": 0.9 }</pre>
+        <h4>Example:</h4>
+        <pre>POST /convert</pre>
+    </div>
+    
+    <div class="endpoint">
         <h3><span class="method">GET</span> /makes</h3>
         <p>Get all available car manufacturers</p>
         <h4>Example:</h4>
