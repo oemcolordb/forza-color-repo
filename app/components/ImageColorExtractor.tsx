@@ -1,27 +1,28 @@
-import React, { useState, useCallback } from 'react'
-import type { CarColor } from '../types/color'
+'use client'
+
+import React, { useState, useCallback, useRef } from 'react'
+import { CarColor } from '../types/color'
+
+interface ExtractedColor {
+  rgb: [number, number, number]
+  hsb: { h: number; s: number; b: number }
+  percentage: number
+  name?: string
+}
 
 interface ImageColorExtractorProps {
-  colors: CarColor[]
-  onColorsFound: (matchedColors: CarColor[]) => void
+  colors?: CarColor[]
+  onColorsExtracted?: (colors: ExtractedColor[]) => void
+  onColorsFound?: (matchedColors: CarColor[]) => void
   onColorSelect?: (color: CarColor) => void
   isDarkMode: boolean
   showTutorial?: boolean
   onTutorialClose?: () => void
 }
 
-interface ExtractedColor {
-  r: number
-  g: number
-  b: number
-  h: number
-  s: number
-  l: number
-  count: number
-}
-
 const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
-  colors,
+  colors = [],
+  onColorsExtracted,
   onColorsFound,
   onColorSelect,
   isDarkMode,
@@ -29,442 +30,190 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   onTutorialClose
 }) => {
   const [isProcessing, setIsProcessing] = useState(false)
-  const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
-  const [dragActive, setDragActive] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => {
+  const rgbToHsb = useCallback((r: number, g: number, b: number) => {
     r /= 255
     g /= 255
     b /= 255
+
     const max = Math.max(r, g, b)
     const min = Math.min(r, g, b)
-    let h = 0, s = 0
-    const l = (max + min) / 2
+    const diff = max - min
 
-    if (max !== min) {
-      const d = max - min
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break
-        case g: h = (b - r) / d + 2; break
-        case b: h = (r - g) / d + 4; break
-      }
-      h /= 6
+    let h = 0
+    if (diff !== 0) {
+      if (max === r) h = ((g - b) / diff) % 6
+      else if (max === g) h = (b - r) / diff + 2
+      else h = (r - g) / diff + 4
     }
-    return [h, s, l]
-  }
+    h = Math.round(h * 60)
+    if (h < 0) h += 360
 
-  const extractColorsFromImage = useCallback((imageData: ImageData): ExtractedColor[] => {
-    const colorMap = new Map<string, number>()
+    const s = max === 0 ? 0 : diff / max
+    const brightness = max
+
+    return {
+      h: h / 360,
+      s: Math.round(s * 100) / 100,
+      b: Math.round(brightness * 100) / 100
+    }
+  }, [])
+
+  const extractColorsFromCanvas = useCallback((canvas: HTMLCanvasElement): ExtractedColor[] => {
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return []
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const data = imageData.data
+    const colorMap = new Map<string, number>()
+    const totalPixels = data.length / 4
 
-    // Sample every pixel for better accuracy
-    for (let i = 0; i < data.length; i += 4) {
+    // Sample every 4th pixel for performance
+    for (let i = 0; i < data.length; i += 16) {
       const r = data[i]
       const g = data[i + 1]
       const b = data[i + 2]
       const alpha = data[i + 3]
 
-      if (alpha < 200) continue // Skip transparent/semi-transparent pixels
+      if (alpha < 200) continue
 
-      // Use smaller grouping for better color accuracy
-      const key = `${Math.floor(r/5)*5}-${Math.floor(g/5)*5}-${Math.floor(b/5)*5}`
+      // Group similar colors (reduce precision)
+      const key = `${Math.floor(r/8)*8}-${Math.floor(g/8)*8}-${Math.floor(b/8)*8}`
       colorMap.set(key, (colorMap.get(key) || 0) + 1)
     }
 
-    return Array.from(colorMap.entries())
+    // Convert to array and sort by frequency
+    const colors = Array.from(colorMap.entries())
       .map(([key, count]) => {
         const [r, g, b] = key.split('-').map(Number)
-        const [h, s, l] = rgbToHsl(r, g, b)
-        return { r, g, b, h, s, l, count }
-      })
-      .sort((a, b) => b.count - a.count)
-      .filter(color => color.count > 5) // Filter out noise
-      .slice(0, 12)
-  }, [])
-
-  const findMatchingColors = useCallback((extractedColors: ExtractedColor[]): CarColor[] => {
-    const matches: Array<{ color: CarColor; score: number }> = []
-
-    extractedColors.forEach(extracted => {
-      colors.forEach(carColor => {
-        // Convert HSB to HSL for comparison
-        const carH = carColor.color1.h
-        const carS = carColor.color1.s
-        const carB = carColor.color1.b
-        const carL = carB * (1 - carS / 2)
-        const carSHsl = carL === 0 || carL === 1 ? 0 : (carB - carL) / Math.min(carL, 1 - carL)
-
-        // Calculate color distance
-        const hDiff = Math.min(Math.abs(extracted.h - carH), 1 - Math.abs(extracted.h - carH))
-        const sDiff = Math.abs(extracted.s - carSHsl)
-        const lDiff = Math.abs(extracted.l - carL)
-
-        const distance = Math.sqrt(hDiff * hDiff + sDiff * sDiff + lDiff * lDiff)
-        const score = (1 - distance) * extracted.count
-
-        if (distance < 0.3) { // Threshold for similarity
-          matches.push({ color: carColor, score })
+        return {
+          rgb: [r, g, b] as [number, number, number],
+          hsb: rgbToHsb(r, g, b),
+          percentage: Math.round((count / (totalPixels / 4)) * 10000) / 100
         }
       })
-    })
+      .sort((a, b) => b.percentage - a.percentage)
+      .slice(0, 10)
 
-    return matches
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 20)
-      .map(match => match.color)
-  }, [colors])
+    return colors
+  }, [rgbToHsb])
 
-  const validateFile = useCallback((file: File): string | null => {
-    // Check file type - support all common image formats
-    const validTypes = [
-      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 
-      'image/bmp', 'image/tiff', 'image/svg+xml', 'image/avif', 'image/heic'
-    ]
-    
-    if (!validTypes.includes(file.type)) {
-      return 'Please upload a valid image file (JPEG, PNG, GIF, WebP, BMP, TIFF, SVG, AVIF, HEIC)'
+  const processWithPythonML = useCallback(async (colors: ExtractedColor[]): Promise<ExtractedColor[]> => {
+    try {
+      const response = await fetch('/api/ml/enhance-colors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ colors })
+      })
+
+      if (!response.ok) {
+        console.warn('ML service unavailable, using basic extraction')
+        return colors
+      }
+
+      const enhanced = await response.json()
+      return enhanced.colors || colors
+    } catch (error) {
+      console.warn('ML enhancement failed:', error)
+      return colors
     }
-    
-    // Check file size - allow up to 50MB for large images
-    const maxSize = 50 * 1024 * 1024 // 50MB
-    if (file.size > maxSize) {
-      return 'File size too large. Please upload an image smaller than 50MB.'
-    }
-    
-    return null
   }, [])
 
-  const processImage = useCallback(async (file: File) => {
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
     setIsProcessing(true)
     setError(null)
-    
-    // Enhanced file validation
-    const validationError = validateFile(file)
-    if (validationError) {
-      setError(validationError)
-      setIsProcessing(false)
-      return
-    }
-    
-    let objectUrl: string | null = null
-    let dataUrl: string | null = null
-    
-    const loadImageWithFallback = async (): Promise<HTMLImageElement> => {
-      const img = new Image()
-      
-      // Strategy 1: Try with object URL
-      try {
-        objectUrl = URL.createObjectURL(file)
-        await new Promise<void>((resolve, reject) => {
-          const timeout = setTimeout(() => reject(new Error('timeout')), 8000)
-          img.onload = () => { clearTimeout(timeout); resolve() }
-          img.onerror = () => { clearTimeout(timeout); reject(new Error('object_url_failed')) }
-          img.src = objectUrl!
-        })
-        return img
-      } catch {
-        console.warn('Object URL failed, trying FileReader...')
-      }
-      
-      // Strategy 2: Try with FileReader (data URL)
-      try {
-        dataUrl = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader()
-          reader.onload = (e) => resolve(e.target?.result as string)
-          reader.onerror = () => reject(new Error('FileReader failed'))
-          reader.readAsDataURL(file)
-        })
-        
-        const img2 = new Image()
-        await new Promise<void>((resolve, reject) => {
-          const timeout = setTimeout(() => reject(new Error('timeout')), 8000)
-          img2.onload = () => { clearTimeout(timeout); resolve() }
-          img2.onerror = () => { clearTimeout(timeout); reject(new Error('data_url_failed')) }
-          img2.src = dataUrl!
-        })
-        return img2
-      } catch {
-        console.warn('FileReader failed, trying ArrayBuffer...')
-      }
-      
-      // Strategy 3: Try with ArrayBuffer
-      try {
-        const arrayBuffer = await file.arrayBuffer()
-        const blob = new Blob([arrayBuffer], { type: file.type })
-        const url = URL.createObjectURL(blob)
-        
-        const img3 = new Image()
-        await new Promise<void>((resolve, reject) => {
-          const timeout = setTimeout(() => reject(new Error('timeout')), 8000)
-          img3.onload = () => { clearTimeout(timeout); resolve() }
-          img3.onerror = () => { clearTimeout(timeout); reject(new Error('arraybuffer_failed')) }
-          img3.crossOrigin = 'anonymous'
-          img3.src = url
-        })
-        
-        URL.revokeObjectURL(url)
-        return img3
-      } catch (error) {
-        throw new Error('All image loading strategies failed. Please try a different image format (JPEG/PNG recommended).')
-      }
-    }
-    
+
     try {
-      const img = await loadImageWithFallback()
-      
-      // Validate image
-      if (!img.width || !img.height || img.width > 10000 || img.height > 10000) {
-        throw new Error('Invalid image dimensions. Please use images between 1x1 and 10000x10000 pixels.')
-      }
-      
-      // Create canvas with fallback
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d', { willReadFrequently: true })
-      
-      if (!ctx) {
-        throw new Error('Canvas not supported in this browser')
-      }
-      
-      // Resize for performance
-      const maxSize = 300
-      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
-      canvas.width = Math.max(1, Math.floor(img.width * scale))
-      canvas.height = Math.max(1, Math.floor(img.height * scale))
-      
-      // Draw with error handling
-      try {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const img = new Image()
+      const canvas = canvasRef.current
+      if (!canvas) throw new Error('Canvas not available')
+
+      img.onload = async () => {
+        const ctx = canvas.getContext('2d')
+        if (!ctx) throw new Error('Canvas context not available')
+
+        // Resize for performance
+        const maxSize = 300
+        const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
+        canvas.width = img.width * scale
+        canvas.height = img.height * scale
+
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-      } catch {
-        throw new Error('Failed to draw image. The image may be corrupted.')
+
+        const basicColors = extractColorsFromCanvas(canvas)
+        const enhancedColors = await processWithPythonML(basicColors)
+        
+        onColorsExtracted?.(enhancedColors)
+        onColorsFound?.([])
+        setIsProcessing(false)
       }
-      
-      // Extract image data with validation
-      let imageData: ImageData
-      try {
-        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      } catch {
-        throw new Error('Failed to extract image data. Try a different image.')
+
+      img.onerror = () => {
+        setError('Failed to load image')
+        setIsProcessing(false)
       }
-      
-      if (!imageData?.data?.length) {
-        throw new Error('No pixel data found in image')
-      }
-      
-      // Extract colors with enhanced algorithm
-      const extracted = extractColorsFromImage(imageData)
-      if (extracted.length === 0) {
-        throw new Error('No distinct colors found. Try an image with more varied colors.')
-      }
-      
-      setExtractedColors(extracted)
-      
-      // Find matches
-      const matchedColors = findMatchingColors(extracted)
-      if (matchedColors.length === 0) {
-        setError('No matching automotive colors found. Try an image with more common car colors.')
-      } else {
-        onColorsFound(matchedColors)
-      }
-      
+
+      img.src = URL.createObjectURL(file)
     } catch (error) {
-      console.error('Image processing error:', error)
-      
-      let userMessage = 'Failed to process image'
-      if (error instanceof Error) {
-        userMessage = error.message
-      }
-      
-      // Add helpful suggestions based on error type
-      if (userMessage.includes('loading') || userMessage.includes('failed')) {
-        userMessage += '. Try: 1) A different image format (JPEG/PNG), 2) A smaller file size, 3) Re-saving the image.'
-      }
-      
-      setError(userMessage)
-    } finally {
-      // Cleanup
-      if (objectUrl) URL.revokeObjectURL(objectUrl)
+      setError(error instanceof Error ? error.message : 'Processing failed')
       setIsProcessing(false)
     }
-  }, [onColorsFound, extractColorsFromImage, findMatchingColors, validateFile])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setDragActive(false)
-    
-    const files = Array.from(e.dataTransfer.files)
-    const imageFile = files.find(file => file.type.startsWith('image/'))
-    
-    if (imageFile) {
-      processImage(imageFile)
-    }
-  }, [processImage])
-
-  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      processImage(file)
-    }
-  }, [processImage])
+  }, [extractColorsFromCanvas, processWithPythonML, onColorsExtracted])
 
   return (
-    <>
-      {/* Tutorial Overlay */}
-      {showTutorial && (
-        <div className={`mb-4 p-4 rounded-lg border-l-4 ${
-          isDarkMode 
-            ? 'bg-blue-900/30 border-blue-400 text-blue-100' 
-            : 'bg-blue-50 border-blue-400 text-blue-800'
+    <div className={`p-4 rounded-lg border ${
+      isDarkMode 
+        ? 'bg-slate-800 border-slate-600' 
+        : 'bg-white border-gray-300'
+    }`}>
+      <div className="mb-4">
+        <label className={`block text-sm font-medium mb-2 ${
+          isDarkMode ? 'text-slate-200' : 'text-gray-700'
         }`}>
-          <div className="flex items-start justify-between">
-            <div>
-              <h4 className="font-semibold mb-2">How to use Image Color Matching:</h4>
-              <ol className="text-sm space-y-1 list-decimal list-inside">
-                <li>Upload a photo (car, color swatch, or any image)</li>
-                <li>We'll extract the dominant colors automatically</li>
-                <li>See matching automotive paint colors from 10,000+ options</li>
-                <li>Click any result to view detailed color information</li>
-              </ol>
-            </div>
-            {onTutorialClose && (
-              <button
-                onClick={onTutorialClose}
-                className={`ml-4 text-sm px-2 py-1 rounded ${
-                  isDarkMode 
-                    ? 'text-blue-300 hover:bg-blue-800' 
-                    : 'text-blue-600 hover:bg-blue-100'
-                } transition-colors`}
-              >
-                Got it
-              </button>
-            )}
-          </div>
+          Extract Colors from Image
+        </label>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          disabled={isProcessing}
+          className={`block w-full text-sm ${
+            isDarkMode 
+              ? 'text-slate-300 file:bg-slate-700 file:text-slate-200' 
+              : 'text-gray-900 file:bg-gray-50 file:text-gray-700'
+          } file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold hover:file:bg-opacity-80`}
+        />
+      </div>
+
+      {isProcessing && (
+        <div className="flex items-center space-x-2 text-blue-600">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+          <span className="text-sm">Processing with ML enhancement...</span>
         </div>
       )}
-      
-      <div className={`p-6 rounded-lg border-2 border-dashed transition-colors ${
-      dragActive 
-        ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-900/20' 
-        : isDarkMode 
-          ? 'border-slate-600 bg-slate-800' 
-          : 'border-gray-300 bg-gray-50'
-    }`}
-      onDrop={handleDrop}
-      onDragOver={(e) => { e.preventDefault(); setDragActive(true) }}
-      onDragLeave={() => setDragActive(false)}
-    >
-      <div className={`text-center ${extractedColors.length > 0 ? 'text-left' : ''}`}>
-        <div className={`mx-auto w-12 h-12 mb-4 rounded-full flex items-center justify-center ${
-          isDarkMode ? 'bg-slate-700' : 'bg-gray-200'
-        }`}>
-          🎨
-        </div>
-        
-        <h3 className={`text-lg font-semibold mb-2 ${
-          isDarkMode ? 'text-slate-200' : 'text-gray-800'
-        }`}>
-          Find Matching Car Colors
-        </h3>
-        
-        <p className={`text-sm mb-4 ${
-          isDarkMode ? 'text-slate-400' : 'text-gray-600'
-        }`}>
-          Upload an image to extract colors and find matching automotive paints
-        </p>
 
-        <input
-          type="file"
-          accept="image/*,.heic,.avif"
-          onChange={handleFileInput}
-          className="hidden"
-          id="image-upload"
-          disabled={isProcessing}
-        />
-        
-        {error && (
-          <div className={`mb-4 p-3 rounded-lg ${isDarkMode ? 'bg-red-900/30 text-red-200' : 'bg-red-50 text-red-800'}`}>
-            {error}
-          </div>
-        )}
-        
-        {extractedColors.length === 0 ? (
-          <label
-            htmlFor="image-upload"
-            className={`inline-block px-4 py-2 rounded-md cursor-pointer transition-colors ${
-              isProcessing
-                ? 'bg-gray-400 cursor-not-allowed'
-                : isDarkMode
-                  ? 'bg-fuchsia-600 hover:bg-fuchsia-700 text-white'
-                  : 'bg-fuchsia-500 hover:bg-fuchsia-600 text-white'
-            }`}
-          >
-            {isProcessing ? 'Processing...' : 'Choose Image'}
-          </label>
-        ) : (
-          <div className="w-full">
-            <h4 className={`text-lg font-semibold mb-4 ${
-              isDarkMode ? 'text-slate-200' : 'text-gray-800'
-            }`}>
-              🎨 Extracted Colors
-            </h4>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 mb-4">
-              {extractedColors.map((color, index) => {
-                const hexCode = `#${color.r.toString(16).padStart(2,'0')}${color.g.toString(16).padStart(2,'0')}${color.b.toString(16).padStart(2,'0')}`
-                
-                // Convert HSL back to HSB for proper display
-                const hslToHsb = (h: number, s: number, l: number): { h: number; s: number; b: number } => {
-                  const b = l + s * Math.min(l, 1 - l)
-                  const newS = b === 0 ? 0 : 2 * (1 - l / b)
-                  return { h, s: newS, b }
-                }
-                
-                const hsbColor = hslToHsb(color.h, color.s, color.l)
-                
-                // Convert extracted color to CarColor format
-                const carColor: CarColor = {
-                  make: 'Extracted',
-                  model: 'Image Color',
-                  year: null,
-                  colorName: `Color ${index + 1} (${hexCode.toUpperCase()})`,
-                  colorType: 'Extracted',
-                  color1: hsbColor,
-                  color2: hsbColor
-                }
-                
-                return (
-                  <div key={index} className="flex flex-col items-center">
-                    <button
-                      className="w-12 h-12 rounded-lg border-2 border-white shadow-lg transition-all hover:scale-110 hover:shadow-xl cursor-pointer"
-                      style={{ backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})` }}
-                      onClick={() => onColorSelect?.(carColor)}
-                      title={`Click to view details - RGB(${color.r}, ${color.g}, ${color.b})`}
-                    />
-                    <span className={`text-xs mt-1 ${
-                      isDarkMode ? 'text-slate-400' : 'text-gray-600'
-                    }`}>
-                      {hexCode}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-            <label
-              htmlFor="image-upload"
-              className={`inline-block px-3 py-1 text-sm rounded-md cursor-pointer transition-colors ${
-                isDarkMode
-                  ? 'bg-slate-700 hover:bg-slate-600 text-slate-300'
-                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-              }`}
-            >
-              Try Different Image
-            </label>
-          </div>
-        )}
+      {error && (
+        <div className={`text-sm p-2 rounded ${
+          isDarkMode ? 'text-red-200 bg-red-900/30' : 'text-red-600 bg-red-50'
+        }`}>
+          {error}
         </div>
-      </div>
-    </>
+      )}
+
+      <canvas
+        ref={canvasRef}
+        className="hidden"
+        width={300}
+        height={300}
+      />
+    </div>
   )
 }
 

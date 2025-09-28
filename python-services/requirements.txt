@@ -1,0 +1,34 @@
+# Core dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+redis==5.0.1
+
+# Data science and ML
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0
+scipy==1.11.1
+
+# Image processing
+opencv-python==4.8.1.78
+Pillow==10.0.1
+imageio==2.31.1
+
+# Color science
+colorspacious==1.1.2
+colour-science==0.4.2
+
+# Async and performance
+aiohttp==3.9.1
+asyncio-throttle==1.0.2
+multiprocessing-logging==0.3.4
+
+# Database and caching
+aiofiles==23.2.1
+python-multipart==0.0.6
+
+# Development
+pytest==7.4.2
+pytest-asyncio==0.21.1
+black==23.9.1

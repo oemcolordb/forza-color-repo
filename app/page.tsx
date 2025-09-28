@@ -32,6 +32,8 @@ import CollapsibleSection from './components/CollapsibleSection'
 import Car3DViewer from './components/Car3DViewer'
 import PaintEffect3D from './components/PaintEffect3D'
 import DiscordIntegration from './components/DiscordIntegration'
+import OfflineIndicator from './components/OfflineIndicator'
+import { useOfflineStorage } from './hooks/useOfflineStorage'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -55,6 +57,7 @@ export default function HomePage() {
   const ITEMS_PER_PAGE = isMobile ? 30 : 60
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
+  const { isOnline, cacheColors, getOfflineColors } = useOfflineStorage()
 
   useEffect(() => {
     // Detect mobile device
@@ -72,12 +75,28 @@ export default function HomePage() {
             if (typeof window !== 'undefined' && (window as any).electronAPI) {
               return await (window as any).electronAPI.loadColorData()
             }
-            // Web version
-            const { default: data } = await import('../services/colorData')
-            return data
+            
+            // Try online first, fallback to offline
+            if (isOnline) {
+              const { default: data } = await import('../services/colorData')
+              // Cache colors for offline use
+              await cacheColors(data)
+              return data
+            } else {
+              // Load from offline cache
+              const cachedData = await getOfflineColors()
+              if (cachedData.length > 0) {
+                return cachedData
+              }
+              // Last resort - try to load anyway
+              const { default: data } = await import('../services/colorData')
+              return data
+            }
           } catch (error) {
             console.error('Failed to load color data:', error)
-            return []
+            // Try offline cache as final fallback
+            const cachedData = await getOfflineColors()
+            return cachedData.length > 0 ? cachedData : []
           }
         })
         
@@ -138,9 +157,15 @@ export default function HomePage() {
     }
     loadColors()
     
-    // Register service worker
+    // Register service worker for offline support
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('SW registered:', registration)
+        })
+        .catch(error => {
+          console.log('SW registration failed:', error)
+        })
     }
   }, [measureAsync])
 
@@ -785,6 +810,8 @@ export default function HomePage() {
           onClose={() => setShowAuthModal(false)} 
           isDarkMode={isDarkMode} 
         />
+        
+        <OfflineIndicator isDarkMode={isDarkMode} />
       </div>
     </div>
     </AuthProvider>
