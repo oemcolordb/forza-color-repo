@@ -1,7 +1,6 @@
 import React, { memo, useMemo } from 'react'
 import type { CarColor } from '../types/color'
-
-const ColorCard = React.lazy(() => import('./ColorCard'))
+import ColorCard from './ColorCard'
 
 interface LazyColorGridProps {
   colors: CarColor[]
@@ -21,29 +20,22 @@ const LazyColorGrid: React.FC<LazyColorGridProps> = memo(({
   const colorItems = useMemo(() => 
     colors.map((color, index) => {
       const colorId = `${color.make}-${color.model}-${color.colorName}-${color.year || 'unknown'}`
-      const uniqueKey = `${colorId}-${index}` // Add index to ensure uniqueness
+      const uniqueKey = `${colorId}-${index}`
       return (
-        <div 
+        <ColorCard
           key={uniqueKey}
-          className="animate-fade-in"
-          style={{ animationDelay: `${(index % 50) * 20}ms` }}
-        >
-          <React.Suspense fallback={<div className="h-64 bg-gray-200 rounded-lg animate-pulse" />}>
-            <ColorCard
-              color={color}
-              onSelect={onColorSelect}
-              isFavorite={favorites.includes(colorId)}
-              onToggleFavorite={() => onToggleFavorite(colorId)}
-              isDarkMode={isDarkMode}
-            />
-          </React.Suspense>
-        </div>
+          color={color}
+          onSelect={onColorSelect}
+          isFavorite={favorites.includes(colorId)}
+          onToggleFavorite={() => onToggleFavorite(colorId)}
+          isDarkMode={isDarkMode}
+        />
       )
     }), [colors, favorites, onColorSelect, onToggleFavorite, isDarkMode]
   )
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
       {colorItems}
     </div>
   )

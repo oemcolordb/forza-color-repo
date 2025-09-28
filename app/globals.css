@@ -52,6 +52,38 @@
   .gradient-text {
     @apply bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent;
   }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .mobile-optimized {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+    }
+    
+    .mobile-card {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+    
+    .mobile-text {
+      text-rendering: optimizeSpeed;
+    }
+    
+    /* Disable expensive animations on mobile */
+    .animate-pulse,
+    .animate-bounce,
+    .animate-spin {
+      animation: none;
+    }
+    
+    /* Reduce motion for better performance */
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 /* Tokyo Neon Animations */

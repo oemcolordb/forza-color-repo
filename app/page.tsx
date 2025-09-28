@@ -6,12 +6,13 @@ import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils
 import Header from './components/Header'
 import Footer from './components/Footer'
 import ColorStats from './components/ColorStats'
+import MobileColorStats from './components/MobileColorStats'
 import ShareButton from './components/ShareButton'
 import ExportButton from './components/ExportButton'
 import { SecurityHeaders } from './components/SecurityHeaders'
 import { useAnalytics } from './hooks/useAnalytics'
 import { usePerformance } from './hooks/usePerformance'
-import LazyColorGrid from './components/LazyColorGrid'
+import VirtualizedColorGrid from './components/VirtualizedColorGrid'
 import ModelBrowser from './components/ModelBrowser'
 import LoadingSpinner from './components/LoadingSpinner'
 import ImageColorExtractor from './components/ImageColorExtractor'
@@ -20,6 +21,7 @@ import ColorRandomizer from './components/ColorRandomizer'
 import ColorPalette from './components/ColorPalette'
 import ColorTrends from './components/ColorTrends'
 import TokyoBackground from './components/TokyoBackground'
+import MobileOptimizedBackground from './components/MobileOptimizedBackground'
 import MusicPlayer from './components/MusicPlayer'
 
 export default function HomePage() {
@@ -39,11 +41,19 @@ export default function HomePage() {
   const [imageMatchedColors, setImageMatchedColors] = useState<CarColor[]>([])
   const [showImageExtractor, setShowImageExtractor] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
-  const ITEMS_PER_PAGE = 50
+  const [isMobile, setIsMobile] = useState(false)
+  const ITEMS_PER_PAGE = isMobile ? 30 : 60
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
 
   useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
     const loadColors = async () => {
       try {
         const colorData = await measureAsync('Load Color Data', async () => {
@@ -96,7 +106,10 @@ export default function HomePage() {
         }, 30 * 60 * 1000) // 30 minutes
         
         // Cleanup interval on unmount
-        return () => clearInterval(backgroundInterval)
+        return () => {
+          clearInterval(backgroundInterval)
+          window.removeEventListener('resize', checkMobile)
+        }
       } catch (error) {
         console.error('Failed to load colors:', error)
       } finally {
@@ -191,18 +204,19 @@ export default function HomePage() {
     } else {
       setHasMore(false)
     }
-  }, [filteredColors, imageMatchedColors, page, hasMore, loading])
+  }, [filteredColors, imageMatchedColors, page, hasMore, loading, ITEMS_PER_PAGE])
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1000) {
+      const threshold = isMobile ? 500 : 800
+      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - threshold) {
         loadMore()
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loadMore])
+  }, [loadMore, isMobile])
 
   const toggleFavorite = useCallback((colorId: string) => {
     setFavorites(prev => 
@@ -293,8 +307,12 @@ export default function HomePage() {
   }
 
   return (
-    <div className={`font-sans transition-all duration-500 ${themeClasses} relative`} style={backgroundStyle}>
-      <TokyoBackground isDarkMode={isDarkMode} />
+    <div className={`font-sans transition-all duration-500 ${themeClasses} relative ${isMobile ? 'mobile-optimized' : ''}`} style={backgroundStyle}>
+      {isMobile ? (
+        <MobileOptimizedBackground isDarkMode={isDarkMode} />
+      ) : (
+        <TokyoBackground isDarkMode={isDarkMode} />
+      )}
       <div className="relative z-10">
         <SecurityHeaders />
       <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
@@ -458,16 +476,26 @@ export default function HomePage() {
         {!loading && colors.length > 0 && (
           <section className="mb-8" aria-labelledby="color-stats-heading">
             <h2 id="color-stats-heading" className="sr-only">Color Database Statistics</h2>
-            <ColorStats 
-              colors={colors}
-              favorites={favorites}
-              colorHistory={colorHistory}
-              isDarkMode={isDarkMode}
-            />
+            {isMobile ? (
+              <MobileColorStats 
+                colors={colors}
+                favorites={favorites}
+                colorHistory={colorHistory}
+                isDarkMode={isDarkMode}
+              />
+            ) : (
+              <ColorStats 
+                colors={colors}
+                favorites={favorites}
+                colorHistory={colorHistory}
+                isDarkMode={isDarkMode}
+              />
+            )}
           </section>
         )}
         
-        {/* Fun Features Section */}
+        {/* Fun Features Section - Hide on mobile */}
+        {!isMobile && (
           <div className="grid lg:grid-cols-3 gap-6 mb-8">
             <ColorRandomizer 
               colors={filteredColors} 
@@ -480,9 +508,10 @@ export default function HomePage() {
             <ColorPalette colors={colors} isDarkMode={isDarkMode} />
             <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
           </div>
+        )}
 
-          {/* Color Type Browser */}
-        {!loading && colors.length > 0 && (
+        {/* Color Type Browser - Hide on mobile */}
+        {!loading && colors.length > 0 && !isMobile && (
           <section className="mb-8" aria-labelledby="color-type-browser-heading">
             <h2 id="color-type-browser-heading" className="sr-only">Browse Colors by Type</h2>
             <ModelBrowser 
@@ -495,12 +524,13 @@ export default function HomePage() {
         
         {displayedColors.length > 0 ? (
           <>
-            <LazyColorGrid
+            <VirtualizedColorGrid
               colors={displayedColors}
               favorites={favorites}
               onColorSelect={handleColorSelect}
               onToggleFavorite={toggleFavorite}
               isDarkMode={isDarkMode}
+              isMobile={isMobile}
             />
             
             {/* Loading indicator */}
@@ -535,8 +565,8 @@ export default function HomePage() {
       
       <Footer isDarkMode={isDarkMode} />
       
-      {/* Music Player */}
-      <MusicPlayer isDarkMode={isDarkMode} />
+      {/* Music Player - Hide on mobile */}
+      {!isMobile && <MusicPlayer isDarkMode={isDarkMode} />}
 
       {/* Enhanced Color Modal */}
       {selectedColor && (
@@ -545,128 +575,137 @@ export default function HomePage() {
           onClick={() => setSelectedColor(null)}
         >
           <div 
-            className="bg-slate-900 rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto relative p-8 border border-slate-700 animate-bounce-in"
+            className={`bg-slate-900 rounded-xl shadow-2xl w-full max-h-[90vh] overflow-y-auto relative border border-slate-700 animate-bounce-in ${
+              isMobile ? 'max-w-sm p-3' : 'max-w-3xl p-8'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="absolute top-4 right-4 flex gap-2">
-              <ShareButton color={selectedColor} isDarkMode={isDarkMode} />
+            <div className={`absolute ${isMobile ? 'top-2 right-2' : 'top-4 right-4'} flex gap-2`}>
+              {!isMobile && <ShareButton color={selectedColor} isDarkMode={isDarkMode} />}
               <button 
                 onClick={() => setSelectedColor(null)}
-                className="text-slate-400 hover:text-white transition-colors"
+                className={`text-slate-400 hover:text-white transition-colors ${isMobile ? 'text-lg' : ''}`}
               >
                 ✕
               </button>
             </div>
-            <h2 className="text-3xl font-bold text-slate-100 bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-transparent bg-clip-text mb-2">
+            <h2 className={`font-bold text-slate-100 bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-transparent bg-clip-text mb-2 ${isMobile ? 'text-lg pr-8' : 'text-3xl'}`}>
               {selectedColor.colorName}
             </h2>
-            <p className="text-lg text-slate-400 mb-6">
+            <p className={`text-slate-400 mb-3 ${isMobile ? 'text-xs' : 'text-lg'}`}>
               {selectedColor.make} {selectedColor.model} {selectedColor.year && `(${selectedColor.year})`}
             </p>
             
             {/* Color Swatches */}
-            <div className="mb-6">
-              <h4 className="text-lg font-semibold text-cyan-400 mb-3">🎨 Color Preview</h4>
-              <div className="grid grid-cols-2 gap-4">
+            <div className={`mb-3 ${isMobile ? 'mb-2' : 'mb-6'}`}>
+              <h4 className={`font-semibold text-cyan-400 mb-2 ${isMobile ? 'text-sm' : 'text-lg'}`}>🎨 Color Preview</h4>
+              <div className={`grid gap-2 ${isMobile ? 'grid-cols-2' : 'grid-cols-2'}`}>
                 {/* Color 1 Swatch */}
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div 
-                    className="w-full h-24 rounded-lg border-2 border-slate-600 shadow-lg"
+                    className={`w-full rounded-lg border-2 border-slate-600 shadow-lg ${isMobile ? 'h-12' : 'h-24'}`}
                     style={{ 
                       backgroundColor: hsbToCSS(selectedColor.color1)
                     }}
                   />
-                  <p className="text-sm text-slate-300 text-center font-medium">Primary Color</p>
+                  <p className={`text-slate-300 text-center font-medium ${isMobile ? 'text-xs' : 'text-sm'}`}>Primary</p>
                 </div>
                 
                 {/* Color 2 Swatch */}
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <div 
-                    className="w-full h-24 rounded-lg border-2 border-slate-600 shadow-lg"
+                    className={`w-full rounded-lg border-2 border-slate-600 shadow-lg ${isMobile ? 'h-12' : 'h-24'}`}
                     style={{ 
                       backgroundColor: hsbToCSS(selectedColor.color2)
                     }}
                   />
-                  <p className="text-sm text-slate-300 text-center font-medium">Secondary Color</p>
+                  <p className={`text-slate-300 text-center font-medium ${isMobile ? 'text-xs' : 'text-sm'}`}>Secondary</p>
                 </div>
               </div>
               
               {/* Combined Gradient */}
-              <div className="mt-4">
+              <div className="mt-2">
                 <div 
-                  className="w-full h-16 rounded-lg border-2 border-slate-600 shadow-lg"
+                  className={`w-full rounded-lg border-2 border-slate-600 shadow-lg ${isMobile ? 'h-8' : 'h-16'}`}
                   style={{ 
                     background: createForzaGradient(selectedColor.color1, selectedColor.color2)
                   }}
                 />
-                <p className="text-sm text-slate-300 text-center font-medium mt-2">Forza 5 Mixed Color</p>
+                <p className={`text-slate-300 text-center font-medium mt-1 ${isMobile ? 'text-xs' : 'text-sm'}`}>Mixed Color</p>
               </div>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-3">
               {selectedColor.colorType && (
-                <p className="text-slate-300">
+                <p className={`text-slate-300 ${isMobile ? 'text-sm' : ''}`}>
                   <span className="font-semibold text-slate-100">Type:</span> {selectedColor.colorType}
                 </p>
               )}
               
               {/* Forza 5 HSB Color Values */}
               <div>
-                <h4 className="text-lg font-semibold text-cyan-400 mb-3">📊 Forza 5 Color Values</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h4 className={`font-semibold text-cyan-400 mb-2 ${isMobile ? 'text-sm' : 'text-lg'}`}>📊 Color Values</h4>
+                <div className={`grid gap-2 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
                   {/* Color 1 Values */}
-                  <div className="bg-slate-800 p-4 rounded-lg">
-                    <h5 className="font-semibold text-fuchsia-400 mb-3">Primary Color</h5>
-                    <div className="space-y-3 text-sm">
+                  <div className={`bg-slate-800 rounded-lg ${isMobile ? 'p-2' : 'p-4'}`}>
+                    <h5 className={`font-semibold text-fuchsia-400 mb-1 ${isMobile ? 'text-xs' : 'text-base'}`}>Primary Color</h5>
+                    <div className={`space-y-1 ${isMobile ? 'text-xs' : 'text-sm'}`}>
                       <div className="text-center">
-                        <div className="text-lg font-mono text-slate-200">
+                        <div className={`font-mono text-slate-200 ${isMobile ? 'text-sm' : 'text-lg'}`}>
                           {formatHSBValues(selectedColor.color1)}
                         </div>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className="grid grid-cols-3 gap-1 text-center">
                         <div>
-                          <div className="text-xs text-slate-400">Hue</div>
-                          <div className="text-lg font-bold text-fuchsia-400">{Math.round(selectedColor.color1.h * 360)}</div>
+                          <div className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-xs'}`}>Hue</div>
+                          <div className={`font-bold text-fuchsia-400 ${isMobile ? 'text-xs' : 'text-lg'}`}>{Math.round(selectedColor.color1.h * 360)}</div>
                         </div>
                         <div>
-                          <div className="text-xs text-slate-400">Saturation</div>
-                          <div className="text-lg font-bold text-cyan-400">{Math.round(selectedColor.color1.s * 100)}</div>
+                          <div className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-xs'}`}>Sat</div>
+                          <div className={`font-bold text-cyan-400 ${isMobile ? 'text-xs' : 'text-lg'}`}>{Math.round(selectedColor.color1.s * 100)}</div>
                         </div>
                         <div>
-                          <div className="text-xs text-slate-400">Brightness</div>
-                          <div className="text-lg font-bold text-yellow-400">{Math.round(selectedColor.color1.b * 100)}</div>
+                          <div className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-xs'}`}>Bright</div>
+                          <div className={`font-bold text-yellow-400 ${isMobile ? 'text-xs' : 'text-lg'}`}>{Math.round(selectedColor.color1.b * 100)}</div>
                         </div>
                       </div>
                     </div>
                   </div>
                   
                   {/* Color 2 Values */}
-                  <div className="bg-slate-800 p-4 rounded-lg">
-                    <h5 className="font-semibold text-cyan-400 mb-3">Secondary Color</h5>
-                    <div className="space-y-3 text-sm">
+                  <div className={`bg-slate-800 rounded-lg ${isMobile ? 'p-2' : 'p-4'}`}>
+                    <h5 className={`font-semibold text-cyan-400 mb-1 ${isMobile ? 'text-xs' : 'text-base'}`}>Secondary Color</h5>
+                    <div className={`space-y-1 ${isMobile ? 'text-xs' : 'text-sm'}`}>
                       <div className="text-center">
-                        <div className="text-lg font-mono text-slate-200">
+                        <div className={`font-mono text-slate-200 ${isMobile ? 'text-sm' : 'text-lg'}`}>
                           {formatHSBValues(selectedColor.color2)}
                         </div>
                       </div>
-                      <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className="grid grid-cols-3 gap-1 text-center">
                         <div>
-                          <div className="text-xs text-slate-400">Hue</div>
-                          <div className="text-lg font-bold text-fuchsia-400">{Math.round(selectedColor.color2.h * 360)}</div>
+                          <div className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-xs'}`}>Hue</div>
+                          <div className={`font-bold text-fuchsia-400 ${isMobile ? 'text-xs' : 'text-lg'}`}>{Math.round(selectedColor.color2.h * 360)}</div>
                         </div>
                         <div>
-                          <div className="text-xs text-slate-400">Saturation</div>
-                          <div className="text-lg font-bold text-cyan-400">{Math.round(selectedColor.color2.s * 100)}</div>
+                          <div className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-xs'}`}>Sat</div>
+                          <div className={`font-bold text-cyan-400 ${isMobile ? 'text-xs' : 'text-lg'}`}>{Math.round(selectedColor.color2.s * 100)}</div>
                         </div>
                         <div>
-                          <div className="text-xs text-slate-400">Brightness</div>
-                          <div className="text-lg font-bold text-yellow-400">{Math.round(selectedColor.color2.b * 100)}</div>
+                          <div className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-xs'}`}>Bright</div>
+                          <div className={`font-bold text-yellow-400 ${isMobile ? 'text-xs' : 'text-lg'}`}>{Math.round(selectedColor.color2.b * 100)}</div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              
+              {/* Mobile Share Button */}
+              {isMobile && (
+                <div className="flex justify-center pt-2">
+                  <ShareButton color={selectedColor} isDarkMode={isDarkMode} />
+                </div>
+              )}
             </div>
           </div>
         </div>
