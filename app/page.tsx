@@ -29,6 +29,8 @@ import ColorRouletteHarmony from './components/ColorRouletteHarmony'
 import { AuthProvider } from './components/AuthProvider'
 import AuthModal from './components/AuthModal'
 import CollapsibleSection from './components/CollapsibleSection'
+import Car3DViewer from './components/Car3DViewer'
+import PaintEffect3D from './components/PaintEffect3D'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -546,14 +548,25 @@ export default function HomePage() {
                 <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
               </div>
             </CollapsibleSection>
-            <CollapsibleSection 
-              title="HSB Color Space Visualization" 
-              icon="🌈" 
-              isDarkMode={isDarkMode}
-              defaultOpen={false}
-            >
-              <HSBVisualizer colors={filteredColors} isDarkMode={isDarkMode} />
-            </CollapsibleSection>
+            <div className="grid lg:grid-cols-2 gap-6 mb-8">
+              <CollapsibleSection 
+                title="HSB Color Space Visualization" 
+                icon="🌈" 
+                isDarkMode={isDarkMode}
+                defaultOpen={false}
+              >
+                <HSBVisualizer colors={filteredColors} isDarkMode={isDarkMode} />
+              </CollapsibleSection>
+              
+              <CollapsibleSection 
+                title="3D Paint Effects" 
+                icon="🎨" 
+                isDarkMode={isDarkMode}
+                defaultOpen={false}
+              >
+                <PaintEffect3D colors={filteredColors} isDarkMode={isDarkMode} />
+              </CollapsibleSection>
+            </div>
           </>
         )}
 
@@ -749,6 +762,12 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+              </div>
+              
+              {/* 3D Car Viewer */}
+              <div className="mb-4">
+                <h4 className={`font-semibold text-cyan-400 mb-2 ${isMobile ? 'text-sm' : 'text-lg'}`}>🚗 3D Preview</h4>
+                <Car3DViewer color={selectedColor} isDarkMode={isDarkMode} />
               </div>
               
               {/* Mobile Share Button */}
