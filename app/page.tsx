@@ -23,6 +23,7 @@ import ColorTrends from './components/ColorTrends'
 import TokyoBackground from './components/TokyoBackground'
 import MobileOptimizedBackground from './components/MobileOptimizedBackground'
 import MusicPlayer from './components/MusicPlayer'
+import PaletteGenerator from './components/PaletteGenerator'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -506,7 +507,7 @@ export default function HomePage() {
         
         {/* Fun Features Section - Hide on mobile */}
         {!isMobile && (
-          <div className="grid lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid lg:grid-cols-4 gap-6 mb-8">
             <ColorRandomizer 
               colors={filteredColors} 
               onColorSelect={(color) => {
@@ -517,6 +518,15 @@ export default function HomePage() {
             />
             <ColorPalette colors={colors} isDarkMode={isDarkMode} />
             <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
+            <PaletteGenerator 
+              colors={colors} 
+              isDarkMode={isDarkMode}
+              onPaletteGenerated={(palette) => {
+                setDisplayedColors(palette)
+                setHasMore(false)
+                setPage(1)
+              }}
+            />
           </div>
         )}
 
