@@ -183,7 +183,7 @@ const PaletteGenerator: React.FC<PaletteGeneratorProps> = ({
               ))}
             </div>
           </div>
-        )
+        )}
       </div>
     </div>
   )
