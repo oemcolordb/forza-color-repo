@@ -24,6 +24,7 @@ import TokyoBackground from './components/TokyoBackground'
 import MobileOptimizedBackground from './components/MobileOptimizedBackground'
 import MusicPlayer from './components/MusicPlayer'
 import PaletteGenerator from './components/PaletteGenerator'
+import HSBVisualizer from './components/HSBVisualizer'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -507,27 +508,32 @@ export default function HomePage() {
         
         {/* Fun Features Section - Hide on mobile */}
         {!isMobile && (
-          <div className="grid lg:grid-cols-4 gap-6 mb-8">
-            <ColorRandomizer 
-              colors={filteredColors} 
-              onColorSelect={(color) => {
-                setSelectedColor(color)
-                track({ action: 'view', colorName: color.colorName, make: color.make })
-              }}
-              isDarkMode={isDarkMode} 
-            />
-            <ColorPalette colors={colors} isDarkMode={isDarkMode} />
-            <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
-            <PaletteGenerator 
-              colors={colors} 
-              isDarkMode={isDarkMode}
-              onPaletteGenerated={(palette) => {
-                setDisplayedColors(palette)
-                setHasMore(false)
-                setPage(1)
-              }}
-            />
-          </div>
+          <>
+            <div className="grid lg:grid-cols-4 gap-6 mb-8">
+              <ColorRandomizer 
+                colors={filteredColors} 
+                onColorSelect={(color) => {
+                  setSelectedColor(color)
+                  track({ action: 'view', colorName: color.colorName, make: color.make })
+                }}
+                isDarkMode={isDarkMode} 
+              />
+              <ColorPalette colors={colors} isDarkMode={isDarkMode} />
+              <ColorTrends colors={colors} favorites={favorites} isDarkMode={isDarkMode} />
+              <PaletteGenerator 
+                colors={colors} 
+                isDarkMode={isDarkMode}
+                onPaletteGenerated={(palette) => {
+                  setDisplayedColors(palette)
+                  setHasMore(false)
+                  setPage(1)
+                }}
+              />
+            </div>
+            <div className="mb-8">
+              <HSBVisualizer colors={filteredColors} isDarkMode={isDarkMode} />
+            </div>
+          </>
         )}
 
         {/* Color Type Browser - Hide on mobile */}
