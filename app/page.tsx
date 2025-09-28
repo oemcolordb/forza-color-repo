@@ -25,6 +25,8 @@ import MobileOptimizedBackground from './components/MobileOptimizedBackground'
 import MusicPlayer from './components/MusicPlayer'
 import PaletteGenerator from './components/PaletteGenerator'
 import HSBVisualizer from './components/HSBVisualizer'
+import { AuthProvider } from './components/AuthProvider'
+import AuthModal from './components/AuthModal'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -44,6 +46,7 @@ export default function HomePage() {
   const [showImageExtractor, setShowImageExtractor] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [showAuthModal, setShowAuthModal] = useState(false)
   const ITEMS_PER_PAGE = isMobile ? 30 : 60
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
@@ -319,7 +322,8 @@ export default function HomePage() {
   }
 
   return (
-    <div className={`font-sans transition-all duration-500 ${themeClasses} relative ${isMobile ? 'mobile-optimized' : ''}`} style={backgroundStyle}>
+    <AuthProvider>
+      <div className={`font-sans transition-all duration-500 ${themeClasses} relative ${isMobile ? 'mobile-optimized' : ''}`} style={backgroundStyle}>
       {isMobile ? (
         <MobileOptimizedBackground isDarkMode={isDarkMode} />
       ) : (
@@ -327,7 +331,7 @@ export default function HomePage() {
       )}
       <div className="relative z-10">
         <SecurityHeaders />
-      <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} />
+      <Header isDarkMode={isDarkMode} onToggleTheme={toggleTheme} onShowAuth={() => setShowAuthModal(true)} />
       
       {/* SEO Content */}
       <section className="sr-only">
@@ -736,7 +740,13 @@ export default function HomePage() {
           </div>
         </div>
       )}
+        <AuthModal 
+          isOpen={showAuthModal} 
+          onClose={() => setShowAuthModal(false)} 
+          isDarkMode={isDarkMode} 
+        />
       </div>
     </div>
+    </AuthProvider>
   )
 }
