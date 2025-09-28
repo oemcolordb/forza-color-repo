@@ -9,7 +9,7 @@ export const usePerformance = () => {
       const duration = end - start
       
       if (process.env.NODE_ENV === 'development') {
-        console.warn(`Performance: ${name} took ${duration.toFixed(2)}ms`)
+        console.warn(`Performance: ${name.replace(/[\r\n]/g, '')} took ${duration.toFixed(2)}ms`)
       }
       
       return result
@@ -18,7 +18,7 @@ export const usePerformance = () => {
       const duration = end - start
       
       if (process.env.NODE_ENV === 'development') {
-        console.error(`Performance: ${name} failed after ${duration.toFixed(2)}ms`, error)
+        console.error(`Performance: ${name.replace(/[\r\n]/g, '')} failed after ${duration.toFixed(2)}ms`)
       }
       
       throw error
