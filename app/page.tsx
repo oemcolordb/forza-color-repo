@@ -57,8 +57,18 @@ export default function HomePage() {
     const loadColors = async () => {
       try {
         const colorData = await measureAsync('Load Color Data', async () => {
-          const { default: data } = await import('../services/colorData')
-          return data
+          try {
+            // Check if running in Electron
+            if (typeof window !== 'undefined' && (window as any).electronAPI) {
+              return await (window as any).electronAPI.loadColorData()
+            }
+            // Web version
+            const { default: data } = await import('../services/colorData')
+            return data
+          } catch (error) {
+            console.error('Failed to load color data:', error)
+            return []
+          }
         })
         
         setColors(colorData)

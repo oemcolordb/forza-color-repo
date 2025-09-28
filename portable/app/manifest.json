@@ -1,0 +1,19 @@
+{
+  "name": "Forza Color Universe - Automotive Paint Colors",
+  "short_name": "Forza Colors",
+  "description": "Discover and explore over 10,000 official automotive paint colors from Forza racing games",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["utilities", "automotive", "design"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
