@@ -1,4 +1,5 @@
-const colorData = require('../../services/colorData')
+// Inline minimal color data for function
+const colorData = []
 
 // Color distance calculation
 const colorDistance = (c1, c2) => {
@@ -31,7 +32,7 @@ exports.handler = async (event, context) => {
     }
 
     const targetColor = { h: h / 360, s: s / 100, b: b / 100 }
-    const colors = colorData.default || colorData
+    const colors = colorData
 
     const matches = colors
       .map(color => ({
