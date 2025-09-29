@@ -74,10 +74,12 @@ export function getPrimaryColor(color1: HSBColor, color2: HSBColor): string {
 
 /**
  * Format HSB values for display (Forza Horizon 5 format)
+ * Note: The stored values are already in Forza's 0-360/0-100 scale, not normalized 0-1
  */
 export function formatHSBValues(hsb: HSBColor): string {
-  const h = Math.round(hsb.h * 360)
-  const s = Math.round(hsb.s * 100)
-  const b = Math.round(hsb.b * 100)
+  // Values are already in Forza format, just round them
+  const h = Math.round(hsb.h)
+  const s = Math.round(hsb.s)
+  const b = Math.round(hsb.b)
   return `${h}, ${s}, ${b}`
 }
