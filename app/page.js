@@ -197,7 +197,7 @@ export default function HomePage() {
       <div className={`font-sans min-h-screen ${
         isDarkMode 
           ? 'bg-gray-900 text-gray-100' 
-          : 'bg-gray-50 text-gray-900'
+          : 'bg-gray-100 text-gray-800'
       }`}>
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
@@ -265,7 +265,7 @@ export default function HomePage() {
           {/* Results Display */}
           {(extractedColors.length > 0 || harmonyColors.length > 0) && (
             <div className={`mb-4 rounded-lg backdrop-blur-sm shadow-lg animate-slide-up ${
-              isDarkMode ? 'bg-slate-800/90' : 'bg-white/90'
+              isDarkMode ? 'bg-slate-800/90' : 'bg-gray-50/95'
             } ${
               deviceInfo.isMobile ? 'p-2' : 'p-3'
             }`}>
@@ -389,7 +389,7 @@ export default function HomePage() {
             <div 
               className={`w-full rounded-lg shadow-xl animate-scale-in gpu-accelerated ${
                 deviceInfo.isMobile ? 'max-w-sm' : 'max-w-md'
-              } ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}
+              } ${isDarkMode ? 'bg-slate-800' : 'bg-gray-50'}`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className={deviceInfo.isMobile ? 'p-3' : 'p-4'}>
