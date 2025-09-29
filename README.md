@@ -2,6 +2,7 @@
 <img width="1200" height="475" alt="Forza Color Universe Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 
 # Forza Color Universe 🎨
+<!-- Deploy trigger -->
 
 **Explore 10,000+ Official Automotive Colors from Forza Racing Games**
 
