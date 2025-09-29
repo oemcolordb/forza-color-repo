@@ -12,7 +12,7 @@ interface OfflineStorageState {
 
 export function useOfflineStorage() {
   const [state, setState] = useState<OfflineStorageState>({
-    isOnline: navigator.onLine,
+    isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
     cacheSize: 0,
     lastUpdated: null,
     isLoading: false,
@@ -76,6 +76,8 @@ export function useOfflineStorage() {
   }, [])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    
     const handleOnline = () => setState(prev => ({ ...prev, isOnline: true }))
     const handleOffline = () => setState(prev => ({ ...prev, isOnline: false }))
 
