@@ -1,4 +1,4 @@
-const colorData = require('../../services/colorData')
+const colorData = []
 
 exports.handler = async (event, context) => {
   const headers = {
