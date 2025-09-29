@@ -62,7 +62,7 @@ export default function HomePage() {
   useEffect(() => {
     // Detect mobile device
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+      setIsMobile(window.innerWidth < 768 || (typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)))
     }
     checkMobile()
     window.addEventListener('resize', checkMobile)
@@ -158,7 +158,7 @@ export default function HomePage() {
     loadColors()
     
     // Register service worker for offline support
-    if ('serviceWorker' in navigator) {
+    if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(registration => {
           console.log('SW registered:', registration)
