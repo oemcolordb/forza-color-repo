@@ -1,7 +1,4 @@
-import type { CarColor } from '../app/types/color'
-
-// @ts-ignore - Large array causes TypeScript complexity issues
-const colorData: CarColor[] = [
+[
   {
     "make": "3M",
     "model": "",
@@ -10921,7 +10918,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Carbon Fibre",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.5,
       "s": 0.01,
@@ -31338,7 +31335,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Carbon Fibre",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0,
       "s": 0,
@@ -31576,7 +31573,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Exposed Carbon Fiber",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.71,
       "s": 0.13,
@@ -32596,7 +32593,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Royal Blue Carbon",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.57,
       "s": 0.64,
@@ -99814,7 +99811,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Blue-Tint Carbon Fibre",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.57,
       "s": 0.64,
@@ -99831,7 +99828,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Burgundy Carbon",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.97,
       "s": 0.88,
@@ -99899,7 +99896,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Clear Carbon",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0,
       "s": 0,
@@ -99984,7 +99981,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Green Carbon",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.43,
       "s": 0.54,
@@ -100137,7 +100134,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Naked Carbon",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.61,
       "s": 0.08,
@@ -100171,7 +100168,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Purple Carbon",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.79,
       "s": 0.36,
@@ -144796,7 +144793,7 @@ const colorData: CarColor[] = [
     "model": "",
     "year": null,
     "colorName": "Exposed Carbon Fiber",
-    "colorType": "Carbon Fiber Polished",
+    "colorType": "Carbon Fibre Polished",
     "color1": {
       "h": 0.57,
       "s": 0.09,
@@ -185064,434 +185061,4 @@ const colorData: CarColor[] = [
       "b": 0.88
     }
   }
-,
-
-  {
-    "make": "Ferrari",
-    "model": "F8 Tributo",
-    "year": 2024,
-    "colorName": "Electric Storm Phantom Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.22,
-      "s": 0.95,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0.83,
-      "s": 0.9,
-      "b": 0.25
-    }
-  },
-  {
-    "make": "Lamborghini",
-    "model": "Huracán",
-    "year": 2024,
-    "colorName": "Neon Blaze Ghost Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.08,
-      "s": 0.98,
-      "b": 0.92
-    },
-    "color2": {
-      "h": 0.75,
-      "s": 0.85,
-      "b": 0.3
-    }
-  },
-  {
-    "make": "McLaren",
-    "model": "720S",
-    "year": 2024,
-    "colorName": "Cyber Glow Shadow Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.92,
-      "s": 0.9,
-      "b": 0.88
-    },
-    "color2": {
-      "h": 0.33,
-      "s": 0.95,
-      "b": 0.2
-    }
-  },
-  {
-    "make": "Bugatti",
-    "model": "Chiron",
-    "year": 2024,
-    "colorName": "Arctic Fire Stealth Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0,
-      "s": 0.95,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0.55,
-      "s": 0.9,
-      "b": 0.28
-    }
-  },
-  {
-    "make": "Koenigsegg",
-    "model": "Jesko",
-    "year": 2024,
-    "colorName": "Toxic Wave Venom Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.25,
-      "s": 0.98,
-      "b": 0.8
-    },
-    "color2": {
-      "h": 0,
-      "s": 0.85,
-      "b": 0.22
-    }
-  },
-  {
-    "make": "Pagani",
-    "model": "Huayra",
-    "year": 2024,
-    "colorName": "Plasma Storm Fury Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.75,
-      "s": 0.95,
-      "b": 0.9
-    },
-    "color2": {
-      "h": 0.08,
-      "s": 0.9,
-      "b": 0.25
-    }
-  },
-  {
-    "make": "Ferrari",
-    "model": "SF90",
-    "year": 2024,
-    "colorName": "Laser Strike Thunder Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.5,
-      "s": 0.98,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0.92,
-      "s": 0.85,
-      "b": 0.3
-    }
-  },
-  {
-    "make": "Lamborghini",
-    "model": "Aventador",
-    "year": 2024,
-    "colorName": "Quantum Blaze Lightning Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.17,
-      "s": 0.95,
-      "b": 0.88
-    },
-    "color2": {
-      "h": 0.67,
-      "s": 0.9,
-      "b": 0.22
-    }
-  },
-  {
-    "make": "McLaren",
-    "model": "P1",
-    "year": 2024,
-    "colorName": "Digital Storm Frost Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.58,
-      "s": 0.92,
-      "b": 0.82
-    },
-    "color2": {
-      "h": 0,
-      "s": 0,
-      "b": 0.15
-    }
-  },
-  {
-    "make": "Bugatti",
-    "model": "Veyron",
-    "year": 2024,
-    "colorName": "Atomic Glow Crystal Matte",
-    "colorType": "Two-Tone Matte",
-    "color1": {
-      "h": 0.33,
-      "s": 0.98,
-      "b": 0.9
-    },
-    "color2": {
-      "h": 0.83,
-      "s": 0.88,
-      "b": 0.28
-    }
-  },
-  {
-    "make": "Aston Martin",
-    "model": "DB11",
-    "year": 2025,
-    "colorName": "Royal Sapphire Prestige Semigloss",
-    "colorType": "Two-Tone Semigloss",
-    "color1": {
-      "h": 0.67,
-      "s": 0.85,
-      "b": 0.75
-    },
-    "color2": {
-      "h": 0.13,
-      "s": 0.8,
-      "b": 0.85
-    }
-  },
-  {
-    "make": "Bentley",
-    "model": "Continental GT",
-    "year": 2025,
-    "colorName": "Emerald Crown Elite Semigloss",
-    "colorType": "Two-Tone Semigloss",
-    "color1": {
-      "h": 0.33,
-      "s": 0.8,
-      "b": 0.7
-    },
-    "color2": {
-      "h": 0,
-      "s": 0.05,
-      "b": 0.9
-    }
-  },
-  {
-    "make": "Rolls-Royce",
-    "model": "Wraith",
-    "year": 2025,
-    "colorName": "Ruby Steel Luxury Semigloss",
-    "colorType": "Two-Tone Semigloss",
-    "color1": {
-      "h": 0,
-      "s": 0.85,
-      "b": 0.72
-    },
-    "color2": {
-      "h": 0,
-      "s": 0.1,
-      "b": 0.65
-    }
-  },
-  {
-    "make": "Maserati",
-    "model": "MC20",
-    "year": 2025,
-    "colorName": "Amethyst Gold Premium Semigloss",
-    "colorType": "Two-Tone Semigloss",
-    "color1": {
-      "h": 0.83,
-      "s": 0.75,
-      "b": 0.68
-    },
-    "color2": {
-      "h": 0.13,
-      "s": 0.85,
-      "b": 0.8
-    }
-  },
-  {
-    "make": "Jaguar",
-    "model": "F-Type",
-    "year": 2025,
-    "colorName": "Ocean Pearl Executive Semigloss",
-    "colorType": "Two-Tone Semigloss",
-    "color1": {
-      "h": 0.58,
-      "s": 0.8,
-      "b": 0.65
-    },
-    "color2": {
-      "h": 0,
-      "s": 0.02,
-      "b": 0.88
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Flake Pro",
-    "year": 2024,
-    "colorName": "Electric Metal Flake",
-    "colorType": "Metal Flake",
-    "color1": {
-      "h": 0.22,
-      "s": 0.95,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0.22,
-      "s": 0.9,
-      "b": 0.95
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Sparkle",
-    "year": 2024,
-    "colorName": "Neon Metal Flake",
-    "colorType": "Metal Flake",
-    "color1": {
-      "h": 0.08,
-      "s": 0.98,
-      "b": 0.92
-    },
-    "color2": {
-      "h": 0.08,
-      "s": 0.85,
-      "b": 0.98
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Glitter",
-    "year": 2024,
-    "colorName": "Cyber Metal Flake",
-    "colorType": "Metal Flake",
-    "color1": {
-      "h": 0.92,
-      "s": 0.9,
-      "b": 0.88
-    },
-    "color2": {
-      "h": 0.92,
-      "s": 0.8,
-      "b": 0.95
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Shimmer",
-    "year": 2024,
-    "colorName": "Arctic Metal Flake",
-    "colorType": "Metal Flake",
-    "color1": {
-      "h": 0,
-      "s": 0.95,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0,
-      "s": 0.85,
-      "b": 0.95
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Dazzle",
-    "year": 2024,
-    "colorName": "Toxic Metal Flake",
-    "colorType": "Metal Flake",
-    "color1": {
-      "h": 0.25,
-      "s": 0.98,
-      "b": 0.8
-    },
-    "color2": {
-      "h": 0.25,
-      "s": 0.88,
-      "b": 0.9
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Classic",
-    "year": 2024,
-    "colorName": "Electric Blue Custom",
-    "colorType": "Normal",
-    "color1": {
-      "h": 0.67,
-      "s": 0.95,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0.67,
-      "s": 0.95,
-      "b": 0.85
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Sport",
-    "year": 2024,
-    "colorName": "Neon Green Custom",
-    "colorType": "Normal",
-    "color1": {
-      "h": 0.33,
-      "s": 0.98,
-      "b": 0.9
-    },
-    "color2": {
-      "h": 0.33,
-      "s": 0.98,
-      "b": 0.9
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Racing",
-    "year": 2024,
-    "colorName": "Hot Pink Custom",
-    "colorType": "Normal",
-    "color1": {
-      "h": 0.92,
-      "s": 0.9,
-      "b": 0.88
-    },
-    "color2": {
-      "h": 0.92,
-      "s": 0.9,
-      "b": 0.88
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Performance",
-    "year": 2024,
-    "colorName": "Fire Red Custom",
-    "colorType": "Normal",
-    "color1": {
-      "h": 0,
-      "s": 0.95,
-      "b": 0.85
-    },
-    "color2": {
-      "h": 0,
-      "s": 0.95,
-      "b": 0.85
-    }
-  },
-  {
-    "make": "Custom",
-    "model": "Tuner",
-    "year": 2024,
-    "colorName": "Toxic Yellow Custom",
-    "colorType": "Normal",
-    "color1": {
-      "h": 0.25,
-      "s": 0.98,
-      "b": 0.8
-    },
-    "color2": {
-      "h": 0.25,
-      "s": 0.98,
-      "b": 0.8
-    }
-  }
-
 ]
-
-export default colorData;

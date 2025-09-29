@@ -1,4 +1,4 @@
-// Import the color data from the root colorData.ts file
-const colorData = require('../../colorData.ts')
+// Import the color data from the JSON file
+const colorData = require('../../carColors.json')
 
 module.exports = colorData

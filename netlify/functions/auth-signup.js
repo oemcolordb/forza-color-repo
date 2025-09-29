@@ -2,15 +2,40 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { v4: uuidv4 } = require('uuid')
 
-// Simple user store (use database in production)
-const users = new Map()
+// Simple file-based user store (use database in production)
+const fs = require('fs')
+const path = require('path')
 
+const USERS_FILE = path.join('/tmp', 'forza-users.json')
 const JWT_SECRET = process.env.JWT_SECRET || 'forza-colors-secret-key-change-in-production'
+
+// Load users from file
+function loadUsers() {
+  try {
+    if (fs.existsSync(USERS_FILE)) {
+      const data = fs.readFileSync(USERS_FILE, 'utf8')
+      return JSON.parse(data)
+    }
+  } catch (error) {
+    console.error('Error loading users:', error)
+  }
+  return {}
+}
+
+// Save users to file
+function saveUsers(users) {
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2))
+  } catch (error) {
+    console.error('Error saving users:', error)
+  }
+}
 
 exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json'
   }
 
@@ -19,23 +44,25 @@ exports.handler = async (event, context) => {
   }
 
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) }
+    return { statusCode: 405, headers, body: JSON.stringify({ message: 'Method not allowed' }) }
   }
 
   try {
     const { email, password, name } = JSON.parse(event.body)
 
     if (!email || !password) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Email and password required' }) }
+      return { statusCode: 400, headers, body: JSON.stringify({ message: 'Email and password required' }) }
     }
 
     if (password.length < 8) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Password must be at least 8 characters' }) }
+      return { statusCode: 400, headers, body: JSON.stringify({ message: 'Password must be at least 8 characters' }) }
     }
 
+    const users = loadUsers()
     const emailLower = email.toLowerCase()
-    if (users.has(emailLower)) {
-      return { statusCode: 409, headers, body: JSON.stringify({ error: 'User already exists' }) }
+    
+    if (users[emailLower]) {
+      return { statusCode: 409, headers, body: JSON.stringify({ message: 'User already exists' }) }
     }
 
     const passwordHash = await bcrypt.hash(password, 12)
@@ -50,7 +77,8 @@ exports.handler = async (event, context) => {
       createdAt: new Date().toISOString()
     }
 
-    users.set(emailLower, user)
+    users[emailLower] = user
+    saveUsers(users)
 
     const token = jwt.sign(
       {
@@ -77,10 +105,11 @@ exports.handler = async (event, context) => {
       })
     }
   } catch (error) {
+    console.error('Signup error:', error)
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ message: 'Internal server error' })
     }
   }
 }

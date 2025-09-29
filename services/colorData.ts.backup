@@ -1,0 +1,6 @@
+import type { CarColor } from '../app/types/color'
+import colorDataJson from '../carColors.json'
+
+const colorData: CarColor[] = colorDataJson as CarColor[]
+
+export default colorData;

@@ -4,6 +4,12 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
+  },
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      config.devtool = 'source-map'
+    }
+    return config
   }
 }
 

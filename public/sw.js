@@ -36,8 +36,8 @@ self.addEventListener('fetch', (event) => {
   const { request } = event
   const url = new URL(request.url)
 
-  // Cache color data
-  if (url.pathname.includes('colorData') || url.pathname.startsWith('/api/')) {
+  // Cache color data (only GET requests)
+  if (request.method === 'GET' && (url.pathname.includes('colorData') || url.pathname.startsWith('/api/'))) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
         const cachedResponse = await cache.match(request)

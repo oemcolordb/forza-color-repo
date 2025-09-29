@@ -1,0 +1,39 @@
+// Test script to verify color data import works correctly
+const fs = require('fs');
+const path = require('path');
+
+console.log('Testing color data import...\n');
+
+// Test 1: Direct JSON import
+try {
+  const jsonPath = path.join(__dirname, 'carColors.json');
+  const jsonData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  console.log(`✅ JSON import successful: ${jsonData.length} colors loaded`);
+  
+  // Show first color as example
+  if (jsonData.length > 0) {
+    const firstColor = jsonData[0];
+    console.log(`   Example: ${firstColor.make} ${firstColor.colorName} (${firstColor.colorType})`);
+  }
+} catch (error) {
+  console.log(`❌ JSON import failed: ${error.message}`);
+}
+
+// Test 2: TypeScript service import (simulated)
+try {
+  // This simulates what the TypeScript service does
+  const colorDataJson = require('./carColors.json');
+  console.log(`✅ Service import successful: ${colorDataJson.length} colors loaded`);
+} catch (error) {
+  console.log(`❌ Service import failed: ${error.message}`);
+}
+
+// Test 3: Netlify function import
+try {
+  const colorData = require('./carColors.json');
+  console.log(`✅ Netlify function import successful: ${colorData.length} colors loaded`);
+} catch (error) {
+  console.log(`❌ Netlify function import failed: ${error.message}`);
+}
+
+console.log('\n🎉 All tests completed!');

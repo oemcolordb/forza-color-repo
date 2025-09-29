@@ -5,31 +5,19 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Read the colorData.ts file and extract just the data portion
-const colorDataPath = path.join(__dirname, '..', 'services', 'colorData.ts');
-const colorDataContent = fs.readFileSync(colorDataPath, 'utf8');
-
-// Find the start and end of the array
-const startIndex = colorDataContent.indexOf('[');
-const endIndex = colorDataContent.lastIndexOf('];');
-
-if (startIndex === -1 || endIndex === -1) {
-  console.error('Could not find array boundaries in color data file');
-  process.exit(1);
-}
-
-const arrayContent = colorDataContent.substring(startIndex, endIndex + 1);
-
-// Use Function constructor to safely evaluate the array
+// Read the carColors.json file
+const colorDataPath = path.join(__dirname, '..', 'carColors.json');
 let colorData;
+
 try {
-  colorData = new Function('return ' + arrayContent)();
+  const colorDataContent = fs.readFileSync(colorDataPath, 'utf8');
+  colorData = JSON.parse(colorDataContent);
 } catch (error) {
-  console.error('Error parsing color data:', error.message);
+  console.error('Error reading color data:', error.message);
   process.exit(1);
 }
 
-console.log(`Loaded ${colorData.length} colors from data file`);
+console.log(`Loaded ${colorData.length} colors from JSON file`);
 
 // Enhanced color to car model mappings
 const colorToModelMappings = {
@@ -364,11 +352,8 @@ const processedData = colorData.map(color => {
   return color;
 });
 
-// Update the colorData.ts file with the new data
-const updatedContent = `const colorData = ${JSON.stringify(processedData, null, 2)};
-
-export default colorData;
-`;
+// Update the carColors.json file with the new data
+const updatedContent = JSON.stringify(processedData, null, 2);
 
 fs.writeFileSync(colorDataPath, updatedContent);
 

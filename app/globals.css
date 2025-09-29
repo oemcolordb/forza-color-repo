@@ -53,7 +53,26 @@
     @apply bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent;
   }
   
-  /* Mobile optimizations */
+  /* Performance optimizations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  .mobile-card {
+    will-change: transform;
+    transform: translateZ(0);
+    contain: layout style paint;
+  }
+  
+  .mobile-text {
+    text-rendering: optimizeSpeed;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+  }
+  
+  /* Responsive optimizations */
   @media (max-width: 768px) {
     .mobile-optimized {
       transform: translateZ(0);
@@ -61,28 +80,57 @@
       perspective: 1000px;
     }
     
-    .mobile-card {
-      will-change: transform;
-      transform: translateZ(0);
+    /* Reduce expensive effects on mobile */
+    .shadow-xl {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     
-    .mobile-text {
-      text-rendering: optimizeSpeed;
+    /* Optimize animations for mobile */
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-    
-    /* Disable expensive animations on mobile */
-    .animate-pulse,
-    .animate-bounce,
-    .animate-spin {
-      animation: none;
-    }
-    
-    /* Reduce motion for better performance */
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .color-card {
+      border-width: 2px;
+    }
+  }
+  
+  /* Cross-browser text-size-adjust support */
+  html, :host {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  
+  /* Cross-browser backdrop-filter support */
+  .backdrop-blur-sm {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  
+  .backdrop-blur {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  
+  .glass-effect {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
   }
 }
 
@@ -175,4 +223,34 @@
 
 .animate-rain {
   animation: rain 2s linear infinite;
+}
+
+/* Improved readability */
+.text-readable {
+  line-height: 1.6;
+  letter-spacing: 0.025em;
+}
+
+.text-readable-tight {
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* Focus improvements */
+.focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Container queries for responsive design */
+@container (max-width: 400px) {
+  .container-responsive {
+    padding: 0.5rem;
+  }
+}
+
+@container (min-width: 401px) {
+  .container-responsive {
+    padding: 1rem;
+  }
 }

@@ -33,22 +33,25 @@ export async function POST(request: NextRequest) {
 function enhanceColors(colors: ExtractedColor[]): ExtractedColor[] {
   const clusters: ExtractedColor[][] = []
   const threshold = 30
+  const maxClusters = 10
   
   for (const color of colors) {
-    let assigned = false
+    if (clusters.length >= maxClusters) break
+    
+    let bestCluster: ExtractedColor[] | null = null
+    let minDistance = threshold
     
     for (const cluster of clusters) {
-      const representative = cluster[0]
-      const distance = calculateRGBDistance(color.rgb, representative.rgb)
-      
-      if (distance < threshold) {
-        cluster.push(color)
-        assigned = true
-        break
+      const distance = calculateRGBDistance(color.rgb, cluster[0].rgb)
+      if (distance < minDistance) {
+        minDistance = distance
+        bestCluster = cluster
       }
     }
     
-    if (!assigned) {
+    if (bestCluster) {
+      bestCluster.push(color)
+    } else {
       clusters.push([color])
     }
   }
