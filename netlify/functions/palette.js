@@ -1,4 +1,4 @@
-const colorData = []
+const colorData = require('./colorData.js')
 
 const PALETTES = {
   ferrari: { makes: ['Ferrari'], colors: ['rosso', 'red'] },
