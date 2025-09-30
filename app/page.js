@@ -254,13 +254,12 @@ export default function HomePage() {
           </div>
           
           {/* Color Generator - Full Width */}
-          {!deviceInfo.isMobile && (
-            <ColorGenerator
-              colors={colors}
-              isDarkMode={isDarkMode}
-              onColorsGenerated={handleColorsGenerated}
-            />
-          )}
+          <ColorGenerator
+            colors={colors}
+            isDarkMode={isDarkMode}
+            onColorsGenerated={handleColorsGenerated}
+            isMobile={deviceInfo.isMobile}
+          />
           
           {/* Results Display */}
           {(extractedColors.length > 0 || harmonyColors.length > 0) && (
@@ -423,13 +422,11 @@ export default function HomePage() {
                     <div className={`text-readable-tight ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
                       deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
                     }`}>Color 1</div>
-                    {!deviceInfo.isMobile && (
-                      <div className={`font-mono text-readable-tight ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
-                        deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
-                      }`}>
-                        {selectedColor.color1.h.toFixed(2)} {selectedColor.color1.s.toFixed(2)} {selectedColor.color1.b.toFixed(2)}
-                      </div>
-                    )}
+                    <div className={`font-mono text-readable-tight ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
+                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    }`}>
+                      {selectedColor.color1.h.toFixed(2)} {selectedColor.color1.s.toFixed(2)} {selectedColor.color1.b.toFixed(2)}
+                    </div>
                   </div>
                   <div className="text-center">
                     <div 
@@ -443,13 +440,11 @@ export default function HomePage() {
                     <div className={`text-readable-tight ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
                       deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
                     }`}>Color 2</div>
-                    {!deviceInfo.isMobile && (
-                      <div className={`font-mono text-readable-tight ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
-                        deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
-                      }`}>
-                        {selectedColor.color2.h.toFixed(2)} {selectedColor.color2.s.toFixed(2)} {selectedColor.color2.b.toFixed(2)}
-                      </div>
-                    )}
+                    <div className={`font-mono text-readable-tight ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
+                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    }`}>
+                      {selectedColor.color2.h.toFixed(2)} {selectedColor.color2.s.toFixed(2)} {selectedColor.color2.b.toFixed(2)}
+                    </div>
                   </div>
                   <div className="text-center">
                     <div 

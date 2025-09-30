@@ -64,6 +64,8 @@
     will-change: transform;
     transform: translateZ(0);
     contain: layout style paint;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   
   .mobile-text {
@@ -252,5 +254,82 @@
 @container (min-width: 401px) {
   .container-responsive {
     padding: 1rem;
+  }
+}
+
+/* Mobile touch optimizations */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, .btn-primary, .btn-secondary {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Optimize button feedback */
+  button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
+  
+  /* Improve text size for mobile */
+  .text-2xs {
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+  }
+  
+  /* Mobile-specific color generator styles */
+  .mobile-color-generator {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .mobile-color-generator button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  
+  /* Improve scrolling performance */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+}
+
+/* Touch-specific styles */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Active states for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .hover\:scale-105:active {
+    transform: scale(0.95);
+  }
+  
+  .hover\:bg-blue-700:active {
+    background-color: rgb(29 78 216);
+  }
+  
+  .hover\:bg-purple-700:active {
+    background-color: rgb(126 34 206);
   }
 }

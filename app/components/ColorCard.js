@@ -21,22 +21,34 @@ const ColorCard = React.memo(({
   }, [color.make, color.model, color.year])
 
   return (
-    <div className={`rounded-lg shadow-lg overflow-hidden flex flex-col cursor-pointer ${isMobile ? 'mobile-card' : ''} ${
-      isOptimized 
-        ? 'transition-transform duration-200 hover:scale-[1.02]' 
-        : 'transition-all duration-300 hover:scale-105 hover:shadow-xl'
-    } ${
-      isDarkMode 
-        ? 'bg-slate-800 border border-slate-700 hover:border-slate-500' 
-        : 'bg-white border border-gray-200 hover:border-gray-400'
-    }`} onClick={() => onSelect(color)}>
+    <div 
+      className={`rounded-lg shadow-lg overflow-hidden flex flex-col cursor-pointer ${isMobile ? 'mobile-card' : ''} ${
+        isOptimized 
+          ? 'transition-transform duration-200 hover:scale-[1.02]' 
+          : 'transition-all duration-300 hover:scale-105 hover:shadow-xl'
+      } ${
+        isDarkMode 
+          ? 'bg-slate-800 border border-slate-700 hover:border-slate-500' 
+          : 'bg-white border border-gray-200 hover:border-gray-400'
+      }`} 
+      onClick={(e) => {
+        // Only trigger if clicking on the card itself, not buttons
+        if (e.target === e.currentTarget || e.target.closest('.color-info-area')) {
+          onSelect(color)
+        }
+      }}
+      style={{
+        WebkitTapHighlightColor: 'transparent',
+        touchAction: 'manipulation'
+      }}
+    >
       <div 
         className={`w-full ${isMobile ? 'h-16' : 'h-20 sm:h-24'}`} 
         style={{ background: gradient }}
         role="img"
         aria-label={`Color preview for ${color.colorName}`}
       />
-      <div className={`${isMobile ? 'p-1.5' : 'p-3'} flex-grow flex flex-col justify-between`}>
+      <div className={`${isMobile ? 'p-1.5' : 'p-3'} flex-grow flex flex-col justify-between color-info-area`}>
         <div className="min-h-0">
           <h3 className={`${isMobile ? 'text-xs' : 'text-sm'} font-bold truncate leading-tight ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>
             {color.colorName}
@@ -57,23 +69,46 @@ const ColorCard = React.memo(({
             {onToggleFavorite && (
               <button
                 onClick={(e) => {
+                  e.preventDefault()
                   e.stopPropagation()
                   onToggleFavorite()
                 }}
-                className={`transition-colors ${isMobile ? 'text-lg' : ''} ${
-                  isFavorite ? 'text-red-500 hover:text-red-600' : 
-                  isDarkMode ? 'text-slate-500 hover:text-red-400' : 'text-gray-400 hover:text-red-500'
+                onTouchStart={(e) => {
+                  e.stopPropagation()
+                }}
+                className={`transition-colors touch-manipulation select-none ${isMobile ? 'text-lg p-1' : 'p-0.5'} ${
+                  isFavorite ? 'text-red-500 hover:text-red-600 active:text-red-700' : 
+                  isDarkMode ? 'text-slate-500 hover:text-red-400 active:text-red-500' : 'text-gray-400 hover:text-red-500 active:text-red-600'
                 }`}
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
+                  minHeight: isMobile ? '44px' : 'auto',
+                  minWidth: isMobile ? '44px' : 'auto'
+                }}
                 aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               >
                 {isFavorite ? '❤️' : '🤍'}
               </button>
             )}
             <button
-              onClick={() => onSelect(color)}
-              className={`transition-colors ${isMobile ? 'text-lg' : ''} ${
-                isDarkMode ? 'text-slate-500 hover:text-fuchsia-400' : 'text-gray-500 hover:text-blue-600'
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                onSelect(color)
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation()
+              }}
+              className={`transition-colors touch-manipulation select-none ${isMobile ? 'text-lg p-1' : 'p-0.5'} ${
+                isDarkMode ? 'text-slate-500 hover:text-fuchsia-400 active:text-fuchsia-500' : 'text-gray-500 hover:text-blue-600 active:text-blue-700'
               }`}
+              style={{
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
+                minHeight: isMobile ? '44px' : 'auto',
+                minWidth: isMobile ? '44px' : 'auto'
+              }}
               aria-label={`Learn more about ${color.colorName}`}
             >
               ℹ️

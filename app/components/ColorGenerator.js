@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 
-const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated }) => {
+const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated, isMobile = false }) => {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedCount, setGeneratedCount] = useState(0)
 
@@ -36,7 +36,7 @@ const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated }) => {
   }, [colors])
 
   // Generate new colors based on existing OEM colors
-  const generateColors = async () => {
+  const generateColors = useCallback(async () => {
     setIsGenerating(true)
     const newColors = []
 
@@ -188,20 +188,20 @@ const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated }) => {
     setGeneratedCount(newColors.length)
     onColorsGenerated(newColors)
     setIsGenerating(false)
-  }
+  }, [colors, onColorsGenerated])
 
   return (
-    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg`}>
-      <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+    <div className={`${isMobile ? 'p-3' : 'p-4'} rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg`}>
+      <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold ${isMobile ? 'mb-3' : 'mb-4'} ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         🧬 Color Generator
       </h3>
 
       {/* Database Analysis */}
-      <div className={`mb-4 p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-        <h4 className={`font-medium text-sm mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+      <div className={`${isMobile ? 'mb-3 p-2' : 'mb-4 p-3'} rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
+        <h4 className={`font-medium ${isMobile ? 'text-xs' : 'text-sm'} ${isMobile ? 'mb-1' : 'mb-2'} ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
           Database Analysis
         </h4>
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className={`grid grid-cols-2 ${isMobile ? 'gap-1' : 'gap-2'} ${isMobile ? 'text-2xs' : 'text-xs'}`}>
           <div>
             <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Total Colors:</span>
             <span className={`ml-1 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -218,54 +218,76 @@ const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated }) => {
       </div>
 
       {/* Generation Categories */}
-      <div className="space-y-2 mb-4">
-        <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+      <div className={`${isMobile ? 'space-y-1 mb-3' : 'space-y-2 mb-4'}`}>
+        <div className={`${isMobile ? 'text-2xs' : 'text-xs'} ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
           Will generate:
         </div>
-        <div className="grid grid-cols-2 gap-1 text-xs">
-          <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-blue-50'}`}>
-            <div className={`font-medium ${isDarkMode ? 'text-blue-400' : 'text-blue-700'}`}>Muted Variants</div>
-            <div className={isDarkMode ? 'text-slate-400' : 'text-blue-600'}>~100 colors</div>
-          </div>
-          <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-purple-50'}`}>
-            <div className={`font-medium ${isDarkMode ? 'text-purple-400' : 'text-purple-700'}`}>Deep Variants</div>
-            <div className={isDarkMode ? 'text-slate-400' : 'text-purple-600'}>~100 colors</div>
-          </div>
-          <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-green-50'}`}>
-            <div className={`font-medium ${isDarkMode ? 'text-green-400' : 'text-green-700'}`}>Hue Variants</div>
-            <div className={isDarkMode ? 'text-slate-400' : 'text-green-600'}>~150 colors</div>
-          </div>
-          <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-orange-50'}`}>
-            <div className={`font-medium ${isDarkMode ? 'text-orange-400' : 'text-orange-700'}`}>Brand Blends</div>
-            <div className={isDarkMode ? 'text-slate-400' : 'text-orange-600'}>~100 colors</div>
-          </div>
-          <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-pink-50'}`}>
-            <div className={`font-medium ${isDarkMode ? 'text-pink-400' : 'text-pink-700'}`}>Semigloss</div>
-            <div className={isDarkMode ? 'text-slate-400' : 'text-pink-600'}>~200 colors</div>
-          </div>
-          <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-yellow-50'}`}>
-            <div className={`font-medium ${isDarkMode ? 'text-yellow-400' : 'text-yellow-700'}`}>Seasonal</div>
-            <div className={isDarkMode ? 'text-slate-400' : 'text-yellow-600'}>~100 colors</div>
-          </div>
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-1' : 'grid-cols-2 gap-1'} ${isMobile ? 'text-2xs' : 'text-xs'}`}>
+          {isMobile ? (
+            // Mobile: Simplified single column layout
+            <>
+              <div className={`${isMobile ? 'p-1.5' : 'p-2'} rounded ${isDarkMode ? 'bg-slate-700' : 'bg-blue-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-blue-400' : 'text-blue-700'}`}>Color Variants</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-blue-600'}>~750 new colors</div>
+              </div>
+            </>
+          ) : (
+            // Desktop: Full grid layout
+            <>
+              <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-blue-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-blue-400' : 'text-blue-700'}`}>Muted Variants</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-blue-600'}>~100 colors</div>
+              </div>
+              <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-purple-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-purple-400' : 'text-purple-700'}`}>Deep Variants</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-purple-600'}>~100 colors</div>
+              </div>
+              <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-green-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-green-400' : 'text-green-700'}`}>Hue Variants</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-green-600'}>~150 colors</div>
+              </div>
+              <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-orange-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-orange-400' : 'text-orange-700'}`}>Brand Blends</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-orange-600'}>~100 colors</div>
+              </div>
+              <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-pink-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-pink-400' : 'text-pink-700'}`}>Semigloss</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-pink-600'}>~200 colors</div>
+              </div>
+              <div className={`p-2 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-yellow-50'}`}>
+                <div className={`font-medium ${isDarkMode ? 'text-yellow-400' : 'text-yellow-700'}`}>Seasonal</div>
+                <div className={isDarkMode ? 'text-slate-400' : 'text-yellow-600'}>~100 colors</div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* Generate Button */}
       <button
         onClick={generateColors}
+        onTouchStart={() => {}} // Enable touch feedback
         disabled={isGenerating}
-        className={`w-full py-3 px-4 rounded font-medium transition-all ${
+        className={`w-full ${isMobile ? 'py-3 px-3 text-sm' : 'py-3 px-4'} rounded font-medium transition-all touch-manipulation select-none ${
           isGenerating
             ? 'bg-gray-400 cursor-not-allowed animate-pulse'
-            : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white transform hover:scale-105'
+            : `bg-gradient-to-r from-blue-600 to-purple-600 text-white ${
+                isMobile 
+                  ? 'active:from-blue-700 active:to-purple-700 active:scale-95' 
+                  : 'hover:from-blue-700 hover:to-purple-700 transform hover:scale-105'
+              }`
         }`}
+        style={{
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation'
+        }}
       >
         {isGenerating ? '🧬 Generating Colors...' : '🧬 Generate New Colors'}
       </button>
 
       {generatedCount > 0 && (
-        <div className={`mt-3 p-2 rounded text-xs text-center ${isDarkMode ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800'}`}>
-          ✅ Generated {generatedCount} new colors! Check the harmony modes to see them.
+        <div className={`${isMobile ? 'mt-2 p-1.5' : 'mt-3 p-2'} rounded ${isMobile ? 'text-2xs' : 'text-xs'} text-center ${isDarkMode ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-800'}`}>
+          ✅ Generated {generatedCount} new colors! {isMobile ? 'Scroll to see them.' : 'Check the harmony modes to see them.'}
         </div>
       )}
     </div>
