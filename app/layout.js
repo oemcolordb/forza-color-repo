@@ -11,15 +11,25 @@ const inter = Inter({
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'),
   title: {
-    default: 'OEMColorDB - 10,000+ Official Automotive Paint Colors',
-    template: '%s | OEMColorDB'
+    default: 'Forza Color Universe - Official FH5 & FM Paint Colors Database',
+    template: '%s | Forza Colors'
   },
-  description: 'Discover and explore over 10,000 official automotive paint colors. Search by manufacturer, model, year, or upload images to find matching car colors. Complete HSB color data included.',
+  description: 'Ultimate Forza Horizon 5 and Forza Motorsport paint color database. 10,000+ official car colors, livery creator tool, custom paint codes, and FH5 color matching for racing game enthusiasts.',
   keywords: [
-    'Forza colors', 'automotive paint colors', 'car colors', 'racing game colors',
-    'paint codes', 'automotive color database', 'car paint matching', 'HSB color values',
-    'Ferrari colors', 'Porsche colors', 'BMW colors', 'Mercedes colors',
-    'color picker', 'automotive design', 'car customization', 'paint reference'
+    // Gaming SEO - Long-tail keywords
+    'Forza Horizon 5 livery creator', 'FH5 custom paint tool', 'Forza Motorsport colors',
+    'Forza Horizon 5 paint codes', 'FH5 color database', 'Forza livery designer',
+    'Forza Horizon 5 car customization', 'FH5 paint job creator', 'Forza color picker',
+    'Forza Motorsport livery editor', 'FH5 racing stripes', 'Forza custom designs',
+    // Core automotive terms
+    'automotive paint colors', 'car colors database', 'racing game colors',
+    'paint codes lookup', 'car paint matching', 'HSB color values',
+    // Brand-specific gaming searches
+    'Ferrari Forza colors', 'Porsche FH5 paints', 'BMW Forza liveries',
+    'Mercedes racing colors', 'Lamborghini Forza paints', 'McLaren FH5 colors',
+    // Gaming community terms
+    'Forza community colors', 'racing game paint jobs', 'car game customization',
+    'Forza tuning colors', 'FH5 drift car colors', 'Forza drag racing paints'
   ],
   authors: [{ name: 'ResinRonin', url: 'https://github.com/ResinRonin' }],
   creator: 'ResinRonin',
@@ -40,20 +50,20 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app',
-    title: 'OEMColorDB - 10,000+ Official Automotive Paint Colors',
-    description: 'Discover and explore over 10,000 official automotive paint colors. Search, filter, and find matching colors with our advanced tools.',
-    siteName: 'OEMColorDB',
+    title: 'Forza Color Universe - FH5 Livery Creator & Paint Database',
+    description: 'Ultimate Forza Horizon 5 paint color database with 10,000+ official car colors. Create custom liveries, find paint codes, and design racing masterpieces.',
+    siteName: 'Forza Color Universe',
     images: [{
       url: '/og-image.jpg',
       width: 1200,
       height: 630,
-      alt: 'OEMColorDB - Automotive Color Database'
+      alt: 'Forza Color Universe - FH5 Paint Colors & Livery Creator'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OEMColorDB - 10,000+ Official Automotive Paint Colors',
-    description: 'Discover and explore over 10,000 official automotive paint colors.',
+    title: 'Forza Color Universe - FH5 Livery Creator & Paint Database',
+    description: 'Ultimate Forza Horizon 5 paint color database with 10,000+ official car colors for custom liveries.',
     creator: '@ResinRonin',
     images: ['/og-image.jpg']
   },
@@ -61,9 +71,13 @@ export const metadata = {
     canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'
   },
   other: {
-    'application-name': 'OEMColorDB',
-    'apple-mobile-web-app-title': 'OEMColorDB',
-    'msapplication-TileColor': '#0f172a'
+    'application-name': 'Forza Colors',
+    'apple-mobile-web-app-title': 'Forza Colors',
+    'msapplication-TileColor': '#0f172a',
+    // Gaming-specific meta tags
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent'
   }
 }
 
@@ -77,11 +91,14 @@ export default function RootLayout({ children }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "OEMColorDB",
-    "description": "Discover and explore over 10,000 official automotive paint colors",
+    "name": "Forza Color Universe",
+    "alternateName": "FH5 Livery Creator",
+    "description": "Ultimate Forza Horizon 5 and Forza Motorsport paint color database with livery creator tools",
     "url": process.env.NEXT_PUBLIC_APP_URL || "https://forza-colors.netlify.app",
-    "applicationCategory": "UtilitiesApplication",
+    "applicationCategory": ["GameApplication", "UtilitiesApplication"],
     "operatingSystem": "Web Browser",
+    "genre": ["Racing", "Automotive", "Design Tools"],
+    "gamePlatform": ["Web Browser", "Mobile", "Desktop"],
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -92,12 +109,21 @@ export default function RootLayout({ children }) {
       "name": "ResinRonin"
     },
     "featureList": [
-      "10,000+ automotive paint colors",
-      "Image color matching",
+      "10,000+ Forza Horizon 5 paint colors",
+      "Forza Motorsport color database",
+      "Custom livery creator tool",
+      "FH5 paint code lookup",
+      "Image color matching for racing games",
       "Advanced search and filtering",
-      "HSB color values",
-      "Manufacturer and model data"
-    ]
+      "HSB color values for game modding",
+      "Manufacturer and model data",
+      "Mobile-optimized for gaming on-the-go"
+    ],
+    "about": {
+      "@type": "VideoGame",
+      "name": "Forza Horizon 5",
+      "alternateName": "FH5"
+    }
   }
 
   return (

@@ -5,12 +5,31 @@ export const dynamic = 'force-static'
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'
   
+  // Gaming-focused sitemap with Forza-specific sections
   return [
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'daily',
       priority: 1,
+    },
+    {
+      url: `${baseUrl}/#fh5-livery-creator`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/#forza-horizon-5-colors`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/#forza-motorsport-paints`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/#image-color-matching`,
@@ -19,10 +38,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#color-database`,
+      url: `${baseUrl}/#racing-game-colors`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'weekly',
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/#custom-paint-codes`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
     }
   ]
 }

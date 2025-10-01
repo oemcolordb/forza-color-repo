@@ -1,8 +1,32 @@
 User-agent: *
 Allow: /
 
+# Gaming-specific crawl optimization
+Crawl-delay: 1
+
+# Allow gaming bots and search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Gaming community crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Gaming platforms
+User-agent: DiscordBot
+Allow: /
+
+User-agent: RedditBot
+Allow: /
+
 # Sitemap
 Sitemap: https://forza-colors.netlify.app/sitemap.xml
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1

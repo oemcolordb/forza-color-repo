@@ -36,6 +36,9 @@ import { useOfflineStorage } from './hooks/useOfflineStorage'
 import { useDeviceDetection } from './hooks/useDeviceDetection'
 import HarmonyVisualizer from './components/HarmonyVisualizer'
 import ColorGenerator from './components/ColorGenerator'
+import GamingSEO from './components/GamingSEO'
+import MobileGamingOptimizer from './components/MobileGamingOptimizer'
+import GamingErrorBoundary from './components/GamingErrorBoundary'
 
 export default function HomePage() {
   const [colors, setColors] = useState([])
@@ -194,6 +197,10 @@ export default function HomePage() {
   return (
     <AuthProvider>
       <CriticalCSS />
+      <GamingErrorBoundary>
+        <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
+        <MobileGamingOptimizer deviceInfo={deviceInfo} />
+      </GamingErrorBoundary>
       <div className={`font-sans min-h-screen ${
         isDarkMode 
           ? 'bg-gray-900 text-gray-100' 
@@ -218,48 +225,52 @@ export default function HomePage() {
           />
           
           {/* Tool Sections */}
-          <div className={`grid gap-3 mb-4 ${
-            deviceInfo.isMobile 
-              ? 'grid-cols-1' 
-              : deviceInfo.isTablet 
-              ? 'grid-cols-2' 
-              : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-          }`}>
-            <ImageColorExtractor
-              colors={allColors}
-              onColorsExtracted={setExtractedColors}
-              onColorsFound={() => {}}
-              onColorSelect={handleColorSelect}
-              isDarkMode={isDarkMode}
-            />
-            
-            <ColorRouletteHarmony
-              colors={allColors}
-              isDarkMode={isDarkMode}
-              onColorSelect={handleColorSelect}
-              onHarmonyGenerated={(colors, mode) => {
-                setHarmonyColors(colors)
-                setHarmonyMode(mode)
-              }}
-            />
-            
-            {!deviceInfo.isMobile && (
-              <HarmonyVisualizer
-                currentHarmony={harmonyColors}
-                harmonyMode={harmonyMode}
+          <GamingErrorBoundary>
+            <div className={`grid gap-3 mb-4 ${
+              deviceInfo.isMobile 
+                ? 'grid-cols-1' 
+                : deviceInfo.isTablet 
+                ? 'grid-cols-2' 
+                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+            }`}>
+              <ImageColorExtractor
+                colors={allColors}
+                onColorsExtracted={setExtractedColors}
+                onColorsFound={() => {}}
+                onColorSelect={handleColorSelect}
+                isDarkMode={isDarkMode}
+              />
+              
+              <ColorRouletteHarmony
+                colors={allColors}
                 isDarkMode={isDarkMode}
                 onColorSelect={handleColorSelect}
+                onHarmonyGenerated={(colors, mode) => {
+                  setHarmonyColors(colors)
+                  setHarmonyMode(mode)
+                }}
               />
-            )}
-          </div>
+              
+              {!deviceInfo.isMobile && (
+                <HarmonyVisualizer
+                  currentHarmony={harmonyColors}
+                  harmonyMode={harmonyMode}
+                  isDarkMode={isDarkMode}
+                  onColorSelect={handleColorSelect}
+                />
+              )}
+            </div>
+          </GamingErrorBoundary>
           
           {/* Color Generator - Full Width */}
-          <ColorGenerator
-            colors={colors}
-            isDarkMode={isDarkMode}
-            onColorsGenerated={handleColorsGenerated}
-            isMobile={deviceInfo.isMobile}
-          />
+          <GamingErrorBoundary>
+            <ColorGenerator
+              colors={colors}
+              isDarkMode={isDarkMode}
+              onColorsGenerated={handleColorsGenerated}
+              isMobile={deviceInfo.isMobile}
+            />
+          </GamingErrorBoundary>
           
           {/* Results Display */}
           {(extractedColors.length > 0 || harmonyColors.length > 0) && (
