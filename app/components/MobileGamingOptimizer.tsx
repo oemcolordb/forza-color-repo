@@ -28,11 +28,12 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
 
       // Optimize touch interactions for gaming
       optimizeTouch: () => {
-        document.body.style.touchAction = 'manipulation'
-        document.body.style.userSelect = 'none'
-        document.body.style.webkitUserSelect = 'none'
-        document.body.style.webkitTouchCallout = 'none'
-        document.body.style.webkitTapHighlightColor = 'transparent'
+        const bodyStyle = document.body.style as any
+        bodyStyle.touchAction = 'manipulation'
+        bodyStyle.userSelect = 'none'
+        bodyStyle.webkitUserSelect = 'none'
+        bodyStyle.webkitTouchCallout = 'none'
+        bodyStyle.webkitTapHighlightColor = 'transparent'
       },
 
       // Prevent zoom for gaming experience

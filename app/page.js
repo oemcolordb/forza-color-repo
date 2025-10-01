@@ -184,11 +184,25 @@ export default function HomePage() {
 
   if (isInitialLoad) {
     return (
-      <div className="critical-loading">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="critical-spinner mb-4 mx-auto"></div>
-          <p className="text-xl font-semibold mb-2">🎨 OEMColorDB</p>
-          <p className="opacity-70">Preparing your color universe...</p>
+          <div className="relative mb-8">
+            <div className="w-20 h-20 mx-auto relative">
+              <div className="absolute inset-0 rounded-full border-4 border-purple-500/30"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-500 animate-spin"></div>
+              <div className="absolute inset-2 rounded-full border-4 border-transparent border-t-pink-500 animate-spin" style={{animationDirection: 'reverse', animationDuration: '0.8s'}}></div>
+              <div className="absolute inset-4 rounded-full border-4 border-transparent border-t-cyan-500 animate-spin" style={{animationDuration: '1.2s'}}></div>
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 text-transparent bg-clip-text animate-pulse">
+            🎨 OEMColorDB
+          </h1>
+          <p className="text-lg text-slate-300 mb-2">Preparing your color universe...</p>
+          <div className="flex justify-center items-center gap-1 mt-4">
+            <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+            <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+            <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+          </div>
         </div>
       </div>
     )
@@ -211,6 +225,17 @@ export default function HomePage() {
         
         <TokyoBackground isDarkMode={isDarkMode} />
         <ProgressiveLoader progress={loadingProgress} isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
+        
+        {/* TuneForge Quick Access */}
+        <div className="fixed bottom-6 right-6 z-40">
+          <a 
+            href="/tuneforge"
+            className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
+            title="Open TuneForge Lab"
+          >
+            🔧 TuneForge
+          </a>
+        </div>
         
         <ResponsiveLayout>
           {/* Header Stats Bar */}

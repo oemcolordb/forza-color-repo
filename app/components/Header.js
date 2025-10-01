@@ -58,6 +58,14 @@ const Header = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
       <p className="mt-4 text-lg max-w-2xl mx-auto text-white font-semibold bg-black/50 backdrop-blur-sm px-4 py-2 rounded-lg">
         The ultimate color harmony engine for car lovers and Forza fans. 10,000+ real manufacturer colors. Curated by ResinRonin. Spin. Extract. Create.
       </p>
+      <div className="mt-6">
+        <a 
+          href="/tuneforge"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+        >
+          🔧 TuneForge Lab
+        </a>
+      </div>
     </header>
   )
 }

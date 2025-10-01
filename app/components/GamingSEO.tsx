@@ -104,7 +104,7 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
     if (!script) {
       script = document.createElement('script')
       script.id = 'gaming-structured-data'
-      script.type = 'application/ld+json'
+      script.setAttribute('type', 'application/ld+json')
       document.head.appendChild(script)
     }
     script.textContent = JSON.stringify(gamingStructuredData)
