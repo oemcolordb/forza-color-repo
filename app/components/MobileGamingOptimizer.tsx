@@ -48,14 +48,15 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
 
       // Optimize for gaming performance
       optimizePerformance: () => {
+        const bodyStyle = document.body.style as any
         // Enable hardware acceleration
-        document.body.style.transform = 'translateZ(0)'
-        document.body.style.backfaceVisibility = 'hidden'
-        document.body.style.perspective = '1000px'
+        bodyStyle.transform = 'translateZ(0)'
+        bodyStyle.backfaceVisibility = 'hidden'
+        bodyStyle.perspective = '1000px'
         
         // Optimize scrolling
-        document.body.style.overscrollBehavior = 'none'
-        document.body.style.webkitOverflowScrolling = 'touch'
+        bodyStyle.overscrollBehavior = 'none'
+        bodyStyle.webkitOverflowScrolling = 'touch'
       },
 
       // Gaming-specific CSS optimizations
