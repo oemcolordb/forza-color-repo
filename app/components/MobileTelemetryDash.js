@@ -1,9 +1,16 @@
+'use client'
 import React, { useState, useEffect } from 'react'
 
 const MobileTelemetryDash = () => {
   const [data, setData] = useState(null)
   const [connected, setConnected] = useState(false)
-  const [serverIP, setServerIP] = useState(localStorage.getItem('telemetryIP') || '')
+  const [serverIP, setServerIP] = useState('')
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setServerIP(localStorage.getItem('telemetryIP') || '')
+    }
+  }, [])
 
   useEffect(() => {
     if (!serverIP) return
@@ -19,8 +26,10 @@ const MobileTelemetryDash = () => {
   }, [serverIP])
 
   const handleConnect = () => {
-    localStorage.setItem('telemetryIP', serverIP)
-    window.location.reload()
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('telemetryIP', serverIP)
+      window.location.reload()
+    }
   }
 
   if (!serverIP || !connected) {

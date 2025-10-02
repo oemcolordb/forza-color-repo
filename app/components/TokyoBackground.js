@@ -17,35 +17,34 @@ const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
   useEffect(() => {
     if (!isMobile) {
       const mediaFiles = [
-        'tokyo-panorama.jpg', 'neon-shibuya-crossing-tokyo-japan-1140x760.jpg',
-        'manuel-velasquez-ssfp9okorys-unsplash-1200x801.jpg', '3060_04.jpg', '3060_06.jpg',
-        'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
-        'Mp 4 H 280 C Baj X 2 Z 9 R 9 E Fr 1 Gh W Ai RTFM 6 Xbt BSZ 76 N 6 Ywb BAE Dic 4 R.mp4',
-        'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4',
-        'Mp 4 H 280 Szq 5 E KT 7 Ee 1 C A Vh 3 C KR Vdnf L 9 S 52 V 6 GG 2 R Md Ll V 2 Qx Y Cc.mp4',
-        'Mp 4 H 280 U Rk Qu 5 Hjg Vq B 14 A V 582 Kiio P 3 Db Lnqmo L 5 Z WZBEM Az 5 Z 5.mp4',
-        'Mp 4 H 280 Uw 0 WJIUIA Uq 31 Fa H Pqs T Zh Kewnh 32 BCLPE Fhxml I 4 ZV 5 Q.mp4',
-        'Mp 4 H 280 Yq 68 Y FSH 7 L G 3 Xq O 4 Vv IA 6 F Ud IEJIB 01 Qeq N 1 T Sur DR 5 T I.mp4'
+        { file: 'tokyo-panorama.jpg', type: 'image' },
+        { file: 'neon-shibuya-crossing-tokyo-japan-1140x760.jpg', type: 'image' },
+        { file: 'manuel-velasquez-ssfp9okorys-unsplash-1200x801.jpg', type: 'image' },
+        { file: '3060_04.jpg', type: 'image' },
+        { file: '3060_06.jpg', type: 'image' },
+        { file: 'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4', type: 'video' },
+        { file: 'Mp 4 H 280 C Baj X 2 Z 9 R 9 E Fr 1 Gh W Ai RTFM 6 Xbt BSZ 76 N 6 Ywb BAE Dic 4 R.mp4', type: 'video' },
+        { file: 'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4', type: 'video' },
+        { file: 'Mp 4 H 280 Szq 5 E KT 7 Ee 1 C A Vh 3 C KR Vdnf L 9 S 52 V 6 GG 2 R Md Ll V 2 Qx Y Cc.mp4', type: 'video' },
+        { file: 'Mp 4 H 280 U Rk Qu 5 Hjg Vq B 14 A V 582 Kiio P 3 Db Lnqmo L 5 Z WZBEM Az 5 Z 5.mp4', type: 'video' },
+        { file: 'Mp 4 H 280 Uw 0 WJIUIA Uq 31 Fa H Pqs T Zh Kewnh 32 BCLPE Fhxml I 4 ZV 5 Q.mp4', type: 'video' },
+        { file: 'Mp 4 H 280 Yq 68 Y FSH 7 L G 3 Xq O 4 Vv IA 6 F Ud IEJIB 01 Qeq N 1 T Sur DR 5 T I.mp4', type: 'video' }
       ]
-      
-      const tokyoMedia = mediaFiles.map(file => ({
-        src: getSecureAssetUrl ? getSecureAssetUrl(file) : `/${file}`,
-        type: file.endsWith('.mp4') ? 'video' : 'image'
-      }))
       
       const now = new Date()
       const thirtyMinuteSlots = Math.floor(now.getTime() / (30 * 60 * 1000))
-      const mediaIndex = thirtyMinuteSlots % tokyoMedia.length
-      const selectedMedia = tokyoMedia[mediaIndex]
+      const mediaIndex = thirtyMinuteSlots % mediaFiles.length
+      const selectedMedia = mediaFiles[mediaIndex]
       
-      console.log('Loading Tokyo background:', selectedMedia.src, 'Type:', selectedMedia.type, 'Index:', mediaIndex)
+      const mediaSrc = getSecureAssetUrl ? getSecureAssetUrl(selectedMedia.file) : `/${selectedMedia.file}`
+      
+      console.log('Loading Tokyo background:', mediaSrc, 'Type:', selectedMedia.type, 'Index:', mediaIndex)
       
       if (selectedMedia.type === 'image') {
-        // Preload image
         const img = new Image()
         img.onload = () => {
           console.log('Tokyo background image loaded successfully')
-          setBackgroundMedia(selectedMedia.src)
+          setBackgroundMedia(mediaSrc)
           setMediaType('image')
           setMediaLoaded(true)
           setMediaError(false)
@@ -55,11 +54,10 @@ const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
           setMediaError(true)
           setMediaLoaded(true)
         }
-        img.src = selectedMedia.src
+        img.src = mediaSrc
       } else {
-        // Set video directly
         console.log('Tokyo background video set')
-        setBackgroundMedia(selectedMedia.src)
+        setBackgroundMedia(mediaSrc)
         setMediaType('video')
         setMediaLoaded(true)
         setMediaError(false)
@@ -67,7 +65,7 @@ const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
     } else {
       setMediaLoaded(true)
     }
-  }, [isMobile])
+  }, [isMobile, getSecureAssetUrl])
   
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -88,12 +86,20 @@ const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
             muted
             loop
             playsInline
+            preload="metadata"
+            onLoadStart={() => console.log('Video loading started')}
+            onCanPlay={() => console.log('Video can play')}
+            onError={(e) => {
+              console.error('Video error:', e)
+              setMediaError(true)
+            }}
             style={{
               opacity: isDarkMode ? 0.4 : 0.6,
               filter: isDarkMode ? 'brightness(0.8) contrast(1.3)' : 'brightness(1.2) contrast(1.1)'
             }}
           >
             <source src={backgroundMedia} type="video/mp4" />
+            Your browser does not support the video tag.
           </video>
         )
       )}

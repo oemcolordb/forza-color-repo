@@ -5,78 +5,142 @@ export const metadata: Metadata = {
   description: 'Get in touch with the Forza Color Universe team. Find support, report issues, or share feedback.',
 }
 
+'use client'
+import { useState, useEffect } from 'react'
+import TokyoBackground from '../components/TokyoBackground'
+import { getSecureAssetUrl } from '../lib/assetProtection'
+
 export default function Contact() {
+  const [isDarkMode, setIsDarkMode] = useState(true)
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme')
+    setIsDarkMode(savedTheme !== 'light')
+  }, [])
+
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100">
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
-        
-        <div className="grid md:grid-cols-2 gap-12">
-          <div>
-            <h2 className="text-2xl font-semibold mb-6">Get in Touch</h2>
-            <p className="leading-relaxed mb-8">
-              We'd love to hear from you! Whether you have questions, feedback, or need support, 
-              we're here to help make your experience with Forza Color Universe the best it can be.
+    <div className={`min-h-screen ${
+      isDarkMode 
+        ? 'bg-gray-900 text-gray-100' 
+        : 'bg-gray-100 text-gray-800'
+    }`}>
+      <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+      
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
+        {/* Engine Bay - Header */}
+        <div className={`relative mb-8 rounded-xl overflow-hidden ${
+          isDarkMode ? 'bg-gradient-to-r from-gray-800 to-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
+        } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}>
+          <div className="absolute top-2 left-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+              <span className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>CONTACT SYSTEM</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text">
+              🔧 Contact & Support
+            </h1>
+            <p className="leading-relaxed">
+              Get in touch for support, feedback, or collaboration opportunities.
             </p>
+          </div>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Dashboard - Contact Info */}
+          <div className={`relative rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-slate-100 to-slate-200'
+          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>COMMUNICATION</span>
+              </div>
+            </div>
             
-            <div className="space-y-6">
+            <div className="mt-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium mb-2">Email Support</h3>
-                <p className="text-blue-600 dark:text-blue-400">support@forza-colors.com</p>
+                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
+                  📧 <span>Direct Contact</span>
+                </h3>
+                <a href="mailto:julian.penning1@gmail.com" className="text-blue-600 dark:text-blue-400 hover:underline text-lg">
+                  julian.penning1@gmail.com
+                </a>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  We typically respond within 24 hours
+                  Response within 24-48 hours
                 </p>
               </div>
               
               <div>
-                <h3 className="text-lg font-medium mb-2">GitHub Repository</h3>
-                <p className="leading-relaxed mb-2">
-                  For bug reports, feature requests, and technical discussions:
-                </p>
+                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
+                  💰 <span>Support Development</span>
+                </h3>
                 <a 
-                  href="https://github.com/xblackxscars123/forza-color-repo" 
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
+                  href="https://paypal.me/julianpenning1" 
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  github.com/xblackxscars123/forza-color-repo
+                  💳 PayPal Donation
                 </a>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  Help keep the project running and support new features
+                </p>
               </div>
               
               <div>
-                <h3 className="text-lg font-medium mb-2">Community Discussions</h3>
-                <p className="leading-relaxed mb-2">
-                  Join our community for questions and discussions:
-                </p>
-                <a 
-                  href="https://github.com/xblackxscars123/forza-color-repo/discussions" 
-                  className="text-blue-600 dark:text-blue-400 hover:underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub Discussions
-                </a>
+                <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+                  🌐 <span>Social Media</span>
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  <a href="https://twitter.com" className="flex items-center gap-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
+                    🐦 Twitter
+                  </a>
+                  <a href="https://github.com" className="flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
+                    🐙 GitHub
+                  </a>
+                  <a href="https://discord.com" className="flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
+                    💬 Discord
+                  </a>
+                  <a href="https://youtube.com" className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
+                    📺 YouTube
+                  </a>
+                </div>
               </div>
             </div>
           </div>
           
-          <div>
-            <h2 className="text-2xl font-semibold mb-6">What We Can Help With</h2>
-            <div className="space-y-4">
+          {/* Control Panel - Support Info */}
+          <div className={`relative rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-green-800 to-green-900' : 'bg-gradient-to-r from-green-100 to-green-200'
+          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>SUPPORT MATRIX</span>
+              </div>
+            </div>
+            
+            <div className="mt-6 space-y-6">
               <div>
-                <h3 className="text-lg font-medium mb-2">Technical Support</h3>
+                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
+                  🔧 <span>Technical Support</span>
+                </h3>
                 <ul className="space-y-1 text-sm">
                   <li>• Website functionality issues</li>
                   <li>• Performance problems</li>
                   <li>• Browser compatibility</li>
-                  <li>• Mobile app concerns</li>
+                  <li>• Telemetry setup assistance</li>
                 </ul>
               </div>
               
               <div>
-                <h3 className="text-lg font-medium mb-2">Color Data</h3>
+                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
+                  🎨 <span>Color Data</span>
+                </h3>
                 <ul className="space-y-1 text-sm">
-                  <li>• Missing or incorrect color information</li>
+                  <li>• Missing color information</li>
                   <li>• Data export questions</li>
                   <li>• Color matching assistance</li>
                   <li>• API usage inquiries</li>
@@ -84,23 +148,27 @@ export default function Contact() {
               </div>
               
               <div>
-                <h3 className="text-lg font-medium mb-2">General Inquiries</h3>
+                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
+                  💡 <span>General Inquiries</span>
+                </h3>
                 <ul className="space-y-1 text-sm">
                   <li>• Feature suggestions</li>
                   <li>• Partnership opportunities</li>
-                  <li>• Media and press inquiries</li>
+                  <li>• Collaboration requests</li>
                   <li>• General feedback</li>
                 </ul>
               </div>
-            </div>
-            
-            <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <h3 className="text-lg font-medium mb-2">Response Times</h3>
-              <ul className="space-y-1 text-sm">
-                <li>• Email: Within 24 hours</li>
-                <li>• GitHub Issues: 1-3 business days</li>
-                <li>• Community Discussions: Community-driven</li>
-              </ul>
+              
+              <div className={`mt-6 p-4 rounded-lg ${
+                isDarkMode ? 'bg-green-900/40' : 'bg-green-50'
+              }`}>
+                <h3 className="text-lg font-medium mb-2">⏱️ Response Times</h3>
+                <ul className="space-y-1 text-sm">
+                  <li>• Email: 24-48 hours</li>
+                  <li>• Bug reports: 1-3 days</li>
+                  <li>• Feature requests: 1 week</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

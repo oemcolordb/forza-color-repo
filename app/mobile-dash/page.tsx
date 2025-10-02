@@ -6,6 +6,12 @@ export default function MobileDashPage() {
 
 export const metadata = {
   title: 'Mobile Telemetry Dashboard',
-  description: 'Mobile-optimized Forza Horizon 5 telemetry dashboard',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+  description: 'Mobile-optimized Forza Horizon 5 telemetry dashboard'
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false
 }

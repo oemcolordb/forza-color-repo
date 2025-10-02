@@ -419,64 +419,116 @@ export default function HomePage() {
         </div>
         
         <ResponsiveLayout>
-          {/* Header Stats Bar */}
-          <OptimizedStatsBar
-            totalColors={allColors.length}
-            totalMakes={makes.length}
-            favorites={favorites.length}
-            colorHistory={colorHistory.length}
-            filteredCount={filteredColors.length}
-            isDarkMode={isDarkMode}
-            deviceInfo={deviceInfo}
-          />
-          
-          {/* Tool Sections */}
-          <GamingErrorBoundary>
-            <div className={`grid gap-3 mb-4 ${
-              deviceInfo.isMobile 
-                ? 'grid-cols-1' 
-                : deviceInfo.isTablet 
-                ? 'grid-cols-2' 
-                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-            }`}>
-              <ImageColorExtractor
-                colors={allColors}
-                onColorsExtracted={setExtractedColors}
-                onColorsFound={() => {}}
-                onColorSelect={handleColorSelect}
-                isDarkMode={isDarkMode}
-              />
-              
-              <ColorRouletteHarmony
-                colors={allColors}
-                isDarkMode={isDarkMode}
-                onColorSelect={handleColorSelect}
-                onHarmonyGenerated={(colors, mode) => {
-                  setHarmonyColors(colors)
-                  setHarmonyMode(mode)
-                }}
-              />
-              
-              {!deviceInfo.isMobile && (
-                <HarmonyVisualizer
-                  currentHarmony={harmonyColors}
-                  harmonyMode={harmonyMode}
-                  isDarkMode={isDarkMode}
-                  onColorSelect={handleColorSelect}
-                />
-              )}
+          {/* Engine Bay - Header Stats */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-gray-800 to-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
+          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ENGINE</span>
+              </div>
             </div>
-          </GamingErrorBoundary>
-          
-          {/* Color Generator - Full Width */}
-          <GamingErrorBoundary>
-            <ColorGenerator
-              colors={colors}
+            <OptimizedStatsBar
+              totalColors={allColors.length}
+              totalMakes={makes.length}
+              favorites={favorites.length}
+              colorHistory={colorHistory.length}
+              filteredCount={filteredColors.length}
               isDarkMode={isDarkMode}
-              onColorsGenerated={handleColorsGenerated}
-              isMobile={deviceInfo.isMobile}
+              deviceInfo={deviceInfo}
             />
-          </GamingErrorBoundary>
+          </div>
+          
+          {/* Dashboard - Tool Sections */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-slate-100 to-slate-200'
+          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-4`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>DASHBOARD</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              <GamingErrorBoundary>
+                <div className={`grid gap-3 ${
+                  deviceInfo.isMobile 
+                    ? 'grid-cols-1' 
+                    : deviceInfo.isTablet 
+                    ? 'grid-cols-2' 
+                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                }`}>
+                  <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">📸</span>
+                      <span className={`text-sm font-semibold ${isDarkMode ? 'text-cyan-400' : 'text-cyan-600'}`}>PAINT SCANNER</span>
+                    </div>
+                    <ImageColorExtractor
+                      colors={allColors}
+                      onColorsExtracted={setExtractedColors}
+                      onColorsFound={() => {}}
+                      onColorSelect={handleColorSelect}
+                      isDarkMode={isDarkMode}
+                    />
+                  </div>
+                  
+                  <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">🎰</span>
+                      <span className={`text-sm font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>COLOR ROULETTE</span>
+                    </div>
+                    <ColorRouletteHarmony
+                      colors={allColors}
+                      isDarkMode={isDarkMode}
+                      onColorSelect={handleColorSelect}
+                      onHarmonyGenerated={(colors, mode) => {
+                        setHarmonyColors(colors)
+                        setHarmonyMode(mode)
+                      }}
+                    />
+                  </div>
+                  
+                  {!deviceInfo.isMobile && (
+                    <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">🎨</span>
+                        <span className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>HARMONY DISPLAY</span>
+                      </div>
+                      <HarmonyVisualizer
+                        currentHarmony={harmonyColors}
+                        harmonyMode={harmonyMode}
+                        isDarkMode={isDarkMode}
+                        onColorSelect={handleColorSelect}
+                      />
+                    </div>
+                  )}
+                </div>
+              </GamingErrorBoundary>
+            </div>
+          </div>
+          
+          {/* Paint Booth - Color Generator */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-purple-800 to-purple-900' : 'bg-gradient-to-r from-purple-100 to-purple-200'
+          } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'} p-4`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>PAINT BOOTH</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              <GamingErrorBoundary>
+                <ColorGenerator
+                  colors={colors}
+                  isDarkMode={isDarkMode}
+                  onColorsGenerated={handleColorsGenerated}
+                  isMobile={deviceInfo.isMobile}
+                />
+              </GamingErrorBoundary>
+            </div>
+          </div>
           
           {/* Results Display */}
           {(extractedColors.length > 0 || harmonyColors.length > 0) && (
@@ -537,66 +589,91 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Search Controls */}
-          <OptimizedSearchControls
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedMake={selectedMake}
-            setSelectedMake={setSelectedMake}
-            selectedColorType={selectedColorType}
-            setSelectedColorType={setSelectedColorType}
-            favorites={favorites}
-            makes={makes}
-            colorTypes={colorTypes}
-            isDarkMode={isDarkMode}
-            deviceInfo={deviceInfo}
-          />
-          
-          {filteredColors.length > 0 ? (
-            deviceInfo.isDesktop && filteredColors.length > 100 ? (
-              <OptimizedVirtualGrid
-                colors={filteredColors}
+          {/* Control Panel - Search Controls */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-green-800 to-green-900' : 'bg-gradient-to-r from-green-100 to-green-200'
+          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-4`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>CONTROL PANEL</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              <OptimizedSearchControls
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedMake={selectedMake}
+                setSelectedMake={setSelectedMake}
+                selectedColorType={selectedColorType}
+                setSelectedColorType={setSelectedColorType}
                 favorites={favorites}
-                onColorSelect={handleColorSelect}
-                onToggleFavorite={toggleFavorite}
+                makes={makes}
+                colorTypes={colorTypes}
                 isDarkMode={isDarkMode}
                 deviceInfo={deviceInfo}
               />
-            ) : (
-              <VirtualizedColorGrid
-                colors={filteredColors}
-                favorites={favorites}
-                onColorSelect={handleColorSelect}
-                onToggleFavorite={toggleFavorite}
-                isDarkMode={isDarkMode}
-                isMobile={deviceInfo.isMobile}
-              />
-            )
-          ) : (
-            <div className={`text-center ${deviceInfo.isMobile ? 'py-8' : 'py-12'}`}>
-              <p className={`text-readable ${deviceInfo.isMobile ? 'text-base' : 'text-lg'} ${
-                isDarkMode ? 'text-slate-300' : 'text-gray-600'
-              }`}>
-                {colors.length === 0 ? 'Loading colors...' : 'No colors found matching your search.'}
-              </p>
-              {searchQuery || selectedMake || selectedColorType ? (
-                <button
-                  onClick={() => {
-                    setSearchQuery('')
-                    setSelectedMake('')
-                    setSelectedColorType('')
-                  }}
-                  className={`mt-4 px-4 py-2 rounded-lg transition-colors focus-visible ${
-                    isDarkMode
-                      ? 'bg-blue-600 hover:bg-blue-500 text-white'
-                      : 'bg-blue-500 hover:bg-blue-600 text-white'
-                  }`}
-                >
-                  Clear Filters
-                </button>
-              ) : null}
             </div>
-          )}
+          </div>
+          
+          {/* Showroom - Color Display */}
+          <div className={`relative rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-yellow-800 to-yellow-900' : 'bg-gradient-to-r from-yellow-100 to-yellow-200'
+          } border-2 ${isDarkMode ? 'border-yellow-500/30' : 'border-yellow-400/40'} p-4`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`}>SHOWROOM</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              {filteredColors.length > 0 ? (
+                deviceInfo.isDesktop && filteredColors.length > 100 ? (
+                  <OptimizedVirtualGrid
+                    colors={filteredColors}
+                    favorites={favorites}
+                    onColorSelect={handleColorSelect}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    deviceInfo={deviceInfo}
+                  />
+                ) : (
+                  <VirtualizedColorGrid
+                    colors={filteredColors}
+                    favorites={favorites}
+                    onColorSelect={handleColorSelect}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    isMobile={deviceInfo.isMobile}
+                  />
+                )
+              ) : (
+                <div className={`text-center ${deviceInfo.isMobile ? 'py-8' : 'py-12'}`}>
+                  <p className={`text-readable ${deviceInfo.isMobile ? 'text-base' : 'text-lg'} ${
+                    isDarkMode ? 'text-slate-300' : 'text-gray-600'
+                  }`}>
+                    {colors.length === 0 ? 'Loading colors...' : 'No colors found matching your search.'}
+                  </p>
+                  {searchQuery || selectedMake || selectedColorType ? (
+                    <button
+                      onClick={() => {
+                        setSearchQuery('')
+                        setSelectedMake('')
+                        setSelectedColorType('')
+                      }}
+                      className={`mt-4 px-4 py-2 rounded-lg transition-colors focus-visible ${
+                        isDarkMode
+                          ? 'bg-blue-600 hover:bg-blue-500 text-white'
+                          : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      }`}
+                    >
+                      Clear Filters
+                    </button>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          </div>
         </ResponsiveLayout>
 
         {/* Color Info Modal */}
