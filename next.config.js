@@ -16,9 +16,6 @@ const nextConfig = {
     pagesBufferLength: 2,
   },
   
-  // CSP compliance
-  inlineImageLimit: false,
-  
   // Suppress React DevTools warning in production
   env: {
     NEXT_TELEMETRY_DISABLED: '1',
