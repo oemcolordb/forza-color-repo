@@ -12,6 +12,7 @@
   NODE_VERSION = "18"
   NPM_FLAGS = "--production=false"
   NEXT_TELEMETRY_DISABLED = "1"
+  INLINE_RUNTIME_CHUNK = "false"
 
 [[headers]]
   for = "/*"
