@@ -74,7 +74,27 @@
 
 [[edge_functions]]
   function = "asset-guard"
-  path = ["/assets/*", "/*.jpg", "/*.jpeg", "/*.png", "/*.mp4", "/*.json"]
+  path = "/assets/*"
+
+[[edge_functions]]
+  function = "asset-guard"
+  path = "/*.jpg"
+
+[[edge_functions]]
+  function = "asset-guard"
+  path = "/*.jpeg"
+
+[[edge_functions]]
+  function = "asset-guard"
+  path = "/*.png"
+
+[[edge_functions]]
+  function = "asset-guard"
+  path = "/*.mp4"
+
+[[edge_functions]]
+  function = "asset-guard"
+  path = "/*.json"
 
 [[redirects]]
   from = "/api/*"
