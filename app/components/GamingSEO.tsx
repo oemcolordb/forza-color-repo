@@ -61,16 +61,7 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
       element.setAttribute('content', meta.content)
     })
 
-    // Preload critical gaming fonts for better performance
-    if (!document.querySelector('link[href*="UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2"]')) {
-      const fontPreload = document.createElement('link')
-      fontPreload.rel = 'preload'
-      fontPreload.href = 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2'
-      fontPreload.as = 'font'
-      fontPreload.type = 'font/woff2'
-      fontPreload.crossOrigin = 'anonymous'
-      document.head.appendChild(fontPreload)
-    }
+
 
   }, [isDarkMode, deviceInfo])
 
