@@ -680,92 +680,119 @@ export default function HomePage() {
           </div>
           
           {/* Showroom - Color Display */}
-          <div className={`relative rounded-xl overflow-hidden border-2 ${isDarkMode ? 'border-yellow-500/30' : 'border-yellow-400/40'} p-4`} style={{
+          <div className={`relative rounded-xl overflow-hidden border-2 ${isDarkMode ? 'border-cyan-500/40' : 'border-blue-400/50'} p-4`} style={{
             background: isDarkMode 
-              ? 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, rgba(192,192,192,0.3) 30%, rgba(169,169,169,0.2) 60%, rgba(105,105,105,0.1) 100%), conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.5) 0deg, rgba(192,192,192,0.4) 60deg, rgba(255,255,255,0.5) 120deg, rgba(192,192,192,0.4) 180deg, rgba(255,255,255,0.5) 240deg, rgba(192,192,192,0.4) 300deg, rgba(255,255,255,0.5) 360deg)'
-              : 'radial-gradient(circle at 50% 50%, rgba(255,165,0,0.6) 0%, rgba(255,140,0,0.5) 30%, rgba(255,69,0,0.3) 60%, rgba(255,99,71,0.2) 100%), conic-gradient(from 0deg at 50% 50%, rgba(255,165,0,0.7) 0deg, rgba(255,140,0,0.6) 60deg, rgba(255,165,0,0.7) 120deg, rgba(255,140,0,0.6) 180deg, rgba(255,165,0,0.7) 240deg, rgba(255,140,0,0.6) 300deg, rgba(255,165,0,0.7) 360deg)'
+              ? 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,41,59,0.9) 25%, rgba(51,65,85,0.85) 50%, rgba(30,41,59,0.9) 75%, rgba(15,23,42,0.95) 100%), radial-gradient(ellipse at 30% 20%, rgba(6,182,212,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.1) 0%, transparent 50%)'
+              : 'linear-gradient(135deg, rgba(248,250,252,0.95) 0%, rgba(226,232,240,0.9) 25%, rgba(203,213,225,0.85) 50%, rgba(226,232,240,0.9) 75%, rgba(248,250,252,0.95) 100%), radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.2) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(147,51,234,0.15) 0%, transparent 50%)'
           }}>
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-gradient-to-r from-white to-gray-400 rounded-full animate-spin shadow-lg" style={{animationDuration: '3s', boxShadow: '0 0 8px rgba(255,255,255,0.6)'}}></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-gray-300' : 'text-orange-700'}`}>ROTARY SHOWROOM</span>
+            <div className="absolute top-3 left-4">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-4 h-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse shadow-lg" style={{boxShadow: '0 0 12px rgba(6,182,212,0.6)'}}></div>
+                  <div className="absolute inset-0 w-4 h-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-ping opacity-30"></div>
+                </div>
+                <span className={`text-sm font-bold tracking-wider ${isDarkMode ? 'text-cyan-300' : 'text-blue-700'}`}>PREMIUM SHOWROOM</span>
+                <div className="flex gap-1">
+                  <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
+                  <div className="w-1 h-1 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
+                  <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse" style={{animationDelay: '0.6s'}}></div>
+                </div>
               </div>
             </div>
-            {/* Car Shop Background */}
-            <div className="absolute inset-0 pointer-events-none opacity-75">
-              {/* Car Tools */}
-              <div className="absolute left-6 top-12 w-3 h-16 bg-gradient-to-b from-red-500 to-red-700 rounded shadow-lg">
-                <div className="absolute top-0 w-full h-2 bg-black rounded-t"></div>
-                <div className="absolute bottom-0 w-1 h-4 bg-gray-300 left-1/2 transform -translate-x-1/2"></div>
-              </div>
-              <div className="absolute right-6 top-12 w-12 h-2 bg-gradient-to-r from-gray-300 to-gray-500 rounded shadow-lg">
-                <div className="absolute left-0 w-3 h-2 bg-gray-600 rounded-l"></div>
-                <div className="absolute right-0 w-3 h-2 bg-gray-600 rounded-r"></div>
-              </div>
-              <div className="absolute left-12 bottom-20 w-2 h-12 bg-gradient-to-b from-blue-400 to-blue-600 rounded shadow-lg">
-                <div className="absolute top-0 w-full h-2 bg-black rounded-t"></div>
-              </div>
-              <div className="absolute right-12 bottom-20 w-8 h-2 bg-gradient-to-r from-gray-400 to-gray-600 rounded shadow-lg">
-                <div className="absolute left-1 top-0 w-1 h-2 bg-black"></div>
-                <div className="absolute right-1 top-0 w-1 h-2 bg-black"></div>
+            
+            {/* Modern Showroom Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-60">
+              {/* Showroom Floor Grid */}
+              <div className="absolute inset-0" style={{
+                backgroundImage: isDarkMode 
+                  ? 'linear-gradient(rgba(148,163,184,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.1) 1px, transparent 1px)'
+                  : 'linear-gradient(rgba(100,116,139,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(100,116,139,0.15) 1px, transparent 1px)',
+                backgroundSize: '40px 40px'
+              }}></div>
+              
+              {/* Luxury Car Silhouettes */}
+              <div className="absolute left-8 top-16">
+                {/* McLaren P1 Silhouette */}
+                <svg width="120" height="40" viewBox="0 0 120 40" className={`${isDarkMode ? 'fill-slate-600' : 'fill-gray-400'} opacity-80`}>
+                  <path d="M10 30 Q15 20 25 22 L35 20 Q45 18 55 20 L75 18 Q85 16 95 18 L105 20 Q110 25 108 30 L100 32 Q95 35 90 32 L85 30 L35 30 L30 32 Q25 35 20 32 L12 30 Z" />
+                  <circle cx="25" cy="32" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
+                  <circle cx="95" cy="32" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
+                  <path d="M40 22 Q50 15 60 22 L70 20 Q75 18 80 20" className="stroke-current stroke-1 fill-none" />
+                </svg>
               </div>
               
-              {/* Car Hoists with JDM Cars */}
-              <div className="absolute left-1/4 bottom-8 w-24 h-4 bg-gray-600 rounded">
-                {/* Hoist Base */}
-                <div className="absolute -top-16 left-1/2 w-1 h-16 bg-gray-500 transform -translate-x-1/2"></div>
-                {/* Nissan Skyline R34 */}
-                <div className="absolute -top-20 left-1/2 transform -translate-x-1/2">
-                  <div className="w-20 h-6 bg-gradient-to-r from-purple-600 to-purple-800 rounded-sm shadow-lg">
-                    <div className="absolute top-1 left-2 w-2 h-1 bg-yellow-400 rounded-full"></div>
-                    <div className="absolute top-1 right-2 w-2 h-1 bg-red-500 rounded-full"></div>
-                    <div className="absolute -bottom-1 left-1 w-2 h-2 bg-black rounded-full"></div>
-                    <div className="absolute -bottom-1 right-1 w-2 h-2 bg-black rounded-full"></div>
-                  </div>
+              <div className="absolute right-8 top-16">
+                {/* Lamborghini Aventador Silhouette */}
+                <svg width="120" height="40" viewBox="0 0 120 40" className={`${isDarkMode ? 'fill-slate-600' : 'fill-gray-400'} opacity-80`}>
+                  <path d="M15 28 Q20 18 30 20 L40 18 Q50 15 60 18 L80 16 Q90 14 100 16 L110 18 Q115 23 113 28 L105 30 Q100 33 95 30 L90 28 L30 28 L25 30 Q20 33 15 30 L10 28 Z" />
+                  <circle cx="28" cy="30" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
+                  <circle cx="98" cy="30" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
+                  <path d="M35 20 Q45 12 55 20 L75 18 Q85 15 95 18" className="stroke-current stroke-1 fill-none" />
+                </svg>
+              </div>
+              
+              {/* Showroom Lighting Effects */}
+              <div className="absolute top-0 left-1/4 w-32 h-32 bg-gradient-radial from-white/20 via-white/5 to-transparent rounded-full blur-xl"></div>
+              <div className="absolute top-0 right-1/4 w-32 h-32 bg-gradient-radial from-blue-400/20 via-blue-400/5 to-transparent rounded-full blur-xl"></div>
+              
+              {/* Premium Display Pedestals */}
+              <div className="absolute bottom-12 left-1/4 transform -translate-x-1/2">
+                <div className={`w-24 h-8 ${isDarkMode ? 'bg-gradient-to-t from-slate-700 to-slate-600' : 'bg-gradient-to-t from-gray-300 to-gray-200'} rounded-lg shadow-lg`}>
+                  <div className={`w-20 h-2 ${isDarkMode ? 'bg-slate-500' : 'bg-gray-400'} rounded-full mx-auto mt-1`}></div>
+                  <div className={`w-16 h-1 ${isDarkMode ? 'bg-slate-400' : 'bg-gray-500'} rounded-full mx-auto mt-1`}></div>
                 </div>
               </div>
               
-              <div className="absolute right-1/4 bottom-8 w-24 h-4 bg-gray-600 rounded">
-                {/* Hoist Base */}
-                <div className="absolute -top-16 left-1/2 w-1 h-16 bg-gray-500 transform -translate-x-1/2"></div>
-                {/* Toyota Supra */}
-                <div className="absolute -top-20 left-1/2 transform -translate-x-1/2">
-                  <div className="w-20 h-6 bg-gradient-to-r from-orange-500 to-orange-700 rounded-sm shadow-lg">
-                    <div className="absolute top-1 left-2 w-2 h-1 bg-white rounded-full"></div>
-                    <div className="absolute top-1 right-2 w-2 h-1 bg-red-500 rounded-full"></div>
-                    <div className="absolute -bottom-1 left-1 w-2 h-2 bg-black rounded-full"></div>
-                    <div className="absolute -bottom-1 right-1 w-2 h-2 bg-black rounded-full"></div>
-                  </div>
+              <div className="absolute bottom-12 right-1/4 transform translate-x-1/2">
+                <div className={`w-24 h-8 ${isDarkMode ? 'bg-gradient-to-t from-slate-700 to-slate-600' : 'bg-gradient-to-t from-gray-300 to-gray-200'} rounded-lg shadow-lg`}>
+                  <div className={`w-20 h-2 ${isDarkMode ? 'bg-slate-500' : 'bg-gray-400'} rounded-full mx-auto mt-1`}></div>
+                  <div className={`w-16 h-1 ${isDarkMode ? 'bg-slate-400' : 'bg-gray-500'} rounded-full mx-auto mt-1`}></div>
                 </div>
               </div>
               
-              {/* Spinning Tire with Rim */}
+              {/* Central Display Platform */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                {/* Tire */}
-                <div className="w-80 h-80 rounded-full border-8 border-black animate-spin" style={{
-                  background: 'radial-gradient(circle, rgba(40,40,40,0.9) 0%, rgba(20,20,20,0.8) 70%, rgba(10,10,10,0.9) 100%)',
-                  boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6)',
-                  animationDuration: '3s'
+                {/* Rotating Platform */}
+                <div className="w-64 h-64 rounded-full animate-spin" style={{
+                  background: isDarkMode 
+                    ? 'conic-gradient(from 0deg, rgba(6,182,212,0.3) 0deg, rgba(168,85,247,0.2) 120deg, rgba(6,182,212,0.3) 240deg, rgba(168,85,247,0.2) 360deg)'
+                    : 'conic-gradient(from 0deg, rgba(59,130,246,0.4) 0deg, rgba(147,51,234,0.3) 120deg, rgba(59,130,246,0.4) 240deg, rgba(147,51,234,0.3) 360deg)',
+                  boxShadow: isDarkMode 
+                    ? '0 0 40px rgba(6,182,212,0.3), inset 0 0 40px rgba(15,23,42,0.8)'
+                    : '0 0 40px rgba(59,130,246,0.4), inset 0 0 40px rgba(248,250,252,0.8)',
+                  animationDuration: '8s'
                 }}>
-                  {/* Spinner Rim */}
-                  <div className="absolute top-1/2 left-1/2 w-48 h-48 transform -translate-x-1/2 -translate-y-1/2 animate-spin" style={{
-                    background: 'conic-gradient(from 0deg, rgba(255,215,0,0.9) 0deg, rgba(255,255,255,0.8) 30deg, rgba(255,215,0,0.9) 60deg, rgba(255,255,255,0.8) 90deg, rgba(255,215,0,0.9) 120deg, rgba(255,255,255,0.8) 150deg, rgba(255,215,0,0.9) 180deg, rgba(255,255,255,0.8) 210deg, rgba(255,215,0,0.9) 240deg, rgba(255,255,255,0.8) 270deg, rgba(255,215,0,0.9) 300deg, rgba(255,255,255,0.8) 330deg, rgba(255,215,0,0.9) 360deg)',
-                    borderRadius: '50%',
-                    boxShadow: '0 0 20px rgba(255,215,0,0.6), inset 0 0 30px rgba(255,255,255,0.3)',
-                    animationDuration: '2s'
+                  {/* Inner Platform */}
+                  <div className="absolute top-1/2 left-1/2 w-48 h-48 transform -translate-x-1/2 -translate-y-1/2 rounded-full" style={{
+                    background: isDarkMode 
+                      ? 'radial-gradient(circle, rgba(30,41,59,0.9) 0%, rgba(51,65,85,0.7) 70%, rgba(30,41,59,0.9) 100%)'
+                      : 'radial-gradient(circle, rgba(226,232,240,0.9) 0%, rgba(203,213,225,0.7) 70%, rgba(226,232,240,0.9) 100%)',
+                    boxShadow: isDarkMode 
+                      ? 'inset 0 0 30px rgba(0,0,0,0.5), 0 0 20px rgba(6,182,212,0.2)'
+                      : 'inset 0 0 30px rgba(0,0,0,0.1), 0 0 20px rgba(59,130,246,0.3)'
                   }}>
-                    {/* Rim Spokes */}
-                    <div className="absolute top-1/2 left-1/2 w-1 h-20 bg-gradient-to-t from-yellow-400 to-white transform -translate-x-1/2 -translate-y-1/2"></div>
-                    <div className="absolute top-1/2 left-1/2 w-1 h-20 bg-gradient-to-t from-yellow-400 to-white transform -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
-                    <div className="absolute top-1/2 left-1/2 w-1 h-20 bg-gradient-to-t from-yellow-400 to-white transform -translate-x-1/2 -translate-y-1/2 rotate-90"></div>
-                    <div className="absolute top-1/2 left-1/2 w-1 h-20 bg-gradient-to-t from-yellow-400 to-white transform -translate-x-1/2 -translate-y-1/2" style={{transform: 'translate(-50%, -50%) rotate(135deg)'}}></div>
+                    {/* Center Logo */}
+                    <div className="absolute top-1/2 left-1/2 w-16 h-16 transform -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center" style={{
+                      background: isDarkMode 
+                        ? 'linear-gradient(135deg, rgba(6,182,212,0.8) 0%, rgba(168,85,247,0.6) 100%)'
+                        : 'linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(147,51,234,0.6) 100%)',
+                      boxShadow: '0 0 20px rgba(6,182,212,0.4)'
+                    }}>
+                      <span className="text-2xl font-bold text-white">🎨</span>
+                    </div>
                   </div>
-                  {/* Center Cap */}
-                  <div className="absolute top-1/2 left-1/2 w-12 h-12 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-lg border-2 border-white"></div>
+                  
+                  {/* Orbital Elements */}
+                  <div className="absolute top-1/2 left-1/2 w-56 h-56 transform -translate-x-1/2 -translate-y-1/2 animate-spin" style={{animationDuration: '12s', animationDirection: 'reverse'}}>
+                    <div className="absolute top-0 left-1/2 w-3 h-3 bg-cyan-400 rounded-full transform -translate-x-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(6,182,212,0.6)'}}></div>
+                    <div className="absolute bottom-0 left-1/2 w-3 h-3 bg-purple-400 rounded-full transform -translate-x-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(168,85,247,0.6)'}}></div>
+                    <div className="absolute left-0 top-1/2 w-3 h-3 bg-blue-400 rounded-full transform -translate-y-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(59,130,246,0.6)'}}></div>
+                    <div className="absolute right-0 top-1/2 w-3 h-3 bg-pink-400 rounded-full transform -translate-y-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(236,72,153,0.6)'}}></div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="mt-6">
+            <div className="mt-8 relative z-10">
               {filteredColors.length > 0 ? (
                 deviceInfo.isDesktop && filteredColors.length > 100 ? (
                   <OptimizedVirtualGrid
