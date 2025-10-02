@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { sanitizeInput, secureApiCall } from '../lib/security'
 
 export const useAnalytics = () => {
   const track = useCallback(async (event) => {
@@ -16,10 +17,13 @@ export const useAnalytics = () => {
       localStorage.setItem('forza-analytics', JSON.stringify(analytics))
       
       if (navigator.onLine) {
-        fetch('/.netlify/functions/analytics', {
+        secureApiCall('/.netlify/functions/analytics', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(event)
+          body: JSON.stringify({
+            ...event,
+            colorName: sanitizeInput(event.colorName),
+            make: sanitizeInput(event.make)
+          })
         }).catch(() => {})
       }
     } catch {

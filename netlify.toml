@@ -19,6 +19,26 @@
     Cache-Control = "public, max-age=31536000, immutable"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "private, no-cache"
+
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "private, no-cache"
+
+[[headers]]
+  for = "/*.mp4"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "private, no-cache"
 
 [[headers]]
   for = "/*.html"
@@ -43,6 +63,18 @@
 
 [build.processing.html]
   pretty_urls = true
+
+[[edge_functions]]
+  function = "security-headers"
+  path = "/*"
+
+[[edge_functions]]
+  function = "rate-limit"
+  path = "/api/*"
+
+[[edge_functions]]
+  function = "asset-guard"
+  path = ["/assets/*", "/*.jpg", "/*.jpeg", "/*.png", "/*.mp4", "/*.json"]
 
 [[redirects]]
   from = "/api/*"

@@ -22,6 +22,7 @@ import ImageColorExtractor from './components/ImageColorExtractor'
 import ColorRouletteHarmony from './components/ColorRouletteHarmony'
 
 import TokyoBackground from './components/TokyoBackground'
+import { getSecureAssetUrl } from './lib/assetProtection'
 import { AuthProvider } from './components/AuthProvider'
 import AuthModal from './components/AuthModal'
 import CollapsibleSection from './components/CollapsibleSection'
@@ -39,6 +40,7 @@ import ColorGenerator from './components/ColorGenerator'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import GamingErrorBoundary from './components/GamingErrorBoundary'
+import { ConsoleCleanup } from './components/ConsoleCleanup'
 
 export default function HomePage() {
   const [colors, setColors] = useState([])
@@ -89,19 +91,22 @@ export default function HomePage() {
       })
     }
     
-    const filtered = allColors.filter(color => {
+    if (!searchQuery && !selectedMake && !selectedColorType) {
+      return allColors
+    }
+    
+    const searchLower = searchQuery.toLowerCase()
+    return allColors.filter(color => {
       const matchesSearch = !searchQuery || 
-        color.colorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        color.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (color.model && color.model.toLowerCase().includes(searchQuery.toLowerCase()))
+        color.colorName.toLowerCase().includes(searchLower) ||
+        color.make.toLowerCase().includes(searchLower) ||
+        (color.model && color.model.toLowerCase().includes(searchLower))
       
       const matchesMake = !selectedMake || color.make === selectedMake
       const matchesType = !selectedColorType || color.colorType === selectedColorType
       
       return matchesSearch && matchesMake && matchesType
     })
-    
-    return filtered
   }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet])
 
 
@@ -184,25 +189,173 @@ export default function HomePage() {
 
   if (isInitialLoad) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
+        {/* Forge Background Glow */}
+        <div className="absolute inset-0 bg-gradient-radial from-orange-600/20 via-red-600/10 to-transparent animate-pulse"></div>
+        
+        {/* Anvil Background */}
+        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 opacity-20">
+          <svg width="200" height="120" viewBox="0 0 200 120" className="fill-gray-600">
+            <path d="M20 80 L180 80 L180 90 L170 100 L30 100 L20 90 Z" />
+            <path d="M40 60 L160 60 L160 80 L40 80 Z" />
+            <path d="M160 50 L180 50 L185 60 L180 70 L160 70 Z" />
+            <circle cx="100" cy="40" r="8" className="fill-gray-500" />
+          </svg>
+        </div>
+        
+        <div className="text-center z-10">
           <div className="relative mb-8">
-            <div className="w-20 h-20 mx-auto relative">
-              <div className="absolute inset-0 rounded-full border-4 border-purple-500/30"></div>
-              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-500 animate-spin"></div>
-              <div className="absolute inset-2 rounded-full border-4 border-transparent border-t-pink-500 animate-spin" style={{animationDirection: 'reverse', animationDuration: '0.8s'}}></div>
-              <div className="absolute inset-4 rounded-full border-4 border-transparent border-t-cyan-500 animate-spin" style={{animationDuration: '1.2s'}}></div>
+            {/* Engine Block */}
+            <div className="w-32 h-24 mx-auto relative">
+              <svg className="w-full h-full" viewBox="0 0 120 80">
+                <defs>
+                  <linearGradient id="engineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#6b7280" />
+                    <stop offset="50%" stopColor="#4b5563" />
+                    <stop offset="100%" stopColor="#374151" />
+                  </linearGradient>
+                  <linearGradient id="pistonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#fbbf24" />
+                    <stop offset="50%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#d97706" />
+                  </linearGradient>
+                  <filter id="engineGlow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge> 
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/> 
+                    </feMerge>
+                  </filter>
+                </defs>
+                
+                {/* Engine Block */}
+                <rect x="10" y="30" width="100" height="40" rx="5" fill="url(#engineGradient)" filter="url(#engineGlow)" />
+                
+                {/* Cylinder Heads */}
+                <rect x="15" y="25" width="15" height="10" rx="2" fill="#4b5563" />
+                <rect x="35" y="25" width="15" height="10" rx="2" fill="#4b5563" />
+                <rect x="55" y="25" width="15" height="10" rx="2" fill="#4b5563" />
+                <rect x="75" y="25" width="15" height="10" rx="2" fill="#4b5563" />
+                <rect x="95" y="25" width="10" height="10" rx="2" fill="#4b5563" />
+                
+                {/* Animated Pistons */}
+                {[0, 1, 2, 3, 4].map((i) => {
+                  const x = 17.5 + (i * 20)
+                  const delay = i * 0.2
+                  return (
+                    <g key={i}>
+                      <rect 
+                        x={x} 
+                        y="15" 
+                        width="5" 
+                        height="15" 
+                        rx="1" 
+                        fill="url(#pistonGradient)"
+                        filter="url(#engineGlow)"
+                        className="animate-bounce"
+                        style={{
+                          animationDuration: '1s',
+                          animationDelay: `${delay}s`,
+                          transformOrigin: 'center bottom'
+                        }}
+                      />
+                      {/* Connecting Rod */}
+                      <line 
+                        x1={x + 2.5} 
+                        y1="30" 
+                        x2={x + 2.5} 
+                        y2="15" 
+                        stroke="#9ca3af" 
+                        strokeWidth="1.5"
+                        className="animate-pulse"
+                        style={{
+                          animationDuration: '1s',
+                          animationDelay: `${delay}s`
+                        }}
+                      />
+                    </g>
+                  )
+                })}
+                
+                {/* Crankshaft */}
+                <ellipse cx="60" cy="55" rx="45" ry="3" fill="#1f2937" opacity="0.8" />
+                <rect x="15" y="53" width="90" height="4" rx="2" fill="#374151" />
+                
+                {/* Engine Details */}
+                <circle cx="25" cy="50" r="3" fill="#ef4444" opacity="0.8" className="animate-pulse" />
+                <circle cx="95" cy="50" r="3" fill="#10b981" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.5s'}} />
+                
+                {/* Exhaust Pipes */}
+                <rect x="110" y="35" width="8" height="3" rx="1" fill="#6b7280" />
+                <rect x="110" y="42" width="8" height="3" rx="1" fill="#6b7280" />
+                <rect x="110" y="49" width="8" height="3" rx="1" fill="#6b7280" />
+              </svg>
+            </div>
+            
+            {/* Exhaust Smoke */}
+            <div className="absolute top-0 right-4">
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-2 h-2 bg-gray-400 rounded-full opacity-60 animate-ping"
+                  style={{
+                    animationDelay: `${i * 0.3}s`,
+                    animationDuration: '2s',
+                    position: 'absolute',
+                    top: `${i * 8}px`,
+                    right: `${i * 2}px`
+                  }}
+                />
+              ))}
+            </div>
+            
+            {/* RPM Gauge */}
+            <div className="absolute top-2 left-8 w-8 h-8">
+              <svg className="w-full h-full" viewBox="0 0 40 40">
+                <circle cx="20" cy="20" r="18" fill="none" stroke="#374151" strokeWidth="2" />
+                <circle cx="20" cy="20" r="15" fill="#1f2937" />
+                <line 
+                  x1="20" 
+                  y1="20" 
+                  x2="20" 
+                  y2="8" 
+                  stroke="#ef4444" 
+                  strokeWidth="2" 
+                  className="animate-spin"
+                  style={{animationDuration: '0.5s', transformOrigin: '20px 20px'}}
+                />
+                <circle cx="20" cy="20" r="2" fill="#ef4444" />
+              </svg>
             </div>
           </div>
-          <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 text-transparent bg-clip-text animate-pulse">
-            🎨 OEMColorDB
+          
+          <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text animate-pulse">
+            🔧 TuneForge Loading...
           </h1>
-          <p className="text-lg text-slate-300 mb-2">Preparing your color universe...</p>
-          <div className="flex justify-center items-center gap-1 mt-4">
-            <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
-            <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
-            <div className="w-2 h-2 bg-cyan-500 rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+          <p className="text-lg text-slate-300 mb-4">Forging your automotive experience...</p>
+          
+          {/* Loading Bar */}
+          <div className="w-64 h-3 bg-gray-700 rounded-full mx-auto mb-4 overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-pulse" style={{width: `${loadingProgress}%`, transition: 'width 0.3s ease'}}></div>
           </div>
+          
+          {/* Sparks Animation */}
+          <div className="flex justify-center items-center gap-1 mt-4">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="w-1 h-1 bg-yellow-400 rounded-full animate-ping"
+                style={{animationDelay: `${i * 200}ms`, animationDuration: '1s'}}
+              ></div>
+            ))}
+          </div>
+          
+          <p className="text-sm text-orange-300 mt-2 opacity-75">
+            {loadingProgress < 30 && "Heating the forge..."}
+            {loadingProgress >= 30 && loadingProgress < 60 && "Shaping the gears..."}
+            {loadingProgress >= 60 && loadingProgress < 90 && "Tempering the steel..."}
+            {loadingProgress >= 90 && "Almost ready..."}
+          </p>
         </div>
       </div>
     )
@@ -210,6 +363,7 @@ export default function HomePage() {
 
   return (
     <AuthProvider>
+      <ConsoleCleanup />
       <CriticalCSS />
       <GamingErrorBoundary>
         <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
@@ -223,7 +377,7 @@ export default function HomePage() {
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
         
-        <TokyoBackground isDarkMode={isDarkMode} />
+        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
         <ProgressiveLoader progress={loadingProgress} isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
         
         {/* TuneForge Quick Access */}

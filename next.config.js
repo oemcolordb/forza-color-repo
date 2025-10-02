@@ -10,6 +10,17 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: false,
   
+  // Reduce console warnings
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
+  
+  // Suppress React DevTools warning in production
+  env: {
+    NEXT_TELEMETRY_DISABLED: '1'
+  },
+  
   // Mobile gaming performance
   experimental: {
     optimizeCss: true,
@@ -17,6 +28,14 @@ const nextConfig = {
   },
   
   webpack: (config, { dev, isServer }) => {
+    // Suppress specific warnings
+    config.ignoreWarnings = [
+      /Critical dependency: the request of a dependency is an expression/,
+      /Module not found: Can't resolve 'fs'/,
+      /Module not found: Can't resolve 'net'/,
+      /Module not found: Can't resolve 'tls'/
+    ]
+    
     if (!dev) {
       config.devtool = 'source-map'
       

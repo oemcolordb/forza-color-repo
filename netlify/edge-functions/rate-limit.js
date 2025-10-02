@@ -1,40 +1,47 @@
+const rateLimitMap = new Map()
+
 export default async (request, context) => {
-  const clientIP = context.ip
-  const rateLimitKey = `rate-limit-${clientIP}`
+  const clientIP = request.headers.get('x-forwarded-for') || 
+                   request.headers.get('x-real-ip') || 
+                   'unknown'
   
-  // Get current request count
-  const currentCount = parseInt(context.cookies.get(rateLimitKey) || '0')
-  const limit = 100 // requests per hour
+  const now = Date.now()
+  const windowMs = 60000 // 1 minute
+  const maxRequests = 100 // per minute
   
-  if (currentCount >= limit) {
-    return new Response(JSON.stringify({
-      error: 'Rate limit exceeded',
-      limit,
-      resetTime: new Date(Date.now() + 3600000).toISOString()
-    }), {
+  const key = `${clientIP}-${Math.floor(now / windowMs)}`
+  const current = rateLimitMap.get(key) || 0
+  
+  if (current >= maxRequests) {
+    return new Response('Rate limit exceeded', { 
       status: 429,
       headers: {
-        'Content-Type': 'application/json',
-        'Retry-After': '3600'
+        'Retry-After': '60',
+        'X-RateLimit-Limit': maxRequests.toString(),
+        'X-RateLimit-Remaining': '0'
       }
     })
   }
   
-  // Increment counter
-  context.cookies.set(rateLimitKey, (currentCount + 1).toString(), {
-    maxAge: 3600, // 1 hour
-    httpOnly: true
-  })
+  rateLimitMap.set(key, current + 1)
+  
+  // Cleanup old entries
+  if (rateLimitMap.size > 10000) {
+    const cutoff = now - windowMs * 2
+    for (const [k] of rateLimitMap) {
+      const timestamp = parseInt(k.split('-').pop())
+      if (timestamp < cutoff) rateLimitMap.delete(k)
+    }
+  }
   
   const response = await context.next()
+  const headers = new Headers(response.headers)
+  headers.set('X-RateLimit-Limit', maxRequests.toString())
+  headers.set('X-RateLimit-Remaining', (maxRequests - current - 1).toString())
   
-  // Add rate limit headers
-  response.headers.set('X-RateLimit-Limit', limit.toString())
-  response.headers.set('X-RateLimit-Remaining', (limit - currentCount - 1).toString())
-  
-  return response
-}
-
-export const config = {
-  path: '/api/*'
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  })
 }

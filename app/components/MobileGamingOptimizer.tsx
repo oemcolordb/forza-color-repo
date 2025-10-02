@@ -13,6 +13,7 @@ interface MobileGamingOptimizerProps {
 /**
  * Mobile Gaming Performance Optimizer
  * Optimizes the app specifically for mobile gaming users
+ * Fixed webkit properties for TypeScript compatibility
  */
 export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimizerProps) {
   useEffect(() => {

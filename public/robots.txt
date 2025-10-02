@@ -1,5 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /assets/
+Disallow: /*.json$
+Disallow: /*.mp4$
+Disallow: /api/asset
+Disallow: /_next/
+Disallow: /.netlify/
 
 # Gaming-specific crawl optimization
 Crawl-delay: 1
@@ -7,6 +13,9 @@ Crawl-delay: 1
 # Allow gaming bots and search engines
 User-agent: Googlebot
 Allow: /
+Disallow: /assets/
+Disallow: /*.json$
+Disallow: /*.mp4$
 
 User-agent: Bingbot
 Allow: /
