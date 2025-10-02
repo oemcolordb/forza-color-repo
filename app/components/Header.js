@@ -6,18 +6,32 @@ const Header = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
   
   return (
     <header className="py-8 text-center bg-transparent relative">
+      <button
+        onClick={onToggleTheme}
+        className={`fixed top-4 left-4 z-50 p-3 rounded-full shadow-lg border-2 transition-all ${
+          isDarkMode 
+            ? 'bg-yellow-400 border-yellow-300 text-yellow-900 hover:bg-yellow-300' 
+            : 'bg-slate-800 border-slate-700 text-yellow-400 hover:bg-slate-700'
+        }`}
+        aria-label="Toggle theme"
+        style={{ minHeight: '48px', minWidth: '48px' }}
+      >
+        <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
+      </button>
       <div className="absolute top-4 right-4 flex items-center gap-3">
         {user ? (
           <div className="flex items-center gap-2">
-            <span className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+            <span className={`text-sm font-medium ${
+              isDarkMode ? 'text-white bg-slate-800/80 px-2 py-1 rounded' : 'text-gray-900 bg-white/80 px-2 py-1 rounded'
+            }`}>
               {user.name}
             </span>
             <button
               onClick={logout}
-              className={`px-3 py-1 text-sm rounded transition-colors ${
+              className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
                 isDarkMode
-                  ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-slate-800 text-white border-slate-600 hover:bg-slate-700'
+                  : 'bg-white text-gray-900 border-gray-300 hover:bg-gray-50'
               }`}
             >
               Sign Out
@@ -26,26 +40,15 @@ const Header = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
         ) : (
           <button
             onClick={onShowAuth}
-            className={`px-3 py-1 text-sm rounded transition-colors ${
+            className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-colors ${
               isDarkMode
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-blue-500 text-white hover:bg-blue-600'
+                ? 'bg-blue-600 text-white border-blue-500 hover:bg-blue-700'
+                : 'bg-blue-600 text-white border-blue-500 hover:bg-blue-700'
             }`}
           >
             Sign In
           </button>
         )}
-        <button
-          onClick={onToggleTheme}
-          className={`p-2 rounded-lg border-2 ${
-            isDarkMode 
-              ? 'bg-yellow-500 border-yellow-400 text-yellow-900' 
-              : 'bg-blue-900 border-blue-800 text-blue-100'
-          }`}
-          aria-label="Toggle theme"
-        >
-          <span className="text-lg">{isDarkMode ? '☀️' : '🌙'}</span>
-        </button>
       </div>
       <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up bg-black/50 backdrop-blur-sm px-6 py-4 rounded-lg inline-block">
         <span className="neon-text animate-color-shift text-white" style={{

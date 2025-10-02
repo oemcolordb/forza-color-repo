@@ -196,13 +196,7 @@ export default function HomePage() {
   }, [])
 
   if (isInitialLoad) {
-    const loadingVideos = [
-      'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
-      'Mp 4 H 280 C Baj X 2 Z 9 R 9 E Fr 1 Gh W Ai RTFM 6 Xbt BSZ 76 N 6 Ywb BAE Dic 4 R.mp4',
-      'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4'
-    ]
-    const randomVideo = loadingVideos[Math.floor(Math.random() * loadingVideos.length)]
-    const videoUrl = `/${randomVideo}`
+    const videoUrl = '/Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4'
     
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
@@ -398,8 +392,8 @@ export default function HomePage() {
       </GamingErrorBoundary>
       <div className={`font-sans min-h-screen ${
         isDarkMode 
-          ? 'bg-gray-900 text-gray-100' 
-          : 'bg-gray-100 text-gray-800'
+          ? 'bg-slate-900 text-white' 
+          : 'bg-white text-gray-900'
       }`}>
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
@@ -419,15 +413,13 @@ export default function HomePage() {
         </div>
         
         <ResponsiveLayout>
-          {/* Engine Bay - Header Stats */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-gray-800 to-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
-          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ENGINE</span>
-              </div>
+          {/* Garage Stats */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+            isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
+          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">🏁</span>
+              <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>FORZA GARAGE</span>
             </div>
             <OptimizedStatsBar
               totalColors={allColors.length}
@@ -440,94 +432,86 @@ export default function HomePage() {
             />
           </div>
           
-          {/* Dashboard - Tool Sections */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-slate-100 to-slate-200'
-          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-4`}>
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>DASHBOARD</span>
-              </div>
+          {/* Tuning Tools */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+            isDarkMode ? 'bg-gradient-to-r from-purple-900/50 to-blue-900/50' : 'bg-gradient-to-r from-purple-100 to-blue-100'
+          } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">🔧</span>
+              <span className={`font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>TUNING TOOLS</span>
             </div>
-            <div className="mt-6">
-              <GamingErrorBoundary>
-                <div className={`grid gap-3 ${
-                  deviceInfo.isMobile 
-                    ? 'grid-cols-1' 
-                    : deviceInfo.isTablet 
-                    ? 'grid-cols-2' 
-                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                }`}>
-                  <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg">📸</span>
-                      <span className={`text-sm font-semibold ${isDarkMode ? 'text-cyan-400' : 'text-cyan-600'}`}>PAINT SCANNER</span>
-                    </div>
-                    <ImageColorExtractor
-                      colors={allColors}
-                      onColorsExtracted={setExtractedColors}
-                      onColorsFound={() => {}}
-                      onColorSelect={handleColorSelect}
-                      isDarkMode={isDarkMode}
-                    />
+            <GamingErrorBoundary>
+              <div className={`grid gap-3 ${
+                deviceInfo.isMobile 
+                  ? 'grid-cols-1' 
+                  : deviceInfo.isTablet 
+                  ? 'grid-cols-2' 
+                  : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+              }`}>
+                <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">📸</span>
+                    <span className={`text-sm font-semibold ${isDarkMode ? 'text-cyan-400' : 'text-cyan-600'}`}>PAINT SCANNER</span>
                   </div>
-                  
-                  <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg">🎰</span>
-                      <span className={`text-sm font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>COLOR ROULETTE</span>
-                    </div>
-                    <ColorRouletteHarmony
-                      colors={allColors}
-                      isDarkMode={isDarkMode}
-                      onColorSelect={handleColorSelect}
-                      onHarmonyGenerated={(colors, mode) => {
-                        setHarmonyColors(colors)
-                        setHarmonyMode(mode)
-                      }}
-                    />
-                  </div>
-                  
-                  {!deviceInfo.isMobile && (
-                    <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">🎨</span>
-                        <span className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>HARMONY DISPLAY</span>
-                      </div>
-                      <HarmonyVisualizer
-                        currentHarmony={harmonyColors}
-                        harmonyMode={harmonyMode}
-                        isDarkMode={isDarkMode}
-                        onColorSelect={handleColorSelect}
-                      />
-                    </div>
-                  )}
+                  <ImageColorExtractor
+                    colors={allColors}
+                    onColorsExtracted={setExtractedColors}
+                    onColorsFound={() => {}}
+                    onColorSelect={handleColorSelect}
+                    isDarkMode={isDarkMode}
+                  />
                 </div>
-              </GamingErrorBoundary>
-            </div>
+                
+                <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">🎰</span>
+                    <span className={`text-sm font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>COLOR ROULETTE</span>
+                  </div>
+                  <ColorRouletteHarmony
+                    colors={allColors}
+                    isDarkMode={isDarkMode}
+                    onColorSelect={handleColorSelect}
+                    onHarmonyGenerated={(colors, mode) => {
+                      setHarmonyColors(colors)
+                      setHarmonyMode(mode)
+                    }}
+                  />
+                </div>
+                
+                {!deviceInfo.isMobile && (
+                  <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">🎨</span>
+                      <span className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>HARMONY DISPLAY</span>
+                    </div>
+                    <HarmonyVisualizer
+                      currentHarmony={harmonyColors}
+                      harmonyMode={harmonyMode}
+                      isDarkMode={isDarkMode}
+                      onColorSelect={handleColorSelect}
+                    />
+                  </div>
+                )}
+              </div>
+            </GamingErrorBoundary>
           </div>
           
-          {/* Paint Booth - Color Generator */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-purple-800 to-purple-900' : 'bg-gradient-to-r from-purple-100 to-purple-200'
-          } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'} p-4`}>
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>PAINT BOOTH</span>
-              </div>
+          {/* Paint Booth */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+            isDarkMode ? 'bg-gradient-to-r from-green-900/50 to-teal-900/50' : 'bg-gradient-to-r from-green-100 to-teal-100'
+          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">🎨</span>
+              <span className={`font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>PAINT BOOTH</span>
             </div>
-            <div className="mt-6">
-              <GamingErrorBoundary>
-                <ColorGenerator
-                  colors={colors}
-                  isDarkMode={isDarkMode}
-                  onColorsGenerated={handleColorsGenerated}
-                  isMobile={deviceInfo.isMobile}
-                />
-              </GamingErrorBoundary>
-            </div>
+            <GamingErrorBoundary>
+              <ColorGenerator
+                colors={colors}
+                isDarkMode={isDarkMode}
+                onColorsGenerated={handleColorsGenerated}
+                isMobile={deviceInfo.isMobile}
+              />
+            </GamingErrorBoundary>
           </div>
           
           {/* Results Display */}
@@ -546,15 +530,27 @@ export default function HomePage() {
                   </h3>
                   <div className="flex flex-wrap gap-1">
                     {extractedColors.slice(0, deviceInfo.isMobile ? 6 : 8).map((color, index) => (
-                      <div
+                      <button
                         key={index}
-                        className={`rounded border border-gray-300 gpu-accelerated ${
+                        onClick={() => {
+                          const fakeColor = {
+                            colorName: `Extracted Color ${index + 1}`,
+                            make: 'Image Extract',
+                            model: '',
+                            year: null,
+                            colorType: 'Extracted',
+                            color1: { h: 0, s: 0, b: 0.5 },
+                            color2: { h: 0, s: 0, b: 0.5 }
+                          }
+                          handleColorSelect(fakeColor)
+                        }}
+                        className={`rounded border border-gray-300 hover:border-blue-500 transition-colors cursor-pointer gpu-accelerated ${
                           deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
                         }`}
                         style={{
                           backgroundColor: `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`
                         }}
-                        title={`${color.percentage}%`}
+                        title={`${color.percentage}% - Click to view`}
                       />
                     ))}
                   </div>
@@ -589,256 +585,107 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Control Panel - Search Controls */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-4`} style={{
-            background: isDarkMode 
-              ? 'linear-gradient(135deg, rgba(20,20,20,0.95) 0%, rgba(40,40,40,0.9) 50%, rgba(20,20,20,0.95) 100%), radial-gradient(circle at 20% 30%, rgba(0,255,0,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,0,0,0.1) 0%, transparent 50%)'
-              : 'linear-gradient(135deg, rgba(60,60,60,0.95) 0%, rgba(80,80,80,0.9) 50%, rgba(60,60,60,0.95) 100%), radial-gradient(circle at 20% 30%, rgba(0,255,0,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255,0,0,0.15) 0%, transparent 50%)'
-          }}>
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse shadow-lg" style={{boxShadow: '0 0 8px rgba(0,255,0,0.6)'}}></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>DASHBOARD</span>
+          {/* Search Controls */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+            isDarkMode ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50' : 'bg-gradient-to-r from-orange-100 to-red-100'
+          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">🔍</span>
+              <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>SEARCH & FILTER</span>
+              <div className="ml-auto flex gap-1">
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-red-400 rounded-full"></div>
               </div>
             </div>
-            {/* Dashboard Elements */}
-            <div className="absolute top-2 right-4 flex gap-2">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" style={{boxShadow: '0 0 4px rgba(255,0,0,0.6)'}}></div>
-              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" style={{animationDelay: '0.5s', boxShadow: '0 0 4px rgba(255,255,0,0.6)'}}></div>
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style={{animationDelay: '1s', boxShadow: '0 0 4px rgba(0,0,255,0.6)'}}></div>
-            </div>
-            {/* Dashboard Gauges */}
-            <div className="absolute inset-4 grid grid-cols-5 gap-4">
-              {/* RPM Gauge */}
-              <div className="w-24 h-24 border-4 border-gray-300 rounded-full bg-black/80 flex items-center justify-center relative">
-                <div className="absolute inset-2 border border-gray-500 rounded-full">
-                  <div className="absolute top-1 left-1/2 w-0.5 h-3 bg-red-500 transform -translate-x-1/2"></div>
-                  <div className="absolute bottom-1 left-1/2 w-0.5 h-3 bg-white transform -translate-x-1/2"></div>
-                  <div className="absolute left-1 top-1/2 w-3 h-0.5 bg-white transform -translate-y-1/2"></div>
-                  <div className="absolute right-1 top-1/2 w-3 h-0.5 bg-white transform -translate-y-1/2"></div>
-                </div>
-                <div className="w-1 h-8 bg-red-400 rounded transform rotate-45 origin-bottom shadow-lg"></div>
-                <div className="absolute bottom-1 text-xs text-white font-mono">RPM</div>
-              </div>
-              
-              {/* Turbo Gauge */}
-              <div className="w-24 h-24 border-4 border-gray-300 rounded-full bg-black/80 flex items-center justify-center relative">
-                <div className="absolute inset-2 border border-gray-500 rounded-full">
-                  <div className="absolute top-1 left-1/2 w-0.5 h-3 bg-green-500 transform -translate-x-1/2"></div>
-                  <div className="absolute bottom-1 left-1/2 w-0.5 h-3 bg-white transform -translate-x-1/2"></div>
-                  <div className="absolute left-1 top-1/2 w-3 h-0.5 bg-white transform -translate-y-1/2"></div>
-                  <div className="absolute right-1 top-1/2 w-3 h-0.5 bg-white transform -translate-y-1/2"></div>
-                </div>
-                <div className="w-1 h-8 bg-green-400 rounded transform -rotate-12 origin-bottom shadow-lg"></div>
-                <div className="absolute bottom-1 text-xs text-white font-mono">PSI</div>
-              </div>
-              
-              {/* Digital Speedometer */}
-              <div className="w-32 h-24 border-2 border-gray-400 bg-black/90 rounded flex flex-col items-center justify-center relative">
-                <div className="text-2xl font-mono text-cyan-400 font-bold">187</div>
-                <div className="text-xs text-white font-mono">MPH</div>
-                <div className="absolute top-1 left-1 w-1 h-1 bg-green-500 rounded-full"></div>
-                <div className="absolute top-1 right-1 w-1 h-1 bg-red-500 rounded-full"></div>
-              </div>
-              
-              {/* Dynometer */}
-              <div className="w-32 h-24 border-2 border-gray-400 bg-black/90 rounded flex flex-col items-center justify-center relative">
-                <div className="text-lg font-mono text-orange-400 font-bold">542</div>
-                <div className="text-xs text-white font-mono">HP</div>
-                <div className="w-full h-1 bg-gray-700 mt-1 rounded">
-                  <div className="w-3/4 h-1 bg-orange-500 rounded"></div>
-                </div>
-              </div>
-              
-              {/* Temp Gauge */}
-              <div className="w-24 h-24 border-4 border-gray-300 rounded-full bg-black/80 flex items-center justify-center relative">
-                <div className="absolute inset-2 border border-gray-500 rounded-full">
-                  <div className="absolute top-1 left-1/2 w-0.5 h-3 bg-blue-500 transform -translate-x-1/2"></div>
-                  <div className="absolute bottom-1 left-1/2 w-0.5 h-3 bg-red-500 transform -translate-x-1/2"></div>
-                  <div className="absolute left-1 top-1/2 w-3 h-0.5 bg-white transform -translate-y-1/2"></div>
-                  <div className="absolute right-1 top-1/2 w-3 h-0.5 bg-white transform -translate-y-1/2"></div>
-                </div>
-                <div className="w-1 h-8 bg-yellow-400 rounded transform rotate-12 origin-bottom shadow-lg"></div>
-                <div className="absolute bottom-1 text-xs text-white font-mono">TEMP</div>
-              </div>
-            </div>
-            <div className="mt-6">
-              <OptimizedSearchControls
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                selectedMake={selectedMake}
-                setSelectedMake={setSelectedMake}
-                selectedColorType={selectedColorType}
-                setSelectedColorType={setSelectedColorType}
-                favorites={favorites}
-                makes={makes}
-                colorTypes={colorTypes}
-                isDarkMode={isDarkMode}
-                deviceInfo={deviceInfo}
-              />
-            </div>
+            <OptimizedSearchControls
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedMake={selectedMake}
+              setSelectedMake={setSelectedMake}
+              selectedColorType={selectedColorType}
+              setSelectedColorType={setSelectedColorType}
+              favorites={favorites}
+              makes={makes}
+              colorTypes={colorTypes}
+              isDarkMode={isDarkMode}
+              deviceInfo={deviceInfo}
+            />
           </div>
           
-          {/* Showroom - Color Display */}
-          <div className={`relative rounded-xl overflow-hidden border-2 ${isDarkMode ? 'border-cyan-500/40' : 'border-blue-400/50'} p-4`} style={{
-            background: isDarkMode 
-              ? 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,41,59,0.9) 25%, rgba(51,65,85,0.85) 50%, rgba(30,41,59,0.9) 75%, rgba(15,23,42,0.95) 100%), radial-gradient(ellipse at 30% 20%, rgba(6,182,212,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(168,85,247,0.1) 0%, transparent 50%)'
-              : 'linear-gradient(135deg, rgba(248,250,252,0.95) 0%, rgba(226,232,240,0.9) 25%, rgba(203,213,225,0.85) 50%, rgba(226,232,240,0.9) 75%, rgba(248,250,252,0.95) 100%), radial-gradient(ellipse at 30% 20%, rgba(59,130,246,0.2) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(147,51,234,0.15) 0%, transparent 50%)'
-          }}>
-            <div className="absolute top-3 left-4">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-4 h-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse shadow-lg" style={{boxShadow: '0 0 12px rgba(6,182,212,0.6)'}}></div>
-                  <div className="absolute inset-0 w-4 h-4 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-ping opacity-30"></div>
-                </div>
-                <span className={`text-sm font-bold tracking-wider ${isDarkMode ? 'text-cyan-300' : 'text-blue-700'}`}>PREMIUM SHOWROOM</span>
+          {/* Color Gallery */}
+          <div className={`relative rounded-xl overflow-hidden p-4 ${
+            isDarkMode ? 'bg-gradient-to-br from-slate-800 to-slate-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
+          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">🏆</span>
+              <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>COLOR GALLERY</span>
+              <div className="ml-auto flex items-center gap-2">
                 <div className="flex gap-1">
-                  <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
-                  <div className="w-1 h-1 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '0.3s'}}></div>
-                  <div className="w-1 h-1 bg-red-400 rounded-full animate-pulse" style={{animationDelay: '0.6s'}}></div>
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
                 </div>
+                <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                  {filteredColors.length} colors
+                </span>
               </div>
             </div>
             
-            {/* Modern Showroom Background */}
-            <div className="absolute inset-0 pointer-events-none opacity-60">
-              {/* Showroom Floor Grid */}
-              <div className="absolute inset-0" style={{
-                backgroundImage: isDarkMode 
-                  ? 'linear-gradient(rgba(148,163,184,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.1) 1px, transparent 1px)'
-                  : 'linear-gradient(rgba(100,116,139,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(100,116,139,0.15) 1px, transparent 1px)',
-                backgroundSize: '40px 40px'
-              }}></div>
-              
-              {/* Luxury Car Silhouettes */}
-              <div className="absolute left-8 top-16">
-                {/* McLaren P1 Silhouette */}
-                <svg width="120" height="40" viewBox="0 0 120 40" className={`${isDarkMode ? 'fill-slate-600' : 'fill-gray-400'} opacity-80`}>
-                  <path d="M10 30 Q15 20 25 22 L35 20 Q45 18 55 20 L75 18 Q85 16 95 18 L105 20 Q110 25 108 30 L100 32 Q95 35 90 32 L85 30 L35 30 L30 32 Q25 35 20 32 L12 30 Z" />
-                  <circle cx="25" cy="32" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
-                  <circle cx="95" cy="32" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
-                  <path d="M40 22 Q50 15 60 22 L70 20 Q75 18 80 20" className="stroke-current stroke-1 fill-none" />
-                </svg>
-              </div>
-              
-              <div className="absolute right-8 top-16">
-                {/* Lamborghini Aventador Silhouette */}
-                <svg width="120" height="40" viewBox="0 0 120 40" className={`${isDarkMode ? 'fill-slate-600' : 'fill-gray-400'} opacity-80`}>
-                  <path d="M15 28 Q20 18 30 20 L40 18 Q50 15 60 18 L80 16 Q90 14 100 16 L110 18 Q115 23 113 28 L105 30 Q100 33 95 30 L90 28 L30 28 L25 30 Q20 33 15 30 L10 28 Z" />
-                  <circle cx="28" cy="30" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
-                  <circle cx="98" cy="30" r="4" className={isDarkMode ? 'fill-slate-500' : 'fill-gray-500'} />
-                  <path d="M35 20 Q45 12 55 20 L75 18 Q85 15 95 18" className="stroke-current stroke-1 fill-none" />
-                </svg>
-              </div>
-              
-              {/* Showroom Lighting Effects */}
-              <div className="absolute top-0 left-1/4 w-32 h-32 bg-gradient-radial from-white/20 via-white/5 to-transparent rounded-full blur-xl"></div>
-              <div className="absolute top-0 right-1/4 w-32 h-32 bg-gradient-radial from-blue-400/20 via-blue-400/5 to-transparent rounded-full blur-xl"></div>
-              
-              {/* Premium Display Pedestals */}
-              <div className="absolute bottom-12 left-1/4 transform -translate-x-1/2">
-                <div className={`w-24 h-8 ${isDarkMode ? 'bg-gradient-to-t from-slate-700 to-slate-600' : 'bg-gradient-to-t from-gray-300 to-gray-200'} rounded-lg shadow-lg`}>
-                  <div className={`w-20 h-2 ${isDarkMode ? 'bg-slate-500' : 'bg-gray-400'} rounded-full mx-auto mt-1`}></div>
-                  <div className={`w-16 h-1 ${isDarkMode ? 'bg-slate-400' : 'bg-gray-500'} rounded-full mx-auto mt-1`}></div>
-                </div>
-              </div>
-              
-              <div className="absolute bottom-12 right-1/4 transform translate-x-1/2">
-                <div className={`w-24 h-8 ${isDarkMode ? 'bg-gradient-to-t from-slate-700 to-slate-600' : 'bg-gradient-to-t from-gray-300 to-gray-200'} rounded-lg shadow-lg`}>
-                  <div className={`w-20 h-2 ${isDarkMode ? 'bg-slate-500' : 'bg-gray-400'} rounded-full mx-auto mt-1`}></div>
-                  <div className={`w-16 h-1 ${isDarkMode ? 'bg-slate-400' : 'bg-gray-500'} rounded-full mx-auto mt-1`}></div>
-                </div>
-              </div>
-              
-              {/* Central Display Platform */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                {/* Rotating Platform */}
-                <div className="w-64 h-64 rounded-full animate-spin" style={{
-                  background: isDarkMode 
-                    ? 'conic-gradient(from 0deg, rgba(6,182,212,0.3) 0deg, rgba(168,85,247,0.2) 120deg, rgba(6,182,212,0.3) 240deg, rgba(168,85,247,0.2) 360deg)'
-                    : 'conic-gradient(from 0deg, rgba(59,130,246,0.4) 0deg, rgba(147,51,234,0.3) 120deg, rgba(59,130,246,0.4) 240deg, rgba(147,51,234,0.3) 360deg)',
-                  boxShadow: isDarkMode 
-                    ? '0 0 40px rgba(6,182,212,0.3), inset 0 0 40px rgba(15,23,42,0.8)'
-                    : '0 0 40px rgba(59,130,246,0.4), inset 0 0 40px rgba(248,250,252,0.8)',
-                  animationDuration: '8s'
-                }}>
-                  {/* Inner Platform */}
-                  <div className="absolute top-1/2 left-1/2 w-48 h-48 transform -translate-x-1/2 -translate-y-1/2 rounded-full" style={{
-                    background: isDarkMode 
-                      ? 'radial-gradient(circle, rgba(30,41,59,0.9) 0%, rgba(51,65,85,0.7) 70%, rgba(30,41,59,0.9) 100%)'
-                      : 'radial-gradient(circle, rgba(226,232,240,0.9) 0%, rgba(203,213,225,0.7) 70%, rgba(226,232,240,0.9) 100%)',
-                    boxShadow: isDarkMode 
-                      ? 'inset 0 0 30px rgba(0,0,0,0.5), 0 0 20px rgba(6,182,212,0.2)'
-                      : 'inset 0 0 30px rgba(0,0,0,0.1), 0 0 20px rgba(59,130,246,0.3)'
-                  }}>
-                    {/* Center Logo */}
-                    <div className="absolute top-1/2 left-1/2 w-16 h-16 transform -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center" style={{
-                      background: isDarkMode 
-                        ? 'linear-gradient(135deg, rgba(6,182,212,0.8) 0%, rgba(168,85,247,0.6) 100%)'
-                        : 'linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(147,51,234,0.6) 100%)',
-                      boxShadow: '0 0 20px rgba(6,182,212,0.4)'
-                    }}>
-                      <span className="text-2xl font-bold text-white">🎨</span>
-                    </div>
-                  </div>
-                  
-                  {/* Orbital Elements */}
-                  <div className="absolute top-1/2 left-1/2 w-56 h-56 transform -translate-x-1/2 -translate-y-1/2 animate-spin" style={{animationDuration: '12s', animationDirection: 'reverse'}}>
-                    <div className="absolute top-0 left-1/2 w-3 h-3 bg-cyan-400 rounded-full transform -translate-x-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(6,182,212,0.6)'}}></div>
-                    <div className="absolute bottom-0 left-1/2 w-3 h-3 bg-purple-400 rounded-full transform -translate-x-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(168,85,247,0.6)'}}></div>
-                    <div className="absolute left-0 top-1/2 w-3 h-3 bg-blue-400 rounded-full transform -translate-y-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(59,130,246,0.6)'}}></div>
-                    <div className="absolute right-0 top-1/2 w-3 h-3 bg-pink-400 rounded-full transform -translate-y-1/2 shadow-lg" style={{boxShadow: '0 0 8px rgba(236,72,153,0.6)'}}></div>
-                  </div>
-                </div>
-              </div>
+            {/* Simple car decoration */}
+            <div className="absolute top-4 right-16 opacity-20">
+              <svg width="60" height="20" viewBox="0 0 60 20" className={isDarkMode ? 'fill-blue-400' : 'fill-blue-600'}>
+                <path d="M5 15 Q8 10 15 12 L25 10 Q35 8 45 10 L50 12 Q52 15 50 16 L45 17 L15 17 L10 16 Q5 15 5 15 Z" />
+                <circle cx="15" cy="17" r="2" />
+                <circle cx="45" cy="17" r="2" />
+              </svg>
             </div>
-            <div className="mt-8 relative z-10">
-              {filteredColors.length > 0 ? (
-                deviceInfo.isDesktop && filteredColors.length > 100 ? (
-                  <OptimizedVirtualGrid
-                    colors={filteredColors}
-                    favorites={favorites}
-                    onColorSelect={handleColorSelect}
-                    onToggleFavorite={toggleFavorite}
-                    isDarkMode={isDarkMode}
-                    deviceInfo={deviceInfo}
-                  />
-                ) : (
-                  <VirtualizedColorGrid
-                    colors={filteredColors}
-                    favorites={favorites}
-                    onColorSelect={handleColorSelect}
-                    onToggleFavorite={toggleFavorite}
-                    isDarkMode={isDarkMode}
-                    isMobile={deviceInfo.isMobile}
-                  />
-                )
+            
+            {filteredColors.length > 0 ? (
+              deviceInfo.isDesktop && filteredColors.length > 100 ? (
+                <OptimizedVirtualGrid
+                  colors={filteredColors}
+                  favorites={favorites}
+                  onColorSelect={handleColorSelect}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  deviceInfo={deviceInfo}
+                />
               ) : (
-                <div className={`text-center ${deviceInfo.isMobile ? 'py-8' : 'py-12'}`}>
-                  <p className={`text-readable ${deviceInfo.isMobile ? 'text-base' : 'text-lg'} ${
-                    isDarkMode ? 'text-slate-300' : 'text-gray-600'
-                  }`}>
-                    {colors.length === 0 ? 'Loading colors...' : 'No colors found matching your search.'}
-                  </p>
-                  {searchQuery || selectedMake || selectedColorType ? (
-                    <button
-                      onClick={() => {
-                        setSearchQuery('')
-                        setSelectedMake('')
-                        setSelectedColorType('')
-                      }}
-                      className={`mt-4 px-4 py-2 rounded-lg transition-colors focus-visible ${
-                        isDarkMode
-                          ? 'bg-blue-600 hover:bg-blue-500 text-white'
-                          : 'bg-blue-500 hover:bg-blue-600 text-white'
-                      }`}
-                    >
-                      Clear Filters
-                    </button>
-                  ) : null}
-                </div>
-              )}
-            </div>
+                <VirtualizedColorGrid
+                  colors={filteredColors}
+                  favorites={favorites}
+                  onColorSelect={handleColorSelect}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  isMobile={deviceInfo.isMobile}
+                />
+              )
+            ) : (
+              <div className={`text-center ${deviceInfo.isMobile ? 'py-8' : 'py-12'}`}>
+                <p className={`text-readable ${deviceInfo.isMobile ? 'text-base' : 'text-lg'} ${
+                  isDarkMode ? 'text-slate-300' : 'text-gray-600'
+                }`}>
+                  {colors.length === 0 ? 'Loading colors...' : 'No colors found matching your search.'}
+                </p>
+                {searchQuery || selectedMake || selectedColorType ? (
+                  <button
+                    onClick={() => {
+                      setSearchQuery('')
+                      setSelectedMake('')
+                      setSelectedColorType('')
+                    }}
+                    className={`mt-4 px-4 py-2 rounded-lg transition-colors focus-visible ${
+                      isDarkMode
+                        ? 'bg-blue-600 hover:bg-blue-500 text-white'
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`}
+                  >
+                    Clear Filters
+                  </button>
+                ) : null}
+              </div>
+            )}
           </div>
         </ResponsiveLayout>
 
