@@ -30,9 +30,11 @@ export const SecurityEnforcer = () => {
       })
     }
 
-    // Block eval and Function constructor
-    window.eval = () => { throw new Error('eval() blocked for security') }
-    window.Function = () => { throw new Error('Function() blocked for security') }
+    // Block eval and Function constructor in production only
+    if (process.env.NODE_ENV === 'production') {
+      window.eval = () => { throw new Error('eval() blocked for security') }
+      window.Function = () => { throw new Error('Function() blocked for security') }
+    }
 
     // Prevent clickjacking
     if (window.top !== window.self) {
