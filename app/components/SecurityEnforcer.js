@@ -14,19 +14,21 @@ export const SecurityEnforcer = () => {
     }
 
     // Override dangerous DOM methods
-    const originalInnerHTML = Element.prototype.innerHTML
-    Object.defineProperty(Element.prototype, 'innerHTML', {
-      set: function(value) {
-        if (typeof value === 'string' && /<script|javascript:|data:|vbscript:/i.test(value)) {
-          console.warn('Blocked potentially malicious HTML')
-          return
-        }
-        originalInnerHTML.call(this, value)
-      },
-      get: function() {
-        return originalInnerHTML.call(this)
-      }
-    })
+    const originalDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML') || 
+                              Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'innerHTML')
+    if (originalDescriptor) {
+      Object.defineProperty(Element.prototype, 'innerHTML', {
+        set: function(value) {
+          if (typeof value === 'string' && /<script|javascript:|data:|vbscript:/i.test(value)) {
+            console.warn('Blocked potentially malicious HTML')
+            return
+          }
+          originalDescriptor.set.call(this, value)
+        },
+        get: originalDescriptor.get,
+        configurable: true
+      })
+    }
 
     // Block eval and Function constructor
     window.eval = () => { throw new Error('eval() blocked for security') }
