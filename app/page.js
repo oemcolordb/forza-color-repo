@@ -202,6 +202,7 @@ export default function HomePage() {
       'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4'
     ]
     const randomVideo = loadingVideos[Math.floor(Math.random() * loadingVideos.length)]
+    const videoUrl = getSecureAssetUrl ? getSecureAssetUrl(randomVideo) : `/${randomVideo}`
     
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
@@ -213,7 +214,7 @@ export default function HomePage() {
           loop
           playsInline
         >
-          <source src={`/${randomVideo}`} type="video/mp4" />
+          <source src={videoUrl} type="video/mp4" />
         </video>
         
         {/* Forge Background Glow */}

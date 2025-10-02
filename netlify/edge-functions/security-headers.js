@@ -14,16 +14,14 @@ export default async (request, context) => {
   // Enhanced CSP
   headers.set('Content-Security-Policy', 
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'nonce-forza2024'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
-    "img-src 'self' data: blob: https://fonts.gstatic.com; " +
-    "connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://generativelanguage.googleapis.com; " +
+    "img-src 'self' data: blob: https:; " +
+    "media-src 'self' data: blob:; " +
+    "connect-src 'self' https:; " +
     "object-src 'none'; " +
-    "base-uri 'self'; " +
-    "frame-ancestors 'none'; " +
-    "form-action 'self'; " +
-    "upgrade-insecure-requests"
+    "base-uri 'self';"
   )
   
   return new Response(response.body, {
