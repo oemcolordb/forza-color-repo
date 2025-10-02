@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 
 const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
@@ -8,10 +9,12 @@ const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
   const [mediaError, setMediaError] = useState(false)
   
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    if (typeof window !== 'undefined') {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768)
+      checkMobile()
+      window.addEventListener('resize', checkMobile)
+      return () => window.removeEventListener('resize', checkMobile)
+    }
   }, [])
   
   useEffect(() => {
@@ -36,7 +39,7 @@ const TokyoBackground = ({ isDarkMode, getSecureAssetUrl }) => {
       const mediaIndex = thirtyMinuteSlots % mediaFiles.length
       const selectedMedia = mediaFiles[mediaIndex]
       
-      const mediaSrc = getSecureAssetUrl ? getSecureAssetUrl(selectedMedia.file) : `/${selectedMedia.file}`
+      const mediaSrc = `/${selectedMedia.file}`
       
       console.log('Loading Tokyo background:', mediaSrc, 'Type:', selectedMedia.type, 'Index:', mediaIndex)
       

@@ -69,7 +69,7 @@ export default function TuneForge() {
       const response = await fetch('/api/tuneforge/cars')
       if (response.ok) {
         const carData = await response.json()
-        const processedCars = carData.slice(0, 100).map((car: any) => ({
+        const processedCars = carData.map((car: any) => ({
           ...car,
           fullName: `${car.year} ${car.manufacturer} ${car.model}`,
           drivetrain: car.drivetrain || (car.type === 'Rally Car' ? 'AWD' : car.type === 'Sports Car' ? 'RWD' : 'RWD'),

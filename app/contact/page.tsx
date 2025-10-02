@@ -1,10 +1,3 @@
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Contact - Forza Color Universe',
-  description: 'Get in touch with the Forza Color Universe team. Find support, report issues, or share feedback.',
-}
-
 'use client'
 import { useState, useEffect } from 'react'
 import TokyoBackground from '../components/TokyoBackground'
@@ -77,7 +70,7 @@ export default function Contact() {
                   💰 <span>Support Development</span>
                 </h3>
                 <a 
-                  href="https://paypal.me/julianpenning1" 
+                  href="https://www.paypal.com/paypalme/julianpenning1" 
                   className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"

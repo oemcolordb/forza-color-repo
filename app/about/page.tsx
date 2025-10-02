@@ -1,10 +1,3 @@
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'About - Forza Color Universe',
-  description: 'Learn about Forza Color Universe, the comprehensive automotive color database from Forza racing games.',
-}
-
 'use client'
 import { useState, useEffect } from 'react'
 import TokyoBackground from '../components/TokyoBackground'

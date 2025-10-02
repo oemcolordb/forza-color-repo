@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
+import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import { DevToolsSuppress } from './components/DevToolsSuppress'
 import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
