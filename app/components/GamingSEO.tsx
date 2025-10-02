@@ -100,7 +100,7 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
       ]
     }
 
-    let script = document.getElementById('gaming-structured-data')
+    let script = document.getElementById('gaming-structured-data') as HTMLScriptElement
     if (!script) {
       script = document.createElement('script')
       script.id = 'gaming-structured-data'
