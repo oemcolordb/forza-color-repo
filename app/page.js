@@ -130,7 +130,15 @@ export default function HomePage() {
       }
     }
     
+    // Fallback timeout
+    const timeout = setTimeout(() => {
+      setLoading(false)
+      setIsInitialLoad(false)
+    }, 10000)
+    
     loadColors()
+    
+    return () => clearTimeout(timeout)
   }, [])
 
   // Memoized data for performance
@@ -188,8 +196,26 @@ export default function HomePage() {
   }, [])
 
   if (isInitialLoad) {
+    const loadingVideos = [
+      'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
+      'Mp 4 H 280 C Baj X 2 Z 9 R 9 E Fr 1 Gh W Ai RTFM 6 Xbt BSZ 76 N 6 Ywb BAE Dic 4 R.mp4',
+      'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4'
+    ]
+    const randomVideo = loadingVideos[Math.floor(Math.random() * loadingVideos.length)]
+    
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
+        {/* Background Video */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src={`/${randomVideo}`} type="video/mp4" />
+        </video>
+        
         {/* Forge Background Glow */}
         <div className="absolute inset-0 bg-gradient-radial from-orange-600/20 via-red-600/10 to-transparent animate-pulse"></div>
         
