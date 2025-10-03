@@ -1,1 +1,3 @@
-export const getSecureAssetUrl = (url: string): string => url
+export const getSecureAssetUrl = (path: string): string => {
+  return path
+}

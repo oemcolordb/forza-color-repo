@@ -3,7 +3,6 @@ import { HeaderProps } from '../types'
 import { ErrorBoundary } from '../lib/errorBoundary'
 
 const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
-  const user = null
   
   return (
     <ErrorBoundary>
@@ -21,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
           <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
         </button>
         <div className="absolute top-4 right-4 flex items-center gap-3">
-          {user ? (
+          {false ? (
             <div className="flex items-center gap-2">
               <span className={`text-sm font-medium ${
                 isDarkMode ? 'text-white bg-slate-800/80 px-2 py-1 rounded' : 'text-gray-900 bg-white/80 px-2 py-1 rounded'

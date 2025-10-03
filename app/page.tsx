@@ -7,6 +7,7 @@ import { cache } from './lib/cache'
 import { sanitizeSearchQuery, handleError } from './lib/validation'
 import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils'
 
+
 import Header from './components/Header'
 import Footer from './components/Footer'
 import VirtualizedColorGrid from './components/VirtualizedColorGrid'
@@ -62,8 +63,8 @@ export default function HomePage() {
   const [loadingProgress, setLoadingProgress] = useState<number>(0)
   const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const deviceInfo = useDeviceDetection()
-  const ITEMS_PER_PAGE = deviceInfo.isMobile ? 30 : 60
+  const deviceInfo: DeviceInfo = useDeviceDetection()
+  const ITEMS_PER_PAGE: number = useMemo(() => deviceInfo.isMobile ? 30 : 60, [deviceInfo.isMobile])
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
   const { isOnline, cacheColors, getOfflineColors } = useOfflineStorage()
