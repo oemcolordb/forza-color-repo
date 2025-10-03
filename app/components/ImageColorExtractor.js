@@ -15,8 +15,12 @@ const ImageColorExtractor = ({
   const [error, setError] = useState(null)
   const [extractionMode, setExtractionMode] = useState('advanced')
   const [excludeGrays, setExcludeGrays] = useState(false)
+  const [showRegionSelect, setShowRegionSelect] = useState(false)
+  const [uploadedImage, setUploadedImage] = useState(null)
+  const [matchedForzaColors, setMatchedForzaColors] = useState([])
   const fileInputRef = useRef(null)
   const canvasRef = useRef(null)
+  const displayCanvasRef = useRef(null)
 
   const rgbToHsb = useCallback((r, g, b) => {
     r /= 255
@@ -109,6 +113,34 @@ const ImageColorExtractor = ({
       }
     }).filter(c => c.pixelCount > 0).sort((a, b) => b.percentage - a.percentage)
   }, [rgbToHsb])
+
+  const findClosestForzaColors = useCallback((extractedColors) => {
+    if (!colors || colors.length === 0) return []
+    
+    return extractedColors.map(extracted => {
+      let closestColor = null
+      let minDistance = Infinity
+      
+      colors.forEach(forzaColor => {
+        const distance = Math.sqrt(
+          Math.pow((extracted.hsb.h - forzaColor.color1.h) * 360, 2) +
+          Math.pow((extracted.hsb.s - forzaColor.color1.s) * 100, 2) +
+          Math.pow((extracted.hsb.b - forzaColor.color1.b) * 100, 2)
+        )
+        
+        if (distance < minDistance) {
+          minDistance = distance
+          closestColor = forzaColor
+        }
+      })
+      
+      return {
+        extracted,
+        forza: closestColor,
+        similarity: Math.max(0, 100 - (minDistance / 5))
+      }
+    }).filter(match => match.similarity > 30)
+  }, [colors])
 
   const generateColorName = useCallback((rgb) => {
     const [r, g, b] = rgb
@@ -249,12 +281,23 @@ const ImageColorExtractor = ({
             canvas.height = img.height * scale
 
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            
+            // Also draw to display canvas for region selection
+            if (displayCanvasRef.current) {
+              const displayCtx = displayCanvasRef.current.getContext('2d')
+              displayCanvasRef.current.width = canvas.width
+              displayCanvasRef.current.height = canvas.height
+              displayCtx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            }
 
             const basicColors = extractColorsFromCanvas(canvas)
             const enhancedColors = await processWithPythonML(basicColors)
+            const forzaMatches = findClosestForzaColors(enhancedColors)
             
             onColorsExtracted?.(enhancedColors)
-            onColorsFound?.([])
+            setMatchedForzaColors(forzaMatches)
+            setUploadedImage(imageUrl)
+            setShowRegionSelect(true)
             URL.revokeObjectURL(imageUrl)
             resolve()
           } catch (error) {
@@ -344,6 +387,90 @@ const ImageColorExtractor = ({
           isDarkMode ? 'text-red-200 bg-red-900/30' : 'text-red-600 bg-red-50'
         }`}>
           {error}
+        </div>
+      )}
+
+      {showRegionSelect && uploadedImage && (
+        <div className="mt-4">
+          <div className="text-sm font-medium mb-2">Click on image to extract colors from that area:</div>
+          <div className="relative inline-block">
+            <canvas
+              ref={displayCanvasRef}
+              className="border rounded cursor-crosshair max-w-full h-auto"
+              onClick={(e) => {
+                const rect = e.target.getBoundingClientRect()
+                const x = Math.floor((e.clientX - rect.left) * (e.target.width / rect.width))
+                const y = Math.floor((e.clientY - rect.top) * (e.target.height / rect.height))
+                
+                const regionSize = 50
+                const ctx = canvasRef.current.getContext('2d')
+                const imageData = ctx.getImageData(
+                  Math.max(0, x - regionSize/2),
+                  Math.max(0, y - regionSize/2),
+                  regionSize,
+                  regionSize
+                )
+                
+                const pixels = []
+                for (let i = 0; i < imageData.data.length; i += 16) {
+                  const r = imageData.data[i]
+                  const g = imageData.data[i + 1]
+                  const b = imageData.data[i + 2]
+                  const alpha = imageData.data[i + 3]
+                  if (alpha > 200) pixels.push({ rgb: [r, g, b] })
+                }
+                
+                const regionColors = pixels.slice(0, 3).map(p => ({
+                  rgb: p.rgb,
+                  hsb: rgbToHsb(p.rgb[0], p.rgb[1], p.rgb[2]),
+                  percentage: 33,
+                  name: generateColorName(p.rgb)
+                }))
+                
+                if (regionColors.length > 0) {
+                  const regionMatches = findClosestForzaColors(regionColors)
+                  onColorsExtracted?.(regionColors)
+                  setMatchedForzaColors(regionMatches)
+                }
+              }}
+            />
+          </div>
+        </div>
+      )}
+      
+      {matchedForzaColors.length > 0 && (
+        <div className="mt-4">
+          <div className="text-sm font-medium mb-2">🎯 Closest Forza Colors:</div>
+          <div className="space-y-2">
+            {matchedForzaColors.slice(0, 3).map((match, index) => (
+              <div key={index} className={`flex items-center gap-3 p-2 rounded border ${
+                isDarkMode ? 'border-slate-600 bg-slate-700/50' : 'border-gray-300 bg-gray-50'
+              }`}>
+                <div className="flex gap-1">
+                  <div 
+                    className="w-6 h-6 rounded border"
+                    style={{ backgroundColor: `rgb(${match.extracted.rgb.join(',')})` }}
+                  />
+                  <div 
+                    className="w-6 h-6 rounded border"
+                    style={{ backgroundColor: `hsl(${match.forza.color1.h * 360}, ${match.forza.color1.s * 100}%, ${match.forza.color1.b * 100}%)` }}
+                  />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium">{match.forza.colorName}</div>
+                  <div className="text-xs opacity-75">{match.forza.make} • {match.similarity.toFixed(0)}% match</div>
+                </div>
+                <button
+                  onClick={() => onColorSelect?.(match.forza)}
+                  className={`px-2 py-1 text-xs rounded ${
+                    isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
+                  } text-white`}
+                >
+                  Select
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
