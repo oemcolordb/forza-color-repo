@@ -9,7 +9,8 @@ const VirtualizedColorGrid = React.memo(({
   onColorSelect,
   onToggleFavorite,
   isDarkMode,
-  isMobile
+  isMobile,
+  showManufacturerBorders = true
 }) => {
   // Group colors by manufacturer for separators
   const groupedColors = useMemo(() => {
@@ -29,13 +30,21 @@ const VirtualizedColorGrid = React.memo(({
     <div className="space-y-3 sm:space-y-4">
       {manufacturers.map(make => (
         <div key={make}>
-          <h3 className={`text-xl font-bold mb-4 pb-2 border-b-2 ${
-            isDarkMode 
-              ? 'text-white border-fuchsia-500' 
-              : 'text-gray-900 border-blue-500'
-          }`}>
-            {make}
-          </h3>
+          {showManufacturerBorders ? (
+            <h3 className={`text-xl font-bold mb-4 pb-2 border-b-2 ${
+              isDarkMode 
+                ? 'text-white border-fuchsia-500' 
+                : 'text-gray-900 border-blue-500'
+            }`}>
+              {make}
+            </h3>
+          ) : (
+            <h3 className={`text-sm font-medium mb-2 opacity-60 ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-600'
+            }`}>
+              {make}
+            </h3>
+          )}
           <div className={`grid ${isMobile ? 'gap-1 grid-cols-3' : 'gap-2 grid-cols-4 lg:grid-cols-6'}`}>
             {groupedColors[make].map((color, index) => {
               const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`

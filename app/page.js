@@ -66,6 +66,7 @@ export default function HomePage() {
   const [harmonyMode, setHarmonyMode] = useState('')
   const [allColors, setAllColors] = useState([]) // Original + Generated
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
   const deviceInfo = useDeviceDetection()
   const ITEMS_PER_PAGE = deviceInfo.isMobile ? 30 : 60
   const { track } = useAnalytics()
@@ -592,10 +593,21 @@ export default function HomePage() {
             <div className="flex items-center gap-2 mb-3">
               <span className="text-2xl">🔍</span>
               <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>SEARCH & FILTER</span>
-              <div className="ml-auto flex gap-1">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+              <div className="ml-auto flex items-center gap-2">
+                <button
+                  onClick={() => setShowManufacturerBorders(!showManufacturerBorders)}
+                  className={`px-2 py-1 text-xs rounded transition-colors ${
+                    isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                  }`}
+                  title="Toggle manufacturer section borders"
+                >
+                  {showManufacturerBorders ? '📋 Sections' : '📄 Minimal'}
+                </button>
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                </div>
               </div>
             </div>
             <OptimizedSearchControls
@@ -659,6 +671,7 @@ export default function HomePage() {
                   onToggleFavorite={toggleFavorite}
                   isDarkMode={isDarkMode}
                   isMobile={deviceInfo.isMobile}
+                  showManufacturerBorders={showManufacturerBorders}
                 />
               )
             ) : (
