@@ -1,10 +1,10 @@
 import React from 'react'
 import { HeaderProps } from '../types'
-import { useAuth } from './AuthProvider'
 import { ErrorBoundary } from '../lib/errorBoundary'
 
 const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
-  const { user, logout } = useAuth()
+  const user = null
+  const logout = () => {}
   
   return (
     <ErrorBoundary>
