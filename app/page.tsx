@@ -6,45 +6,35 @@ import { ErrorBoundary } from './lib/errorBoundary'
 import { cache } from './lib/cache'
 import { sanitizeSearchQuery, handleError } from './lib/validation'
 import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils'
+
 import Header from './components/Header'
 import Footer from './components/Footer'
-import ColorStats from './components/ColorStats'
-import MobileColorStats from './components/MobileColorStats'
-import ShareButton from './components/ShareButton'
-import ExportButton from './components/ExportButton'
-import { SecurityHeaders } from './components/SecurityHeaders'
-import { useAnalytics } from './hooks/useAnalytics'
-import { usePerformance } from './hooks/usePerformance'
 import VirtualizedColorGrid from './components/VirtualizedColorGrid'
 import OptimizedVirtualGrid from './components/OptimizedVirtualGrid'
-import OptimizedStatsBar from './components/OptimizedStatsBar'
 import OptimizedSearchControls from './components/OptimizedSearchControls'
-import ResponsiveLayout from './components/ResponsiveLayout'
-import ModelBrowser from './components/ModelBrowser'
-import LoadingSpinner from './components/LoadingSpinner'
 import ImageColorExtractor from './components/ImageColorExtractor'
-import ColorRouletteHarmony from './components/ColorRouletteHarmony'
-
+import ResponsiveLayout from './components/ResponsiveLayout'
 import TokyoBackground from './components/TokyoBackground'
-import { getSecureAssetUrl } from './lib/assetProtection'
 import { AuthProvider } from './components/AuthProvider'
 import AuthModal from './components/AuthModal'
-import CollapsibleSection from './components/CollapsibleSection'
-import Car3DViewer from './components/Car3DViewer'
-import PaintEffect3D from './components/PaintEffect3D'
-import DiscordIntegration from './components/DiscordIntegration'
-import OfflineIndicator from './components/OfflineIndicator'
-import PerformanceMonitor from './components/PerformanceMonitor'
-import ProgressiveLoader from './components/ProgressiveLoader'
-import CriticalCSS from './components/CriticalCSS'
+import { useAnalytics } from './hooks/useAnalytics'
+import { usePerformance } from './hooks/usePerformance'
 import { useOfflineStorage } from './hooks/useOfflineStorage'
 import { useDeviceDetection } from './hooks/useDeviceDetection'
-import HarmonyVisualizer from './components/HarmonyVisualizer'
-import ColorGenerator from './components/ColorGenerator'
-import GamingSEO from './components/GamingSEO'
-import MobileGamingOptimizer from './components/MobileGamingOptimizer'
-import GamingErrorBoundary from './components/GamingErrorBoundary'
-import { ConsoleCleanup } from './components/ConsoleCleanup'
+import { getSecureAssetUrl } from './lib/assetProtection'
+
+// Stub components
+const ProgressiveLoader = () => null
+const ColorRouletteHarmony = () => <div className="text-sm text-gray-500">Color Roulette Coming Soon</div>
+const HarmonyVisualizer = () => null
+const ColorGenerator = () => <div className="text-sm text-gray-500">Color Generator Coming Soon</div>
+const PerformanceMonitor = () => null
+const SecurityHeaders = () => null
+const ConsoleCleanup = () => null
+const CriticalCSS = () => null
+const GamingSEO = () => null
+const MobileGamingOptimizer = () => null
+const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -65,7 +55,7 @@ export default function HomePage() {
   const [showImageExtractor, setShowImageExtractor] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
-  const [extractedColors, setExtractedColors] = useState<any[]>([])
+  const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
   const [harmonyMode, setHarmonyMode] = useState('')
   const [allColors, setAllColors] = useState<CarColor[]>([]) // Original + Generated
@@ -502,15 +492,9 @@ export default function HomePage() {
               <span className="text-2xl">🏁</span>
               <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>FORZA GARAGE</span>
             </div>
-            <OptimizedStatsBar
-              totalColors={allColors.length}
-              totalMakes={makes.length}
-              favorites={favorites.length}
-              colorHistory={colorHistory.length}
-              filteredCount={filteredColors.length}
-              isDarkMode={isDarkMode}
-              deviceInfo={deviceInfo}
-            />
+            <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+              {allColors.length} colors • {makes.length} manufacturers • {favorites.length} favorites
+            </div>
           </div>
           
           {/* Tuning Tools */}
@@ -614,7 +598,7 @@ export default function HomePage() {
                       <button
                         key={index}
                         onClick={() => {
-                          const fakeColor = {
+                          const fakeColor: CarColor = {
                             colorName: `Extracted Color ${index + 1}`,
                             make: 'Image Extract',
                             model: '',

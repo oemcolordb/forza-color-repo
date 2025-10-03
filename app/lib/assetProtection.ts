@@ -1,0 +1,1 @@
+export const getSecureAssetUrl = (url: string): string => url

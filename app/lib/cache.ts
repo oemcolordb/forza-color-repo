@@ -56,5 +56,7 @@ class MemoryCache implements CacheManager {
 
 export const cache = new MemoryCache()
 
-// Cleanup expired entries every 5 minutes
-setInterval(() => cache.cleanup(), 5 * 60 * 1000)
+// Cleanup expired entries every 5 minutes (client-side only)
+if (typeof window !== 'undefined') {
+  setInterval(() => cache.cleanup(), 5 * 60 * 1000)
+}
