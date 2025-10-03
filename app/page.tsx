@@ -140,7 +140,7 @@ export default function HomePage() {
           return
         }
         
-        const { getColorData } = await import('../services/colorDataLazy.js')
+        const { getColorData } = await import('../services/colorDataLazy')
         const originalColors = await getColorData()
         
         // Validate data
@@ -652,33 +652,19 @@ export default function HomePage() {
           )}
 
           {/* Search Controls */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-            isDarkMode ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50' : 'bg-gradient-to-r from-orange-100 to-red-100'
-          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🔍</span>
-              <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>SEARCH & FILTER</span>
-              <div className="ml-auto flex items-center gap-2">
-                <button
-                  onClick={() => setShowManufacturerBorders(!showManufacturerBorders)}
-                  className={`px-2 py-1 text-xs rounded transition-colors ${
-                    isDarkMode ? 'bg-slate-700 hover:bg-slate-600 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
-                  }`}
-                  title="Toggle manufacturer section borders"
-                >
-                  {showManufacturerBorders ? '📋 Sections' : '📄 Minimal'}
-                </button>
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                </div>
-              </div>
-            </div>
-            <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-              Search controls coming soon
-            </div>
-          </div>
+          <OptimizedSearchControls
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            selectedMake={selectedMake}
+            onMakeChange={setSelectedMake}
+            selectedColorType={selectedColorType}
+            onColorTypeChange={setSelectedColorType}
+            makes={makes}
+            colorTypes={colorTypes}
+            isDarkMode={isDarkMode}
+            showManufacturerBorders={showManufacturerBorders}
+            onToggleManufacturerBorders={() => setShowManufacturerBorders(!showManufacturerBorders)}
+          />
           
           {/* Color Gallery */}
           <div className={`relative rounded-xl overflow-hidden p-4 ${
@@ -708,35 +694,14 @@ export default function HomePage() {
               </svg>
             </div>
             
-            {filteredColors.length > 0 ? (
-              <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-                Color grid coming soon - {filteredColors.length} colors available
-              </div>
-            ) : (
-              <div className={`text-center ${deviceInfo.isMobile ? 'py-8' : 'py-12'}`}>
-                <p className={`text-readable ${deviceInfo.isMobile ? 'text-base' : 'text-lg'} ${
-                  isDarkMode ? 'text-slate-300' : 'text-gray-600'
-                }`}>
-                  {colors.length === 0 ? 'Loading colors...' : 'No colors found matching your search.'}
-                </p>
-                {searchQuery || selectedMake || selectedColorType ? (
-                  <button
-                    onClick={() => {
-                      setSearchQuery('')
-                      setSelectedMake('')
-                      setSelectedColorType('')
-                    }}
-                    className={`mt-4 px-4 py-2 rounded-lg transition-colors focus-visible ${
-                      isDarkMode
-                        ? 'bg-blue-600 hover:bg-blue-500 text-white'
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                    }`}
-                  >
-                    Clear Filters
-                  </button>
-                ) : null}
-              </div>
-            )}
+            <VirtualizedColorGrid
+              colors={filteredColors}
+              onColorSelect={handleColorSelect}
+              favorites={favorites}
+              onToggleFavorite={toggleFavorite}
+              isDarkMode={isDarkMode}
+              showManufacturerBorders={showManufacturerBorders}
+            />
           </div>
           </ResponsiveLayout>
         </ErrorBoundary>
