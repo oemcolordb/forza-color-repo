@@ -3,7 +3,7 @@ import { HeaderProps } from '../types'
 import { ErrorBoundary } from '../lib/errorBoundary'
 
 const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
-  const user = null
+  const user: { name: string } | null = null
   const logout = () => {}
   
   return (
