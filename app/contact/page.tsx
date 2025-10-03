@@ -61,7 +61,7 @@ export default function Contact() {
                   julian.penning1@gmail.com
                 </a>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Response within 24-48 hours
+                  Response usually within 24-48 hours
                 </p>
               </div>
               
@@ -88,16 +88,16 @@ export default function Contact() {
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   <a href="https://twitter.com" className="flex items-center gap-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
-                    🐦 Twitter
+                    🐦 Twitter placeholder
                   </a>
                   <a href="https://github.com" className="flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
-                    🐙 GitHub
+                    🐙 GitHub placeholder
                   </a>
                   <a href="https://discord.com" className="flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
-                    💬 Discord
+                    💬 Discord placeholder
                   </a>
                   <a href="https://youtube.com" className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors" target="_blank" rel="noopener noreferrer">
-                    📺 YouTube
+                    📺 YouTube placeholder
                   </a>
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function Contact() {
                 <h3 className="text-lg font-medium mb-2">⏱️ Response Times</h3>
                 <ul className="space-y-1 text-sm">
                   <li>• Email: 24-48 hours</li>
-                  <li>• Bug reports: 1-3 days</li>
+                  <li>• Bug reports: 1-4 days</li>
                   <li>• Feature requests: 1 week</li>
                 </ul>
               </div>

@@ -13,6 +13,8 @@ const ImageColorExtractor = ({
 }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState(null)
+  const [extractionMode, setExtractionMode] = useState('advanced')
+  const [excludeGrays, setExcludeGrays] = useState(false)
   const fileInputRef = useRef(null)
   const canvasRef = useRef(null)
 
@@ -44,44 +46,143 @@ const ImageColorExtractor = ({
     }
   }, [])
 
+  const kMeansCluster = useCallback((pixels, k = 8) => {
+    if (pixels.length === 0) return []
+    
+    let centroids = []
+    for (let i = 0; i < k; i++) {
+      const randomPixel = pixels[Math.floor(Math.random() * pixels.length)]
+      centroids.push([...randomPixel.rgb])
+    }
+    
+    for (let iter = 0; iter < 15; iter++) {
+      const clusters = Array(k).fill().map(() => [])
+      
+      pixels.forEach(pixel => {
+        let minDistance = Infinity
+        let clusterIndex = 0
+        
+        centroids.forEach((centroid, i) => {
+          const distance = Math.sqrt(
+            Math.pow(pixel.rgb[0] - centroid[0], 2) +
+            Math.pow(pixel.rgb[1] - centroid[1], 2) +
+            Math.pow(pixel.rgb[2] - centroid[2], 2)
+          )
+          if (distance < minDistance) {
+            minDistance = distance
+            clusterIndex = i
+          }
+        })
+        
+        clusters[clusterIndex].push(pixel)
+      })
+      
+      centroids = clusters.map(cluster => {
+        if (cluster.length === 0) return centroids[0]
+        
+        const avgR = cluster.reduce((sum, p) => sum + p.rgb[0], 0) / cluster.length
+        const avgG = cluster.reduce((sum, p) => sum + p.rgb[1], 0) / cluster.length
+        const avgB = cluster.reduce((sum, p) => sum + p.rgb[2], 0) / cluster.length
+        
+        return [Math.round(avgR), Math.round(avgG), Math.round(avgB)]
+      })
+    }
+    
+    return centroids.map((centroid, i) => {
+      const cluster = pixels.filter(pixel => {
+        const distances = centroids.map(c => 
+          Math.sqrt(
+            Math.pow(pixel.rgb[0] - c[0], 2) +
+            Math.pow(pixel.rgb[1] - c[1], 2) +
+            Math.pow(pixel.rgb[2] - c[2], 2)
+          )
+        )
+        return distances.indexOf(Math.min(...distances)) === i
+      })
+      
+      return {
+        rgb: centroid,
+        hsb: rgbToHsb(centroid[0], centroid[1], centroid[2]),
+        percentage: Math.round((cluster.length / pixels.length) * 10000) / 100,
+        pixelCount: cluster.length,
+        name: generateColorName(centroid)
+      }
+    }).filter(c => c.pixelCount > 0).sort((a, b) => b.percentage - a.percentage)
+  }, [rgbToHsb])
+
+  const generateColorName = useCallback((rgb) => {
+    const [r, g, b] = rgb
+    const hsb = rgbToHsb(r, g, b)
+    const h = hsb.h * 360
+    const s = hsb.s
+    const brightness = hsb.b
+    
+    let baseName = ''
+    if (s < 0.1) {
+      baseName = brightness > 0.8 ? 'White' : brightness > 0.5 ? 'Gray' : 'Black'
+    } else if (h < 15 || h >= 345) baseName = 'Red'
+    else if (h < 45) baseName = 'Orange'
+    else if (h < 75) baseName = 'Yellow'
+    else if (h < 135) baseName = 'Green'
+    else if (h < 225) baseName = 'Blue'
+    else if (h < 285) baseName = 'Purple'
+    else baseName = 'Pink'
+    
+    const modifiers = []
+    if (brightness < 0.3) modifiers.push('Dark')
+    else if (brightness > 0.8) modifiers.push('Light')
+    if (s > 0.8) modifiers.push('Vivid')
+    
+    return modifiers.length > 0 ? `${modifiers.join(' ')} ${baseName}` : baseName
+  }, [rgbToHsb])
+
   const extractColorsFromCanvas = useCallback((canvas) => {
     const ctx = canvas.getContext('2d', { willReadFrequently: true })
     if (!ctx) return []
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const data = imageData.data
-    const colorMap = new Map()
-    const totalPixels = data.length / 4
-
-    // Sample every 4th pixel for performance
-    for (let i = 0; i < data.length; i += 16) {
+    const pixels = []
+    
+    for (let i = 0; i < data.length; i += 8) {
       const r = data[i]
       const g = data[i + 1]
       const b = data[i + 2]
       const alpha = data[i + 3]
 
       if (alpha < 200) continue
-
-      // Group similar colors (reduce precision)
-      const key = `${Math.floor(r/8)*8}-${Math.floor(g/8)*8}-${Math.floor(b/8)*8}`
-      colorMap.set(key, (colorMap.get(key) || 0) + 1)
+      
+      if (excludeGrays) {
+        const grayness = Math.abs(r - g) + Math.abs(g - b) + Math.abs(b - r)
+        if (grayness < 30) continue
+      }
+      
+      pixels.push({ rgb: [r, g, b] })
     }
 
-    // Convert to array and sort by frequency
-    const colors = Array.from(colorMap.entries())
-      .map(([key, count]) => {
-        const [r, g, b] = key.split('-').map(Number)
-        return {
-          rgb: [r, g, b],
-          hsb: rgbToHsb(r, g, b),
-          percentage: Math.round((count / (totalPixels / 4)) * 10000) / 100
-        }
+    if (extractionMode === 'advanced') {
+      return kMeansCluster(pixels, 10)
+    } else {
+      const colorMap = new Map()
+      pixels.forEach(pixel => {
+        const key = `${Math.floor(pixel.rgb[0]/8)*8}-${Math.floor(pixel.rgb[1]/8)*8}-${Math.floor(pixel.rgb[2]/8)*8}`
+        colorMap.set(key, (colorMap.get(key) || 0) + 1)
       })
-      .sort((a, b) => b.percentage - a.percentage)
-      .slice(0, 10)
-
-    return colors
-  }, [rgbToHsb])
+      
+      return Array.from(colorMap.entries())
+        .map(([key, count]) => {
+          const [r, g, b] = key.split('-').map(Number)
+          return {
+            rgb: [r, g, b],
+            hsb: rgbToHsb(r, g, b),
+            percentage: Math.round((count / pixels.length) * 10000) / 100,
+            name: generateColorName([r, g, b])
+          }
+        })
+        .sort((a, b) => b.percentage - a.percentage)
+        .slice(0, 10)
+    }
+  }, [rgbToHsb, kMeansCluster, generateColorName, extractionMode, excludeGrays])
 
   const processWithPythonML = useCallback(async (colors) => {
     try {
@@ -190,6 +291,30 @@ const ImageColorExtractor = ({
         }`}>
           Extract Colors from Image
         </label>
+        
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          <select
+            value={extractionMode}
+            onChange={(e) => setExtractionMode(e.target.value)}
+            className={`text-xs p-2 rounded border ${
+              isDarkMode ? 'bg-slate-700 text-white border-slate-600' : 'bg-white text-gray-900 border-gray-300'
+            }`}
+          >
+            <option value="advanced">🧠 AI Clustering</option>
+            <option value="basic">⚡ Fast Extract</option>
+          </select>
+          
+          <label className="flex items-center text-xs">
+            <input
+              type="checkbox"
+              checked={excludeGrays}
+              onChange={(e) => setExcludeGrays(e.target.checked)}
+              className="mr-1"
+            />
+            Skip Grays
+          </label>
+        </div>
+        
         <input
           ref={fileInputRef}
           type="file"
@@ -208,7 +333,9 @@ const ImageColorExtractor = ({
       {isProcessing && (
         <div className="flex items-center space-x-2 text-blue-600">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-          <span className="text-sm">Processing with ML enhancement...</span>
+          <span className="text-sm">
+            {extractionMode === 'advanced' ? '🧠 AI clustering colors...' : '⚡ Fast extracting...'}
+          </span>
         </div>
       )}
 
