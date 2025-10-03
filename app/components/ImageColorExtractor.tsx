@@ -1,0 +1,495 @@
+'use client'
+
+import React, { useState, useCallback, useRef } from 'react'
+import { ImageColorExtractorProps, ExtractedColor, ForzaColorMatch, CarColor, HSBColor } from '../types'
+import { validateImageFile, handleError } from '../lib/validation'
+import { cache } from '../lib/cache'
+import { ErrorBoundary } from '../lib/errorBoundary'
+
+const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
+  colors = [],
+  onColorsExtracted,
+  onColorsFound,
+  onColorSelect,
+  isDarkMode,
+  showTutorial = false,
+  onTutorialClose
+}) => {
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [extractionMode, setExtractionMode] = useState<'advanced' | 'basic'>('advanced')
+  const [excludeGrays, setExcludeGrays] = useState(false)
+  const [showRegionSelect, setShowRegionSelect] = useState(false)
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+  const [matchedForzaColors, setMatchedForzaColors] = useState<ForzaColorMatch[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const displayCanvasRef = useRef<HTMLCanvasElement>(null)
+
+  const rgbToHsb = useCallback((r: number, g: number, b: number): HSBColor => {
+    r /= 255
+    g /= 255
+    b /= 255
+
+    const max = Math.max(r, g, b)
+    const min = Math.min(r, g, b)
+    const diff = max - min
+
+    let h = 0
+    if (diff !== 0) {
+      if (max === r) h = ((g - b) / diff) % 6
+      else if (max === g) h = (b - r) / diff + 2
+      else h = (r - g) / diff + 4
+    }
+    h = Math.round(h * 60)
+    if (h < 0) h += 360
+
+    const s = max === 0 ? 0 : diff / max
+    const brightness = max
+
+    return {
+      h: h / 360,
+      s: Math.round(s * 100) / 100,
+      b: Math.round(brightness * 100) / 100
+    }
+  }, [])
+
+  const kMeansCluster = useCallback((pixels: Array<{rgb: [number, number, number]}>, k = 8): ExtractedColor[] => {
+    if (pixels.length === 0) return []
+    
+    let centroids: Array<[number, number, number]> = []
+    for (let i = 0; i < k; i++) {
+      const randomPixel = pixels[Math.floor(Math.random() * pixels.length)]
+      centroids.push([...randomPixel.rgb])
+    }
+    
+    for (let iter = 0; iter < 15; iter++) {
+      const clusters: Array<Array<{rgb: [number, number, number]}>> = Array(k).fill(null).map(() => [])
+      
+      pixels.forEach(pixel => {
+        let minDistance = Infinity
+        let clusterIndex = 0
+        
+        centroids.forEach((centroid, i) => {
+          const distance = Math.sqrt(
+            Math.pow(pixel.rgb[0] - centroid[0], 2) +
+            Math.pow(pixel.rgb[1] - centroid[1], 2) +
+            Math.pow(pixel.rgb[2] - centroid[2], 2)
+          )
+          if (distance < minDistance) {
+            minDistance = distance
+            clusterIndex = i
+          }
+        })
+        
+        clusters[clusterIndex].push(pixel)
+      })
+      
+      centroids = clusters.map((cluster, i) => {
+        if (cluster.length === 0) return centroids[i]
+        
+        const avgR = cluster.reduce((sum, p) => sum + p.rgb[0], 0) / cluster.length
+        const avgG = cluster.reduce((sum, p) => sum + p.rgb[1], 0) / cluster.length
+        const avgB = cluster.reduce((sum, p) => sum + p.rgb[2], 0) / cluster.length
+        
+        return [Math.round(avgR), Math.round(avgG), Math.round(avgB)] as [number, number, number]
+      })
+    }
+    
+    return centroids.map((centroid, i) => {
+      const cluster = pixels.filter(pixel => {
+        const distances = centroids.map(c => 
+          Math.sqrt(
+            Math.pow(pixel.rgb[0] - c[0], 2) +
+            Math.pow(pixel.rgb[1] - c[1], 2) +
+            Math.pow(pixel.rgb[2] - c[2], 2)
+          )
+        )
+        return distances.indexOf(Math.min(...distances)) === i
+      })
+      
+      return {
+        rgb: centroid,
+        hsb: rgbToHsb(centroid[0], centroid[1], centroid[2]),
+        percentage: Math.round((cluster.length / pixels.length) * 10000) / 100,
+        pixelCount: cluster.length,
+        name: generateColorName(centroid)
+      }
+    }).filter(c => c.pixelCount! > 0).sort((a, b) => b.percentage - a.percentage)
+  }, [rgbToHsb])
+
+  const findClosestForzaColors = useCallback((extractedColors: ExtractedColor[]): ForzaColorMatch[] => {
+    if (!colors || colors.length === 0) return []
+    
+    const cacheKey = `forza-matches-${extractedColors.map(c => c.rgb.join(',')).join('|')}`
+    const cached = cache.get<ForzaColorMatch[]>(cacheKey)
+    if (cached) return cached
+    
+    const matches = extractedColors.map(extracted => {
+      let closestColor: CarColor | null = null
+      let minDistance = Infinity
+      
+      colors.forEach(forzaColor => {
+        const distance = Math.sqrt(
+          Math.pow((extracted.hsb.h - forzaColor.color1.h) * 360, 2) +
+          Math.pow((extracted.hsb.s - forzaColor.color1.s) * 100, 2) +
+          Math.pow((extracted.hsb.b - forzaColor.color1.b) * 100, 2)
+        )
+        
+        if (distance < minDistance) {
+          minDistance = distance
+          closestColor = forzaColor
+        }
+      })
+      
+      return {
+        extracted,
+        forza: closestColor!,
+        similarity: Math.max(0, 100 - (minDistance / 5))
+      }
+    }).filter(match => match.similarity > 30)
+    
+    cache.set(cacheKey, matches, 5 * 60 * 1000) // Cache for 5 minutes
+    return matches
+  }, [colors])
+
+  const generateColorName = useCallback((rgb: [number, number, number]): string => {
+    const [r, g, b] = rgb
+    const hsb = rgbToHsb(r, g, b)
+    const h = hsb.h * 360
+    const s = hsb.s
+    const brightness = hsb.b
+    
+    let baseName = ''
+    if (s < 0.1) {
+      baseName = brightness > 0.8 ? 'White' : brightness > 0.5 ? 'Gray' : 'Black'
+    } else if (h < 15 || h >= 345) baseName = 'Red'
+    else if (h < 45) baseName = 'Orange'
+    else if (h < 75) baseName = 'Yellow'
+    else if (h < 135) baseName = 'Green'
+    else if (h < 225) baseName = 'Blue'
+    else if (h < 285) baseName = 'Purple'
+    else baseName = 'Pink'
+    
+    const modifiers: string[] = []
+    if (brightness < 0.3) modifiers.push('Dark')
+    else if (brightness > 0.8) modifiers.push('Light')
+    if (s > 0.8) modifiers.push('Vivid')
+    
+    return modifiers.length > 0 ? `${modifiers.join(' ')} ${baseName}` : baseName
+  }, [rgbToHsb])
+
+  const extractColorsFromCanvas = useCallback((canvas: HTMLCanvasElement): ExtractedColor[] => {
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    if (!ctx) return []
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const data = imageData.data
+    const pixels: Array<{rgb: [number, number, number]}> = []
+    
+    for (let i = 0; i < data.length; i += 8) {
+      const r = data[i]
+      const g = data[i + 1]
+      const b = data[i + 2]
+      const alpha = data[i + 3]
+
+      if (alpha < 200) continue
+      
+      if (excludeGrays) {
+        const grayness = Math.abs(r - g) + Math.abs(g - b) + Math.abs(b - r)
+        if (grayness < 30) continue
+      }
+      
+      pixels.push({ rgb: [r, g, b] })
+    }
+
+    if (extractionMode === 'advanced') {
+      return kMeansCluster(pixels, 10)
+    } else {
+      const colorMap = new Map<string, number>()
+      pixels.forEach(pixel => {
+        const key = `${Math.floor(pixel.rgb[0]/8)*8}-${Math.floor(pixel.rgb[1]/8)*8}-${Math.floor(pixel.rgb[2]/8)*8}`
+        colorMap.set(key, (colorMap.get(key) || 0) + 1)
+      })
+      
+      return Array.from(colorMap.entries())
+        .map(([key, count]) => {
+          const [r, g, b] = key.split('-').map(Number)
+          return {
+            rgb: [r, g, b] as [number, number, number],
+            hsb: rgbToHsb(r, g, b),
+            percentage: Math.round((count / pixels.length) * 10000) / 100,
+            name: generateColorName([r, g, b])
+          }
+        })
+        .sort((a, b) => b.percentage - a.percentage)
+        .slice(0, 10)
+    }
+  }, [rgbToHsb, kMeansCluster, generateColorName, extractionMode, excludeGrays])
+
+  const processWithPythonML = useCallback(async (colors: ExtractedColor[]): Promise<ExtractedColor[]> => {
+    try {
+      const response = await fetch('/api/ml/enhance-colors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ colors })
+      })
+
+      if (!response.ok) {
+        console.warn('ML service unavailable, using basic extraction')
+        return colors
+      }
+
+      const enhanced = await response.json()
+      return enhanced.colors || colors
+    } catch (error) {
+      console.warn('ML enhancement failed:', error)
+      return colors
+    }
+  }, [])
+
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setIsProcessing(true)
+    setError(null)
+
+    try {
+      // Validate file
+      validateImageFile(file)
+
+      const img = new Image()
+      const canvas = canvasRef.current
+      if (!canvas) {
+        throw new Error('Canvas not available. Please refresh the page and try again.')
+      }
+
+      const imageUrl = URL.createObjectURL(file)
+
+      await new Promise<void>((resolve, reject) => {
+        img.onload = async () => {
+          try {
+            const ctx = canvas.getContext('2d', { willReadFrequently: true })
+            if (!ctx) {
+              throw new Error('Canvas context not available. Your browser may not support this feature.')
+            }
+
+            // Resize for performance
+            const maxSize = 300
+            const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
+            canvas.width = img.width * scale
+            canvas.height = img.height * scale
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+            
+            // Also draw to display canvas for region selection
+            if (displayCanvasRef.current) {
+              const displayCtx = displayCanvasRef.current.getContext('2d')
+              if (displayCtx) {
+                displayCanvasRef.current.width = canvas.width
+                displayCanvasRef.current.height = canvas.height
+                displayCtx.drawImage(img, 0, 0, canvas.width, canvas.height)
+              }
+            }
+
+            const basicColors = extractColorsFromCanvas(canvas)
+            const enhancedColors = await processWithPythonML(basicColors)
+            const forzaMatches = findClosestForzaColors(enhancedColors)
+            
+            onColorsExtracted?.(enhancedColors)
+            setMatchedForzaColors(forzaMatches)
+            setUploadedImage(imageUrl)
+            setShowRegionSelect(true)
+            URL.revokeObjectURL(imageUrl)
+            resolve()
+          } catch (error) {
+            URL.revokeObjectURL(imageUrl)
+            reject(error)
+          }
+        }
+
+        img.onerror = () => {
+          URL.revokeObjectURL(imageUrl)
+          reject(new Error('Failed to load image. Please check the file format and try again.'))
+        }
+
+        img.src = imageUrl
+      })
+
+      setIsProcessing(false)
+    } catch (err) {
+      const error = handleError(err)
+      setError(error.message)
+      setIsProcessing(false)
+    }
+  }, [extractColorsFromCanvas, processWithPythonML, onColorsExtracted, findClosestForzaColors])
+
+  return (
+    <ErrorBoundary>
+      <div className={`p-4 rounded-lg border ${
+        isDarkMode 
+          ? 'bg-slate-800 border-slate-600' 
+          : 'bg-white border-gray-300'
+      }`}>
+        <div className="mb-4">
+          <label className={`block text-sm font-medium mb-2 ${
+            isDarkMode ? 'text-slate-200' : 'text-gray-700'
+          }`}>
+            Extract Colors from Image
+          </label>
+          
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <select
+              value={extractionMode}
+              onChange={(e) => setExtractionMode(e.target.value as 'advanced' | 'basic')}
+              className={`text-xs p-2 rounded border ${
+                isDarkMode ? 'bg-slate-700 text-white border-slate-600' : 'bg-white text-gray-900 border-gray-300'
+              }`}
+            >
+              <option value="advanced">🧠 AI Clustering</option>
+              <option value="basic">⚡ Fast Extract</option>
+            </select>
+            
+            <label className="flex items-center text-xs">
+              <input
+                type="checkbox"
+                checked={excludeGrays}
+                onChange={(e) => setExcludeGrays(e.target.checked)}
+                className="mr-1"
+              />
+              Skip Grays
+            </label>
+          </div>
+          
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            disabled={isProcessing}
+            aria-label="Upload image to extract colors"
+            className={`block w-full text-sm ${
+              isDarkMode 
+                ? 'text-slate-300 file:bg-slate-700 file:text-slate-200' 
+                : 'text-gray-900 file:bg-gray-50 file:text-gray-700'
+            } file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold hover:file:bg-opacity-80`}
+          />
+        </div>
+
+        {isProcessing && (
+          <div className="flex items-center space-x-2 text-blue-600">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <span className="text-sm">
+              {extractionMode === 'advanced' ? '🧠 AI clustering colors...' : '⚡ Fast extracting...'}
+            </span>
+          </div>
+        )}
+
+        {error && (
+          <div className={`text-sm p-2 rounded ${
+            isDarkMode ? 'text-red-200 bg-red-900/30' : 'text-red-600 bg-red-50'
+          }`}>
+            {error}
+          </div>
+        )}
+
+        {showRegionSelect && uploadedImage && (
+          <div className="mt-4">
+            <div className="text-sm font-medium mb-2">Click on image to extract colors from that area:</div>
+            <div className="relative inline-block">
+              <canvas
+                ref={displayCanvasRef}
+                className="border rounded cursor-crosshair max-w-full h-auto"
+                onClick={(e) => {
+                  const canvas = e.target as HTMLCanvasElement
+                  const rect = canvas.getBoundingClientRect()
+                  const x = Math.floor((e.clientX - rect.left) * (canvas.width / rect.width))
+                  const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height))
+                  
+                  const regionSize = 50
+                  const ctx = canvasRef.current?.getContext('2d')
+                  if (!ctx) return
+                  
+                  const imageData = ctx.getImageData(
+                    Math.max(0, x - regionSize/2),
+                    Math.max(0, y - regionSize/2),
+                    regionSize,
+                    regionSize
+                  )
+                  
+                  const pixels: Array<{rgb: [number, number, number]}> = []
+                  for (let i = 0; i < imageData.data.length; i += 16) {
+                    const r = imageData.data[i]
+                    const g = imageData.data[i + 1]
+                    const b = imageData.data[i + 2]
+                    const alpha = imageData.data[i + 3]
+                    if (alpha > 200) pixels.push({ rgb: [r, g, b] })
+                  }
+                  
+                  const regionColors: ExtractedColor[] = pixels.slice(0, 3).map(p => ({
+                    rgb: p.rgb,
+                    hsb: rgbToHsb(p.rgb[0], p.rgb[1], p.rgb[2]),
+                    percentage: 33,
+                    name: generateColorName(p.rgb)
+                  }))
+                  
+                  if (regionColors.length > 0) {
+                    const regionMatches = findClosestForzaColors(regionColors)
+                    onColorsExtracted?.(regionColors)
+                    setMatchedForzaColors(regionMatches)
+                  }
+                }}
+              />
+            </div>
+          </div>
+        )}
+        
+        {matchedForzaColors.length > 0 && (
+          <div className="mt-4">
+            <div className="text-sm font-medium mb-2">🎯 Closest Forza Colors:</div>
+            <div className="space-y-2">
+              {matchedForzaColors.slice(0, 3).map((match, index) => (
+                <div key={index} className={`flex items-center gap-3 p-2 rounded border ${
+                  isDarkMode ? 'border-slate-600 bg-slate-700/50' : 'border-gray-300 bg-gray-50'
+                }`}>
+                  <div className="flex gap-1">
+                    <div 
+                      className="w-6 h-6 rounded border"
+                      style={{ backgroundColor: `rgb(${match.extracted.rgb.join(',')})` }}
+                    />
+                    <div 
+                      className="w-6 h-6 rounded border"
+                      style={{ backgroundColor: `hsl(${match.forza.color1.h * 360}, ${match.forza.color1.s * 100}%, ${match.forza.color1.b * 100}%)` }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">{match.forza.colorName}</div>
+                    <div className="text-xs opacity-75">{match.forza.make} • {match.similarity.toFixed(0)}% match</div>
+                  </div>
+                  <button
+                    onClick={() => onColorSelect?.(match.forza)}
+                    className={`px-2 py-1 text-xs rounded ${
+                      isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
+                    } text-white`}
+                  >
+                    Select
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <canvas
+          ref={canvasRef}
+          className="hidden"
+          width={300}
+          height={300}
+        />
+      </div>
+    </ErrorBoundary>
+  )
+}
+
+export default ImageColorExtractor

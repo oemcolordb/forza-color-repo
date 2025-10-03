@@ -1,6 +1,10 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import { CarColor, DeviceInfo } from './types'
+import { ErrorBoundary } from './lib/errorBoundary'
+import { cache } from './lib/cache'
+import { sanitizeSearchQuery, handleError } from './lib/validation'
 import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -43,30 +47,31 @@ import GamingErrorBoundary from './components/GamingErrorBoundary'
 import { ConsoleCleanup } from './components/ConsoleCleanup'
 
 export default function HomePage() {
-  const [colors, setColors] = useState([])
+  const [colors, setColors] = useState<CarColor[]>([])
   const [loading, setLoading] = useState(true)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMake, setSelectedMake] = useState('')
   const [selectedColorType, setSelectedColorType] = useState('')
-  const [displayedColors, setDisplayedColors] = useState([])
+  const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
   const [hasMore, setHasMore] = useState(true)
-  const [selectedColor, setSelectedColor] = useState(null)
-  const [favorites, setFavorites] = useState([])
-  const [colorHistory, setColorHistory] = useState([])
+  const [selectedColor, setSelectedColor] = useState<CarColor | null>(null)
+  const [favorites, setFavorites] = useState<string[]>([])
+  const [colorHistory, setColorHistory] = useState<string[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [tokyoBackground, setTokyoBackground] = useState('')
   const [page, setPage] = useState(1)
-  const [imageMatchedColors, setImageMatchedColors] = useState([])
+  const [imageMatchedColors, setImageMatchedColors] = useState<CarColor[]>([])
   const [showImageExtractor, setShowImageExtractor] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
-  const [extractedColors, setExtractedColors] = useState([])
-  const [harmonyColors, setHarmonyColors] = useState([])
+  const [extractedColors, setExtractedColors] = useState<any[]>([])
+  const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
   const [harmonyMode, setHarmonyMode] = useState('')
-  const [allColors, setAllColors] = useState([]) // Original + Generated
+  const [allColors, setAllColors] = useState<CarColor[]>([]) // Original + Generated
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const deviceInfo = useDeviceDetection()
   const ITEMS_PER_PAGE = deviceInfo.isMobile ? 30 : 60
   const { track } = useAnalytics()
@@ -76,38 +81,56 @@ export default function HomePage() {
   // Create favorites set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
 
-  // Handle generated colors
-  const handleColorsGenerated = (newColors) => {
-    const updatedColors = [...colors, ...newColors]
-    setColors(updatedColors)
-    setAllColors(updatedColors)
-  }
+  // Handle generated colors with error handling
+  const handleColorsGenerated = useCallback((newColors: CarColor[]) => {
+    try {
+      const updatedColors = [...colors, ...newColors]
+      setColors(updatedColors)
+      setAllColors(updatedColors)
+      cache.set('generated-colors', updatedColors)
+    } catch (err) {
+      const error = handleError(err)
+      setError(error.message)
+      console.error('Failed to generate colors:', error)
+    }
+  }, [colors])
 
-  // Filter colors based on search and selections
+  // Filter colors with caching and sanitization
   const filteredColors = useMemo(() => {
+    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}`
+    const cached = cache.get<CarColor[]>(cacheKey)
+    if (cached) return cached
+    
+    let result: CarColor[]
+    
     if (selectedMake === 'FAVORITES') {
-      return allColors.filter(color => {
+      result = allColors.filter(color => {
         const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
         return favoritesSet.has(colorId)
       })
+    } else {
+      if (!searchQuery && !selectedMake && !selectedColorType) {
+        result = allColors
+      } else {
+        const sanitizedQuery = sanitizeSearchQuery(searchQuery)
+        const searchLower = sanitizedQuery.toLowerCase()
+        
+        result = allColors.filter(color => {
+          const matchesSearch = !sanitizedQuery || 
+            color.colorName.toLowerCase().includes(searchLower) ||
+            color.make.toLowerCase().includes(searchLower) ||
+            (color.model && color.model.toLowerCase().includes(searchLower))
+          
+          const matchesMake = !selectedMake || color.make === selectedMake
+          const matchesType = !selectedColorType || color.colorType === selectedColorType
+          
+          return matchesSearch && matchesMake && matchesType
+        })
+      }
     }
     
-    if (!searchQuery && !selectedMake && !selectedColorType) {
-      return allColors
-    }
-    
-    const searchLower = searchQuery.toLowerCase()
-    return allColors.filter(color => {
-      const matchesSearch = !searchQuery || 
-        color.colorName.toLowerCase().includes(searchLower) ||
-        color.make.toLowerCase().includes(searchLower) ||
-        (color.model && color.model.toLowerCase().includes(searchLower))
-      
-      const matchesMake = !selectedMake || color.make === selectedMake
-      const matchesType = !selectedColorType || color.colorType === selectedColorType
-      
-      return matchesSearch && matchesMake && matchesType
-    })
+    cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
+    return result
   }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet])
 
 
@@ -115,14 +138,34 @@ export default function HomePage() {
   useEffect(() => {
     const loadColors = async () => {
       try {
+        // Check cache first
+        const cachedColors = cache.get<CarColor[]>('color-data')
+        if (cachedColors) {
+          setColors(cachedColors)
+          setAllColors(cachedColors)
+          setLoadingProgress(100)
+          setLoading(false)
+          setIsInitialLoad(false)
+          return
+        }
+        
         const { getColorData } = await import('../services/colorDataLazy.js')
         const originalColors = await getColorData()
+        
+        // Validate data
+        if (!Array.isArray(originalColors)) {
+          throw new Error('Invalid color data format')
+        }
+        
         setColors(originalColors)
         setAllColors(originalColors)
+        cache.set('color-data', originalColors, 10 * 60 * 1000) // Cache for 10 minutes
         setLoadingProgress(100)
         setLoading(false)
         setIsInitialLoad(false)
-      } catch (error) {
+      } catch (err) {
+        const error = handleError(err)
+        setError(error.message)
         console.error('Failed to load colors:', error)
         setColors([])
         setAllColors([])
@@ -133,14 +176,17 @@ export default function HomePage() {
     
     // Fallback timeout
     const timeout = setTimeout(() => {
-      setLoading(false)
-      setIsInitialLoad(false)
-    }, 10000)
+      if (loading) {
+        setError('Loading timeout - please refresh the page')
+        setLoading(false)
+        setIsInitialLoad(false)
+      }
+    }, 15000)
     
     loadColors()
     
     return () => clearTimeout(timeout)
-  }, [])
+  }, [loading])
 
   // Memoized data for performance
   const makes = useMemo(() => {
@@ -152,24 +198,31 @@ export default function HomePage() {
       .sort()
   }, [allColors])
 
-  // Load favorites from localStorage
+  // Load favorites from localStorage with validation
   useEffect(() => {
     try {
       const saved = localStorage.getItem('forza-favorites')
       if (saved) {
-        setFavorites(JSON.parse(saved))
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed)) {
+          setFavorites(parsed)
+        }
       }
-    } catch (error) {
+    } catch (err) {
+      const error = handleError(err)
       console.error('Failed to load favorites:', error)
+      setFavorites([])
     }
   }, [])
 
-  // Save favorites to localStorage
+  // Save favorites to localStorage with error handling
   useEffect(() => {
     try {
       localStorage.setItem('forza-favorites', JSON.stringify(favorites))
-    } catch (error) {
+    } catch (err) {
+      const error = handleError(err)
       console.error('Failed to save favorites:', error)
+      setError('Failed to save favorites')
     }
   }, [favorites])
 
@@ -399,6 +452,27 @@ export default function HomePage() {
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
         
+        {/* Error Display */}
+        {error && (
+          <div className={`mx-4 mb-4 p-3 rounded-lg border ${
+            isDarkMode ? 'bg-red-900/30 border-red-700 text-red-200' : 'bg-red-50 border-red-200 text-red-700'
+          }`}>
+            <div className="flex items-center gap-2">
+              <span className="text-lg">⚠️</span>
+              <span className="font-medium">Error:</span>
+              <span>{error}</span>
+              <button
+                onClick={() => setError(null)}
+                className={`ml-auto px-2 py-1 text-xs rounded ${
+                  isDarkMode ? 'bg-red-800 hover:bg-red-700' : 'bg-red-200 hover:bg-red-300'
+                }`}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
+        
         <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
         <ProgressiveLoader progress={loadingProgress} isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
         
@@ -413,7 +487,13 @@ export default function HomePage() {
           </a>
         </div>
         
-        <ResponsiveLayout>
+        <ErrorBoundary
+          onError={(error) => {
+            console.error('Application error:', error)
+            setError(error.message)
+          }}
+        >
+          <ResponsiveLayout>
           {/* Garage Stats */}
           <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
             isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
@@ -700,7 +780,8 @@ export default function HomePage() {
               </div>
             )}
           </div>
-        </ResponsiveLayout>
+          </ResponsiveLayout>
+        </ErrorBoundary>
 
         {/* Color Info Modal */}
         {selectedColor && (
