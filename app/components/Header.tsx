@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
               <span className={`text-sm font-medium ${
                 isDarkMode ? 'text-white bg-slate-800/80 px-2 py-1 rounded' : 'text-gray-900 bg-white/80 px-2 py-1 rounded'
               }`}>
-                {user.name}
+                {user?.name || 'Guest'}
               </span>
               <button
                 onClick={logout}
