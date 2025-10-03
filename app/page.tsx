@@ -229,7 +229,7 @@ export default function HomePage() {
 
 
   // Toggle favorite function
-  const toggleFavorite = useCallback((colorId) => {
+  const toggleFavorite = useCallback((colorId: string) => {
     setFavorites(prev => {
       if (prev.includes(colorId)) {
         return prev.filter(id => id !== colorId)
