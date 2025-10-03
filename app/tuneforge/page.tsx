@@ -604,11 +604,68 @@ export default function TuneForge() {
                       <div className="text-xs mt-1">Characteristics: {(TRACKS as any)[selectedTrack].characteristics.join(', ')}</div>
                     </div>
                   )}
-                  <div>• PI {selectedCar.pi.class} class - {selectedCar.pi.value < 600 ? 'Focus on handling balance' : selectedCar.pi.value < 800 ? 'Balance power and grip' : 'Manage high power delivery'}</div>
-                  <div>• {selectedCar.drivetrain || 'RWD'} drivetrain - {(selectedCar.drivetrain || 'RWD') === 'FWD' ? 'Combat understeer with front toe-out' : (selectedCar.drivetrain || 'RWD') === 'AWD' ? 'Balance front/rear grip carefully' : 'Manage oversteer with rear stability'}</div>
-                  <div>• Weight: {selectedCar.weight || 1500}kg - {(selectedCar.weight || 1500) > 1600 ? 'Stiffer springs needed' : 'Standard spring rates work well'}</div>
+                  <div>• <span className="text-cyan-400">PI {selectedCar.pi.class} ({selectedCar.pi.value})</span> - {
+                    selectedCar.pi.value < 500 ? 'Focus on basic handling fundamentals and tire pressure optimization' :
+                    selectedCar.pi.value < 600 ? 'Emphasize suspension balance and alignment for consistent handling' :
+                    selectedCar.pi.value < 700 ? 'Balance aerodynamics with mechanical grip for versatile performance' :
+                    selectedCar.pi.value < 800 ? 'Fine-tune differential and damping for power delivery control' :
+                    selectedCar.pi.value < 900 ? 'Manage high downforce and aggressive camber for maximum grip' :
+                    'Extreme setup required: maximum aero, stiff suspension, precise alignment'
+                  }</div>
+                  
+                  <div>• <span className="text-green-400">{selectedCar.drivetrain || 'RWD'} drivetrain</span> - {
+                    (selectedCar.drivetrain || 'RWD') === 'FWD' ? 
+                      `Front bias: ${selectedCar.stats.handling > 7 ? 'Use aggressive front camber (-2.5°) and toe-out for turn-in' : 'Moderate front setup to prevent understeer'}` :
+                    (selectedCar.drivetrain || 'RWD') === 'AWD' ? 
+                      `All-wheel control: ${selectedCar.stats.acceleration > 8 ? 'High differential lock (60-80%) for traction' : 'Balanced diff settings (40-60%) for stability'}` :
+                      `Rear drive: ${selectedCar.stats.speed > 8 ? 'Lower rear diff accel (30-50%) to prevent wheelspin' : 'Higher rear diff (50-70%) for better launches'}`
+                  }</div>
+                  
+                  <div>• <span className="text-orange-400">Weight: {selectedCar.weight || 1500}kg</span> - {
+                    (selectedCar.weight || 1500) < 1200 ? 'Lightweight: Softer springs (80-120 lb/in) and lower tire pressures for grip' :
+                    (selectedCar.weight || 1500) < 1500 ? 'Medium weight: Balanced spring rates (120-180 lb/in) and standard pressures' :
+                    (selectedCar.weight || 1500) < 1800 ? 'Heavy: Stiffer springs (180-240 lb/in) and higher pressures for support' :
+                    'Very heavy: Maximum spring rates (240+ lb/in) and high tire pressures for stability'
+                  }</div>
+                  
+                  <div>• <span className="text-red-400">Power: {selectedCar.engine?.horsepower || 400}hp</span> - {
+                    (selectedCar.engine?.horsepower || 400) < 300 ? 'Low power: Focus on mechanical grip and cornering speed' :
+                    (selectedCar.engine?.horsepower || 400) < 500 ? 'Moderate power: Balance traction and handling with medium diff settings' :
+                    (selectedCar.engine?.horsepower || 400) < 700 ? 'High power: Careful differential tuning and traction management needed' :
+                    'Extreme power: Maximum traction aids, progressive differential, and stability focus'
+                  }</div>
+                  
+                  <div>• <span className="text-purple-400">Handling: {selectedCar.stats.handling.toFixed(1)}/10</span> - {
+                    selectedCar.stats.handling < 5 ? 'Low handling: Prioritize stability over agility, softer anti-roll bars' :
+                    selectedCar.stats.handling < 7 ? 'Average handling: Balanced setup with moderate camber and ARBs' :
+                    selectedCar.stats.handling < 9 ? 'Good handling: Aggressive alignment and stiffer suspension for precision' :
+                    'Excellent handling: Maximum performance setup with extreme camber and stiff ARBs'
+                  }</div>
+                  
                   {drivingStyle !== 'balanced' && (
-                    <div className="text-purple-400">• {drivingStyle.charAt(0).toUpperCase() + drivingStyle.slice(1)} style selected - tune optimized accordingly</div>
+                    <div className="text-yellow-400">• <span className="font-semibold">{drivingStyle.charAt(0).toUpperCase() + drivingStyle.slice(1)} style</span> - {
+                      drivingStyle === 'aggressive' ? 'Lower tire pressures (-2 PSI), more negative camber (-0.5°), stiffer ARBs (+5)' :
+                      drivingStyle === 'smooth' ? 'Softer springs (-20 lb/in), reduced damping (-2), comfort-focused setup' :
+                      drivingStyle === 'drift' ? 'Front: 30 PSI, -3.5° camber. Rear: 22 PSI, -1.2° camber, 5% diff lock' :
+                      'Optimized for selected driving preference'
+                    }</div>
+                  )}
+                  
+                  {Object.keys(tuneData).length > 0 && (
+                    <div className="mt-2 pt-2 border-t border-gray-500">
+                      <div className="text-xs font-semibold text-blue-300 mb-1">Current Calculated Values:</div>
+                      <div className="text-xs space-y-0.5">
+                        {tuneData['tire-pressure-front'] && (
+                          <div>• Tire Pressure: {tuneData['tire-pressure-front']} PSI front, {tuneData['tire-pressure-rear']} PSI rear</div>
+                        )}
+                        {tuneData['camber-front'] && (
+                          <div>• Camber: {tuneData['camber-front']}° front, {tuneData['camber-rear']}° rear</div>
+                        )}
+                        {tuneData['final-drive'] && (
+                          <div>• Final Drive: {tuneData['final-drive']} (optimized for {selectedCar.stats.speed > selectedCar.stats.acceleration ? 'top speed' : 'acceleration'})</div>
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
