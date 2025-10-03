@@ -29,11 +29,11 @@ export const sanitizeSearchQuery = (query: string): string => {
     .substring(0, 100) // Limit length
 }
 
-export const validateColorData = (color: unknown): boolean => {
+export const validateColorData = (color: unknown): color is Record<string, unknown> => {
   if (!color || typeof color !== 'object') return false
   
   const c = color as Record<string, unknown>
-  return (
+  return Boolean(
     typeof c.make === 'string' &&
     typeof c.colorName === 'string' &&
     typeof c.colorType === 'string' &&
