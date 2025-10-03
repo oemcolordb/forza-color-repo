@@ -1,8 +1,8 @@
-import { CacheEntry, CacheManager } from '../types'
+import { CacheEntry, CacheManager as ICacheManager } from '../types'
 
-class MemoryCache implements CacheManager {
+class MemoryCache implements ICacheManager {
   private cache = new Map<string, CacheEntry<unknown>>()
-  private readonly defaultTTL = 5 * 60 * 1000 // 5 minutes
+  private readonly defaultTTL = 5 * 60 * 1000
 
   get<T>(key: string): T | null {
     const entry = this.cache.get(key)
@@ -55,8 +55,3 @@ class MemoryCache implements CacheManager {
 }
 
 export const cache = new MemoryCache()
-
-// Cleanup expired entries every 5 minutes (client-side only)
-if (typeof window !== 'undefined') {
-  setInterval(() => cache.cleanup(), 5 * 60 * 1000)
-}
