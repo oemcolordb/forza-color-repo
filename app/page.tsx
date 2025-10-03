@@ -240,7 +240,7 @@ export default function HomePage() {
   }, [])
 
   // Handle color selection with history tracking
-  const handleColorSelect = useCallback((color) => {
+  const handleColorSelect = useCallback((color: CarColor) => {
     setSelectedColor(color)
     setColorHistory(prev => {
       const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
