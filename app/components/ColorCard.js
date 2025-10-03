@@ -57,7 +57,7 @@ const ColorCard = React.memo(({
             {displayText}
           </p>
         </div>
-        <div className={`flex justify-between items-center ${isMobile ? 'mt-2' : 'mt-4'} min-h-[26px]`}>
+        <div className={`flex justify-between items-center ${isMobile ? 'mt-1' : 'mt-4'} min-h-[32px]`}>
           {color.colorType && !isMobile && (
             <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
               isDarkMode ? 'bg-slate-700 text-cyan-400' : 'bg-gray-100 text-blue-600'
@@ -65,7 +65,7 @@ const ColorCard = React.memo(({
               {color.colorType}
             </span>
           )}
-          <div className={`flex items-center gap-2 ${isMobile && !color.colorType ? '' : 'ml-auto'}`}>
+          <div className={`flex items-center ${isMobile ? 'gap-1' : 'gap-2'} ${isMobile && !color.colorType ? '' : 'ml-auto'}`}>
             {onToggleFavorite && (
               <button
                 onClick={(e) => {
@@ -83,8 +83,8 @@ const ColorCard = React.memo(({
                 style={{
                   WebkitTapHighlightColor: 'transparent',
                   touchAction: 'manipulation',
-                  minHeight: isMobile ? '44px' : 'auto',
-                  minWidth: isMobile ? '44px' : 'auto'
+                  minHeight: isMobile ? '36px' : 'auto',
+                  minWidth: isMobile ? '36px' : 'auto'
                 }}
                 aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               >
@@ -107,8 +107,8 @@ const ColorCard = React.memo(({
               style={{
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation',
-                minHeight: isMobile ? '44px' : 'auto',
-                minWidth: isMobile ? '44px' : 'auto'
+                minHeight: isMobile ? '36px' : 'auto',
+                minWidth: isMobile ? '36px' : 'auto'
               }}
               aria-label={`Learn more about ${color.colorName}`}
             >

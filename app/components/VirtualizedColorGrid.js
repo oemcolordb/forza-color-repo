@@ -19,8 +19,8 @@ const VirtualizedColorGrid = React.memo(({
   const [viewMode, setViewMode] = useState('grid')
   const containerRef = useRef(null)
   
-  const ITEM_HEIGHT = isMobile ? 120 : 160
-  const ITEMS_PER_ROW = isMobile ? 3 : 6
+  const ITEM_HEIGHT = isMobile ? 140 : 160
+  const ITEMS_PER_ROW = isMobile ? 2 : 6
   const OVERSCAN = 5
 
   // Advanced sorting
@@ -232,7 +232,7 @@ const VirtualizedColorGrid = React.memo(({
                     onToggleFavorite={() => onToggleFavorite(colorId)}
                     isDarkMode={isDarkMode}
                     isMobile={isMobile}
-                    isOptimized={true}
+                    isOptimized={false}
                   />
                 </div>
               </div>
