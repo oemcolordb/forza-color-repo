@@ -60,7 +60,10 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
           </span>
         </h1>
         <p className="mt-4 text-lg max-w-2xl mx-auto text-white font-semibold bg-black/50 backdrop-blur-sm px-4 py-2 rounded-lg">
-          The ultimate color harmony engine for car lovers and Forza fans. 10,000+ real manufacturer colors. Curated by ResinRonin. Spin. Extract. Create.
+          The ultimate color harmony engine for car lovers and Forza fans. 10,000+ real manufacturer colors. Curated by ResinRonin. Spin. Extract. Create.<br />
+          <span className="block mt-2 text-base font-normal text-gray-200">
+            <strong>Credits:</strong> To the GTPlanet community, with special thanks to Terronium-12 (original creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and MadaraxUchiha, whose dedication built and maintained the Forza Color Database Spreadsheet.
+          </span>
         </p>
         <div className="mt-6">
           <a 
