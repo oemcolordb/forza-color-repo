@@ -65,12 +65,18 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
             <strong>Credits:</strong> To the GTPlanet community, with special thanks to Terronium-12 (original creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and MadaraxUchiha, whose dedication built and maintained the Forza Color Database Spreadsheet.
           </span>
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap justify-center gap-4">
           <a 
             href="/tuneforge"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
           >
             🔧 TuneForge Lab
+          </a>
+          <a 
+            href="/how-to-use"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+          >
+            📖 How to Use
           </a>
         </div>
       </header>
