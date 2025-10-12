@@ -81,7 +81,6 @@ export default function HomePage() {
     } catch (err) {
       const error = handleError(err)
       setError(error.message)
-      console.error('Failed to generate colors:', error)
     }
   }, [colors])
 
@@ -156,7 +155,6 @@ export default function HomePage() {
       } catch (err) {
         const error = handleError(err)
         setError(error.message)
-        console.error('Failed to load colors:', error)
         setColors([])
         setAllColors([])
         setLoading(false)
@@ -200,7 +198,6 @@ export default function HomePage() {
       }
     } catch (err) {
       const error = handleError(err)
-      console.error('Failed to load favorites:', error)
       setFavorites([])
     }
   }, [])
@@ -211,7 +208,6 @@ export default function HomePage() {
       localStorage.setItem('forza-favorites', JSON.stringify(favorites))
     } catch (err) {
       const error = handleError(err)
-      console.error('Failed to save favorites:', error)
       setError('Failed to save favorites')
     }
   }, [favorites])
@@ -479,7 +475,6 @@ export default function HomePage() {
         
         <ErrorBoundary
           onError={(error) => {
-            console.error('Application error:', error)
             setError(error.message)
           }}
         >
