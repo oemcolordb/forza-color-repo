@@ -34,6 +34,7 @@ import { ConsoleCleanup } from './components/ConsoleCleanup'
 import CriticalCSS from './components/CriticalCSS'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
+import HSBPopup from './components/HSBPopup'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 export default function HomePage() {
@@ -62,6 +63,8 @@ export default function HomePage() {
   const [loadingProgress, setLoadingProgress] = useState<number>(0)
   const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hsbPopupColor, setHsbPopupColor] = useState<CarColor | null>(null)
+  const [showHsbPopup, setShowHsbPopup] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
   const ITEMS_PER_PAGE: number = useMemo(() => deviceInfo.isMobile ? 30 : 60, [deviceInfo.isMobile])
   const { track } = useAnalytics()
@@ -223,6 +226,12 @@ export default function HomePage() {
         return [...prev, colorId]
       }
     })
+  }, [])
+
+  // Show HSB popup for color data
+  const showColorHSB = useCallback((color: CarColor) => {
+    setHsbPopupColor(color)
+    setShowHsbPopup(true)
   }, [])
 
   // Handle color selection with history tracking
@@ -517,7 +526,7 @@ export default function HomePage() {
                     colors={allColors}
                     onColorsExtracted={setExtractedColors}
                     onColorsFound={() => {}}
-                    onColorSelect={handleColorSelect}
+                    onColorSelect={showColorHSB}
                     isDarkMode={isDarkMode}
                   />
                 </div>
@@ -548,7 +557,7 @@ export default function HomePage() {
                       currentHarmony={harmonyColors}
                       harmonyMode={harmonyMode}
                       isDarkMode={isDarkMode}
-                      onColorSelect={handleColorSelect}
+                      onColorSelect={showColorHSB}
                     />
                   </div>
                 )}
@@ -622,7 +631,7 @@ export default function HomePage() {
                             color1: hsb,
                             color2: hsb
                           }
-                          handleColorSelect(fakeColor)
+                          showColorHSB(fakeColor)
                         }}
                         className={`rounded border border-gray-300 hover:border-blue-500 transition-colors cursor-pointer gpu-accelerated ${
                           deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
@@ -651,7 +660,7 @@ export default function HomePage() {
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
-                          handleColorSelect(color)
+                          showColorHSB(color)
                         }}
                         className={`rounded border border-gray-300 hover:border-blue-500 transition-colors gpu-accelerated focus-visible ${
                           deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
@@ -735,6 +744,13 @@ export default function HomePage() {
         />
         
         <PerformanceMonitor isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
+        
+        <HSBPopup
+          color={hsbPopupColor}
+          isOpen={showHsbPopup}
+          onClose={() => setShowHsbPopup(false)}
+          isDarkMode={isDarkMode}
+        />
       </div>
     </AuthProvider>
   )

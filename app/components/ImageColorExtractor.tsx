@@ -495,7 +495,16 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
-                      onColorSelect?.(match.forza)
+                      const extractedAsCarColor: CarColor = {
+                        colorName: match.extracted.name || `Extracted Color`,
+                        make: 'Image Extract',
+                        model: '',
+                        year: null,
+                        colorType: 'Extracted',
+                        color1: match.extracted.hsb,
+                        color2: match.extracted.hsb
+                      }
+                      onColorSelect?.(extractedAsCarColor)
                     }}
                     className={`px-2 py-1 text-xs rounded transition-colors ${
                       isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
