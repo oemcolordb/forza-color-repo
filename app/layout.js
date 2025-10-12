@@ -1,4 +1,6 @@
 import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -151,6 +153,8 @@ export default function RootLayout({ children }) {
         <ErrorBoundary>
           {children}
         </ErrorBoundary>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
