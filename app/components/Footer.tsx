@@ -71,20 +71,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
           <p className={`text-sm font-semibold ${
             isDarkMode ? 'text-slate-200' : 'text-gray-800'
           }`}>
-            🎨 Created by{' '}
-            <span className="text-fuchsia-500 font-bold text-lg">
-              ResinRonin
-            </span>
-          </p>
-          <p className={`text-xs mt-1 ${
-            isDarkMode ? 'text-slate-400' : 'text-gray-500'
-          }`}>
-            Original data extraction, curation, and application development
-          </p>
-          <p className={`text-xs mt-2 ${
-            isDarkMode ? 'text-slate-500' : 'text-gray-400'
-          }`}>
-            © 2024 ResinRonin • All color data sourced from Forza racing games
+            Credits: To the GTPlanet community, with special thanks to Terronium-12 (original creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and MadaraxUchiha, whose dedication built and maintained the Forza Color Database Spreadsheet.
           </p>
         </div>
       </div>
