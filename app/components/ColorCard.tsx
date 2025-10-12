@@ -1,6 +1,7 @@
 import React from 'react'
 import { createForzaGradient } from '../lib/colorUtils'
 import { CarColor } from '../types'
+import ShareButton from './ShareButton'
 
 interface ColorCardProps {
   color: CarColor
@@ -107,6 +108,9 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
             >
               ℹ️
             </button>
+            <div onClick={(e) => e.stopPropagation()}>
+              <ShareButton color={color} isDarkMode={isDarkMode} />
+            </div>
           </div>
         </div>
       </div>
