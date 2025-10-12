@@ -40,7 +40,8 @@ const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ isDarkMode }) => {
     setDeferredPrompt(null)
   }
 
-  if (!showInstall) return null
+  // Temporarily always show for testing
+  // if (!showInstall) return null
 
   return (
     <button
