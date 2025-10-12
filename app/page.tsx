@@ -706,11 +706,11 @@ export default function HomePage() {
 
         {/* Color Info Modal */}
         {selectedColor && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedColor(null)}>
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999] p-4" onClick={() => setSelectedColor(null)}>
             <div 
-              className={`w-full rounded-lg shadow-xl animate-scale-in gpu-accelerated ${
-                deviceInfo.isMobile ? 'max-w-sm' : 'max-w-md'
-              } ${isDarkMode ? 'bg-slate-800' : 'bg-gray-50'}`}
+              className={`w-full rounded-lg shadow-2xl animate-scale-in ${
+                deviceInfo.isMobile ? 'max-w-sm mx-4' : 'max-w-md'
+              } ${isDarkMode ? 'bg-slate-800 border border-slate-600' : 'bg-white border border-gray-200'}`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className={deviceInfo.isMobile ? 'p-3' : 'p-4'}>
