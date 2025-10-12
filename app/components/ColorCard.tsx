@@ -96,7 +96,6 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                console.log('Info button clicked for:', color.colorName)
                 onSelect(color)
               }}
               onTouchStart={(e) => {
