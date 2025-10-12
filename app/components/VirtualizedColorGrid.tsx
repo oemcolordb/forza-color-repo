@@ -2,25 +2,33 @@
 
 import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import ColorCard from './ColorCard'
+import { CarColor } from '../types'
 
-const VirtualizedColorGrid = React.memo(({
+interface VirtualizedColorGridProps {
+  colors: CarColor[]
+  favorites: string[]
+  onColorSelect: (color: CarColor) => void
+  onToggleFavorite: (colorId: string) => void
+  isDarkMode: boolean
+  showManufacturerBorders?: boolean
+}
+
+const VirtualizedColorGrid: React.FC<VirtualizedColorGridProps> = React.memo(({
   colors,
   favorites,
   onColorSelect,
   onToggleFavorite,
   isDarkMode,
-  isMobile,
   showManufacturerBorders = true
 }) => {
   const [scrollTop, setScrollTop] = useState(0)
-  const [containerHeight, setContainerHeight] = useState(600)
-  const [selectedColors, setSelectedColors] = useState(new Set())
+  const [containerHeight, setContainerHeight] = useState(800)
+  const [selectedColors, setSelectedColors] = useState(new Set<string>())
   const [sortBy, setSortBy] = useState('manufacturer')
-  const [viewMode, setViewMode] = useState('grid')
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   
-  const ITEM_HEIGHT = isMobile ? 140 : 160
-  const ITEMS_PER_ROW = isMobile ? 2 : 6
+  const ITEM_HEIGHT = 160
+  const ITEMS_PER_ROW = 6
   const OVERSCAN = 5
 
   // Advanced sorting
@@ -55,9 +63,13 @@ const VirtualizedColorGrid = React.memo(({
   const startRow = Math.max(0, Math.floor(scrollTop / ITEM_HEIGHT) - OVERSCAN)
   const endRow = Math.min(totalRows, Math.ceil((scrollTop + containerHeight) / ITEM_HEIGHT) + OVERSCAN)
   
+  // Ensure we always show at least some rows initially
+  const safeStartRow = containerHeight > 0 ? startRow : 0
+  const safeEndRow = containerHeight > 0 ? endRow : Math.min(10, totalRows)
+  
   const visibleItems = useMemo(() => {
     const items = []
-    for (let row = startRow; row < endRow; row++) {
+    for (let row = safeStartRow; row < safeEndRow; row++) {
       const startIndex = row * ITEMS_PER_ROW
       const endIndex = Math.min(startIndex + ITEMS_PER_ROW, processedColors.length)
       
@@ -74,11 +86,11 @@ const VirtualizedColorGrid = React.memo(({
       }
     }
     return items
-  }, [processedColors, startRow, endRow, ITEMS_PER_ROW, ITEM_HEIGHT])
+  }, [processedColors, safeStartRow, safeEndRow, ITEMS_PER_ROW, ITEM_HEIGHT])
 
   // Scroll handler
-  const handleScroll = useCallback((e) => {
-    setScrollTop(e.target.scrollTop)
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    setScrollTop(e.currentTarget.scrollTop)
   }, [])
 
   // Resize observer
@@ -96,7 +108,7 @@ const VirtualizedColorGrid = React.memo(({
   }, [])
 
   // Bulk selection handlers
-  const toggleColorSelection = useCallback((colorId) => {
+  const toggleColorSelection = useCallback((colorId: string) => {
     setSelectedColors(prev => {
       const newSet = new Set(prev)
       if (newSet.has(colorId)) {
@@ -118,7 +130,7 @@ const VirtualizedColorGrid = React.memo(({
 
   // Keyboard navigation
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
           case 'a':
@@ -136,6 +148,23 @@ const VirtualizedColorGrid = React.memo(({
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [selectAll, clearSelection])
+
+  // Debug info
+  console.log('VirtualizedColorGrid render:', {
+    colorsLength: colors.length,
+    processedLength: processedColors.length,
+    visibleItemsLength: visibleItems.length,
+    containerHeight,
+    totalHeight
+  })
+
+  if (colors.length === 0) {
+    return (
+      <div className={`text-center py-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+        No colors available
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">
@@ -206,7 +235,7 @@ const VirtualizedColorGrid = React.memo(({
                   left: `${(index % ITEMS_PER_ROW) * (100 / ITEMS_PER_ROW)}%`,
                   width: `${100 / ITEMS_PER_ROW}%`,
                   height: ITEM_HEIGHT,
-                  padding: isMobile ? '2px' : '4px'
+                  padding: '4px'
                 }}
               >
                 <div 
@@ -231,8 +260,6 @@ const VirtualizedColorGrid = React.memo(({
                     isFavorite={isFavorite}
                     onToggleFavorite={() => onToggleFavorite(colorId)}
                     isDarkMode={isDarkMode}
-                    isMobile={isMobile}
-                    isOptimized={false}
                   />
                 </div>
               </div>
@@ -245,10 +272,12 @@ const VirtualizedColorGrid = React.memo(({
       <div className={`text-xs opacity-60 ${
         isDarkMode ? 'text-gray-400' : 'text-gray-600'
       }`}>
-        Showing {visibleItems.length} of {processedColors.length} colors • Rows {startRow}-{endRow} of {totalRows}
+        Showing {visibleItems.length} of {processedColors.length} colors • Rows {safeStartRow}-{safeEndRow} of {totalRows}
       </div>
     </div>
   )
 })
+
+VirtualizedColorGrid.displayName = 'VirtualizedColorGrid'
 
 export default VirtualizedColorGrid

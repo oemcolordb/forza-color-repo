@@ -10,7 +10,7 @@ import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils
 
 import Header from './components/Header'
 import Footer from './components/Footer'
-import VirtualizedColorGrid from './components/VirtualizedColorGrid'
+import SimpleColorGrid from './components/SimpleColorGrid'
 import OptimizedVirtualGrid from './components/OptimizedVirtualGrid'
 import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ImageColorExtractor from './components/ImageColorExtractor'
@@ -24,17 +24,16 @@ import { useOfflineStorage } from './hooks/useOfflineStorage'
 import { useDeviceDetection } from './hooks/useDeviceDetection'
 import { getSecureAssetUrl } from './lib/assetProtection'
 
-// Stub components with proper props
-const ProgressiveLoader = (props: any) => null
-const ColorRouletteHarmony = (props: any) => <div className="text-sm text-gray-500">Color Roulette Coming Soon</div>
-const HarmonyVisualizer = (props: any) => null
-const ColorGenerator = (props: any) => <div className="text-sm text-gray-500">Color Generator Coming Soon</div>
-const PerformanceMonitor = (props: any) => null
-const SecurityHeaders = () => null
-const ConsoleCleanup = () => null
-const CriticalCSS = () => null
-const GamingSEO = (props: any) => null
-const MobileGamingOptimizer = (props: any) => null
+import ProgressiveLoader from './components/ProgressiveLoader'
+import ColorRouletteHarmony from './components/ColorRouletteHarmony'
+import HarmonyVisualizer from './components/HarmonyVisualizer'
+import ColorGenerator from './components/ColorGenerator'
+import PerformanceMonitor from './components/PerformanceMonitor'
+import { SecurityHeaders } from './components/SecurityHeaders'
+import { ConsoleCleanup } from './components/ConsoleCleanup'
+import CriticalCSS from './components/CriticalCSS'
+import GamingSEO from './components/GamingSEO'
+import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 export default function HomePage() {
@@ -694,13 +693,12 @@ export default function HomePage() {
               </svg>
             </div>
             
-            <VirtualizedColorGrid
-              colors={filteredColors}
+            <SimpleColorGrid
+              colors={filteredColors.length > 0 ? filteredColors : allColors}
               onColorSelect={handleColorSelect}
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
               isDarkMode={isDarkMode}
-              showManufacturerBorders={showManufacturerBorders}
             />
           </div>
           </ResponsiveLayout>

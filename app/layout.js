@@ -8,30 +8,28 @@ import { SecurityEnforcer } from './components/SecurityEnforcer'
 
 const inter = Inter({ 
   subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-  preload: true
+  display: 'swap'
 })
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'),
   title: {
-    default: 'Forza Color Universe - Official FH5 & FM Paint Colors Database',
-    template: '%s | Forza Colors'
+    default: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database | Forza Horizon 5 & Motorsport',
+    template: '%s | Forza Color Sheet'
   },
-  description: 'Ultimate Forza Horizon 5 and Forza Motorsport paint color database. 10,000+ official car colors, livery creator tool, custom paint codes, and FH5 color matching for racing game enthusiasts.',
+  description: 'Official Forza Color Sheet with 10,000+ paint colors from Forza Horizon 5, Forza Motorsport 2019-2024. Complete Forza color database, paint codes, and livery creator tools for all Forza games.',
   keywords: [
-    // Gaming SEO - Long-tail keywords
-    'Forza Horizon 5 livery creator', 'FH5 custom paint tool', 'Forza Motorsport colors',
-    'Forza Horizon 5 paint codes', 'FH5 color database', 'Forza livery designer',
-    'Forza Horizon 5 car customization', 'FH5 paint job creator', 'Forza color picker',
-    'Forza Motorsport livery editor', 'FH5 racing stripes', 'Forza custom designs',
-    // Core automotive terms
-    'automotive paint colors', 'car colors database', 'racing game colors',
-    'paint codes lookup', 'car paint matching', 'HSB color values',
-    // Brand-specific gaming searches
-    'Ferrari Forza colors', 'Porsche FH5 paints', 'BMW Forza liveries',
-    'Mercedes racing colors', 'Lamborghini Forza paints', 'McLaren FH5 colors',
+    // Primary target keywords
+    'Forza Color Sheet', 'forza color sheet 2019', 'Forza color sheet 2020', 'Forza color sheet 2021',
+    'Forza color sheet 2022', 'Forza color sheet 2023', 'Forza color sheet 2024', 'official Forza color sheet',
+    'Forza paint color sheet', 'Forza Horizon color sheet', 'Forza Motorsport color sheet',
+    // Secondary variations
+    'Forza colors database', 'Forza paint codes sheet', 'Forza color list', 'Forza paint colors list',
+    'Forza Horizon 5 color sheet', 'FH5 color sheet', 'Forza Motorsport color codes',
+    'complete Forza color sheet', 'all Forza colors', 'Forza paint database',
+    // Long-tail keywords
+    'Forza Horizon 5 official colors', 'Forza paint color reference', 'Forza livery colors',
+    'Forza car paint colors', 'Forza custom paint colors', 'Forza color picker tool',
     // Gaming community terms
     'Forza community colors', 'racing game paint jobs', 'car game customization',
     'Forza tuning colors', 'FH5 drift car colors', 'Forza drag racing paints'
@@ -55,9 +53,9 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app',
-    title: 'Forza Color Universe - FH5 Livery Creator & Paint Database',
-    description: 'Ultimate Forza Horizon 5 paint color database with 10,000+ official car colors. Create custom liveries, find paint codes, and design racing masterpieces.',
-    siteName: 'Forza Color Universe',
+    title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
+    description: 'Complete Forza Color Sheet with 10,000+ official paint colors from Forza Horizon 5 & Motorsport 2019-2024. The ultimate Forza color database and paint codes reference.',
+    siteName: 'Forza Color Sheet',
     images: [{
       url: '/og-image.jpg',
       width: 1200,
@@ -67,8 +65,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Forza Color Universe - FH5 Livery Creator & Paint Database',
-    description: 'Ultimate Forza Horizon 5 paint color database with 10,000+ official car colors for custom liveries.',
+    title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
+    description: 'Complete Forza Color Sheet with 10,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
     creator: '@ResinRonin',
     images: ['/og-image.jpg']
   },
@@ -76,8 +74,8 @@ export const metadata = {
     canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'
   },
   other: {
-    'application-name': 'Forza Colors',
-    'apple-mobile-web-app-title': 'Forza Colors',
+    'application-name': 'Forza Color Sheet',
+    'apple-mobile-web-app-title': 'Forza Color Sheet',
     'msapplication-TileColor': '#0f172a',
     // Gaming-specific meta tags
     'mobile-web-app-capable': 'yes',
@@ -96,9 +94,9 @@ export default function RootLayout({ children }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Forza Color Universe",
-    "alternateName": "FH5 Livery Creator",
-    "description": "Ultimate Forza Horizon 5 and Forza Motorsport paint color database with livery creator tools",
+    "name": "Forza Color Sheet",
+    "alternateName": "Official Forza Color Sheet 2019-2024",
+    "description": "Complete Forza Color Sheet database with 10,000+ official paint colors from Forza Horizon 5 and Forza Motorsport 2019-2024",
     "url": process.env.NEXT_PUBLIC_APP_URL || "https://forza-colors.netlify.app",
     "applicationCategory": ["GameApplication", "UtilitiesApplication"],
     "operatingSystem": "Web Browser",
@@ -114,15 +112,15 @@ export default function RootLayout({ children }) {
       "name": "ResinRonin"
     },
     "featureList": [
-      "10,000+ Forza Horizon 5 paint colors",
-      "Forza Motorsport color database",
-      "Custom livery creator tool",
-      "FH5 paint code lookup",
-      "Image color matching for racing games",
-      "Advanced search and filtering",
-      "HSB color values for game modding",
-      "Manufacturer and model data",
-      "Mobile-optimized for gaming on-the-go"
+      "Complete Forza Color Sheet 2019-2024",
+      "10,000+ official Forza paint colors",
+      "Forza Horizon 5 color database",
+      "Forza Motorsport color sheet",
+      "Official Forza paint codes",
+      "Forza color reference tool",
+      "Advanced Forza color search",
+      "HSB color values for all Forza games",
+      "Mobile-optimized Forza color sheet"
     ],
     "about": {
       "@type": "VideoGame",
@@ -132,11 +130,10 @@ export default function RootLayout({ children }) {
   }
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.className}>
       <head>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
 
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" sizes="any" />

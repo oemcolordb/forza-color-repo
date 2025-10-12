@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
-import { TelemetryPanel } from '../components/TelemetryPanel'
+
 import { TuningCalculator, TRACKS, TRACK_TYPES } from '../lib/tuning-calculator'
 
 interface Car {
@@ -53,7 +53,7 @@ export default function TuneForge() {
   const [aiQuery, setAiQuery] = useState('')
   const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
-  const [showTelemetry, setShowTelemetry] = useState(false)
+
   const [selectedTrack, setSelectedTrack] = useState('')
   const [drivingStyle, setDrivingStyle] = useState('balanced')
 
@@ -529,7 +529,7 @@ export default function TuneForge() {
       
       <div className="p-4">
         <div className={`flex border-b mb-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-          {[{id: 'quick', label: '⚡ Quick', desc: 'Templates & Base Tune'}, {id: 'advanced', label: '🔧 Advanced', desc: 'Detailed Settings'}, {id: 'ai', label: '🤖 AI', desc: 'Expert Advice'}, {id: 'telemetry', label: '📊 Telemetry', desc: 'Live Data'}].map((tab) => (
+          {[{id: 'quick', label: '⚡ Quick', desc: 'Templates & Base Tune'}, {id: 'advanced', label: '🔧 Advanced', desc: 'Detailed Settings'}, {id: 'ai', label: '🤖 AI', desc: 'Expert Advice'}].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -873,24 +873,7 @@ export default function TuneForge() {
           </div>
         )}
         
-        {activeTab === 'telemetry' && (
-          <div className="space-y-4">
-            <TelemetryPanel tuneData={tuneData} carData={selectedCar} isDarkMode={isDarkMode} />
-            
-            <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
-              <h4 className="font-bold mb-2">🎮 Telemetry Guide:</h4>
-              <div className="text-sm space-y-2">
-                <div><strong>In Forza:</strong> Press 'T' to open telemetry overlay</div>
-                <div><strong>Tire Temps:</strong> Watch for even heating across tire width</div>
-                <div><strong>Suspension:</strong> Monitor travel to avoid bottoming out</div>
-                <div><strong>Performance:</strong> Compare lap times after tune changes</div>
-                <div className="text-xs opacity-75 mt-2">
-                  💡 This is simulated data for demonstration. Use actual Forza telemetry for real tuning.
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
       </div>
     </div>
   )

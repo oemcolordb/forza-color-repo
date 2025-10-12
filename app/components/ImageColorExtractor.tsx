@@ -130,10 +130,17 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       let minDistance = Infinity
       
       colors.forEach(forzaColor => {
+        // Convert Forza HSB to RGB for better comparison
+        const forzaR = Math.round(255 * forzaColor.color1.b * (1 - forzaColor.color1.s * (1 - Math.cos((forzaColor.color1.h * 360) * Math.PI / 180))))
+        const forzaG = Math.round(255 * forzaColor.color1.b * (1 - forzaColor.color1.s * (1 - Math.cos((forzaColor.color1.h * 360 - 120) * Math.PI / 180))))
+        const forzaB = Math.round(255 * forzaColor.color1.b * (1 - forzaColor.color1.s * (1 - Math.cos((forzaColor.color1.h * 360 - 240) * Math.PI / 180))))
+        
+        // Weighted RGB distance (human eye perception)
+        const rWeight = 0.3, gWeight = 0.59, bWeight = 0.11
         const distance = Math.sqrt(
-          Math.pow((extracted.hsb.h - forzaColor.color1.h) * 360, 2) +
-          Math.pow((extracted.hsb.s - forzaColor.color1.s) * 100, 2) +
-          Math.pow((extracted.hsb.b - forzaColor.color1.b) * 100, 2)
+          rWeight * Math.pow(extracted.rgb[0] - forzaR, 2) +
+          gWeight * Math.pow(extracted.rgb[1] - forzaG, 2) +
+          bWeight * Math.pow(extracted.rgb[2] - forzaB, 2)
         )
         
         if (distance < minDistance) {
@@ -145,11 +152,11 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       return {
         extracted,
         forza: closestColor!,
-        similarity: Math.max(0, 100 - (minDistance / 5))
+        similarity: Math.max(0, 100 - (minDistance / 3))
       }
-    }).filter(match => match.similarity > 30)
+    }).filter(match => match.similarity > 40)
     
-    cache.set(cacheKey, matches, 5 * 60 * 1000) // Cache for 5 minutes
+    cache.set(cacheKey, matches, 5 * 60 * 1000)
     return matches
   }, [colors])
 
@@ -289,7 +296,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               if (displayCtx) {
                 displayCanvasRef.current.width = canvas.width
                 displayCanvasRef.current.height = canvas.height
-                displayCtx.drawImage(img, 0, 0, canvas.width, canvas.height)
+                displayCtx.drawImage(canvas, 0, 0)
               }
             }
 
@@ -299,7 +306,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             
             onColorsExtracted?.(enhancedColors)
             setMatchedForzaColors(forzaMatches)
-            setUploadedImage(imageUrl)
+            setUploadedImage(canvas.toDataURL())
             setShowRegionSelect(true)
             URL.revokeObjectURL(imageUrl)
             resolve()
@@ -396,43 +403,60 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
 
         {showRegionSelect && uploadedImage && (
           <div className="mt-4">
-            <div className="text-sm font-medium mb-2">Click on image to extract colors from that area:</div>
+            <div className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+              📍 Tap/Click anywhere on the image to extract colors:
+            </div>
             <div className="relative inline-block">
-              <canvas
-                ref={displayCanvasRef}
-                className="border rounded cursor-crosshair max-w-full h-auto"
+              <img
+                src={uploadedImage}
+                alt="Uploaded for color extraction"
+                className="border-2 border-blue-400 rounded cursor-pointer max-w-full h-auto hover:border-blue-600 transition-colors"
+                style={{ maxWidth: '300px', maxHeight: '300px' }}
+
                 onClick={(e) => {
-                  const canvas = e.target as HTMLCanvasElement
-                  const rect = canvas.getBoundingClientRect()
+                  const img = e.target as HTMLImageElement
+                  const rect = img.getBoundingClientRect()
+                  const canvas = canvasRef.current
+                  if (!canvas) return
                   const x = Math.floor((e.clientX - rect.left) * (canvas.width / rect.width))
                   const y = Math.floor((e.clientY - rect.top) * (canvas.height / rect.height))
                   
-                  const regionSize = 50
                   const ctx = canvasRef.current?.getContext('2d')
                   if (!ctx) return
                   
-                  const imageData = ctx.getImageData(
-                    Math.max(0, x - regionSize/2),
-                    Math.max(0, y - regionSize/2),
-                    regionSize,
-                    regionSize
-                  )
+                  // Get exact pixel color at click point
+                  const imageData = ctx.getImageData(x, y, 1, 1)
+                  const [r, g, b, alpha] = imageData.data
                   
+                  if (alpha < 200) return
+                  
+                  // Get 3x3 area around click for better accuracy
+                  const areaData = ctx.getImageData(Math.max(0, x-1), Math.max(0, y-1), 3, 3)
                   const pixels: Array<{rgb: [number, number, number]}> = []
-                  for (let i = 0; i < imageData.data.length; i += 16) {
-                    const r = imageData.data[i]
-                    const g = imageData.data[i + 1]
-                    const b = imageData.data[i + 2]
-                    const alpha = imageData.data[i + 3]
-                    if (alpha > 200) pixels.push({ rgb: [r, g, b] })
+                  
+                  for (let i = 0; i < areaData.data.length; i += 4) {
+                    const ar = areaData.data[i]
+                    const ag = areaData.data[i + 1]
+                    const ab = areaData.data[i + 2]
+                    const aa = areaData.data[i + 3]
+                    if (aa > 200) pixels.push({ rgb: [ar, ag, ab] })
                   }
                   
-                  const regionColors: ExtractedColor[] = pixels.slice(0, 3).map(p => ({
-                    rgb: p.rgb,
-                    hsb: rgbToHsb(p.rgb[0], p.rgb[1], p.rgb[2]),
-                    percentage: 33,
-                    name: generateColorName(p.rgb)
-                  }))
+                  // Primary color is the exact clicked pixel
+                  const regionColors: ExtractedColor[] = [
+                    {
+                      rgb: [r, g, b] as [number, number, number],
+                      hsb: rgbToHsb(r, g, b),
+                      percentage: 60,
+                      name: generateColorName([r, g, b])
+                    },
+                    ...pixels.slice(0, 2).map(p => ({
+                      rgb: p.rgb,
+                      hsb: rgbToHsb(p.rgb[0], p.rgb[1], p.rgb[2]),
+                      percentage: 20,
+                      name: generateColorName(p.rgb)
+                    }))
+                  ]
                   
                   if (regionColors.length > 0) {
                     const regionMatches = findClosestForzaColors(regionColors)

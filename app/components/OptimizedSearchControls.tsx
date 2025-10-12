@@ -1,91 +1,84 @@
 'use client'
 
 import React, { useCallback } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
-const OptimizedSearchControls = React.memo(({
+interface OptimizedSearchControlsProps {
+  searchQuery: string
+  onSearchChange: Dispatch<SetStateAction<string>>
+  selectedMake: string
+  onMakeChange: Dispatch<SetStateAction<string>>
+  selectedColorType: string
+  onColorTypeChange: Dispatch<SetStateAction<string>>
+  makes: string[]
+  colorTypes: string[]
+  isDarkMode: boolean
+  showManufacturerBorders: boolean
+  onToggleManufacturerBorders: () => void
+}
+
+const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.memo(({
   searchQuery,
-  setSearchQuery,
+  onSearchChange,
   selectedMake,
-  setSelectedMake,
+  onMakeChange,
   selectedColorType,
-  setSelectedColorType,
-  favorites,
+  onColorTypeChange,
   makes,
   colorTypes,
   isDarkMode,
-  deviceInfo
+  showManufacturerBorders,
+  onToggleManufacturerBorders
 }) => {
+  const [favorites] = React.useState<string[]>([])
+  
   const handleFavoritesToggle = useCallback(() => {
     if (selectedMake === 'FAVORITES') {
-      setSelectedMake('')
+      onMakeChange('')
     } else {
-      setSelectedMake('FAVORITES')
-      setSearchQuery('')
-      setSelectedColorType('')
+      onMakeChange('FAVORITES')
+      onSearchChange('')
+      onColorTypeChange('')
     }
-  }, [selectedMake, setSelectedMake, setSearchQuery, setSelectedColorType])
-
-  const handleClearFilters = useCallback(() => {
-    setSearchQuery('')
-    setSelectedMake('')
-    setSelectedColorType('')
-  }, [setSearchQuery, setSelectedMake, setSelectedColorType])
+  }, [selectedMake, onMakeChange, onSearchChange, onColorTypeChange])
 
   const inputClasses = React.useMemo(() => {
-    const base = `flex-1 rounded-lg border backdrop-blur-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+    return `flex-1 rounded-lg border backdrop-blur-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 px-3 py-2 text-sm ${
       isDarkMode 
         ? 'bg-slate-800/90 border-slate-600 text-white placeholder-slate-400' 
         : 'bg-white/90 border-gray-300 text-gray-900 placeholder-gray-500'
     }`
-    
-    if (deviceInfo.isMobile) {
-      return `${base} px-3 py-2 text-sm`
-    } else {
-      return `${base} px-3 py-2 text-sm`
-    }
-  }, [isDarkMode, deviceInfo])
+  }, [isDarkMode])
 
   const selectClasses = React.useMemo(() => {
-    const base = `rounded-lg border backdrop-blur-sm transition-colors ${
+    return `rounded-lg border backdrop-blur-sm transition-colors px-3 py-2 text-sm ${
       selectedMake === 'FAVORITES' ? 'opacity-50 cursor-not-allowed' : ''
     } ${
       isDarkMode 
         ? 'bg-slate-800/90 border-slate-600 text-white' 
         : 'bg-white/90 border-gray-300 text-gray-900'
     }`
-    
-    if (deviceInfo.isMobile) {
-      return `${base} px-2 py-2 text-sm`
-    } else {
-      return `${base} px-3 py-2 text-sm`
-    }
-  }, [isDarkMode, deviceInfo, selectedMake])
+  }, [isDarkMode, selectedMake])
 
   const buttonClasses = React.useMemo(() => {
-    const base = `rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+    return `rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 px-3 py-2 text-sm ${
       selectedMake === 'FAVORITES'
         ? 'bg-red-500 text-white focus:ring-red-500'
         : isDarkMode
         ? 'bg-slate-700 text-slate-300 hover:bg-slate-600 focus:ring-slate-500'
         : 'bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-500'
     }`
-    
-    if (deviceInfo.isMobile) {
-      return `${base} px-2 py-2 text-sm`
-    } else {
-      return `${base} px-3 py-2 text-sm`
-    }
-  }, [isDarkMode, deviceInfo, selectedMake])
+  }, [isDarkMode, selectedMake])
 
   return (
     <div className="mb-4 animate-fade-in">
       <div className="space-y-2">
-        <div className={`flex ${deviceInfo.isMobile ? 'gap-1' : 'gap-2'}`}>
+        <div className="flex gap-2">
           <input
             type="text"
             placeholder="Search colors, makes, models..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             className={inputClasses}
             aria-label="Search colors"
           />
@@ -97,10 +90,10 @@ const OptimizedSearchControls = React.memo(({
             ❤️ {favorites.length}
           </button>
         </div>
-        <div className={`grid grid-cols-2 ${deviceInfo.isMobile ? 'gap-1' : 'gap-2'}`}>
+        <div className="grid grid-cols-2 gap-2">
           <select
             value={selectedMake === 'FAVORITES' ? '' : selectedMake}
-            onChange={(e) => setSelectedMake(e.target.value)}
+            onChange={(e) => onMakeChange(e.target.value)}
             disabled={selectedMake === 'FAVORITES'}
             className={selectClasses}
             aria-label="Filter by manufacturer"
@@ -112,7 +105,7 @@ const OptimizedSearchControls = React.memo(({
           </select>
           <select
             value={selectedMake === 'FAVORITES' ? '' : selectedColorType}
-            onChange={(e) => setSelectedColorType(e.target.value)}
+            onChange={(e) => onColorTypeChange(e.target.value)}
             disabled={selectedMake === 'FAVORITES'}
             className={selectClasses}
             aria-label="Filter by color type"
