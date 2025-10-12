@@ -79,6 +79,12 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
             📖 How to Use
           </a>
         </div>
+        
+        {/* Mobile scroll indicator */}
+        <div className="mt-8 md:hidden flex flex-col items-center animate-bounce">
+          <div className="text-white/80 text-sm mb-2">Scroll down to explore colors</div>
+          <div className="text-2xl">👇</div>
+        </div>
       </header>
     </ErrorBoundary>
   )

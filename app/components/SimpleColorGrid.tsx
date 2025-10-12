@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import ColorCard from './ColorCard'
+import ShareButton from './ShareButton'
 import { CarColor } from '../types'
 
 interface SimpleColorGridProps {
@@ -99,7 +100,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                       <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Blend</div>
                     </div>
                   </div>
-                  <div className="space-y-1 text-sm">
+                  <div className="space-y-1 text-sm mb-4">
                     <div className="flex justify-between">
                       <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Make:</span>
                       <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.make}</span>
@@ -119,6 +120,23 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                     <div className="flex justify-between">
                       <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Type:</span>
                       <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.colorType}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => onToggleFavorite(colorId)}
+                      className={`flex-1 rounded-lg font-medium transition-colors py-2 px-4 text-sm ${
+                        favorites.includes(colorId)
+                          ? 'bg-red-500 hover:bg-red-600 text-white'
+                          : isDarkMode
+                          ? 'bg-slate-700 hover:bg-slate-600 text-white'
+                          : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                      }`}
+                    >
+                      {favorites.includes(colorId) ? '❤️ Favorited' : '🤍 Add to Favorites'}
+                    </button>
+                    <div className="flex-shrink-0">
+                      <ShareButton color={color} isDarkMode={isDarkMode} />
                     </div>
                   </div>
                 </div>
