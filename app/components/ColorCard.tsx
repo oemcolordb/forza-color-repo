@@ -94,19 +94,14 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
             )}
             <button
               onClick={(e) => {
-                e.preventDefault()
                 e.stopPropagation()
                 onSelect(color)
               }}
-              onTouchStart={(e) => {
-                e.stopPropagation()
-              }}
-              className={`transition-colors touch-manipulation select-none p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
+              className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
                 isDarkMode ? 'text-slate-300 hover:text-blue-400 hover:bg-slate-700 active:text-blue-500' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100 active:text-blue-700'
               }`}
               style={{
-                WebkitTapHighlightColor: 'transparent',
-                touchAction: 'manipulation'
+                WebkitTapHighlightColor: 'transparent'
               }}
               aria-label={`Learn more about ${color.colorName}`}
             >
