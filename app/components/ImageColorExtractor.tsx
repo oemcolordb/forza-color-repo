@@ -484,7 +484,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
                     />
                     <div 
                       className="w-6 h-6 rounded border"
-                      style={{ backgroundColor: `hsl(${match.forza.color1.h * 360}, ${match.forza.color1.s * 100}%, ${match.forza.color1.b * 100}%)` }}
+                      style={{ backgroundColor: `rgb(${Math.round(255 * match.forza.color1.b * (1 - match.forza.color1.s + match.forza.color1.s * Math.cos((match.forza.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * match.forza.color1.b * (1 - match.forza.color1.s + match.forza.color1.s * Math.cos((match.forza.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * match.forza.color1.b * (1 - match.forza.color1.s + match.forza.color1.s * Math.cos((match.forza.color1.h * 360 - 240) * Math.PI / 180)))})` }}
                     />
                   </div>
                   <div className="flex-1">
