@@ -388,7 +388,7 @@ const ColorRouletteHarmony = ({
                     index === 0 ? 'border-white' : 'border-gray-300'
                   }`}
                   style={{
-                    background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`
+                    background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))})`
                   }}
                   title={`${color.colorName} - ${color.make} (H:${(color.color1.h * 360).toFixed(0)} S:${(color.color1.s * 100).toFixed(0)} B:${(color.color1.b * 100).toFixed(0)})`}
                 />

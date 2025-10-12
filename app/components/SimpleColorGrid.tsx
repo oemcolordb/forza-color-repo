@@ -81,21 +81,21 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                 <div className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bg-slate-800 border-blue-500' : 'bg-gray-50 border-blue-400'}`}>
                   <div className="grid grid-cols-3 gap-2 mb-4">
                     <div className="text-center">
-                      <div className="w-full h-16 rounded border mb-1" style={{ background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)` }} />
+                      <div className="w-full h-16 rounded border mb-1" style={{ background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))})` }} />
                       <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Color 1</div>
                       <div className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
                         {color.color1.h.toFixed(2)} {color.color1.s.toFixed(2)} {color.color1.b.toFixed(2)}
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="w-full h-16 rounded border mb-1" style={{ background: `hsl(${color.color2.h * 360}, ${color.color2.s * 100}%, ${color.color2.b * 100}%)` }} />
+                      <div className="w-full h-16 rounded border mb-1" style={{ background: `rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 240) * Math.PI / 180)))})` }} />
                       <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Color 2</div>
                       <div className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
                         {color.color2.h.toFixed(2)} {color.color2.s.toFixed(2)} {color.color2.b.toFixed(2)}
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="w-full h-16 rounded border mb-1" style={{ background: `linear-gradient(45deg, hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%), hsl(${color.color2.h * 360}, ${color.color2.s * 100}%, ${color.color2.b * 100}%))` }} />
+                      <div className="w-full h-16 rounded border mb-1" style={{ background: `linear-gradient(45deg, rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))}), rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 240) * Math.PI / 180)))}))` }} />
                       <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Blend</div>
                     </div>
                   </div>
