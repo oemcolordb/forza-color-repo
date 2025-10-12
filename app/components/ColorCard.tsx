@@ -79,9 +79,9 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
                 onTouchStart={(e) => {
                   e.stopPropagation()
                 }}
-                className={`transition-colors touch-manipulation select-none p-0.5 ${
+                className={`transition-colors touch-manipulation select-none p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
                   isFavorite ? 'text-red-500 hover:text-red-600 active:text-red-700' : 
-                  isDarkMode ? 'text-slate-500 hover:text-red-400 active:text-red-500' : 'text-gray-400 hover:text-red-500 active:text-red-600'
+                  isDarkMode ? 'text-slate-300 hover:text-red-400 hover:bg-slate-700 active:text-red-500' : 'text-gray-400 hover:text-red-500 hover:bg-gray-100 active:text-red-600'
                 }`}
                 style={{
                   WebkitTapHighlightColor: 'transparent',
@@ -102,8 +102,8 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
               onTouchStart={(e) => {
                 e.stopPropagation()
               }}
-              className={`transition-colors touch-manipulation select-none p-0.5 ${
-                isDarkMode ? 'text-slate-500 hover:text-fuchsia-400 active:text-fuchsia-500' : 'text-gray-500 hover:text-blue-600 active:text-blue-700'
+              className={`transition-colors touch-manipulation select-none p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
+                isDarkMode ? 'text-slate-300 hover:text-blue-400 hover:bg-slate-700 active:text-blue-500' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100 active:text-blue-700'
               }`}
               style={{
                 WebkitTapHighlightColor: 'transparent',
