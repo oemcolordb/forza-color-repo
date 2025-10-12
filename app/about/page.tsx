@@ -123,9 +123,7 @@ export default function About() {
                 🏆 <span>Acknowledgments</span>
               </h2>
               <p className="leading-relaxed">
-                Special thanks to ResinRonin for the original Forza color data extraction and curation, 
-                and to the Forza Motorsport series for providing the source automotive color data that 
-                makes this project possible. Built with passion for the automotive and gaming communities.
+                Credits: To the GTPlanet community, with special thanks to Terronium-12 (original creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and MadaraxUchiha, whose dedication built and maintained the Forza Color Database Spreadsheet.
               </p>
             </div>
           </div>
