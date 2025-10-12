@@ -14,7 +14,7 @@ const inter = Inter({
 })
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app'),
   title: {
     default: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database | Forza Horizon 5 & Motorsport',
     template: '%s | Forza Color Sheet'
@@ -54,7 +54,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app',
+    url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
     title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description: 'Complete Forza Color Sheet with 10,000+ official paint colors from Forza Horizon 5 & Motorsport 2019-2024. The ultimate Forza color database and paint codes reference.',
     siteName: 'Forza Color Sheet',
@@ -73,7 +73,7 @@ export const metadata = {
     images: ['/og-image.jpg']
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-colors.netlify.app'
+    canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app'
   },
   other: {
     'application-name': 'Forza Color Sheet',
@@ -99,7 +99,7 @@ export default function RootLayout({ children }) {
     "name": "Forza Color Sheet",
     "alternateName": "Official Forza Color Sheet 2019-2024",
     "description": "Complete Forza Color Sheet database with 10,000+ official paint colors from Forza Horizon 5 and Forza Motorsport 2019-2024",
-    "url": process.env.NEXT_PUBLIC_APP_URL || "https://forza-colors.netlify.app",
+    "url": process.env.NEXT_PUBLIC_APP_URL || "https://forza-color-repo.vercel.app",
     "applicationCategory": ["GameApplication", "UtilitiesApplication"],
     "operatingSystem": "Web Browser",
     "genre": ["Racing", "Automotive", "Design Tools"],
