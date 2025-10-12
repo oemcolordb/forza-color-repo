@@ -1,6 +1,7 @@
 import React from 'react'
 import { HeaderProps } from '../types'
 import { ErrorBoundary } from '../lib/errorBoundary'
+import PWAInstallButton from './PWAInstallButton'
 
 const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
   
@@ -20,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
           <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
         </button>
         <div className="absolute top-4 right-4 flex items-center gap-3">
+          <PWAInstallButton isDarkMode={isDarkMode} />
           {false ? (
             <div className="flex items-center gap-2">
               <span className={`text-sm font-medium ${
