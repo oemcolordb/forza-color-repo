@@ -231,7 +231,6 @@ export default function HomePage() {
 
   // Handle color selection with history tracking
   const handleColorSelect = useCallback((color: CarColor) => {
-    console.log('handleColorSelect called with:', color.colorName)
     setSelectedColor(color)
     setColorHistory(prev => {
       const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
@@ -706,7 +705,6 @@ export default function HomePage() {
         </ErrorBoundary>
 
         {/* Color Info Modal */}
-        {console.log('Modal render check - selectedColor:', selectedColor?.colorName)}
         {selectedColor && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedColor(null)}>
             <div 
