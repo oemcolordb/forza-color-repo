@@ -592,15 +592,35 @@ export default function HomePage() {
                     {extractedColors.slice(0, deviceInfo.isMobile ? 6 : 8).map((color, index) => (
                       <button
                         key={index}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          const rgbToHsb = (r: number, g: number, b: number) => {
+                            r /= 255; g /= 255; b /= 255
+                            const max = Math.max(r, g, b), min = Math.min(r, g, b)
+                            const diff = max - min
+                            const brightness = max
+                            const saturation = max === 0 ? 0 : diff / max
+                            let hue = 0
+                            if (diff !== 0) {
+                              switch (max) {
+                                case r: hue = (g - b) / diff + (g < b ? 6 : 0); break
+                                case g: hue = (b - r) / diff + 2; break
+                                case b: hue = (r - g) / diff + 4; break
+                              }
+                              hue /= 6
+                            }
+                            return { h: hue, s: saturation, b: brightness }
+                          }
+                          const hsb = rgbToHsb(color.rgb[0], color.rgb[1], color.rgb[2])
                           const fakeColor: CarColor = {
                             colorName: `Extracted Color ${index + 1}`,
                             make: 'Image Extract',
                             model: '',
                             year: null,
                             colorType: 'Extracted',
-                            color1: { h: 0, s: 0, b: 0.5 },
-                            color2: { h: 0, s: 0, b: 0.5 }
+                            color1: hsb,
+                            color2: hsb
                           }
                           handleColorSelect(fakeColor)
                         }}
@@ -628,7 +648,11 @@ export default function HomePage() {
                     {harmonyColors.slice(0, deviceInfo.isMobile ? 4 : 6).map((color, index) => (
                       <button
                         key={index}
-                        onClick={() => handleColorSelect(color)}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleColorSelect(color)
+                        }}
                         className={`rounded border border-gray-300 hover:border-blue-500 transition-colors gpu-accelerated focus-visible ${
                           deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
                         }`}
