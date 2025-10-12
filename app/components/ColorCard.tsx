@@ -52,65 +52,51 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
         role="img"
         aria-label={`Color preview for ${color.colorName}`}
       />
-      <div className="p-3 flex-grow flex flex-col justify-between color-info-area">
-        <div className="min-h-0">
+      <div className="p-3 flex-grow flex flex-col color-info-area">
+        <div className="flex-grow">
           <h3 className={`text-sm font-bold truncate leading-tight ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>
             {color.colorName}
           </h3>
           <p className={`text-sm truncate leading-tight ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
             {displayText}
           </p>
-        </div>
-        <div className="flex justify-between items-center mt-4 min-h-[32px]">
           {color.colorType && (
-            <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-              isDarkMode ? 'bg-slate-700 text-cyan-400' : 'bg-gray-100 text-blue-600'
-            }`}>
+            <div className={`text-xs font-semibold mt-1 ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
               {color.colorType}
-            </span>
+            </div>
           )}
-          <div className="flex items-center gap-2 ml-auto">
-            {onToggleFavorite && (
-              <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation()
-                  onToggleFavorite()
-                }}
-                onTouchStart={(e) => {
-                  e.stopPropagation()
-                }}
-                className={`transition-colors touch-manipulation select-none p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
-                  isFavorite ? 'text-red-500 hover:text-red-600 active:text-red-700' : 
-                  isDarkMode ? 'text-slate-300 hover:text-red-400 hover:bg-slate-700 active:text-red-500' : 'text-gray-400 hover:text-red-500 hover:bg-gray-100 active:text-red-600'
-                }`}
-                style={{
-                  WebkitTapHighlightColor: 'transparent',
-                  touchAction: 'manipulation'
-                }}
-                aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-              >
-                {isFavorite ? '❤️' : '🤍'}
-              </button>
-            )}
+        </div>
+        <div className="flex justify-center items-center gap-2 mt-3">
+          {onToggleFavorite && (
             <button
               onClick={(e) => {
+                e.preventDefault()
                 e.stopPropagation()
-                onSelect(color)
+                onToggleFavorite()
               }}
               className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
-                isDarkMode ? 'text-slate-300 hover:text-blue-400 hover:bg-slate-700 active:text-blue-500' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100 active:text-blue-700'
+                isFavorite ? 'text-red-500 hover:text-red-600' : 
+                isDarkMode ? 'text-slate-300 hover:text-red-400 hover:bg-slate-700' : 'text-gray-400 hover:text-red-500 hover:bg-gray-100'
               }`}
-              style={{
-                WebkitTapHighlightColor: 'transparent'
-              }}
-              aria-label={`Learn more about ${color.colorName}`}
+              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
-              ℹ️
+              {isFavorite ? '❤️' : '🤍'}
             </button>
-            <div onClick={(e) => e.stopPropagation()}>
-              <ShareButton color={color} isDarkMode={isDarkMode} />
-            </div>
+          )}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onSelect(color)
+            }}
+            className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
+              isDarkMode ? 'text-slate-300 hover:text-blue-400 hover:bg-slate-700' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100'
+            }`}
+            aria-label={`Learn more about ${color.colorName}`}
+          >
+            ℹ️
+          </button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <ShareButton color={color} isDarkMode={isDarkMode} />
           </div>
         </div>
       </div>

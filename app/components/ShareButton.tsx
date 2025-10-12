@@ -61,8 +61,8 @@ const ShareButton: React.FC<ShareButtonProps> = ({ color, isDarkMode }) => {
       {showOptions && (
         <div className={`absolute bottom-full right-0 mb-2 p-2 rounded-lg shadow-lg border z-50 ${
           isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-gray-200'
-        }`}>
-          <div className="flex flex-col gap-1 min-w-[120px]">
+        }`} style={{ transform: 'translateX(-50%)', right: '50%' }}>
+          <div className="flex flex-col gap-1 w-24">
             <button
               onClick={shareToTwitter}
               className={`px-3 py-2 text-sm rounded transition-colors text-left ${
