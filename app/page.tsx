@@ -45,7 +45,7 @@ export default function HomePage() {
   const [selectedColorType, setSelectedColorType] = useState('')
   const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
   const [hasMore, setHasMore] = useState(true)
-  const [selectedColor, setSelectedColor] = useState<CarColor | null>(null)
+  const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
   const [colorHistory, setColorHistory] = useState<string[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
@@ -227,13 +227,13 @@ export default function HomePage() {
 
   // Handle color selection with history tracking
   const handleColorSelect = useCallback((color: CarColor) => {
-    setSelectedColor(color)
+    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+    setExpandedColorId(expandedColorId === colorId ? null : colorId)
     setColorHistory(prev => {
-      const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
       const filtered = prev.filter(id => id !== colorId)
       return [colorId, ...filtered.slice(0, 49)] // Keep last 50
     })
-  }, [])
+  }, [expandedColorId])
 
   if (isInitialLoad) {
     const videoUrl = '/Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4'
@@ -694,137 +694,13 @@ export default function HomePage() {
               favorites={favorites}
               onToggleFavorite={toggleFavorite}
               isDarkMode={isDarkMode}
+              expandedColorId={expandedColorId}
             />
           </div>
           </ResponsiveLayout>
         </ErrorBoundary>
 
-        {/* Color Info Modal */}
-        {selectedColor && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999] p-4" onClick={() => setSelectedColor(null)}>
-            <div 
-              className={`w-full rounded-lg shadow-2xl animate-scale-in ${
-                deviceInfo.isMobile ? 'max-w-sm mx-4' : 'max-w-md'
-              } ${isDarkMode ? 'bg-slate-800 border border-slate-600' : 'bg-white border border-gray-200'}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className={deviceInfo.isMobile ? 'p-3' : 'p-4'}>
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
-                    deviceInfo.isMobile ? 'text-lg' : 'text-xl'
-                  }`}>
-                    {selectedColor.colorName}
-                  </h3>
-                  <button
-                    onClick={() => setSelectedColor(null)}
-                    className={`transition-colors focus-visible ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-gray-400 hover:text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-lg' : 'text-xl'
-                    }`}
-                    aria-label="Close modal"
-                  >
-                    ×
-                  </button>
-                </div>
-                
-                <div className={`grid grid-cols-3 mb-4 ${deviceInfo.isMobile ? 'gap-1' : 'gap-2'}`}>
-                  <div className="text-center">
-                    <div 
-                      className={`w-full rounded border-2 border-gray-300 mb-1 gpu-accelerated ${
-                        deviceInfo.isMobile ? 'h-12' : 'h-16'
-                      }`}
-                      style={{ background: `hsl(${selectedColor.color1.h * 360}, ${selectedColor.color1.s * 100}%, ${selectedColor.color1.b * 100}%)` }}
-                      role="img"
-                      aria-label="Primary color"
-                    />
-                    <div className={`${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
-                    }`}>Color 1</div>
-                    <div className={`font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
-                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
-                    }`}>
-                      {selectedColor.color1.h.toFixed(2)} {selectedColor.color1.s.toFixed(2)} {selectedColor.color1.b.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div 
-                      className={`w-full rounded border-2 border-gray-300 mb-1 gpu-accelerated ${
-                        deviceInfo.isMobile ? 'h-12' : 'h-16'
-                      }`}
-                      style={{ background: `hsl(${selectedColor.color2.h * 360}, ${selectedColor.color2.s * 100}%, ${selectedColor.color2.b * 100}%)` }}
-                      role="img"
-                      aria-label="Secondary color"
-                    />
-                    <div className={`${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
-                    }`}>Color 2</div>
-                    <div className={`font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
-                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
-                    }`}>
-                      {selectedColor.color2.h.toFixed(2)} {selectedColor.color2.s.toFixed(2)} {selectedColor.color2.b.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div 
-                      className={`w-full rounded border-2 border-gray-300 mb-1 gpu-accelerated ${
-                        deviceInfo.isMobile ? 'h-12' : 'h-16'
-                      }`}
-                      style={{ background: createForzaGradient(selectedColor.color1, selectedColor.color2) }}
-                      role="img"
-                      aria-label="Blended color"
-                    />
-                    <div className={`${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
-                    }`}>Blend</div>
-                  </div>
-                </div>
-                
-                <div className={`space-y-2 ${deviceInfo.isMobile ? 'text-sm' : 'text-sm'}`}>
-                  <div className="flex justify-between">
-                    <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Make:</span>
-                    <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{selectedColor.make}</span>
-                  </div>
-                  {selectedColor.model && (
-                    <div className="flex justify-between">
-                      <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Model:</span>
-                      <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{selectedColor.model}</span>
-                    </div>
-                  )}
-                  {selectedColor.year && (
-                    <div className="flex justify-between">
-                      <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Year:</span>
-                      <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{selectedColor.year}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Type:</span>
-                    <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{selectedColor.colorType}</span>
-                  </div>
-                </div>
-                
-                <div className={`flex gap-2 ${deviceInfo.isMobile ? 'mt-3' : 'mt-4'}`}>
-                  <button
-                    onClick={() => {
-                      const colorId = `${selectedColor.make}-${selectedColor.colorName}-${selectedColor.year || 'unknown'}`
-                      toggleFavorite(colorId)
-                    }}
-                    className={`flex-1 rounded-lg font-medium transition-colors focus-visible ${
-                      deviceInfo.isMobile ? 'py-2 px-3 text-sm' : 'py-2 px-4'
-                    } ${
-                      favorites.includes(`${selectedColor.make}-${selectedColor.colorName}-${selectedColor.year || 'unknown'}`)
-                        ? 'bg-red-500 hover:bg-red-600 text-white'
-                        : isDarkMode
-                        ? 'bg-slate-700 hover:bg-slate-600 text-white'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
-                    }`}
-                    aria-label={favorites.includes(`${selectedColor.make}-${selectedColor.colorName}-${selectedColor.year || 'unknown'}`) ? 'Remove from favorites' : 'Add to favorites'}
-                  >
-                    {favorites.includes(`${selectedColor.make}-${selectedColor.colorName}-${selectedColor.year || 'unknown'}`) ? '❤️ Favorited' : '🤍 Add to Favorites'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         <Footer isDarkMode={isDarkMode} />
         

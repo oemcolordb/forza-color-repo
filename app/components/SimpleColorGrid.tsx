@@ -10,6 +10,7 @@ interface SimpleColorGridProps {
   onColorSelect: (color: CarColor) => void
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
+  expandedColorId?: string | null
 }
 
 const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
@@ -17,7 +18,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   favorites,
   onColorSelect,
   onToggleFavorite,
-  isDarkMode
+  isDarkMode,
+  expandedColorId
 }) => {
   const [displayCount, setDisplayCount] = useState(100)
   const [isLoading, setIsLoading] = useState(false)
@@ -64,16 +66,64 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
           const uniqueKey = `${colorId}-${index}`
           const isFavorite = favorites.includes(colorId)
+          const isExpanded = expandedColorId === colorId
           
           return (
-            <ColorCard
-              key={uniqueKey}
-              color={color}
-              onSelect={onColorSelect}
-              isFavorite={isFavorite}
-              onToggleFavorite={() => onToggleFavorite(colorId)}
-              isDarkMode={isDarkMode}
-            />
+            <React.Fragment key={uniqueKey}>
+              <ColorCard
+                color={color}
+                onSelect={onColorSelect}
+                isFavorite={isFavorite}
+                onToggleFavorite={() => onToggleFavorite(colorId)}
+                isDarkMode={isDarkMode}
+              />
+              {isExpanded && (
+                <div className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bg-slate-800 border-blue-500' : 'bg-gray-50 border-blue-400'}`}>
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="text-center">
+                      <div className="w-full h-16 rounded border mb-1" style={{ background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)` }} />
+                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Color 1</div>
+                      <div className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
+                        {color.color1.h.toFixed(2)} {color.color1.s.toFixed(2)} {color.color1.b.toFixed(2)}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-full h-16 rounded border mb-1" style={{ background: `hsl(${color.color2.h * 360}, ${color.color2.s * 100}%, ${color.color2.b * 100}%)` }} />
+                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Color 2</div>
+                      <div className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
+                        {color.color2.h.toFixed(2)} {color.color2.s.toFixed(2)} {color.color2.b.toFixed(2)}
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <div className="w-full h-16 rounded border mb-1" style={{ background: `linear-gradient(45deg, hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%), hsl(${color.color2.h * 360}, ${color.color2.s * 100}%, ${color.color2.b * 100}%))` }} />
+                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Blend</div>
+                    </div>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Make:</span>
+                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.make}</span>
+                    </div>
+                    {color.model && (
+                      <div className="flex justify-between">
+                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Model:</span>
+                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.model}</span>
+                      </div>
+                    )}
+                    {color.year && (
+                      <div className="flex justify-between">
+                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Year:</span>
+                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.year}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Type:</span>
+                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.colorType}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </React.Fragment>
           )
         })}
       </div>
