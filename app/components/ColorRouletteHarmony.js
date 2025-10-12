@@ -379,14 +379,18 @@ const ColorRouletteHarmony = ({
               {currentHarmony.map((color, index) => (
                 <button
                   key={index}
-                  onClick={() => onColorSelect(color)}
-                  className={`aspect-square rounded border-2 hover:border-blue-500 transition-colors ${
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onColorSelect?.(color)
+                  }}
+                  className={`aspect-square rounded border-2 hover:border-blue-500 transition-colors cursor-pointer ${
                     index === 0 ? 'border-white' : 'border-gray-300'
                   }`}
                   style={{
-                    background: hsbToHex(color.color1.h * 360, color.color1.s, color.color1.b)
+                    background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`
                   }}
-                  title={`${color.colorName} - ${color.make} (${Math.round(color.color1.h * 360)}°)`}
+                  title={`${color.colorName} - ${color.make} (H:${(color.color1.h * 360).toFixed(0)} S:${(color.color1.s * 100).toFixed(0)} B:${(color.color1.b * 100).toFixed(0)})`}
                 />
               ))}
             </div>

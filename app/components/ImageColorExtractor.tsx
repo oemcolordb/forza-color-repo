@@ -492,8 +492,12 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
                     <div className="text-xs opacity-75">{match.forza.make} • {match.similarity.toFixed(0)}% match</div>
                   </div>
                   <button
-                    onClick={() => onColorSelect?.(match.forza)}
-                    className={`px-2 py-1 text-xs rounded ${
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      onColorSelect?.(match.forza)
+                    }}
+                    className={`px-2 py-1 text-xs rounded transition-colors ${
                       isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
                     } text-white`}
                   >
