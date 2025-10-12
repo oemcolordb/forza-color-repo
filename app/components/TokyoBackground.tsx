@@ -56,12 +56,14 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
         setIsInitialized(true)
       }
       img.onerror = () => {
+        console.warn('Background image failed to load:', mediaSrc)
         setMediaError(true)
         setMediaLoaded(true)
         setIsInitialized(true)
       }
       img.src = mediaSrc
     } else {
+      // For videos, just set the source without preloading
       setBackgroundMedia(mediaSrc)
       setMediaType('video')
       setMediaLoaded(true)
@@ -103,6 +105,10 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
             muted
             loop
             playsInline
+            onError={() => {
+              console.warn('Background video failed to load:', backgroundMedia)
+              setMediaError(true)
+            }}
             style={{
               opacity: isDarkMode ? 0.4 : 0.6,
               filter: isDarkMode ? 'brightness(0.8) contrast(1.3)' : 'brightness(1.2) contrast(1.1)'
