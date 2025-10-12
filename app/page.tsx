@@ -715,8 +715,8 @@ export default function HomePage() {
             >
               <div className={deviceInfo.isMobile ? 'p-3' : 'p-4'}>
                 <div className="flex justify-between items-start mb-4">
-                  <h3 className={`font-bold text-readable ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
-                    deviceInfo.isMobile ? 'text-base' : 'text-lg'
+                  <h3 className={`font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
+                    deviceInfo.isMobile ? 'text-lg' : 'text-xl'
                   }`}>
                     {selectedColor.colorName}
                   </h3>
@@ -741,11 +741,11 @@ export default function HomePage() {
                       role="img"
                       aria-label="Primary color"
                     />
-                    <div className={`text-readable-tight ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    <div className={`${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
+                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
                     }`}>Color 1</div>
-                    <div className={`font-mono text-readable-tight ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
-                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    <div className={`font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
+                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
                     }`}>
                       {selectedColor.color1.h.toFixed(2)} {selectedColor.color1.s.toFixed(2)} {selectedColor.color1.b.toFixed(2)}
                     </div>
@@ -759,11 +759,11 @@ export default function HomePage() {
                       role="img"
                       aria-label="Secondary color"
                     />
-                    <div className={`text-readable-tight ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    <div className={`${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
+                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
                     }`}>Color 2</div>
-                    <div className={`font-mono text-readable-tight ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
-                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    <div className={`font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'} ${
+                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
                     }`}>
                       {selectedColor.color2.h.toFixed(2)} {selectedColor.color2.s.toFixed(2)} {selectedColor.color2.b.toFixed(2)}
                     </div>
@@ -777,13 +777,13 @@ export default function HomePage() {
                       role="img"
                       aria-label="Blended color"
                     />
-                    <div className={`text-readable-tight ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
-                      deviceInfo.isMobile ? 'text-2xs' : 'text-xs'
+                    <div className={`${isDarkMode ? 'text-slate-300' : 'text-gray-600'} ${
+                      deviceInfo.isMobile ? 'text-xs' : 'text-xs'
                     }`}>Blend</div>
                   </div>
                 </div>
                 
-                <div className={`space-y-2 text-readable ${deviceInfo.isMobile ? 'text-sm' : 'text-sm'}`}>
+                <div className={`space-y-2 ${deviceInfo.isMobile ? 'text-sm' : 'text-sm'}`}>
                   <div className="flex justify-between">
                     <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Make:</span>
                     <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{selectedColor.make}</span>
