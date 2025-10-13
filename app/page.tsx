@@ -35,11 +35,8 @@ import CriticalCSS from './components/CriticalCSS'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
-import StructuredData from './components/StructuredData'
-import ColorComparison from './components/ColorComparison'
-import ColorSearch from './components/ColorSearch'
-import ColorExport from './components/ColorExport'
-import ColorHistory from './components/ColorHistory'
+
+
 import Breadcrumbs from './components/Breadcrumbs'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
@@ -454,7 +451,7 @@ export default function HomePage() {
           ? 'bg-slate-900 text-white' 
           : 'bg-white text-gray-900'
       }`}>
-        <StructuredData colors={allColors.length > 0 ? allColors : undefined} type="color" />
+
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
         <Breadcrumbs isDarkMode={isDarkMode} />
@@ -596,35 +593,21 @@ export default function HomePage() {
           </div>
           
           {/* Advanced Tools */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-            isDarkMode ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50' : 'bg-gradient-to-r from-orange-100 to-red-100'
-          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🛠️</span>
-              <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ADVANCED TOOLS</span>
+          {allColors.length > 0 && (
+            <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+              isDarkMode ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50' : 'bg-gradient-to-r from-orange-100 to-red-100'
+            } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">🛠️</span>
+                <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ADVANCED TOOLS</span>
+              </div>
+              <div className="text-center text-sm text-gray-500">
+                Advanced tools coming soon!
+              </div>
             </div>
-            <div className={`grid gap-4 ${
-              deviceInfo.isMobile ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
-            }`}>
-              <ColorSearch
-                colors={allColors}
-                onColorsFound={setSearchResults}
-                isDarkMode={isDarkMode}
-              />
-              <ColorComparison
-                colors={allColors}
-                isDarkMode={isDarkMode}
-              />
-              <ColorExport
-                colors={searchResults.length > 0 ? searchResults : filteredColors}
-                isDarkMode={isDarkMode}
-              />
-              <ColorHistory
-                isDarkMode={isDarkMode}
-                onColorSelect={showColorHSB}
-              />
-            </div>
-          </div>
+          )}
+          
+
           
           {/* Results Display */}
           {(extractedColors.length > 0 || harmonyColors.length > 0) && (
