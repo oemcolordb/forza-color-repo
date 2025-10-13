@@ -12,7 +12,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import SimpleColorGrid from './components/SimpleColorGrid'
 import VirtualColorGrid from './components/VirtualColorGrid'
-import { indexedDB } from './lib/indexedDB'
+import { indexedDBManager } from './lib/indexedDB'
 import OptimizedVirtualGrid from './components/OptimizedVirtualGrid'
 import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ImageColorExtractor from './components/ImageColorExtractor'
@@ -208,7 +208,7 @@ export default function HomePage() {
     const loadFavorites = async () => {
       try {
         // Try IndexedDB first
-        const dbFavorites = await indexedDB.getFavorites()
+        const dbFavorites = await indexedDBManager.getFavorites()
         if (dbFavorites.length > 0) {
           setFavorites(dbFavorites)
           return
@@ -221,7 +221,7 @@ export default function HomePage() {
           if (Array.isArray(parsed)) {
             setFavorites(parsed)
             // Migrate to IndexedDB
-            await indexedDB.storeFavorites(parsed)
+            await indexedDBManager.storeFavorites(parsed)
           }
         }
       } catch (err) {
@@ -238,7 +238,7 @@ export default function HomePage() {
     const saveFavorites = async () => {
       try {
         // Save to IndexedDB
-        await indexedDB.storeFavorites(favorites)
+        await indexedDBManager.storeFavorites(favorites)
         // Keep localStorage as backup
         localStorage.setItem('forza-favorites', JSON.stringify(favorites))
       } catch (err) {
@@ -267,8 +267,6 @@ export default function HomePage() {
 
   // Show HSB popup for color data
   const showColorHSB = useCallback((color: CarColor) => {
-    console.log('showColorHSB called with:', color.colorName)
-    console.log('Setting popup state - color:', color, 'showHsbPopup: true')
     setHsbPopupColor(color)
     setShowHsbPopup(true)
   }, [])
@@ -785,6 +783,7 @@ export default function HomePage() {
               <VirtualColorGrid
                 colors={filteredColors}
                 onColorSelect={handleColorSelect}
+                onShowInfo={showColorHSB}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 isDarkMode={isDarkMode}
@@ -794,6 +793,7 @@ export default function HomePage() {
               <SimpleColorGrid
                 colors={filteredColors}
                 onColorSelect={handleColorSelect}
+                onShowInfo={showColorHSB}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 isDarkMode={isDarkMode}

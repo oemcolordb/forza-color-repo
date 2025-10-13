@@ -1,0 +1,2102 @@
+[
+  {
+    "year": "1993",
+    "manufacturer": "Abarth",
+    "model": "124 Spider",
+    "type": "Convertible",
+    "price": 1157046,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 6,
+      "handling": 6,
+      "acceleration": 6.4,
+      "launch": 5.8,
+      "braking": 6.4,
+      "offroad": 5.1
+    },
+    "pi": {
+      "class": "A",
+      "value": 727
+    }
+  },
+  {
+    "year": "2010",
+    "manufacturer": "Abarth",
+    "model": "124 Spider",
+    "type": "Convertible",
+    "price": 2096567,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 8.5,
+      "handling": 5.5,
+      "acceleration": 5.9,
+      "launch": 6.5,
+      "braking": 4.5,
+      "offroad": 2.2
+    },
+    "pi": {
+      "class": "A",
+      "value": 732
+    }
+  },
+  {
+    "year": "2020",
+    "manufacturer": "Abarth",
+    "model": "124 Spider",
+    "type": "Convertible",
+    "price": 2812553,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 6,
+      "handling": 2.5,
+      "acceleration": 4.2,
+      "launch": 2.7,
+      "braking": 3.2,
+      "offroad": 4.9
+    },
+    "pi": {
+      "class": "C",
+      "value": 528
+    }
+  },
+  {
+    "year": "2003",
+    "manufacturer": "Abarth",
+    "model": "595 esseesse",
+    "type": "Rally Car",
+    "price": 3542620,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 5.6,
+      "handling": 7.8,
+      "acceleration": 2.4,
+      "launch": 7,
+      "braking": 5.4,
+      "offroad": 9.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 684
+    }
+  },
+  {
+    "year": "1992",
+    "manufacturer": "Abarth",
+    "model": "595 esseesse",
+    "type": "Sports Car",
+    "price": 2524888,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 9.9,
+      "handling": 6.7,
+      "acceleration": 3,
+      "launch": 8.2,
+      "braking": 2,
+      "offroad": 6.3
+    },
+    "pi": {
+      "class": "B",
+      "value": 629
+    }
+  },
+  {
+    "year": "1976",
+    "manufacturer": "Abarth",
+    "model": "695 Biposto",
+    "type": "Classic",
+    "price": 1591862,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 7.6,
+      "handling": 4.1,
+      "acceleration": 3.7,
+      "launch": 8.8,
+      "braking": 3.8,
+      "offroad": 3.5
+    },
+    "pi": {
+      "class": "B",
+      "value": 681
+    }
+  },
+  {
+    "year": "1964",
+    "manufacturer": "Abarth",
+    "model": "695 Biposto",
+    "type": "Classic",
+    "price": 500223,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 8.4,
+      "handling": 7.5,
+      "acceleration": 7.1,
+      "launch": 4,
+      "braking": 9.2,
+      "offroad": 2.6
+    },
+    "pi": {
+      "class": "A",
+      "value": 766
+    }
+  },
+  {
+    "year": "1961",
+    "manufacturer": "Abarth",
+    "model": "695 Biposto",
+    "type": "Classic",
+    "price": 4289346,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 5.9,
+      "handling": 6,
+      "acceleration": 9.9,
+      "launch": 7.9,
+      "braking": 9.1,
+      "offroad": 7.7
+    },
+    "pi": {
+      "class": "S1",
+      "value": 872
+    }
+  },
+  {
+    "year": "2006",
+    "manufacturer": "Abarth",
+    "model": "695 Biposto",
+    "type": "Sports Car",
+    "price": 196796,
+    "rarity": "Legendary",
+    "country": "Italy",
+    "stats": {
+      "speed": 5.1,
+      "handling": 5.5,
+      "acceleration": 4.6,
+      "launch": 7.9,
+      "braking": 2.5,
+      "offroad": 3.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 600
+    }
+  },
+  {
+    "year": "1987",
+    "manufacturer": "Abarth",
+    "model": "Fiat 131",
+    "type": "Sports Car",
+    "price": 2211125,
+    "rarity": "Legendary",
+    "country": "Italy",
+    "stats": {
+      "speed": 3.1,
+      "handling": 9.1,
+      "acceleration": 3.8,
+      "launch": 8.9,
+      "braking": 4,
+      "offroad": 4.9
+    },
+    "pi": {
+      "class": "B",
+      "value": 655
+    }
+  },
+  {
+    "year": "1988",
+    "manufacturer": "Abarth",
+    "model": "Fiat 131",
+    "type": "Hypercar",
+    "price": 314734,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 9.5,
+      "handling": 7,
+      "acceleration": 6.5,
+      "launch": 7,
+      "braking": 8.8,
+      "offroad": 5.2
+    },
+    "pi": {
+      "class": "S1",
+      "value": 862
+    }
+  },
+  {
+    "year": "2004",
+    "manufacturer": "Abarth",
+    "model": "Fiat 131",
+    "type": "Sports Car",
+    "price": 132821,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 9.2,
+      "handling": 7.6,
+      "acceleration": 6.4,
+      "launch": 2.4,
+      "braking": 3.5,
+      "offroad": 6.2
+    },
+    "pi": {
+      "class": "B",
+      "value": 686
+    }
+  },
+  {
+    "year": "1974",
+    "manufacturer": "Acura",
+    "model": "Integra Type-R",
+    "type": "Classic",
+    "price": 2361158,
+    "rarity": "Legendary",
+    "country": "United States",
+    "stats": {
+      "speed": 2.3,
+      "handling": 3.7,
+      "acceleration": 8.3,
+      "launch": 10,
+      "braking": 4.3,
+      "offroad": 3.5
+    },
+    "pi": {
+      "class": "B",
+      "value": 668
+    }
+  },
+  {
+    "year": "1982",
+    "manufacturer": "Acura",
+    "model": "Integra Type-R",
+    "type": "Sports Car",
+    "price": 1675806,
+    "rarity": "Epic",
+    "country": "United States",
+    "stats": {
+      "speed": 9.8,
+      "handling": 5.9,
+      "acceleration": 6.7,
+      "launch": 3.7,
+      "braking": 5.7,
+      "offroad": 6.9
+    },
+    "pi": {
+      "class": "A",
+      "value": 708
+    }
+  },
+  {
+    "year": "2013",
+    "manufacturer": "Acura",
+    "model": "NSX",
+    "type": "Supercar",
+    "price": 1140037,
+    "rarity": "Rare",
+    "country": "United States",
+    "stats": {
+      "speed": 7.7,
+      "handling": 10,
+      "acceleration": 6.4,
+      "launch": 6.8,
+      "braking": 7.3,
+      "offroad": 5.3
+    },
+    "pi": {
+      "class": "S1",
+      "value": 865
+    }
+  },
+  {
+    "year": "2020",
+    "manufacturer": "Acura",
+    "model": "NSX",
+    "type": "Rally Car",
+    "price": 170695,
+    "rarity": "Rare",
+    "country": "United States",
+    "stats": {
+      "speed": 8.4,
+      "handling": 5.2,
+      "acceleration": 6.4,
+      "launch": 7.7,
+      "braking": 4.6,
+      "offroad": 9.2
+    },
+    "pi": {
+      "class": "A",
+      "value": 743
+    }
+  },
+  {
+    "year": "2009",
+    "manufacturer": "Acura",
+    "model": "RSX Type-S",
+    "type": "Sports Car",
+    "price": 475521,
+    "rarity": "Epic",
+    "country": "United States",
+    "stats": {
+      "speed": 8.8,
+      "handling": 9.5,
+      "acceleration": 5.8,
+      "launch": 8.5,
+      "braking": 3.7,
+      "offroad": 4.2
+    },
+    "pi": {
+      "class": "A",
+      "value": 764
+    }
+  },
+  {
+    "year": "1980",
+    "manufacturer": "Acura",
+    "model": "RSX Type-S",
+    "type": "Sports Car",
+    "price": 274870,
+    "rarity": "Epic",
+    "country": "United States",
+    "stats": {
+      "speed": 7.1,
+      "handling": 8.3,
+      "acceleration": 8.2,
+      "launch": 6.2,
+      "braking": 7.3,
+      "offroad": 5
+    },
+    "pi": {
+      "class": "A",
+      "value": 795
+    }
+  },
+  {
+    "year": "1979",
+    "manufacturer": "Acura",
+    "model": "RSX Type-S",
+    "type": "Classic",
+    "price": 1078826,
+    "rarity": "Common",
+    "country": "United States",
+    "stats": {
+      "speed": 6.7,
+      "handling": 3.3,
+      "acceleration": 6.7,
+      "launch": 9.8,
+      "braking": 4.1,
+      "offroad": 8.6
+    },
+    "pi": {
+      "class": "A",
+      "value": 742
+    }
+  },
+  {
+    "year": "1989",
+    "manufacturer": "Acura",
+    "model": "RSX Type-S",
+    "type": "Rally Car",
+    "price": 4025330,
+    "rarity": "Rare",
+    "country": "United States",
+    "stats": {
+      "speed": 6.6,
+      "handling": 5.1,
+      "acceleration": 3,
+      "launch": 3.7,
+      "braking": 2.6,
+      "offroad": 7.6
+    },
+    "pi": {
+      "class": "C",
+      "value": 529
+    }
+  },
+  {
+    "year": "1988",
+    "manufacturer": "Alfa Romeo",
+    "model": "155 Q4",
+    "type": "Rally Car",
+    "price": 4303219,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 3.8,
+      "handling": 7.6,
+      "acceleration": 2.3,
+      "launch": 4.3,
+      "braking": 9.1,
+      "offroad": 9.2
+    },
+    "pi": {
+      "class": "B",
+      "value": 685
+    }
+  },
+  {
+    "year": "1994",
+    "manufacturer": "Alfa Romeo",
+    "model": "155 Q4",
+    "type": "Sports Car",
+    "price": 1260463,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 4.2,
+      "handling": 9.1,
+      "acceleration": 5.7,
+      "launch": 6.7,
+      "braking": 9.8,
+      "offroad": 4.4
+    },
+    "pi": {
+      "class": "A",
+      "value": 717
+    }
+  },
+  {
+    "year": "2010",
+    "manufacturer": "Alfa Romeo",
+    "model": "155 Q4",
+    "type": "Sports Car",
+    "price": 1350713,
+    "rarity": "Legendary",
+    "country": "Italy",
+    "stats": {
+      "speed": 6.7,
+      "handling": 5.1,
+      "acceleration": 5.6,
+      "launch": 6.4,
+      "braking": 9.6,
+      "offroad": 3.5
+    },
+    "pi": {
+      "class": "A",
+      "value": 736
+    }
+  },
+  {
+    "year": "2006",
+    "manufacturer": "Alfa Romeo",
+    "model": "155 Q4",
+    "type": "Rally Car",
+    "price": 2520436,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 2.3,
+      "handling": 6.5,
+      "acceleration": 2.9,
+      "launch": 7.9,
+      "braking": 4,
+      "offroad": 7.4
+    },
+    "pi": {
+      "class": "B",
+      "value": 640
+    }
+  },
+  {
+    "year": "1979",
+    "manufacturer": "Alfa Romeo",
+    "model": "33 Stradale",
+    "type": "Classic",
+    "price": 981956,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 8.8,
+      "handling": 3.6,
+      "acceleration": 3,
+      "launch": 6.8,
+      "braking": 7.4,
+      "offroad": 6.1
+    },
+    "pi": {
+      "class": "B",
+      "value": 642
+    }
+  },
+  {
+    "year": "2002",
+    "manufacturer": "Alfa Romeo",
+    "model": "33 Stradale",
+    "type": "Sports Car",
+    "price": 4167654,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 6.9,
+      "handling": 2.8,
+      "acceleration": 4.6,
+      "launch": 6,
+      "braking": 5.6,
+      "offroad": 6.4
+    },
+    "pi": {
+      "class": "B",
+      "value": 611
+    }
+  },
+  {
+    "year": "1988",
+    "manufacturer": "Alfa Romeo",
+    "model": "4C",
+    "type": "Hypercar",
+    "price": 2318054,
+    "rarity": "Legendary",
+    "country": "Italy",
+    "stats": {
+      "speed": 9.2,
+      "handling": 7.4,
+      "acceleration": 8.3,
+      "launch": 8.6,
+      "braking": 6.8,
+      "offroad": 7.2
+    },
+    "pi": {
+      "class": "S1",
+      "value": 832
+    }
+  },
+  {
+    "year": "2019",
+    "manufacturer": "Alfa Romeo",
+    "model": "4C",
+    "type": "Rally Car",
+    "price": 587757,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 4.1,
+      "handling": 3.1,
+      "acceleration": 2.1,
+      "launch": 3.6,
+      "braking": 8.2,
+      "offroad": 7.7
+    },
+    "pi": {
+      "class": "C",
+      "value": 567
+    }
+  },
+  {
+    "year": "1992",
+    "manufacturer": "Alfa Romeo",
+    "model": "4C",
+    "type": "Rally Car",
+    "price": 1124603,
+    "rarity": "Legendary",
+    "country": "Italy",
+    "stats": {
+      "speed": 3.8,
+      "handling": 8.5,
+      "acceleration": 4.9,
+      "launch": 4.9,
+      "braking": 4.6,
+      "offroad": 8.4
+    },
+    "pi": {
+      "class": "B",
+      "value": 682
+    }
+  },
+  {
+    "year": "2016",
+    "manufacturer": "Alfa Romeo",
+    "model": "8C Competizione",
+    "type": "Rally Car",
+    "price": 755140,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 5.9,
+      "handling": 4,
+      "acceleration": 8,
+      "launch": 8.3,
+      "braking": 9.7,
+      "offroad": 9.9
+    },
+    "pi": {
+      "class": "A",
+      "value": 701
+    }
+  },
+  {
+    "year": "1965",
+    "manufacturer": "Alfa Romeo",
+    "model": "8C Competizione",
+    "type": "Supercar",
+    "price": 3618836,
+    "rarity": "Legendary",
+    "country": "Italy",
+    "stats": {
+      "speed": 8.9,
+      "handling": 8.9,
+      "acceleration": 9.3,
+      "launch": 5.7,
+      "braking": 7.3,
+      "offroad": 3.4
+    },
+    "pi": {
+      "class": "S1",
+      "value": 884
+    }
+  },
+  {
+    "year": "1961",
+    "manufacturer": "Alfa Romeo",
+    "model": "Giulia Quadrifoglio",
+    "type": "Classic",
+    "price": 3328578,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 4.5,
+      "handling": 9.9,
+      "acceleration": 6.2,
+      "launch": 7.8,
+      "braking": 9.5,
+      "offroad": 5.3
+    },
+    "pi": {
+      "class": "S1",
+      "value": 887
+    }
+  },
+  {
+    "year": "2005",
+    "manufacturer": "Alfa Romeo",
+    "model": "Giulia Quadrifoglio",
+    "type": "Rally Car",
+    "price": 3116186,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 6.1,
+      "handling": 2.1,
+      "acceleration": 7.2,
+      "launch": 9.6,
+      "braking": 7.2,
+      "offroad": 8.7
+    },
+    "pi": {
+      "class": "A",
+      "value": 723
+    }
+  },
+  {
+    "year": "1986",
+    "manufacturer": "Alfa Romeo",
+    "model": "Giulia Sprint GTA Stradale",
+    "type": "Sports Car",
+    "price": 963578,
+    "rarity": "Common",
+    "country": "Italy",
+    "stats": {
+      "speed": 7.2,
+      "handling": 3.7,
+      "acceleration": 7.6,
+      "launch": 5,
+      "braking": 8.7,
+      "offroad": 2.7
+    },
+    "pi": {
+      "class": "A",
+      "value": 781
+    }
+  },
+  {
+    "year": "1976",
+    "manufacturer": "Alfa Romeo",
+    "model": "Giulia Sprint GTA Stradale",
+    "type": "Classic",
+    "price": 3902518,
+    "rarity": "Epic",
+    "country": "Italy",
+    "stats": {
+      "speed": 4.8,
+      "handling": 9.2,
+      "acceleration": 8.7,
+      "launch": 7.2,
+      "braking": 9,
+      "offroad": 4.5
+    },
+    "pi": {
+      "class": "S1",
+      "value": 802
+    }
+  },
+  {
+    "year": "2004",
+    "manufacturer": "Alfa Romeo",
+    "model": "Giulia TZ2",
+    "type": "Sports Car",
+    "price": 2101979,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 6.9,
+      "handling": 6.3,
+      "acceleration": 5.7,
+      "launch": 6.5,
+      "braking": 5.8,
+      "offroad": 6.5
+    },
+    "pi": {
+      "class": "A",
+      "value": 787
+    }
+  },
+  {
+    "year": "2017",
+    "manufacturer": "Alfa Romeo",
+    "model": "Giulia TZ2",
+    "type": "Rally Car",
+    "price": 3125365,
+    "rarity": "Rare",
+    "country": "Italy",
+    "stats": {
+      "speed": 4.5,
+      "handling": 5.8,
+      "acceleration": 3.6,
+      "launch": 5.5,
+      "braking": 5.1,
+      "offroad": 8
+    },
+    "pi": {
+      "class": "B",
+      "value": 615
+    }
+  },
+  {
+    "year": "1970",
+    "manufacturer": "Alpine",
+    "model": "A110",
+    "type": "Classic",
+    "price": 611698,
+    "rarity": "Epic",
+    "country": "France",
+    "stats": {
+      "speed": 6.1,
+      "handling": 6.4,
+      "acceleration": 9.3,
+      "launch": 4.1,
+      "braking": 3.2,
+      "offroad": 7.9
+    },
+    "pi": {
+      "class": "B",
+      "value": 658
+    }
+  },
+  {
+    "year": "1990",
+    "manufacturer": "Alpine",
+    "model": "A110",
+    "type": "Sports Car",
+    "price": 547710,
+    "rarity": "Common",
+    "country": "France",
+    "stats": {
+      "speed": 5.3,
+      "handling": 3,
+      "acceleration": 2.8,
+      "launch": 9.9,
+      "braking": 8.1,
+      "offroad": 6.3
+    },
+    "pi": {
+      "class": "B",
+      "value": 637
+    }
+  },
+  {
+    "year": "1990",
+    "manufacturer": "Alpine",
+    "model": "A110 1600s",
+    "type": "Sports Car",
+    "price": 3051028,
+    "rarity": "Epic",
+    "country": "France",
+    "stats": {
+      "speed": 6.3,
+      "handling": 4.1,
+      "acceleration": 9.4,
+      "launch": 9.6,
+      "braking": 6.3,
+      "offroad": 2.3
+    },
+    "pi": {
+      "class": "A",
+      "value": 716
+    }
+  },
+  {
+    "year": "1975",
+    "manufacturer": "Alpine",
+    "model": "A110 1600s",
+    "type": "Supercar",
+    "price": 624720,
+    "rarity": "Rare",
+    "country": "France",
+    "stats": {
+      "speed": 8.1,
+      "handling": 5.1,
+      "acceleration": 9.6,
+      "launch": 10,
+      "braking": 6.5,
+      "offroad": 6.4
+    },
+    "pi": {
+      "class": "S1",
+      "value": 869
+    }
+  },
+  {
+    "year": "2011",
+    "manufacturer": "Apollo",
+    "model": "Intensa Emozione",
+    "type": "Rally Car",
+    "price": 702427,
+    "rarity": "Legendary",
+    "country": "United States",
+    "stats": {
+      "speed": 4.9,
+      "handling": 9.9,
+      "acceleration": 5.9,
+      "launch": 4.8,
+      "braking": 2.8,
+      "offroad": 7.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 649
+    }
+  },
+  {
+    "year": "1973",
+    "manufacturer": "Apollo",
+    "model": "Intensa Emozione",
+    "type": "Classic",
+    "price": 480538,
+    "rarity": "Legendary",
+    "country": "United States",
+    "stats": {
+      "speed": 4.9,
+      "handling": 5.1,
+      "acceleration": 9.2,
+      "launch": 2.4,
+      "braking": 3,
+      "offroad": 3.9
+    },
+    "pi": {
+      "class": "B",
+      "value": 696
+    }
+  },
+  {
+    "year": "2022",
+    "manufacturer": "Apollo",
+    "model": "Intensa Emozione",
+    "type": "Rally Car",
+    "price": 2920595,
+    "rarity": "Common",
+    "country": "United States",
+    "stats": {
+      "speed": 5.7,
+      "handling": 7.9,
+      "acceleration": 2.2,
+      "launch": 5.3,
+      "braking": 8.2,
+      "offroad": 8.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 685
+    }
+  },
+  {
+    "year": "1967",
+    "manufacturer": "Ariel",
+    "model": "Atom 500 V8",
+    "type": "Classic",
+    "price": 2384828,
+    "rarity": "Legendary",
+    "country": "United States",
+    "stats": {
+      "speed": 2.1,
+      "handling": 2.7,
+      "acceleration": 5.5,
+      "launch": 5.4,
+      "braking": 8.1,
+      "offroad": 8.5
+    },
+    "pi": {
+      "class": "B",
+      "value": 648
+    }
+  },
+  {
+    "year": "1984",
+    "manufacturer": "Ariel",
+    "model": "Atom 500 V8",
+    "type": "Rally Car",
+    "price": 2148344,
+    "rarity": "Common",
+    "country": "United States",
+    "stats": {
+      "speed": 6.1,
+      "handling": 5.1,
+      "acceleration": 2.9,
+      "launch": 3.3,
+      "braking": 3.6,
+      "offroad": 8.4
+    },
+    "pi": {
+      "class": "C",
+      "value": 532
+    }
+  },
+  {
+    "year": "2011",
+    "manufacturer": "Ariel",
+    "model": "Atom 500 V8",
+    "type": "Sports Car",
+    "price": 56673,
+    "rarity": "Rare",
+    "country": "United States",
+    "stats": {
+      "speed": 3,
+      "handling": 4.4,
+      "acceleration": 7.7,
+      "launch": 4.5,
+      "braking": 6.5,
+      "offroad": 3.4
+    },
+    "pi": {
+      "class": "B",
+      "value": 664
+    }
+  },
+  {
+    "year": "1979",
+    "manufacturer": "Ariel",
+    "model": "Nomad",
+    "type": "Classic",
+    "price": 745781,
+    "rarity": "Common",
+    "country": "United States",
+    "stats": {
+      "speed": 2.5,
+      "handling": 6.8,
+      "acceleration": 6.1,
+      "launch": 2.4,
+      "braking": 7.1,
+      "offroad": 4.8
+    },
+    "pi": {
+      "class": "B",
+      "value": 686
+    }
+  },
+  {
+    "year": "2023",
+    "manufacturer": "Ariel",
+    "model": "Nomad",
+    "type": "Hypercar",
+    "price": 2193247,
+    "rarity": "Common",
+    "country": "United States",
+    "stats": {
+      "speed": 9.9,
+      "handling": 9.8,
+      "acceleration": 9.2,
+      "launch": 5.3,
+      "braking": 4.5,
+      "offroad": 7.5
+    },
+    "pi": {
+      "class": "S1",
+      "value": 834
+    }
+  },
+  {
+    "year": "1961",
+    "manufacturer": "Ariel",
+    "model": "Nomad",
+    "type": "Classic",
+    "price": 4669706,
+    "rarity": "Legendary",
+    "country": "United States",
+    "stats": {
+      "speed": 5.3,
+      "handling": 2.7,
+      "acceleration": 5.4,
+      "launch": 2,
+      "braking": 7.3,
+      "offroad": 4
+    },
+    "pi": {
+      "class": "B",
+      "value": 660
+    }
+  },
+  {
+    "year": "2020",
+    "manufacturer": "Ascari",
+    "model": "KZ1R",
+    "type": "Sports Car",
+    "price": 1704464,
+    "rarity": "Rare",
+    "country": "United States",
+    "stats": {
+      "speed": 3.3,
+      "handling": 2.8,
+      "acceleration": 8.7,
+      "launch": 6.6,
+      "braking": 7.8,
+      "offroad": 3.8
+    },
+    "pi": {
+      "class": "B",
+      "value": 641
+    }
+  },
+  {
+    "year": "1981",
+    "manufacturer": "Ascari",
+    "model": "KZ1R",
+    "type": "Sports Car",
+    "price": 699760,
+    "rarity": "Epic",
+    "country": "United States",
+    "stats": {
+      "speed": 6.8,
+      "handling": 9.3,
+      "acceleration": 4.8,
+      "launch": 7.6,
+      "braking": 8.2,
+      "offroad": 2.7
+    },
+    "pi": {
+      "class": "A",
+      "value": 725
+    }
+  },
+  {
+    "year": "1968",
+    "manufacturer": "Ascari",
+    "model": "KZ1R",
+    "type": "Supercar",
+    "price": 2918296,
+    "rarity": "Common",
+    "country": "United States",
+    "stats": {
+      "speed": 8.7,
+      "handling": 5.8,
+      "acceleration": 7.1,
+      "launch": 8.2,
+      "braking": 7.9,
+      "offroad": 8.7
+    },
+    "pi": {
+      "class": "S1",
+      "value": 818
+    }
+  },
+  {
+    "year": "1973",
+    "manufacturer": "Ascari",
+    "model": "KZ1R",
+    "type": "Classic",
+    "price": 4969449,
+    "rarity": "Epic",
+    "country": "United States",
+    "stats": {
+      "speed": 4.9,
+      "handling": 2.7,
+      "acceleration": 6.6,
+      "launch": 4.7,
+      "braking": 8.5,
+      "offroad": 3.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 650
+    }
+  },
+  {
+    "year": "1994",
+    "manufacturer": "Aston Martin",
+    "model": "DB5",
+    "type": "Sports Car",
+    "price": 4848415,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.8,
+      "handling": 7.1,
+      "acceleration": 8.3,
+      "launch": 6.6,
+      "braking": 6.4,
+      "offroad": 6.2
+    },
+    "pi": {
+      "class": "A",
+      "value": 704
+    }
+  },
+  {
+    "year": "2013",
+    "manufacturer": "Aston Martin",
+    "model": "DB5",
+    "type": "Sports Car",
+    "price": 2106416,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 5.9,
+      "handling": 9.1,
+      "acceleration": 3.9,
+      "launch": 4.7,
+      "braking": 6.8,
+      "offroad": 2.5
+    },
+    "pi": {
+      "class": "A",
+      "value": 796
+    }
+  },
+  {
+    "year": "1995",
+    "manufacturer": "Aston Martin",
+    "model": "DB5",
+    "type": "Sports Car",
+    "price": 2870310,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9.4,
+      "handling": 6,
+      "acceleration": 6.1,
+      "launch": 5.9,
+      "braking": 3.6,
+      "offroad": 3.5
+    },
+    "pi": {
+      "class": "A",
+      "value": 766
+    }
+  },
+  {
+    "year": "1982",
+    "manufacturer": "Aston Martin",
+    "model": "DB5",
+    "type": "Rally Car",
+    "price": 3886275,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 5.9,
+      "handling": 9.1,
+      "acceleration": 9.7,
+      "launch": 7.2,
+      "braking": 9.7,
+      "offroad": 9.4
+    },
+    "pi": {
+      "class": "S1",
+      "value": 802
+    }
+  },
+  {
+    "year": "2022",
+    "manufacturer": "Aston Martin",
+    "model": "DB11",
+    "type": "Rally Car",
+    "price": 584664,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.3,
+      "handling": 8.6,
+      "acceleration": 2.8,
+      "launch": 3.6,
+      "braking": 7.1,
+      "offroad": 7.9
+    },
+    "pi": {
+      "class": "A",
+      "value": 706
+    }
+  },
+  {
+    "year": "1960",
+    "manufacturer": "Aston Martin",
+    "model": "DB11",
+    "type": "Classic",
+    "price": 1980361,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 6.9,
+      "handling": 2.9,
+      "acceleration": 2.6,
+      "launch": 6.6,
+      "braking": 6.5,
+      "offroad": 9.8
+    },
+    "pi": {
+      "class": "B",
+      "value": 696
+    }
+  },
+  {
+    "year": "2011",
+    "manufacturer": "Aston Martin",
+    "model": "DBR1",
+    "type": "Hypercar",
+    "price": 4526424,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9.6,
+      "handling": 9.6,
+      "acceleration": 5.9,
+      "launch": 5.5,
+      "braking": 8.8,
+      "offroad": 7.4
+    },
+    "pi": {
+      "class": "S1",
+      "value": 800
+    }
+  },
+  {
+    "year": "1984",
+    "manufacturer": "Aston Martin",
+    "model": "DBR1",
+    "type": "Sports Car",
+    "price": 4426272,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 7.8,
+      "handling": 5.6,
+      "acceleration": 2.4,
+      "launch": 8.9,
+      "braking": 7.7,
+      "offroad": 5.6
+    },
+    "pi": {
+      "class": "A",
+      "value": 768
+    }
+  },
+  {
+    "year": "1975",
+    "manufacturer": "Aston Martin",
+    "model": "DBR1",
+    "type": "Hypercar",
+    "price": 1436210,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9.6,
+      "handling": 5.3,
+      "acceleration": 8.7,
+      "launch": 7.6,
+      "braking": 8.4,
+      "offroad": 2.3
+    },
+    "pi": {
+      "class": "S1",
+      "value": 810
+    }
+  },
+  {
+    "year": "2017",
+    "manufacturer": "Aston Martin",
+    "model": "DBR1",
+    "type": "Sports Car",
+    "price": 2251685,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 6.1,
+      "handling": 3.6,
+      "acceleration": 6.4,
+      "launch": 9.9,
+      "braking": 2.5,
+      "offroad": 3.9
+    },
+    "pi": {
+      "class": "B",
+      "value": 659
+    }
+  },
+  {
+    "year": "2015",
+    "manufacturer": "Aston Martin",
+    "model": "DBS",
+    "type": "Rally Car",
+    "price": 1174020,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 3.4,
+      "handling": 4.4,
+      "acceleration": 8.7,
+      "launch": 8,
+      "braking": 8.2,
+      "offroad": 9.7
+    },
+    "pi": {
+      "class": "A",
+      "value": 725
+    }
+  },
+  {
+    "year": "1984",
+    "manufacturer": "Aston Martin",
+    "model": "DBS",
+    "type": "Sports Car",
+    "price": 4421805,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 7.8,
+      "handling": 8.3,
+      "acceleration": 4.6,
+      "launch": 3.2,
+      "braking": 2.3,
+      "offroad": 2.3
+    },
+    "pi": {
+      "class": "B",
+      "value": 683
+    }
+  },
+  {
+    "year": "2008",
+    "manufacturer": "Aston Martin",
+    "model": "DBS Superleggera",
+    "type": "Sports Car",
+    "price": 4166739,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 4.3,
+      "handling": 7.5,
+      "acceleration": 5.8,
+      "launch": 4.1,
+      "braking": 5.2,
+      "offroad": 5.3
+    },
+    "pi": {
+      "class": "B",
+      "value": 619
+    }
+  },
+  {
+    "year": "2009",
+    "manufacturer": "Aston Martin",
+    "model": "DBS Superleggera",
+    "type": "Rally Car",
+    "price": 2501012,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 4.3,
+      "handling": 6,
+      "acceleration": 4.8,
+      "launch": 9.1,
+      "braking": 6.7,
+      "offroad": 7.8
+    },
+    "pi": {
+      "class": "A",
+      "value": 736
+    }
+  },
+  {
+    "year": "2008",
+    "manufacturer": "Aston Martin",
+    "model": "DBS Superleggera",
+    "type": "Rally Car",
+    "price": 3260083,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 7.7,
+      "handling": 5.3,
+      "acceleration": 7,
+      "launch": 7.7,
+      "braking": 8.6,
+      "offroad": 9.9
+    },
+    "pi": {
+      "class": "A",
+      "value": 795
+    }
+  },
+  {
+    "year": "1966",
+    "manufacturer": "Aston Martin",
+    "model": "DBX",
+    "type": "Classic",
+    "price": 1562481,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 3.6,
+      "handling": 5.8,
+      "acceleration": 3.6,
+      "launch": 7.7,
+      "braking": 8.5,
+      "offroad": 9.1
+    },
+    "pi": {
+      "class": "B",
+      "value": 697
+    }
+  },
+  {
+    "year": "2002",
+    "manufacturer": "Aston Martin",
+    "model": "DBX",
+    "type": "Hypercar",
+    "price": 2638529,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9,
+      "handling": 8.1,
+      "acceleration": 9.5,
+      "launch": 8.8,
+      "braking": 5.8,
+      "offroad": 6.8
+    },
+    "pi": {
+      "class": "S1",
+      "value": 869
+    }
+  },
+  {
+    "year": "1987",
+    "manufacturer": "Aston Martin",
+    "model": "DBX",
+    "type": "Sports Car",
+    "price": 2472949,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.7,
+      "handling": 5.7,
+      "acceleration": 3.2,
+      "launch": 5.9,
+      "braking": 3.4,
+      "offroad": 6.7
+    },
+    "pi": {
+      "class": "C",
+      "value": 591
+    }
+  },
+  {
+    "year": "2006",
+    "manufacturer": "Aston Martin",
+    "model": "Lagonda",
+    "type": "Sports Car",
+    "price": 126715,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.4,
+      "handling": 3.2,
+      "acceleration": 4.8,
+      "launch": 7.1,
+      "braking": 6.1,
+      "offroad": 4.8
+    },
+    "pi": {
+      "class": "B",
+      "value": 680
+    }
+  },
+  {
+    "year": "2003",
+    "manufacturer": "Aston Martin",
+    "model": "Lagonda",
+    "type": "Rally Car",
+    "price": 570620,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 6.6,
+      "handling": 7.1,
+      "acceleration": 4.3,
+      "launch": 7.2,
+      "braking": 4,
+      "offroad": 7.5
+    },
+    "pi": {
+      "class": "B",
+      "value": 623
+    }
+  },
+  {
+    "year": "1983",
+    "manufacturer": "Aston Martin",
+    "model": "One-77",
+    "type": "Sports Car",
+    "price": 2133459,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 6.7,
+      "handling": 2.9,
+      "acceleration": 6.1,
+      "launch": 3,
+      "braking": 9.6,
+      "offroad": 5.1
+    },
+    "pi": {
+      "class": "B",
+      "value": 655
+    }
+  },
+  {
+    "year": "1962",
+    "manufacturer": "Aston Martin",
+    "model": "One-77",
+    "type": "Classic",
+    "price": 504380,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 6,
+      "handling": 4.8,
+      "acceleration": 4.5,
+      "launch": 8.4,
+      "braking": 4.8,
+      "offroad": 4.9
+    },
+    "pi": {
+      "class": "B",
+      "value": 619
+    }
+  },
+  {
+    "year": "2008",
+    "manufacturer": "Aston Martin",
+    "model": "V12 Vantage S",
+    "type": "Sports Car",
+    "price": 709726,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.9,
+      "handling": 9.5,
+      "acceleration": 4.4,
+      "launch": 8.2,
+      "braking": 3.9,
+      "offroad": 3.5
+    },
+    "pi": {
+      "class": "A",
+      "value": 797
+    }
+  },
+  {
+    "year": "1964",
+    "manufacturer": "Aston Martin",
+    "model": "V12 Vantage S",
+    "type": "Classic",
+    "price": 2380392,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.8,
+      "handling": 4.4,
+      "acceleration": 9.1,
+      "launch": 6,
+      "braking": 2.2,
+      "offroad": 9.9
+    },
+    "pi": {
+      "class": "B",
+      "value": 613
+    }
+  },
+  {
+    "year": "1985",
+    "manufacturer": "Aston Martin",
+    "model": "Valhalla Concept Car",
+    "type": "Sports Car",
+    "price": 2864708,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.1,
+      "handling": 6.6,
+      "acceleration": 5.2,
+      "launch": 2.6,
+      "braking": 5.1,
+      "offroad": 3.2
+    },
+    "pi": {
+      "class": "B",
+      "value": 656
+    }
+  },
+  {
+    "year": "2020",
+    "manufacturer": "Aston Martin",
+    "model": "Valhalla Concept Car",
+    "type": "Rally Car",
+    "price": 1661635,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.3,
+      "handling": 7.5,
+      "acceleration": 4.1,
+      "launch": 5.3,
+      "braking": 6.5,
+      "offroad": 9.8
+    },
+    "pi": {
+      "class": "A",
+      "value": 709
+    }
+  },
+  {
+    "year": "1997",
+    "manufacturer": "Aston Martin",
+    "model": "Valhalla Concept Car",
+    "type": "Sports Car",
+    "price": 4496743,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.9,
+      "handling": 5.1,
+      "acceleration": 2.6,
+      "launch": 8.6,
+      "braking": 3.8,
+      "offroad": 4.1
+    },
+    "pi": {
+      "class": "B",
+      "value": 635
+    }
+  },
+  {
+    "year": "1973",
+    "manufacturer": "Aston Martin",
+    "model": "Valkyrie",
+    "type": "Classic",
+    "price": 1182977,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 7.6,
+      "handling": 5.4,
+      "acceleration": 5.1,
+      "launch": 6,
+      "braking": 3.1,
+      "offroad": 8
+    },
+    "pi": {
+      "class": "B",
+      "value": 658
+    }
+  },
+  {
+    "year": "1971",
+    "manufacturer": "Aston Martin",
+    "model": "Valkyrie",
+    "type": "Classic",
+    "price": 1531011,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9.9,
+      "handling": 8,
+      "acceleration": 2.3,
+      "launch": 5.9,
+      "braking": 5,
+      "offroad": 6.3
+    },
+    "pi": {
+      "class": "A",
+      "value": 795
+    }
+  },
+  {
+    "year": "1972",
+    "manufacturer": "Aston Martin",
+    "model": "Valkyrie",
+    "type": "Classic",
+    "price": 4478423,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.1,
+      "handling": 3.8,
+      "acceleration": 4.3,
+      "launch": 3,
+      "braking": 5.8,
+      "offroad": 5.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 694
+    }
+  },
+  {
+    "year": "1967",
+    "manufacturer": "Aston Martin",
+    "model": "Valkyrie",
+    "type": "Classic",
+    "price": 3524137,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 5.9,
+      "handling": 3.4,
+      "acceleration": 2.1,
+      "launch": 6.8,
+      "braking": 2.7,
+      "offroad": 5.5
+    },
+    "pi": {
+      "class": "C",
+      "value": 580
+    }
+  },
+  {
+    "year": "1977",
+    "manufacturer": "Aston Martin",
+    "model": "Valkyrie AMR Pro",
+    "type": "Classic",
+    "price": 583275,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.7,
+      "handling": 5.5,
+      "acceleration": 9,
+      "launch": 8.5,
+      "braking": 8.6,
+      "offroad": 7.9
+    },
+    "pi": {
+      "class": "A",
+      "value": 720
+    }
+  },
+  {
+    "year": "2007",
+    "manufacturer": "Aston Martin",
+    "model": "Valkyrie AMR Pro",
+    "type": "Sports Car",
+    "price": 984622,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 3.2,
+      "handling": 5.9,
+      "acceleration": 3.9,
+      "launch": 2.9,
+      "braking": 2.3,
+      "offroad": 6
+    },
+    "pi": {
+      "class": "C",
+      "value": 501
+    }
+  },
+  {
+    "year": "2004",
+    "manufacturer": "Aston Martin",
+    "model": "Vanquish Zagato Coupé",
+    "type": "Coupe",
+    "price": 3063042,
+    "rarity": "Legendary",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9.2,
+      "handling": 9.2,
+      "acceleration": 6.5,
+      "launch": 6.4,
+      "braking": 4.6,
+      "offroad": 8
+    },
+    "pi": {
+      "class": "A",
+      "value": 700
+    }
+  },
+  {
+    "year": "2004",
+    "manufacturer": "Aston Martin",
+    "model": "Vanquish Zagato Coupé",
+    "type": "Coupe",
+    "price": 1629450,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 9.8,
+      "handling": 9.3,
+      "acceleration": 5.2,
+      "launch": 4.5,
+      "braking": 6.6,
+      "offroad": 5.7
+    },
+    "pi": {
+      "class": "A",
+      "value": 729
+    }
+  },
+  {
+    "year": "1981",
+    "manufacturer": "Aston Martin",
+    "model": "Vanquish Zagato Coupé",
+    "type": "Coupe",
+    "price": 426989,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 6.9,
+      "handling": 5.5,
+      "acceleration": 9.1,
+      "launch": 2.5,
+      "braking": 9.5,
+      "offroad": 6.9
+    },
+    "pi": {
+      "class": "A",
+      "value": 708
+    }
+  },
+  {
+    "year": "1974",
+    "manufacturer": "Aston Martin",
+    "model": "Vantage",
+    "type": "Classic",
+    "price": 1243391,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 3.4,
+      "handling": 5.9,
+      "acceleration": 4.3,
+      "launch": 2.9,
+      "braking": 2.1,
+      "offroad": 9.4
+    },
+    "pi": {
+      "class": "C",
+      "value": 593
+    }
+  },
+  {
+    "year": "1975",
+    "manufacturer": "Aston Martin",
+    "model": "Vantage",
+    "type": "Classic",
+    "price": 1201069,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 5.4,
+      "handling": 9.2,
+      "acceleration": 6.4,
+      "launch": 6.4,
+      "braking": 4.7,
+      "offroad": 2.7
+    },
+    "pi": {
+      "class": "A",
+      "value": 796
+    }
+  },
+  {
+    "year": "2001",
+    "manufacturer": "Aston Martin",
+    "model": "Vantage GT12",
+    "type": "Supercar",
+    "price": 1917136,
+    "rarity": "Rare",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.9,
+      "handling": 8.6,
+      "acceleration": 9.5,
+      "launch": 9.7,
+      "braking": 6.7,
+      "offroad": 4.6
+    },
+    "pi": {
+      "class": "S2",
+      "value": 941
+    }
+  },
+  {
+    "year": "2015",
+    "manufacturer": "Aston Martin",
+    "model": "Vantage GT12",
+    "type": "Rally Car",
+    "price": 428236,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 8.2,
+      "handling": 2.6,
+      "acceleration": 9.6,
+      "launch": 7.8,
+      "braking": 8.3,
+      "offroad": 7.5
+    },
+    "pi": {
+      "class": "A",
+      "value": 756
+    }
+  },
+  {
+    "year": "2020",
+    "manufacturer": "Aston Martin",
+    "model": "Vulcan AMR Pro",
+    "type": "Rally Car",
+    "price": 3222129,
+    "rarity": "Common",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 7.4,
+      "handling": 8.1,
+      "acceleration": 6.4,
+      "launch": 2.5,
+      "braking": 5.3,
+      "offroad": 8.1
+    },
+    "pi": {
+      "class": "B",
+      "value": 673
+    }
+  },
+  {
+    "year": "1993",
+    "manufacturer": "Aston Martin",
+    "model": "Vulcan AMR Pro",
+    "type": "Sports Car",
+    "price": 4087534,
+    "rarity": "Epic",
+    "country": "United Kingdom",
+    "stats": {
+      "speed": 2.7,
+      "handling": 9.2,
+      "acceleration": 4.1,
+      "launch": 5.4,
+      "braking": 2.9,
+      "offroad": 2.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 646
+    }
+  },
+  {
+    "year": "2000",
+    "manufacturer": "Audi",
+    "model": "R8 Coupé V10 plus 5.2 FSI quattro",
+    "type": "Coupe",
+    "price": 1171899,
+    "rarity": "Common",
+    "country": "Germany",
+    "stats": {
+      "speed": 6.5,
+      "handling": 8.8,
+      "acceleration": 6.9,
+      "launch": 3.1,
+      "braking": 4,
+      "offroad": 4.3
+    },
+    "pi": {
+      "class": "B",
+      "value": 655
+    }
+  },
+  {
+    "year": "2000",
+    "manufacturer": "Audi",
+    "model": "R8 Coupé V10 plus 5.2 FSI quattro",
+    "type": "Coupe",
+    "price": 3621175,
+    "rarity": "Common",
+    "country": "Germany",
+    "stats": {
+      "speed": 3.2,
+      "handling": 5.8,
+      "acceleration": 4.6,
+      "launch": 9.2,
+      "braking": 6.4,
+      "offroad": 4.3
+    },
+    "pi": {
+      "class": "B",
+      "value": 604
+    }
+  },
+  {
+    "year": "1993",
+    "manufacturer": "Audi",
+    "model": "R8 Coupé V10 plus 5.2 FSI quattro",
+    "type": "Coupe",
+    "price": 151465,
+    "rarity": "Legendary",
+    "country": "Germany",
+    "stats": {
+      "speed": 4.9,
+      "handling": 7.2,
+      "acceleration": 5.9,
+      "launch": 2.2,
+      "braking": 5.7,
+      "offroad": 5.6
+    },
+    "pi": {
+      "class": "B",
+      "value": 686
+    }
+  },
+  {
+    "year": "1991",
+    "manufacturer": "Audi",
+    "model": "R8 V10 plus",
+    "type": "Sports Car",
+    "price": 1266594,
+    "rarity": "Legendary",
+    "country": "Germany",
+    "stats": {
+      "speed": 4.1,
+      "handling": 5.3,
+      "acceleration": 4.4,
+      "launch": 7.4,
+      "braking": 8.2,
+      "offroad": 2.7
+    },
+    "pi": {
+      "class": "B",
+      "value": 611
+    }
+  }
+]

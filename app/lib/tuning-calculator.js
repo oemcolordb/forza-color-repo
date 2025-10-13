@@ -317,6 +317,64 @@ export class TuningCalculator {
         return baseTune;
     }
   }
+
+  // Get tune recommendations based on tune type
+  getTuneTypeRecommendations(tuneType) {
+    const baseTune = this.calculateBaseTune();
+    
+    switch (tuneType) {
+      case 'Track':
+        return {
+          ...baseTune,
+          'tire-pressure-front': 26,
+          'tire-pressure-rear': 24,
+          'camber-front': -2.5,
+          'camber-rear': -2.0,
+          'aero-front': 200,
+          'aero-rear': 280,
+          'spring-rate-front': baseTune['spring-rate-front'] + 40,
+          'spring-rate-rear': baseTune['spring-rate-rear'] + 30,
+          'anti-roll-bar-front': 35,
+          'anti-roll-bar-rear': 40
+        };
+        
+      case 'Drift':
+        return {
+          ...baseTune,
+          'tire-pressure-front': 30,
+          'tire-pressure-rear': 22,
+          'camber-front': -3.5,
+          'camber-rear': -1.2,
+          'toe-front': -2.0,
+          'toe-rear': -1.0,
+          'differential-rear-accel': 5,
+          'differential-rear-decel': 0,
+          'anti-roll-bar-front': 25,
+          'anti-roll-bar-rear': 15,
+          'brake-balance': 45
+        };
+        
+      case 'Rally':
+        return {
+          ...baseTune,
+          'tire-pressure-front': 24,
+          'tire-pressure-rear': 22,
+          'ride-height-front': 7.5,
+          'ride-height-rear': 8.0,
+          'spring-rate-front': 100,
+          'spring-rate-rear': 95,
+          'differential-rear-accel': 60,
+          'anti-roll-bar-front': 25,
+          'anti-roll-bar-rear': 30,
+          'camber-front': -1.5,
+          'camber-rear': -1.0
+        };
+        
+      case 'Basic (General)':
+      default:
+        return baseTune;
+    }
+  }
 }
 
 // Forza Horizon 5 Track Types Database

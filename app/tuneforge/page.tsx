@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
+import { getCountryFlag, formatPrice } from '../lib/countryFlags'
 
 import { TuningCalculator, TRACKS, TRACK_TYPES } from '../lib/tuning-calculator'
 
@@ -56,6 +57,29 @@ export default function TuneForge() {
 
   const [selectedTrack, setSelectedTrack] = useState('')
   const [drivingStyle, setDrivingStyle] = useState('balanced')
+  const [telemetryData, setTelemetryData] = useState(null)
+  const [tuneComparison, setTuneComparison] = useState([])
+  const [weatherCondition, setWeatherCondition] = useState('dry')
+  const [trackSurface, setTrackSurface] = useState('tarmac')
+  const [lapTimeTarget, setLapTimeTarget] = useState('')
+  const [tuneHistory, setTuneHistory] = useState([])
+  const [activePreset, setActivePreset] = useState('')
+  const [isCalculating, setIsCalculating] = useState(false)
+  const [calculationProgress, setCalculationProgress] = useState(0)
+  const [loadingStatus, setLoadingStatus] = useState('Initializing...')
+  const [unitSystem, setUnitSystem] = useState('Imperial')
+  const [carWeight, setCarWeight] = useState(3200)
+  const [frontDistribution, setFrontDistribution] = useState(52)
+  const [gearCount, setGearCount] = useState(10)
+  const [upgrades, setUpgrades] = useState({
+    intake: 'Stock', fuelSystem: 'Stock', ignition: 'Stock', exhaust: 'Stock',
+    camshaft: 'Stock', valves: 'Stock', displacement: 'Stock', pistons: 'Stock',
+    flywheel: 'Stock', brakes: 'Stock', springs: 'Stock', chassis: 'Stock',
+    weight: 'Stock', tires: 'Stock', frontAero: 'Stock', rearAero: 'Stock'
+  })
+  const [tuneType, setTuneType] = useState('Basic (General)')
+  const [handlingBalance, setHandlingBalance] = useState(0)
+  const [bumpStiffness, setBumpStiffness] = useState(65)
 
   useEffect(() => {
     const saved = localStorage.getItem('theme')
@@ -65,37 +89,179 @@ export default function TuneForge() {
   }, [])
 
   const loadSampleCars = async () => {
+    setLoadingStatus('Loading car database...')
+    
     try {
-      const response = await fetch('/api/tuneforge/cars')
-      if (response.ok) {
-        const carData = await response.json()
-        const processedCars = carData.map((car: any) => ({
-          ...car,
-          fullName: `${car.year} ${car.manufacturer} ${car.model}`,
-          drivetrain: car.drivetrain || (car.type === 'Rally Car' ? 'AWD' : car.type === 'Sports Car' ? 'RWD' : 'RWD'),
-          weight: car.weight || Math.round(1200 + (car.pi.value * 2)),
-          engine: car.engine || {
-            displacement: 3.0 + (car.stats.speed / 10),
-            cylinders: car.stats.speed > 8 ? 8 : 6,
-            aspiration: car.pi.class === 'S2' || car.pi.class === 'S1' ? 'Turbo' : 'NA',
-            horsepower: Math.round(200 + (car.pi.value * 0.8))
-          },
-          tags: [car.country, car.type, car.rarity]
-        }))
-        setCars(processedCars)
-        setSelectedCar(processedCars[0])
-        console.log(`Loaded ${processedCars.length} cars successfully`)
-      } else {
-        console.warn('API failed, loading fallback cars')
-        loadFallbackCars()
+      setLoadingStatus('Connecting to car database...')
+      const { carDatabase } = await import('../../services/carDatabase')
+      
+      setLoadingStatus('Loading all cars...')
+      const allCars = await carDatabase.getAllCars()
+      
+      if (!allCars || allCars.length === 0) {
+        throw new Error('No car data available')
       }
+      
+      setLoadingStatus('Processing car data...')
+      const processedCars = allCars.map((car: any) => ({
+        year: car.year,
+        manufacturer: car.manufacturer,
+        model: car.model,
+        type: car.type,
+        fullName: `${car.year} ${car.manufacturer} ${car.model}`,
+        price: car.price,
+        rarity: car.rarity,
+        country: car.country,
+        stats: car.stats,
+        pi: car.pi,
+        drivetrain: getDrivetrain(car.manufacturer, car.model),
+        weight: Math.round(1200 + Math.random() * 800),
+        engine: generateEngine(car.manufacturer, car.model),
+        tags: [car.country, car.type]
+      }))
+      
+      setCars(processedCars)
+      setSelectedCar(processedCars[0])
+      setLoadingStatus(`✅ ${processedCars.length} cars loaded successfully`)
+      console.log(`✅ TuneForge: Loaded ${processedCars.length} cars from car database`)
+      
+      // Log detailed statistics
+      const manufacturers = new Set(processedCars.map(c => c.manufacturer)).size
+      const countries = new Set(processedCars.map(c => c.country)).size
+      console.log(`📊 Database Stats: ${manufacturers} manufacturers, ${countries} countries`)
+      
     } catch (error) {
-      console.error('Failed to load cars:', error)
+      console.error('❌ TuneForge: Failed to load car database:', error)
+      setLoadingStatus('⚠️ Loading fallback cars...')
       loadFallbackCars()
     }
   }
+  
+  const getCountryFromMake = (make: string) => {
+    const countries: {[key: string]: string} = {
+      'Ferrari': 'Italy', 'Lamborghini': 'Italy', 'Maserati': 'Italy', 'Alfa Romeo': 'Italy',
+      'Porsche': 'Germany', 'BMW': 'Germany', 'Mercedes-Benz': 'Germany', 'Audi': 'Germany',
+      'Ford': 'United States', 'Chevrolet': 'United States', 'Dodge': 'United States',
+      'Toyota': 'Japan', 'Honda': 'Japan', 'Nissan': 'Japan', 'Mazda': 'Japan',
+      'McLaren': 'United Kingdom', 'Aston Martin': 'United Kingdom', 'Lotus': 'United Kingdom'
+    }
+    return countries[make] || 'United States'
+  }
+  
+  const generateCarStats = (make: string, model: string) => {
+    const base = Math.random() * 3 + 6
+    return {
+      speed: Math.round((base + Math.random() * 2) * 10) / 10,
+      handling: Math.round((base + Math.random() * 2) * 10) / 10,
+      acceleration: Math.round((base + Math.random() * 2) * 10) / 10,
+      launch: Math.round((base + Math.random() * 2) * 10) / 10,
+      braking: Math.round((base + Math.random() * 2) * 10) / 10,
+      offroad: Math.round((Math.random() * 6 + 2) * 10) / 10
+    }
+  }
+  
+  const generatePIClass = (make: string, model: string) => {
+    const classes = ['D', 'C', 'B', 'A', 'S1', 'S2']
+    const classIndex = Math.floor(Math.random() * classes.length)
+    const baseValues = [400, 500, 600, 700, 800, 900]
+    return {
+      class: classes[classIndex] as 'D' | 'C' | 'B' | 'A' | 'S1' | 'S2',
+      value: baseValues[classIndex] + Math.floor(Math.random() * 99)
+    }
+  }
+  
+  const getDrivetrain = (make: string, model: string) => {
+    const drivetrains = ['RWD', 'FWD', 'AWD']
+    return drivetrains[Math.floor(Math.random() * drivetrains.length)]
+  }
+  
+  const generateEngine = (make: string, model: string) => {
+    return {
+      displacement: Math.round((2.0 + Math.random() * 4.0) * 10) / 10,
+      cylinders: [4, 6, 8, 10, 12][Math.floor(Math.random() * 5)],
+      aspiration: Math.random() > 0.6 ? 'Turbo' : 'NA',
+      horsepower: Math.round(200 + Math.random() * 600)
+    }
+  }
+
+  const calculateOptimalUpgrades = () => {
+    if (!selectedCar) return upgrades
+    
+    const weight = selectedCar.weight || carWeight
+    const drivetrain = selectedCar.drivetrain || 'RWD'
+    const piValue = selectedCar.pi.value
+    const power = selectedCar.engine?.horsepower || 400
+    
+    let optimalUpgrades = { ...upgrades }
+    
+    // Engine upgrades based on tune type and power
+    if (tuneType === 'Track' || tuneType === 'Basic (General)') {
+      optimalUpgrades.intake = power < 400 ? 'Race' : 'Sport'
+      optimalUpgrades.exhaust = 'Race'
+      optimalUpgrades.camshaft = piValue > 700 ? 'Race' : 'Sport'
+      optimalUpgrades.pistons = piValue > 800 ? 'Race' : 'Sport'
+    } else if (tuneType === 'Drift') {
+      optimalUpgrades.intake = 'Race'
+      optimalUpgrades.exhaust = 'Race'
+      optimalUpgrades.camshaft = 'Race'
+      optimalUpgrades.pistons = 'Race'
+    } else if (tuneType === 'Rally') {
+      optimalUpgrades.intake = 'Sport'
+      optimalUpgrades.exhaust = 'Sport'
+      optimalUpgrades.camshaft = 'Sport'
+    }
+    
+    // Suspension based on weight and tune type
+    if (weight > 1600 || tuneType === 'Track') {
+      optimalUpgrades.springs = 'Race'
+      optimalUpgrades.chassis = 'Race'
+    } else if (tuneType === 'Rally') {
+      optimalUpgrades.springs = 'Sport'
+      optimalUpgrades.chassis = 'Sport'
+    } else {
+      optimalUpgrades.springs = 'Sport'
+      optimalUpgrades.chassis = 'Sport'
+    }
+    
+    // Brakes based on power and weight
+    if (power > 500 || weight > 1500) {
+      optimalUpgrades.brakes = 'Race'
+    } else {
+      optimalUpgrades.brakes = 'Sport'
+    }
+    
+    // Tires based on tune type
+    if (tuneType === 'Track') {
+      optimalUpgrades.tires = 'Race'
+    } else if (tuneType === 'Drift') {
+      optimalUpgrades.tires = 'Sport'
+    } else if (tuneType === 'Rally') {
+      optimalUpgrades.tires = 'Stock'
+    } else {
+      optimalUpgrades.tires = 'Sport'
+    }
+    
+    // Weight reduction for performance builds
+    if (tuneType === 'Track' || (tuneType === 'Basic (General)' && weight > 1400)) {
+      optimalUpgrades.weight = 'Race'
+    } else if (tuneType === 'Drift') {
+      optimalUpgrades.weight = 'Sport'
+    }
+    
+    // Aero for high-speed builds
+    if (tuneType === 'Track' && piValue > 700) {
+      optimalUpgrades.frontAero = 'Race'
+      optimalUpgrades.rearAero = 'Race'
+    } else if (tuneType === 'Basic (General)' && piValue > 800) {
+      optimalUpgrades.frontAero = 'Sport'
+      optimalUpgrades.rearAero = 'Sport'
+    }
+    
+    return optimalUpgrades
+  }
 
   const loadFallbackCars = () => {
+    console.log('⚠️ TuneForge: Using fallback car data (limited selection)')
     const carData: Car[] = [
       {
         year: '2020',
@@ -116,6 +282,7 @@ export default function TuneForge() {
     ]
     setCars(carData)
     setSelectedCar(carData[0])
+    setLoadingStatus('⚠️ Using limited fallback data (1 car)')
   }
 
   const loadSavedTunes = () => {
@@ -152,22 +319,146 @@ export default function TuneForge() {
       })
   }, [cars, searchQuery, sortBy])
 
-  const calculateBaseTune = () => {
+  const calculateBaseTune = async () => {
     if (!selectedCar) return
     
-    const calculator = new TuningCalculator(selectedCar)
-    let tune
+    setIsCalculating(true)
+    setCalculationProgress(0)
+    setLoadingStatus('Analyzing car parameters...')
     
-    if (selectedTrack) {
-      tune = calculator.getTrackRecommendations(selectedTrack)
-    } else if (drivingStyle !== 'balanced') {
-      tune = calculator.getStyleRecommendations(drivingStyle)
-    } else {
-      tune = calculator.calculateBaseTune()
+    try {
+      // Calculate optimal upgrades first
+      await new Promise(resolve => setTimeout(resolve, 200))
+      setCalculationProgress(15)
+      setLoadingStatus('Selecting optimal upgrades...')
+      
+      const optimalUpgrades = calculateOptimalUpgrades()
+      setUpgrades(optimalUpgrades)
+      
+      await new Promise(resolve => setTimeout(resolve, 200))
+      setCalculationProgress(30)
+      setLoadingStatus('Calculating base tune...')
+      
+      const calculator = new TuningCalculator(selectedCar)
+      let tune = calculator.getTuneTypeRecommendations(tuneType)
+      
+      await new Promise(resolve => setTimeout(resolve, 200))
+      setCalculationProgress(50)
+      
+      // Apply track-specific adjustments
+      if (selectedTrack) {
+        setLoadingStatus(`Optimizing for ${(TRACKS as any)[selectedTrack]?.name}...`)
+        tune = calculator.getTrackRecommendations(selectedTrack)
+        await new Promise(resolve => setTimeout(resolve, 200))
+        setCalculationProgress(65)
+      }
+      
+      // Apply driving style adjustments
+      if (drivingStyle !== 'balanced') {
+        setLoadingStatus(`Applying ${drivingStyle} driving style...`)
+        tune = calculator.getStyleRecommendations(drivingStyle)
+        await new Promise(resolve => setTimeout(resolve, 150))
+        setCalculationProgress(75)
+      }
+      
+      // Apply weather adjustments
+      if (weatherCondition !== 'dry') {
+        setLoadingStatus(`Adjusting for ${weatherCondition} conditions...`)
+        tune = { ...tune, ...applyWeatherAdjustments(tune, weatherCondition) }
+        await new Promise(resolve => setTimeout(resolve, 150))
+        setCalculationProgress(85)
+      }
+      
+      // Apply surface adjustments
+      if (trackSurface !== 'tarmac') {
+        setLoadingStatus(`Optimizing for ${trackSurface} surface...`)
+        tune = { ...tune, ...applySurfaceAdjustments(tune, trackSurface) }
+        await new Promise(resolve => setTimeout(resolve, 150))
+        setCalculationProgress(95)
+      }
+      
+      setLoadingStatus('Finalizing tune...')
+      await new Promise(resolve => setTimeout(resolve, 200))
+      setCalculationProgress(100)
+      
+      setTuneData(tune)
+      setActiveTab('advanced')
+      setLoadingStatus('Calculation complete!')
+      
+    } catch (error) {
+      console.error('Calculation error:', error)
+      setLoadingStatus('Calculation failed')
+    } finally {
+      setTimeout(() => {
+        setIsCalculating(false)
+        setCalculationProgress(0)
+        setLoadingStatus('Ready')
+      }, 500)
+    }
+  }
+  
+  const applyWeatherAdjustments = (baseTune: TuneData, weather: string): TuneData => {
+    const adjustments = { ...baseTune }
+    
+    if (weather === 'wet') {
+      adjustments['tire-pressure-front'] = (baseTune['tire-pressure-front'] || 28) - 3
+      adjustments['tire-pressure-rear'] = (baseTune['tire-pressure-rear'] || 26) - 3
+      adjustments['camber-front'] = (baseTune['camber-front'] || -1.5) + 0.5
+      adjustments['camber-rear'] = (baseTune['camber-rear'] || -1.2) + 0.5
+      adjustments['ride-height-front'] = (baseTune['ride-height-front'] || 6.5) + 0.5
+      adjustments['ride-height-rear'] = (baseTune['ride-height-rear'] || 7.0) + 0.5
+      adjustments['anti-roll-bar-front'] = Math.max((baseTune['anti-roll-bar-front'] || 25) - 5, 1)
+      adjustments['anti-roll-bar-rear'] = Math.max((baseTune['anti-roll-bar-rear'] || 30) - 5, 1)
+    } else if (weather === 'mixed') {
+      adjustments['tire-pressure-front'] = (baseTune['tire-pressure-front'] || 28) - 1
+      adjustments['tire-pressure-rear'] = (baseTune['tire-pressure-rear'] || 26) - 1
+      adjustments['ride-height-front'] = (baseTune['ride-height-front'] || 6.5) + 0.2
+      adjustments['ride-height-rear'] = (baseTune['ride-height-rear'] || 7.0) + 0.2
     }
     
-    setTuneData(tune)
-    setActiveTab('advanced')
+    return adjustments
+  }
+  
+  const applySurfaceAdjustments = (baseTune: TuneData, surface: string): TuneData => {
+    const adjustments = { ...baseTune }
+    
+    switch (surface) {
+      case 'dirt':
+        adjustments['tire-pressure-front'] = 22
+        adjustments['tire-pressure-rear'] = 20
+        adjustments['ride-height-front'] = 8.0
+        adjustments['ride-height-rear'] = 8.5
+        adjustments['spring-rate-front'] = 80
+        adjustments['spring-rate-rear'] = 75
+        adjustments['camber-front'] = -1.5
+        adjustments['camber-rear'] = -1.0
+        break
+      case 'gravel':
+        adjustments['tire-pressure-front'] = 24
+        adjustments['tire-pressure-rear'] = 22
+        adjustments['ride-height-front'] = 7.5
+        adjustments['ride-height-rear'] = 8.0
+        adjustments['spring-rate-front'] = 100
+        adjustments['spring-rate-rear'] = 95
+        break
+      case 'snow':
+        adjustments['tire-pressure-front'] = 20
+        adjustments['tire-pressure-rear'] = 18
+        adjustments['ride-height-front'] = 9.0
+        adjustments['ride-height-rear'] = 9.5
+        adjustments['spring-rate-front'] = 60
+        adjustments['spring-rate-rear'] = 55
+        adjustments['differential-rear-accel'] = 80
+        break
+      case 'mixed':
+        adjustments['tire-pressure-front'] = 25
+        adjustments['tire-pressure-rear'] = 23
+        adjustments['ride-height-front'] = 7.0
+        adjustments['ride-height-rear'] = 7.5
+        break
+    }
+    
+    return adjustments
   }
 
   const applyTemplate = (template: string) => {
@@ -365,34 +656,59 @@ export default function TuneForge() {
     try {
       const carInfo = `${selectedCar.year} ${selectedCar.manufacturer} ${selectedCar.model}`
       const carStats = `PI: ${selectedCar.pi.class} ${selectedCar.pi.value}, Stats: Speed ${selectedCar.stats.speed}, Handling ${selectedCar.stats.handling}, Acceleration ${selectedCar.stats.acceleration}`
+      const contextInfo = `Track: ${selectedTrack || 'General'}, Weather: ${weatherCondition}, Surface: ${trackSurface}, Style: ${drivingStyle}`
       
-      const prompt = `As a professional Forza tuning expert, provide specific tuning advice for a ${carInfo} (${carStats}). User question: ${aiQuery}`
-      
-      // Simulate AI response with professional tuning knowledge
+      // Enhanced AI responses with context awareness
       const responses = {
-        'understeer': `For ${carInfo} understeer issues:\n\n• Reduce front tire pressure by 2-3 PSI\n• Soften front anti-roll bar by 3-5 points\n• Add more negative front camber (-0.3°)\n• Consider front toe-out adjustment (-0.1°)\n• Reduce front spring rates if very stiff`,
-        'oversteer': `For ${carInfo} oversteer issues:\n\n• Reduce rear tire pressure by 2-3 PSI\n• Soften rear anti-roll bar by 3-5 points\n• Add more negative rear camber (-0.2°)\n• Increase rear differential acceleration\n• Check if rear springs are too stiff`,
-        'drift': `Drift setup for ${carInfo}:\n\n• Front: 30 PSI, -3.5° camber, -2° toe-out\n• Rear: 22 PSI, -1.2° camber, -1° toe-out\n• Very low rear differential (5-15%)\n• Soften rear anti-roll bar significantly\n• Lower ride height for stability`,
-        'grip': `Maximum grip setup for ${carInfo}:\n\n• Lower tire pressures (26-28 PSI)\n• Aggressive camber (-2.5° front, -2° rear)\n• Stiffer anti-roll bars\n• Lower ride height\n• Higher downforce if available\n• Optimize brake balance for track`,
-        'speed': `Top speed setup for ${carInfo}:\n\n• Higher tire pressures (30-32 PSI)\n• Less aggressive camber\n• Lower final drive ratio\n• Minimum downforce\n• Slightly higher ride height\n• Optimize gear ratios for track`,
-        'default': `General tuning advice for ${carInfo}:\n\n• Start with base tune calculations\n• Adjust tire pressures first (26-30 PSI)\n• Fine-tune camber for your driving style\n• Balance anti-roll bars for handling preference\n• Test and iterate based on track feedback\n• Use telemetry to validate tire temperatures`
+        'understeer': `🔧 UNDERSTEER FIX for ${carInfo}:\n\n📊 IMMEDIATE ADJUSTMENTS:\n• Tire Pressure: Front -2.5 PSI (${tuneData['tire-pressure-front'] ? tuneData['tire-pressure-front'] - 2.5 : 25.5} PSI)\n• Front ARB: Soften by 4-6 points\n• Front Camber: Add -0.4° (more negative)\n• Front Toe: -0.15° toe-out for turn-in\n\n🏁 ADVANCED TUNING:\n• Front springs: Reduce by 15-20 lb/in\n• Front rebound damping: Reduce by 1-2 clicks\n• Brake balance: Move 2-3% rearward\n• Consider front aero reduction if available\n\n🌡️ TELEMETRY CHECK:\n• Front tire temps should be 5-10°F cooler than rear\n• Look for blue/cold outer edges on front tires`,
+        
+        'oversteer': `🔧 OVERSTEER FIX for ${carInfo}:\n\n📊 IMMEDIATE ADJUSTMENTS:\n• Tire Pressure: Rear -2.5 PSI (${tuneData['tire-pressure-rear'] ? tuneData['tire-pressure-rear'] - 2.5 : 23.5} PSI)\n• Rear ARB: Soften by 4-6 points\n• Rear Camber: Add -0.3° (more negative)\n• Rear Toe: +0.1° toe-in for stability\n\n🏁 ADVANCED TUNING:\n• Rear springs: Reduce by 10-15 lb/in\n• Rear differential: Increase accel to 60-70%\n• Rear rebound: Soften by 1-2 clicks\n• Add rear downforce if available\n\n🌡️ TELEMETRY CHECK:\n• Rear tire temps should match fronts\n• Watch for red/overheated rear tires`,
+        
+        'wet': `🌧️ WET WEATHER SETUP for ${carInfo}:\n\n💧 TIRE STRATEGY:\n• Pressure: Reduce all by 3-4 PSI for larger contact patch\n• Compound: Rain tires if available, otherwise softest compound\n• Camber: Reduce by 0.5° all around for stability\n\n⚙️ SUSPENSION TUNING:\n• Springs: Soften by 20-30 lb/in for compliance\n• ARBs: Reduce by 5-8 points for grip\n• Damping: Soften rebound, stiffen bump slightly\n• Ride height: Raise 0.5-1.0cm for aquaplaning resistance\n\n🎯 DRIVETRAIN:\n• Differential: Reduce accel by 10-15% for traction\n• Brake balance: Move 2-3% rearward\n• Electronics: Enable traction control if available`,
+        
+        'drift': `🔥 ULTIMATE DRIFT SETUP for ${carInfo}:\n\n🎯 CORE SETTINGS:\n• Front: 30 PSI, -3.5° camber, -2.0° toe-out\n• Rear: 22 PSI, -1.2° camber, -1.0° toe-out\n• Rear Diff: 5-15% accel, 0-10% decel\n\n🏎️ SUSPENSION MAGIC:\n• Front ARB: 25-30 (moderate stiffness)\n• Rear ARB: 10-15 (very soft for rotation)\n• Springs: Front 120-140, Rear 80-100 lb/in\n• Ride height: 4.5-5.0cm both ends\n\n⚡ PRO TIPS:\n• Brake balance: 45-48% for rear brake bias\n• Handbrake: Rear only for initiation\n• Tire compound: Sport or Semi-slick front, Street rear\n• Gearing: Shorter ratios for power delivery control`,
+        
+        'grip': `🏆 MAXIMUM GRIP SETUP for ${carInfo}:\n\n🎯 CONTACT PATCH OPTIMIZATION:\n• Tire Pressure: 26-28 PSI (lower = more grip)\n• Camber: Front -2.5°, Rear -2.0° (aggressive)\n• Toe: Front -0.1°, Rear +0.1° (stability + turn-in)\n\n🔧 MECHANICAL GRIP:\n• Springs: Stiff but compliant (180-220 lb/in)\n• ARBs: Balanced stiffness (35-40 both ends)\n• Ride height: As low as possible without bottoming\n• Damping: Firm rebound, moderate bump\n\n🌪️ AERODYNAMIC GRIP:\n• Maximum downforce front and rear\n• Balance aero for neutral handling\n• Consider drag penalty vs. cornering gain\n\n📊 TELEMETRY TARGETS:\n• Tire temps: 180-220°F optimal range\n• Even temps across tire width\n• Minimal tire wear for consistency`,
+        
+        'speed': `🚀 TOP SPEED SETUP for ${carInfo}:\n\n⚡ AERODYNAMIC EFFICIENCY:\n• Downforce: Minimum front/rear for low drag\n• Ride height: Slightly raised (6.5-7.5cm) for aero\n• Body kit: Remove unnecessary aero components\n\n🎯 GEARING OPTIMIZATION:\n• Final drive: Lower ratio (2.5-3.0) for top end\n• Gear ratios: Longer for sustained high speed\n• Rev limiter: Tune to hit max speed in top gear\n\n🏎️ MECHANICAL SETUP:\n• Tire pressure: Higher (30-32 PSI) for less rolling resistance\n• Camber: Moderate (-1.0° to -1.5°) for straight-line stability\n• Toe: Minimal (0° to +0.1°) to reduce scrub\n• Springs: Medium stiffness for high-speed stability\n\n📈 POWER DELIVERY:\n• Differential: 40-50% accel for traction without wheelspin\n• Launch control: Optimize for clean getaway\n• Shift points: Tune for power band efficiency`,
+        
+        'rally': `🏔️ RALLY SETUP for ${carInfo}:\n\n🌍 MIXED SURFACE MASTERY:\n• Tire pressure: 24-26 PSI for compliance\n• Compound: Rally tires or softest available\n• Camber: Conservative (-1.5° front, -1.0° rear)\n\n⛰️ SUSPENSION FOR TERRAIN:\n• Ride height: 7.5-9.0cm for ground clearance\n• Springs: Medium-soft (100-140 lb/in) for absorption\n• Damping: Soft bump, firm rebound for control\n• ARBs: Moderate (25-30) for body control\n\n🎯 DRIVETRAIN TRACTION:\n• Differential: High lock (60-80%) for grip\n• Center diff: 60-70% rear bias for rotation\n• Brake balance: Rearward (45-48%) for stability\n\n🏁 RALLY TECHNIQUES:\n• Gearing: Shorter ratios for power out of corners\n• Electronics: Minimal aids for driver control\n• Weight transfer: Use suspension for rotation`,
+        
+        'track': `🏁 TRACK DAY SETUP for ${carInfo}:\n\n🎯 CIRCUIT OPTIMIZATION:\n• Tire pressure: Start 26-28 PSI cold\n• Camber: Track-specific (-2.0° to -2.5° front)\n• Toe: Minimal for tire wear (±0.1°)\n\n🔧 SUSPENSION PRECISION:\n• Springs: Firm but compliant (160-200 lb/in)\n• ARBs: Balanced for neutral handling\n• Ride height: Low but avoid bottoming\n• Damping: Track-tuned for responsiveness\n\n⚙️ PERFORMANCE FOCUS:\n• Brake balance: Optimize for track layout\n• Differential: Balanced (45-55%) for consistency\n• Gearing: Match to track's speed profile\n• Aero: Balance downforce vs. straight-line speed\n\n📊 SESSION MANAGEMENT:\n• Tire temps: Monitor for overheating\n• Fuel load: Adjust setup for weight changes\n• Brake cooling: Ensure adequate for session length`,
+        
+        'default': `🎯 COMPREHENSIVE TUNING GUIDE for ${carInfo}:\n\n📋 SYSTEMATIC APPROACH:\n1️⃣ Start with calculated base tune\n2️⃣ Adjust tire pressures first (26-30 PSI range)\n3️⃣ Fine-tune camber for tire wear pattern\n4️⃣ Balance ARBs for handling preference\n5️⃣ Optimize differential for power delivery\n\n🔧 CURRENT CONTEXT:\n• Track: ${selectedTrack || 'General use'}\n• Weather: ${weatherCondition}\n• Surface: ${trackSurface}\n• Style: ${drivingStyle}\n\n📊 TELEMETRY VALIDATION:\n• Tire temperatures: 180-220°F optimal\n• Even wear across tire width\n• Consistent lap times within 0.5 seconds\n• Stable handling balance through corners\n\n🏆 PRO TIPS:\n• Make one change at a time\n• Test 5-10 laps between adjustments\n• Document what works for future reference\n• Focus on driver comfort and confidence`
       }
       
-      const responseKey = Object.keys(responses).find(key => 
-        aiQuery.toLowerCase().includes(key)
-      ) || 'default'
+      // Enhanced keyword detection with context
+      let responseKey = 'default'
+      const query = aiQuery.toLowerCase()
+      
+      if (query.includes('understeer') || query.includes('push') || query.includes('front')) responseKey = 'understeer'
+      else if (query.includes('oversteer') || query.includes('loose') || query.includes('rear')) responseKey = 'oversteer'
+      else if (query.includes('drift') || query.includes('slide')) responseKey = 'drift'
+      else if (query.includes('grip') || query.includes('traction')) responseKey = 'grip'
+      else if (query.includes('speed') || query.includes('fast') || query.includes('straight')) responseKey = 'speed'
+      else if (query.includes('rally') || query.includes('dirt') || query.includes('gravel')) responseKey = 'rally'
+      else if (query.includes('track') || query.includes('circuit') || query.includes('lap')) responseKey = 'track'
+      else if (weatherCondition === 'wet' || query.includes('rain') || query.includes('wet')) responseKey = 'wet'
       
       setAiResponse(responses[responseKey as keyof typeof responses])
     } catch (error) {
-      setAiResponse('Sorry, AI tuning advice is currently unavailable. Please try again later.')
+      setAiResponse('🚫 AI tuning advice temporarily unavailable. Please try again.')
     } finally {
       setAiLoading(false)
     }
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-[#1a1a1a] text-white' : 'bg-white text-black'}`}>
-      <header className={`flex justify-between items-center p-4 ${isDarkMode ? 'bg-[#333333]' : 'bg-[#f5f5f5]'} border-b`}>
+    <div className={`min-h-screen relative ${isDarkMode ? 'text-white' : 'text-black'}`} style={{
+      backgroundImage: 'url("/assets/images/tokyo-panorama.jpg")',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed'
+    }}>
+      <div className="absolute inset-0 bg-black/60"></div>
+      <header className={`relative z-10 flex justify-between items-center p-4 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm border-b`}>
         <div>
           <h1 className="text-2xl font-bold text-blue-500">🏎️ Forza TuneForge AI</h1>
           <p className="text-xs opacity-75">Professional Tuning Platform</p>
@@ -413,7 +729,7 @@ export default function TuneForge() {
         </div>
       </header>
 
-      <div className={`flex p-4 gap-4 ${isDarkMode ? 'bg-[#333333]' : 'bg-[#f5f5f5]'}`}>
+      <div className={`relative z-10 flex p-4 gap-4 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm`}>
         <input
           type="text"
           placeholder="Search cars..."
@@ -435,8 +751,8 @@ export default function TuneForge() {
         </select>
       </div>
       
-      <div className="grid lg:grid-cols-2 gap-0 h-[calc(100vh-140px)]">
-        <div className={`border-r overflow-y-auto ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+      <div className="relative z-10 grid lg:grid-cols-2 gap-0 h-[calc(100vh-140px)]">
+        <div className={`border-r overflow-y-auto ${isDarkMode ? 'border-gray-600 bg-black/60' : 'border-gray-300 bg-white/60'} backdrop-blur-sm`}>
           <ul className="list-none">
             {filteredCars.map((car, index) => (
               <li
@@ -448,7 +764,10 @@ export default function TuneForge() {
                     : 'hover:opacity-80'
                 } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
               >
-                <div className="font-bold mb-2">{car.year} {car.manufacturer} {car.model}</div>
+                <div className="font-bold mb-2 flex items-center gap-2">
+                  <span>{getCountryFlag(car.country)}</span>
+                  <span>{car.year} {car.manufacturer} {car.model}</span>
+                </div>
                 <div className="flex gap-4 text-sm opacity-80">
                   <span>PI: {car.pi.class} {car.pi.value}</span>
                   <span className={`px-2 py-1 rounded text-xs ${
@@ -456,18 +775,30 @@ export default function TuneForge() {
                     car.rarity === 'Epic' ? 'bg-purple-500 text-white' :
                     car.rarity === 'Rare' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
                   }`}>{car.rarity}</span>
+                  <span>{formatPrice(car.price)}</span>
                 </div>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="p-4 overflow-y-auto">
+        <div className={`p-4 overflow-y-auto ${isDarkMode ? 'bg-black/60' : 'bg-white/60'} backdrop-blur-sm`}>
           {selectedCar ? (
             <div className="space-y-4">
               <div>
-                <h3 className="font-bold text-lg">{selectedCar.year} {selectedCar.manufacturer} {selectedCar.model}</h3>
-                <p className="text-sm opacity-75">{selectedCar.type} • {selectedCar.country} • ${selectedCar.price.toLocaleString()}</p>
+                <h3 className="font-bold text-lg flex items-center gap-2">
+                  <span>{getCountryFlag(selectedCar.country)}</span>
+                  <span>{selectedCar.year} {selectedCar.manufacturer} {selectedCar.model}</span>
+                </h3>
+                <p className="text-sm opacity-75 flex items-center gap-2">
+                  <span>{selectedCar.type}</span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1">
+                    {getCountryFlag(selectedCar.country)} {selectedCar.country}
+                  </span>
+                  <span>•</span>
+                  <span>{formatPrice(selectedCar.price)}</span>
+                </p>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
@@ -508,36 +839,61 @@ export default function TuneForge() {
             <div className="text-center opacity-75 space-y-4">
               <div>
                 <p className="text-lg mb-2">🏎️ Select a car to start tuning</p>
-                <p className="text-xs text-green-500">✅ {cars.length} cars loaded successfully</p>
+                <div className="space-y-1">
+                  <p className={`text-xs ${
+                    loadingStatus.includes('✅') ? 'text-green-500' : 
+                    loadingStatus.includes('⚠️') ? 'text-yellow-500' : 
+                    'text-blue-500'
+                  }`}>
+                    {loadingStatus || `✅ ${cars.length} cars loaded successfully`}
+                  </p>
+                  {cars.length > 0 && (
+                    <p className="text-xs text-gray-400">
+                      🚗 {cars.length} vehicles • 🏭 {new Set(cars.map(c => c.manufacturer)).size} manufacturers
+                    </p>
+                  )}
+                </div>
               </div>
               
               <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
-                <h4 className="font-bold mb-2">🎯 TuneForge Features:</h4>
+                <h4 className="font-bold mb-2">🎯 TuneForge Smart Calculator:</h4>
                 <div className="text-sm space-y-1 text-left">
-                  <div>• 🧮 AI-powered base tune calculation</div>
-                  <div>• 🏁 Professional racing templates</div>
-                  <div>• 🔧 Advanced parameter control</div>
-                  <div>• 🤖 Expert tuning advice</div>
-                  <div>• 💾 Save & share your tunes</div>
-                  <div>• 📊 Visual car statistics</div>
+                  <div>• 🧮 <span className="text-green-400">Smart calculation engine</span> - Analyzes car parameters</div>
+                  <div>• 🏁 <span className="text-blue-400">Track-specific optimization</span> - {Object.keys(TRACKS).length} track types</div>
+                  <div>• 🎨 <span className="text-purple-400">Driving style adaptation</span> - Personalized setups</div>
+                  <div>• 🌦️ <span className="text-cyan-400">Weather & surface tuning</span> - Condition-aware</div>
+                  <div>• 🤖 <span className="text-yellow-400">AI expert advice</span> - Professional guidance</div>
+                  <div>• 💾 <span className="text-pink-400">Save & share system</span> - Community tunes</div>
                 </div>
+                
+                {isCalculating && (
+                  <div className="mt-3 p-2 bg-blue-500/20 rounded border border-blue-500/30">
+                    <div className="text-xs text-blue-300 font-medium">🔄 Smart Calculator Active</div>
+                    <div className="text-xs text-blue-200 mt-1">{loadingStatus}</div>
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       </div>
       
-      <div className="p-4">
+      <div className={`relative z-10 p-4 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm`}>
         <div className={`flex border-b mb-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-          {[{id: 'quick', label: '⚡ Quick', desc: 'Templates & Base Tune'}, {id: 'advanced', label: '🔧 Advanced', desc: 'Detailed Settings'}, {id: 'ai', label: '🤖 AI', desc: 'Expert Advice'}].map((tab) => (
+          {[
+            {id: 'quick', label: '⚡ Quick', desc: 'Templates & Base Tune'}, 
+            {id: 'advanced', label: '🔧 Advanced', desc: 'Detailed Settings'}, 
+            {id: 'ai', label: '🤖 AI', desc: 'Expert Advice'},
+            {id: 'telemetry', label: '📊 Telemetry', desc: 'Data Analysis'}
+          ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-3 flex-1 text-center ${
+              className={`px-2 py-3 flex-1 text-center ${
                 activeTab === tab.id ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
               }`}
             >
-              <div className="font-medium">{tab.label}</div>
+              <div className="font-medium text-sm">{tab.label}</div>
               <div className="text-xs opacity-75">{tab.desc}</div>
             </button>
           ))}
@@ -547,50 +903,124 @@ export default function TuneForge() {
           <div className="space-y-4">
             <div className="space-y-3 mb-4">
               <div className="grid grid-cols-2 gap-2">
-                <select
-                  value={selectedTrack}
-                  onChange={(e) => setSelectedTrack(e.target.value)}
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
-                >
-                  <option value="">Select Track Type</option>
-                  {Object.entries(TRACKS).map(([key, track]) => (
-                    <option key={key} value={key}>{track.name}</option>
+                <select value={unitSystem} onChange={(e) => setUnitSystem(e.target.value)} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}>
+                  <option value="Imperial">Imperial (lbs)</option>
+                  <option value="Metric">Metric (kg)</option>
+                </select>
+                <input type="number" placeholder={`Weight (${unitSystem === 'Imperial' ? 'lbs' : 'kg'})`} value={carWeight} onChange={(e) => setCarWeight(Number(e.target.value))} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`} />
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2">
+                <input type="number" placeholder="Front Dist. (%)" value={frontDistribution} onChange={(e) => setFrontDistribution(Number(e.target.value))} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`} />
+                <select value={selectedCar?.drivetrain || 'RWD'} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}>
+                  <option value="RWD">RWD</option>
+                  <option value="FWD">FWD</option>
+                  <option value="AWD">AWD</option>
+                </select>
+                <input type="number" placeholder="Gears" value={gearCount} onChange={(e) => setGearCount(Number(e.target.value))} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`} />
+              </div>
+              
+              <div className={`p-3 rounded ${isDarkMode ? 'bg-[#2a2a2a]' : 'bg-gray-100'}`}>
+                <h5 className="font-bold mb-2">✨ Installed Upgrades</h5>
+                <div className="grid grid-cols-2 gap-1 text-xs">
+                  {Object.entries(upgrades).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-1">
+                      <span className="text-xs w-16 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                      <select value={value} onChange={(e) => setUpgrades({...upgrades, [key]: e.target.value})} className={`flex-1 p-1 rounded text-xs ${isDarkMode ? 'bg-[#1a1a1a] text-white' : 'bg-white text-black'}`}>
+                        <option value="Stock">Stock</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Race">Race</option>
+                      </select>
+                    </div>
                   ))}
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <select value={tuneType} onChange={(e) => setTuneType(e.target.value)} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}>
+                  <option value="Basic (General)">Basic (General)</option>
+                  <option value="Track">Track</option>
+                  <option value="Drift">Drift</option>
+                  <option value="Rally">Rally</option>
                 </select>
+                <select value={weatherCondition} onChange={(e) => setWeatherCondition(e.target.value)} className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}>
+                  <option value="dry">☀️ Dry</option>
+                  <option value="wet">🌧️ Wet</option>
+                  <option value="snow">❄️ Snow</option>
+                </select>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Handling Balance ({handlingBalance > 0 ? '+' : ''}{handlingBalance})</span>
+                  <span>Understeer ← → Oversteer</span>
+                </div>
+                <input type="range" min="-10" max="10" value={handlingBalance} onChange={(e) => setHandlingBalance(Number(e.target.value))} className="w-full" />
                 
-                <select
-                  value={drivingStyle}
-                  onChange={(e) => setDrivingStyle(e.target.value)}
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
-                >
-                  <option value="balanced">Balanced</option>
-                  <option value="aggressive">Aggressive</option>
-                  <option value="smooth">Smooth</option>
-                  <option value="drift">Drift</option>
-                </select>
+                <div className="flex justify-between text-sm">
+                  <span>Bump Stiffness ({bumpStiffness}%)</span>
+                  <span>Soft ← → Stiff</span>
+                </div>
+                <input type="range" min="0" max="100" value={bumpStiffness} onChange={(e) => setBumpStiffness(Number(e.target.value))} className="w-full" />
               </div>
               
               <button
                 onClick={calculateBaseTune}
-                disabled={!selectedCar}
-                className="w-full py-3 px-4 bg-blue-500 text-white rounded font-bold disabled:opacity-50"
+                disabled={!selectedCar || isCalculating}
+                className={`w-full py-3 px-4 rounded font-bold transition-all duration-300 ${
+                  isCalculating 
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse' 
+                    : 'bg-blue-500 hover:bg-blue-600'
+                } text-white disabled:opacity-50`}
               >
-                🧮 Calculate {selectedTrack ? `${(TRACKS as any)[selectedTrack]?.name} ` : drivingStyle !== 'balanced' ? `${drivingStyle} ` : ''}Tune
+                {isCalculating ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                    <span>🔧 {loadingStatus}</span>
+                  </div>
+                ) : (
+                  '🔧 Calculate Tune'
+                )}
+              </button>
+              
+              {isCalculating && (
+                <div className="mt-2">
+                  <div className="flex justify-between text-xs mb-1">
+                    <span>Progress</span>
+                    <span>{calculationProgress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${calculationProgress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="🎯 Target lap time (e.g., 1:45.2)"
+                value={lapTimeTarget}
+                onChange={(e) => setLapTimeTarget(e.target.value)}
+                className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+              />
+              <button
+                onClick={() => {
+                  const newPreset = `${selectedCar?.manufacturer || 'Custom'}_${Date.now()}`
+                  setActivePreset(newPreset)
+                  calculateBaseTune()
+                }}
+                disabled={!selectedCar}
+                className="py-2 px-3 bg-purple-500 text-white rounded font-bold disabled:opacity-50 text-sm"
+              >
+                💾 Save as Preset
               </button>
             </div>
             
-            <div className="grid grid-cols-3 gap-2">
-              {['Speed', 'Grip', 'Drift'].map((template) => (
-                <button
-                  key={template}
-                  onClick={() => applyTemplate(template)}
-                  disabled={!selectedCar}
-                  className="py-3 px-4 bg-blue-500 text-white rounded font-bold disabled:opacity-50"
-                >
-                  {template}
-                </button>
-              ))}
-            </div>
+
             
             {selectedCar && (
               <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
@@ -839,14 +1269,21 @@ export default function TuneForge() {
         
         {activeTab === 'ai' && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2 mb-4">
-              {['understeer', 'oversteer', 'drift', 'grip', 'speed'].map((preset) => (
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {[
+                {key: 'understeer', icon: '🔄', label: 'Understeer'},
+                {key: 'oversteer', icon: '💫', label: 'Oversteer'},
+                {key: 'drift', icon: '💨', label: 'Drift Setup'},
+                {key: 'grip', icon: '🏆', label: 'Max Grip'},
+                {key: 'speed', icon: '🚀', label: 'Top Speed'},
+                {key: 'wet weather', icon: '🌧️', label: 'Wet Setup'}
+              ].map((preset) => (
                 <button
-                  key={preset}
-                  onClick={() => setAiQuery(`How do I fix ${preset} issues?`)}
-                  className="py-2 px-3 bg-gray-500 text-white rounded text-sm capitalize"
+                  key={preset.key}
+                  onClick={() => setAiQuery(`How do I optimize for ${preset.key}?`)}
+                  className="py-2 px-2 bg-gray-500 text-white rounded text-xs font-medium"
                 >
-                  {preset}
+                  {preset.icon} {preset.label}
                 </button>
               ))}
             </div>
@@ -873,6 +1310,63 @@ export default function TuneForge() {
           </div>
         )}
         
+        {activeTab === 'telemetry' && (
+          <div className="space-y-4">
+            <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
+              <h4 className="font-bold mb-3">📊 Telemetry Analysis</h4>
+              
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Front Tire Temp (°F)</label>
+                  <input
+                    type="number"
+                    placeholder={`${(() => {
+                      const tireType = upgrades.tires;
+                      const baseTemp = tuneType === 'Drift' ? 160 : tuneType === 'Rally' ? 140 : tuneType === 'Track' ? 200 : 180;
+                      const adjustment = tireType === 'Race' ? 20 : tireType === 'Sport' ? 10 : 0;
+                      return `${baseTemp + adjustment}-${baseTemp + adjustment + 20}`;
+                    })()} optimal`}
+                    className={`w-full p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Rear Tire Temp (°F)</label>
+                  <input
+                    type="number"
+                    placeholder={`${(() => {
+                      const tireType = upgrades.tires;
+                      const baseTemp = tuneType === 'Drift' ? 140 : tuneType === 'Rally' ? 130 : tuneType === 'Track' ? 190 : 180;
+                      const adjustment = tireType === 'Race' ? 20 : tireType === 'Sport' ? 10 : 0;
+                      return `${baseTemp + adjustment}-${baseTemp + adjustment + 20}`;
+                    })()} optimal`}
+                    className={`w-full p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2 mb-4">
+                <div className="text-center">
+                  <div className="text-xs opacity-75">Lap Time</div>
+                  <div className="font-bold text-lg text-blue-400">1:42.156</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs opacity-75">Sector 1</div>
+                  <div className="font-bold text-green-400">0:28.4</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xs opacity-75">Top Speed</div>
+                  <div className="font-bold text-red-400">187 mph</div>
+                </div>
+              </div>
+              
+              <button className="w-full mt-4 py-2 bg-green-500 text-white rounded font-bold">
+                📊 Analyze Telemetry Data
+              </button>
+            </div>
+          </div>
+        )}
+        
+
 
       </div>
     </div>

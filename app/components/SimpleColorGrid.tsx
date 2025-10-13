@@ -8,6 +8,7 @@ interface SimpleColorGridProps {
   colors: CarColor[]
   favorites: string[]
   onColorSelect: (color: CarColor) => void
+  onShowInfo?: (color: CarColor) => void
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
   expandedColorId?: string | null
@@ -17,6 +18,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   colors,
   favorites,
   onColorSelect,
+  onShowInfo,
   onToggleFavorite,
   isDarkMode,
   expandedColorId
@@ -73,6 +75,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
               <ColorCard
                 color={color}
                 onSelect={onColorSelect}
+                onShowInfo={onShowInfo}
                 isFavorite={isFavorite}
                 onToggleFavorite={() => onToggleFavorite(colorId)}
                 isDarkMode={isDarkMode}

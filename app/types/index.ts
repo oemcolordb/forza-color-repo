@@ -7,7 +7,13 @@ export interface CarColor {
   colorType: string
   color1: HSBColor
   color2: HSBColor
+  isGenerated?: boolean
+  uniqueId?: string
 }
+
+// Re-export car types
+export * from './car'
+export * from './color'
 
 export interface HSBColor {
   h: number

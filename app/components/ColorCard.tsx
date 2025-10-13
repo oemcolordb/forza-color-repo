@@ -5,6 +5,7 @@ import { CarColor } from '../types'
 interface ColorCardProps {
   color: CarColor
   onSelect: (color: CarColor) => void
+  onShowInfo?: (color: CarColor) => void
   isFavorite?: boolean
   onToggleFavorite?: () => void
   isDarkMode?: boolean
@@ -13,6 +14,7 @@ interface ColorCardProps {
 const ColorCard: React.FC<ColorCardProps> = React.memo(({ 
   color, 
   onSelect, 
+  onShowInfo,
   isFavorite = false, 
   onToggleFavorite,
   isDarkMode = true
@@ -150,7 +152,11 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onSelect(color)
+              if (onShowInfo) {
+                onShowInfo(color)
+              } else {
+                onSelect(color)
+              }
             }}
             className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
               isDarkMode ? 'text-slate-300 hover:text-blue-400 hover:bg-slate-700' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100'

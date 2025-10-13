@@ -8,7 +8,7 @@ class IndexedDBManager {
 
   async init(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.dbName, this.version)
+      const request = window.indexedDB.open(this.dbName, this.version)
       
       request.onerror = () => reject(request.error)
       request.onsuccess = () => {
@@ -198,4 +198,4 @@ class IndexedDBManager {
   }
 }
 
-export const indexedDB = new IndexedDBManager()
+export const indexedDBManager = new IndexedDBManager()

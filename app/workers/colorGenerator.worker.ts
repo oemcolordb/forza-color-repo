@@ -121,6 +121,6 @@ self.onmessage = function(e: MessageEvent<GenerationMessage>) {
     self.postMessage({ type: 'complete', colors: newColors })
     
   } catch (error) {
-    self.postMessage({ type: 'error', error: error.message })
+    self.postMessage({ type: 'error', error: error instanceof Error ? error.message : 'Unknown error' })
   }
 }

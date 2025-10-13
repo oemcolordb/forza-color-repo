@@ -9,6 +9,7 @@ interface VirtualColorGridProps {
   colors: CarColor[]
   favorites: string[]
   onColorSelect: (color: CarColor) => void
+  onShowInfo?: (color: CarColor) => void
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
   expandedColorId?: string | null
@@ -18,6 +19,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   colors,
   favorites,
   onColorSelect,
+  onShowInfo,
   onToggleFavorite,
   isDarkMode,
   expandedColorId
@@ -65,6 +67,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
           <ColorCard
             color={color}
             onSelect={onColorSelect}
+            onShowInfo={onShowInfo}
             isFavorite={isFavorite}
             onToggleFavorite={() => onToggleFavorite(colorId)}
             isDarkMode={isDarkMode}
@@ -72,7 +75,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
         </div>
       </div>
     )
-  }, [colors, favorites, onColorSelect, onToggleFavorite, isDarkMode, columnsCount])
+  }, [colors, favorites, onColorSelect, onShowInfo, onToggleFavorite, isDarkMode, columnsCount])
 
   if (colors.length === 0) {
     return (
