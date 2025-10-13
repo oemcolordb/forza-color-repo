@@ -230,6 +230,7 @@ export default function HomePage() {
 
   // Show HSB popup for color data
   const showColorHSB = useCallback((color: CarColor) => {
+    console.log('showColorHSB called with:', color.colorName, color.make)
     setHsbPopupColor(color)
     setShowHsbPopup(true)
   }, [])
