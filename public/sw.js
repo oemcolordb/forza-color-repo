@@ -1,3 +1,4 @@
+// Service Worker for PWA functionality
 const CACHE_NAME = 'forza-colors-v1'
 const STATIC_CACHE = 'forza-static-v1'
 const DYNAMIC_CACHE = 'forza-dynamic-v1'
@@ -5,61 +6,130 @@ const DYNAMIC_CACHE = 'forza-dynamic-v1'
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/offline.html',
+  '/_next/static/css/app/layout.css',
+  '/_next/static/chunks/webpack.js',
+  '/_next/static/chunks/main.js'
 ]
 
 // Install event
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then(cache => cache.addAll(STATIC_ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(STATIC_CACHE).then((cache) => {
+      return cache.addAll(STATIC_ASSETS)
+    })
   )
+  self.skipWaiting()
 })
 
 // Activate event
-self.addEventListener('activate', event => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map(cacheName => {
+        cacheNames.map((cacheName) => {
           if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
             return caches.delete(cacheName)
           }
         })
       )
-    }).then(() => self.clients.claim())
+    })
   )
+  self.clients.claim()
 })
 
 // Fetch event
-self.addEventListener('fetch', event => {
-  if (event.request.url.includes('/api/')) {
-    // Network first for API calls
+self.addEventListener('fetch', (event) => {
+  const { request } = event
+  const url = new URL(request.url)
+
+  // Handle API requests
+  if (url.pathname.startsWith('/api/')) {
     event.respondWith(
-      fetch(event.request)
-        .then(response => {
+      fetch(request)
+        .then((response) => {
           const responseClone = response.clone()
-          caches.open(DYNAMIC_CACHE)
-            .then(cache => cache.put(event.request, responseClone))
+          caches.open(DYNAMIC_CACHE).then((cache) => {
+            cache.put(request, responseClone)
+          })
           return response
         })
-        .catch(() => caches.match(event.request))
-    )
-  } else {
-    // Cache first for static assets
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          return response || fetch(event.request)
-            .then(fetchResponse => {
-              const responseClone = fetchResponse.clone()
-              caches.open(DYNAMIC_CACHE)
-                .then(cache => cache.put(event.request, responseClone))
-              return fetchResponse
-            })
+        .catch(() => {
+          return caches.match(request)
         })
     )
+    return
   }
+
+  // Handle static assets
+  if (STATIC_ASSETS.includes(url.pathname)) {
+    event.respondWith(
+      caches.match(request).then((response) => {
+        return response || fetch(request)
+      })
+    )
+    return
+  }
+
+  // Handle navigation requests
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const responseClone = response.clone()
+          caches.open(DYNAMIC_CACHE).then((cache) => {
+            cache.put(request, responseClone)
+          })
+          return response
+        })
+        .catch(() => {
+          return caches.match('/offline.html')
+        })
+    )
+    return
+  }
+
+  // Handle other requests
+  event.respondWith(
+    caches.match(request).then((response) => {
+      return response || fetch(request).then((fetchResponse) => {
+        const responseClone = fetchResponse.clone()
+        caches.open(DYNAMIC_CACHE).then((cache) => {
+          cache.put(request, responseClone)
+        })
+        return fetchResponse
+      })
+    })
+  )
+})
+
+// Background sync for offline actions
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    event.waitUntil(
+      // Handle offline actions when back online
+      self.registration.showNotification('Forza Colors', {
+        body: 'Your offline changes have been synced!',
+        icon: '/icon-192.png'
+      })
+    )
+  }
+})
+
+// Push notifications
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'New colors available!',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification('Forza Colors', options)
+  )
 })

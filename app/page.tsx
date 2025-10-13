@@ -11,6 +11,8 @@ import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SimpleColorGrid from './components/SimpleColorGrid'
+import VirtualColorGrid from './components/VirtualColorGrid'
+import { indexedDB } from './lib/indexedDB'
 import OptimizedVirtualGrid from './components/OptimizedVirtualGrid'
 import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ImageColorExtractor from './components/ImageColorExtractor'
@@ -35,7 +37,7 @@ import CriticalCSS from './components/CriticalCSS'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
-
+import AdvancedTools from './components/AdvancedTools'
 
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
@@ -97,7 +99,9 @@ export default function HomePage() {
   const filteredColors = useMemo(() => {
     const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}`
     const cached = cache.get<CarColor[]>(cacheKey)
-    if (cached) return cached
+    if (cached && allColors.length > 0) {
+      return cached
+    }
     
     let result: CarColor[]
     
@@ -127,7 +131,9 @@ export default function HomePage() {
       }
     }
     
-    cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
+    if (allColors.length > 0) {
+      cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
+    }
     return result
   }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet])
 
@@ -197,29 +203,52 @@ export default function HomePage() {
       .sort()
   }, [allColors])
 
-  // Load favorites from localStorage with validation
+  // Load favorites from IndexedDB with localStorage fallback
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('forza-favorites')
-      if (saved) {
-        const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed)) {
-          setFavorites(parsed)
+    const loadFavorites = async () => {
+      try {
+        // Try IndexedDB first
+        const dbFavorites = await indexedDB.getFavorites()
+        if (dbFavorites.length > 0) {
+          setFavorites(dbFavorites)
+          return
         }
+        
+        // Fallback to localStorage
+        const saved = localStorage.getItem('forza-favorites')
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          if (Array.isArray(parsed)) {
+            setFavorites(parsed)
+            // Migrate to IndexedDB
+            await indexedDB.storeFavorites(parsed)
+          }
+        }
+      } catch (err) {
+        const error = handleError(err)
+        setFavorites([])
       }
-    } catch (err) {
-      const error = handleError(err)
-      setFavorites([])
     }
+    
+    loadFavorites()
   }, [])
 
-  // Save favorites to localStorage with error handling
+  // Save favorites to IndexedDB and localStorage
   useEffect(() => {
-    try {
-      localStorage.setItem('forza-favorites', JSON.stringify(favorites))
-    } catch (err) {
-      const error = handleError(err)
-      setError('Failed to save favorites')
+    const saveFavorites = async () => {
+      try {
+        // Save to IndexedDB
+        await indexedDB.storeFavorites(favorites)
+        // Keep localStorage as backup
+        localStorage.setItem('forza-favorites', JSON.stringify(favorites))
+      } catch (err) {
+        const error = handleError(err)
+        setError('Failed to save favorites')
+      }
+    }
+    
+    if (favorites.length > 0) {
+      saveFavorites()
     }
   }, [favorites])
 
@@ -238,6 +267,8 @@ export default function HomePage() {
 
   // Show HSB popup for color data
   const showColorHSB = useCallback((color: CarColor) => {
+    console.log('showColorHSB called with:', color.colorName)
+    console.log('Setting popup state - color:', color, 'showHsbPopup: true')
     setHsbPopupColor(color)
     setShowHsbPopup(true)
   }, [])
@@ -556,20 +587,18 @@ export default function HomePage() {
                   />
                 </div>
                 
-                {!deviceInfo.isMobile && (
-                  <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-lg">🎨</span>
-                      <span className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>HARMONY DISPLAY</span>
-                    </div>
-                    <HarmonyVisualizer
-                      currentHarmony={harmonyColors}
-                      harmonyMode={harmonyMode}
-                      isDarkMode={isDarkMode}
-                      onColorSelect={showColorHSB}
-                    />
+                <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">🎨</span>
+                    <span className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>HARMONY DISPLAY</span>
                   </div>
-                )}
+                  <HarmonyVisualizer
+                    currentHarmony={harmonyColors}
+                    harmonyMode={harmonyMode}
+                    isDarkMode={isDarkMode}
+                    onColorSelect={showColorHSB}
+                  />
+                </div>
               </div>
             </GamingErrorBoundary>
           </div>
@@ -601,9 +630,14 @@ export default function HomePage() {
                 <span className="text-2xl">🛠️</span>
                 <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ADVANCED TOOLS</span>
               </div>
-              <div className="text-center text-sm text-gray-500">
-                Advanced tools coming soon!
-              </div>
+              <GamingErrorBoundary>
+                <AdvancedTools
+                  colors={allColors}
+                  isDarkMode={isDarkMode}
+                  isMobile={deviceInfo.isMobile}
+                  onColorSelect={showColorHSB}
+                />
+              </GamingErrorBoundary>
             </div>
           )}
           
@@ -747,14 +781,25 @@ export default function HomePage() {
               </svg>
             </div>
             
-            <SimpleColorGrid
-              colors={filteredColors.length > 0 ? filteredColors : allColors}
-              onColorSelect={handleColorSelect}
-              favorites={favorites}
-              onToggleFavorite={toggleFavorite}
-              isDarkMode={isDarkMode}
-              expandedColorId={expandedColorId}
-            />
+            {filteredColors.length > 1000 ? (
+              <VirtualColorGrid
+                colors={filteredColors}
+                onColorSelect={handleColorSelect}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+                isDarkMode={isDarkMode}
+                expandedColorId={expandedColorId}
+              />
+            ) : (
+              <SimpleColorGrid
+                colors={filteredColors}
+                onColorSelect={handleColorSelect}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+                isDarkMode={isDarkMode}
+                expandedColorId={expandedColorId}
+              />
+            )}
           </div>
           </ResponsiveLayout>
         </ErrorBoundary>

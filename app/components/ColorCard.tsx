@@ -18,8 +18,49 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
   isDarkMode = true
 }) => {
   const gradient = React.useMemo(() => {
-    return createForzaGradient(color.color1, color.color2)
-  }, [color.color1, color.color2])
+    // Create finish-specific visual effects
+    const baseGradient = createForzaGradient(color.color1, color.color2)
+    const colorType = color.colorType?.toLowerCase() || ''
+    
+    if (colorType.includes('chrome')) {
+      return `linear-gradient(135deg, 
+        hsl(${color.color1.h * 360}, 20%, 85%) 0%,
+        hsl(${color.color1.h * 360}, 30%, 95%) 25%,
+        hsl(${color.color1.h * 360}, 10%, 75%) 50%,
+        hsl(${color.color1.h * 360}, 25%, 90%) 75%,
+        hsl(${color.color1.h * 360}, 15%, 80%) 100%)`
+    }
+    
+    if (colorType.includes('metallic')) {
+      return `linear-gradient(135deg, 
+        hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%) 0%,
+        hsl(${color.color1.h * 360}, ${Math.min(100, color.color1.s * 120)}%, ${Math.min(100, color.color1.b * 110)}%) 30%,
+        hsl(${color.color1.h * 360}, ${color.color1.s * 80}%, ${color.color1.b * 90}%) 70%,
+        hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%) 100%)`
+    }
+    
+    if (colorType.includes('matte')) {
+      return `hsl(${color.color1.h * 360}, ${color.color1.s * 70}%, ${color.color1.b * 85}%)`
+    }
+    
+    if (colorType.includes('gloss') || colorType.includes('semigloss')) {
+      return `linear-gradient(135deg, 
+        hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%) 0%,
+        hsl(${color.color1.h * 360}, ${Math.min(100, color.color1.s * 110)}%, ${Math.min(100, color.color1.b * 120)}%) 50%,
+        hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%) 100%)`
+    }
+    
+    if (colorType.includes('pearlescent') || colorType.includes('pearl')) {
+      return `linear-gradient(135deg, 
+        hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%) 0%,
+        hsl(${(color.color1.h + 0.1) % 1 * 360}, ${Math.min(100, color.color1.s * 130)}%, ${Math.min(100, color.color1.b * 115)}%) 25%,
+        hsl(${(color.color1.h + 0.05) % 1 * 360}, ${color.color1.s * 90}%, ${color.color1.b * 95}%) 50%,
+        hsl(${(color.color1.h - 0.05) % 1 * 360}, ${Math.min(100, color.color1.s * 120)}%, ${Math.min(100, color.color1.b * 110)}%) 75%,
+        hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%) 100%)`
+    }
+    
+    return baseGradient
+  }, [color.color1, color.color2, color.colorType])
   
   const displayText = React.useMemo(() => {
     const modelDisplay = color.model ? ` ${color.model}` : ''
@@ -46,11 +87,35 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(({
       }}
     >
       <div 
-        className="w-full h-20 sm:h-24" 
+        className={`w-full h-20 sm:h-24 relative overflow-hidden ${
+          color.colorType?.toLowerCase().includes('matte') ? '' : 'shadow-inner'
+        }`}
         style={{ background: gradient }}
         role="img"
         aria-label={`Color preview for ${color.colorName}`}
-      />
+      >
+        {/* Add shine effect for glossy finishes */}
+        {(color.colorType?.toLowerCase().includes('gloss') || 
+          color.colorType?.toLowerCase().includes('chrome') ||
+          color.colorType?.toLowerCase().includes('metallic')) && (
+          <div 
+            className="absolute inset-0 opacity-30"
+            style={{
+              background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.6) 55%, transparent 100%)'
+            }}
+          />
+        )}
+        
+        {/* Add sparkle effect for pearlescent */}
+        {color.colorType?.toLowerCase().includes('pearl') && (
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-2 left-4 w-1 h-1 bg-white rounded-full animate-pulse" />
+            <div className="absolute top-6 right-6 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '0.5s'}} />
+            <div className="absolute bottom-4 left-8 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{animationDelay: '1s'}} />
+            <div className="absolute bottom-2 right-4 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '1.5s'}} />
+          </div>
+        )}
+      </div>
       <div className="p-3 flex-grow flex flex-col color-info-area">
         <div className="flex-grow">
           <h3 className={`text-sm font-bold truncate leading-tight ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>

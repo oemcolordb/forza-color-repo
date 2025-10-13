@@ -108,6 +108,52 @@ export default function About() {
             </div>
           </div>
 
+          {/* Paint Guide - How to Use */}
+          <div className={`relative rounded-xl overflow-hidden ${
+            isDarkMode ? 'bg-gradient-to-r from-pink-800 to-pink-900' : 'bg-gradient-to-r from-pink-100 to-pink-200'
+          } border-2 ${isDarkMode ? 'border-pink-500/30' : 'border-pink-400/40'} p-6`}>
+            <div className="absolute top-2 left-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-pink-500 rounded-full animate-pulse"></div>
+                <span className={`text-xs font-mono ${isDarkMode ? 'text-pink-400' : 'text-pink-600'}`}>PAINT GUIDE</span>
+              </div>
+            </div>
+            <div className="mt-6">
+              <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                🎨 <span>Step-by-Step Guide to Creating Pearlescent Effects in FH5</span>
+              </h2>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold mb-2">1. Enter the Paint & Design Menu</h3>
+                  <p className="text-sm opacity-90">Go to your Garage → Upgrades & Tuning → Paint Car. Select Body Paint to start customizing.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">2. Choose a Base Color</h3>
+                  <p className="text-sm opacity-90">Pick a solid or metallic base that will act as your "undercoat." Darker bases (like black, navy, or deep purple) make pearlescent highlights pop more.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">3. Apply a Special Finish</h3>
+                  <p className="text-sm opacity-90">Select Polished Metal or Aluminum finishes. These reflect light differently and give you that shimmering depth. Adjust the brightness and saturation to control how strong the effect looks.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">4. Use Two-Tone or Dual-Color Fine Tuning</h3>
+                  <p className="text-sm opacity-90">In the Advanced Color Editor, you can fine-tune both the highlight and lowlight colors. For a pearlescent effect, make the highlight a bright, contrasting color (like teal over black, or pink over purple). Keep the lowlight close to your base color for subtle blending.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">5. Experiment with Layers & Vinyls</h3>
+                  <p className="text-sm opacity-90">Add transparent gradient vinyls with different hues. This can mimic the "color-shift" effect of real pearlescent paint.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">6. Test in Different Lighting</h3>
+                  <p className="text-sm opacity-90">Drive your car in daylight, sunset, and night to see how the paint reacts. Pearlescent effects look best under changing light.</p>
+                </div>
+                <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? 'bg-pink-900/50' : 'bg-pink-200/50'}`}>
+                  <p className="text-sm font-medium">✅ Pro Tip: The best pearlescent looks come from contrast—dark base + bright highlight. For example, black with teal highlights or deep purple with pink highlights creates that "color-shift" magic.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Showroom - Acknowledgments */}
           <div className={`relative rounded-xl overflow-hidden ${
             isDarkMode ? 'bg-gradient-to-r from-yellow-800 to-yellow-900' : 'bg-gradient-to-r from-yellow-100 to-yellow-200'

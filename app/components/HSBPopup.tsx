@@ -11,30 +11,46 @@ interface HSBPopupProps {
 }
 
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
+  console.log('HSBPopup render - isOpen:', isOpen, 'color:', color?.colorName)
   if (!isOpen || !color) return null
 
   const formatHSB = (hsb: { h: number; s: number; b: number }) => ({
-    h: Math.round(hsb.h * 360),
-    s: Math.round(hsb.s * 100),
-    b: Math.round(hsb.b * 100)
+    h: hsb.h.toFixed(2),
+    s: hsb.s.toFixed(2),
+    b: hsb.b.toFixed(2)
   })
 
   const hsb1 = formatHSB(color.color1)
   const hsb2 = formatHSB(color.color2)
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
+    <div 
+      className="fixed bg-black bg-opacity-50 flex justify-center items-center" 
+      onClick={onClose}
+      style={{ 
+        touchAction: 'none',
+        zIndex: 999999,
+        top: '0px',
+        left: '0px',
+        width: '100vw',
+        height: '100vh'
+      }}
+    >
       <div 
-        className={`p-4 rounded-lg max-w-sm w-full mx-4 ${
-          isDarkMode ? 'bg-slate-800 text-white' : 'bg-white text-gray-900'
+        className={`p-4 rounded-lg max-w-sm w-full mx-4 shadow-2xl border-2 ${
+          isDarkMode ? 'bg-slate-800 text-white border-white' : 'bg-white text-gray-900 border-black'
         }`}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        style={{ zIndex: 1000000 }}
       >
         <div className="flex justify-between items-center mb-3">
           <h3 className="font-semibold">HSB Color Data</h3>
           <button 
             onClick={onClose}
-            className={`text-xl ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
+            onTouchStart={(e) => { e.stopPropagation(); onClose(); }}
+            className={`text-xl min-w-[44px] min-h-[44px] flex items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
+            style={{ touchAction: 'manipulation' }}
           >
             ×
           </button>
@@ -46,30 +62,26 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
             <div className="text-xs opacity-75">{color.make}</div>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-3">
             <div>
-              <div className="text-xs font-medium mb-1">Primary Color</div>
+              <div className="text-sm font-medium mb-2">Color 1</div>
               <div 
-                className="w-full h-8 rounded border"
-                style={{ backgroundColor: `hsl(${hsb1.h}, ${hsb1.s}%, ${hsb1.b}%)` }}
+                className="w-full h-8 rounded border mb-2"
+                style={{ backgroundColor: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))})` }}
               />
-              <div className="text-xs mt-1 space-y-0.5">
-                <div>H: {hsb1.h}°</div>
-                <div>S: {hsb1.s}%</div>
-                <div>B: {hsb1.b}%</div>
+              <div className="text-sm font-mono">
+                {hsb1.h} {hsb1.s} {hsb1.b}
               </div>
             </div>
             
             <div>
-              <div className="text-xs font-medium mb-1">Secondary Color</div>
+              <div className="text-sm font-medium mb-2">Color 2</div>
               <div 
-                className="w-full h-8 rounded border"
-                style={{ backgroundColor: `hsl(${hsb2.h}, ${hsb2.s}%, ${hsb2.b}%)` }}
+                className="w-full h-8 rounded border mb-2"
+                style={{ backgroundColor: `rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 240) * Math.PI / 180)))})` }}
               />
-              <div className="text-xs mt-1 space-y-0.5">
-                <div>H: {hsb2.h}°</div>
-                <div>S: {hsb2.s}%</div>
-                <div>B: {hsb2.b}%</div>
+              <div className="text-sm font-mono">
+                {hsb2.h} {hsb2.s} {hsb2.b}
               </div>
             </div>
           </div>
