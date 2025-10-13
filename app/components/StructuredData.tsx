@@ -22,7 +22,7 @@ const StructuredData: React.FC<StructuredDataProps> = ({ colors, type = 'website
       }
     }
 
-    if (type === 'color' && colors && colors.length > 0) {
+    if (type === 'color' && colors && Array.isArray(colors) && colors.length > 0) {
       return {
         ...baseData,
         "@type": "ItemList",

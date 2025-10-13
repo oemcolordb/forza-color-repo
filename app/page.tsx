@@ -454,7 +454,7 @@ export default function HomePage() {
           ? 'bg-slate-900 text-white' 
           : 'bg-white text-gray-900'
       }`}>
-        <StructuredData colors={allColors} type="color" />
+        <StructuredData colors={allColors.length > 0 ? allColors : undefined} type="color" />
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
         <Breadcrumbs isDarkMode={isDarkMode} />
