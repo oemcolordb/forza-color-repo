@@ -38,6 +38,7 @@ import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
 import AdvancedTools from './components/AdvancedTools'
+import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
@@ -474,6 +475,11 @@ export default function HomePage() {
       <CriticalCSS />
       <GamingErrorBoundary>
         <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
+        <ForzaColorSheetSEO 
+          colorCount={allColors.length} 
+          manufacturerCount={makes.length} 
+          isDarkMode={isDarkMode} 
+        />
         <MobileGamingOptimizer deviceInfo={deviceInfo} />
       </GamingErrorBoundary>
       <div className={`font-sans min-h-screen ${

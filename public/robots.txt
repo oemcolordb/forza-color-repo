@@ -1,20 +1,22 @@
 User-agent: *
 Allow: /
 
-# Sitemap
-Sitemap: https://forza-color-repo.vercel.app/sitemap.xml
+# Enhanced crawling for Forza color sheet content
+Allow: /forza-color-sheet
+Allow: /api/colors
+Allow: /api/search
 
-# Crawl-delay for better server performance
+# Prioritize color-related content
 Crawl-delay: 1
 
-# Allow all search engines to index
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-# Block unnecessary paths
-Disallow: /api/
-Disallow: /_next/
+# Block admin and private areas
+Disallow: /api/admin/
 Disallow: /admin/
+Disallow: /_next/
+Disallow: /netlify/
+
+# Sitemap location
+Sitemap: https://forza-color-repo.vercel.app/sitemap.xml
+
+# Additional sitemaps for color data
+Sitemap: https://forza-color-repo.vercel.app/color-sitemap.xml
