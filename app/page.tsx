@@ -188,10 +188,12 @@ export default function HomePage() {
 
   // Memoized data for performance
   const makes = useMemo(() => {
+    if (!allColors || !Array.isArray(allColors)) return []
     return Array.from(new Set(allColors.map(c => c.make))).sort()
   }, [allColors])
   
   const colorTypes = useMemo(() => {
+    if (!allColors || !Array.isArray(allColors)) return []
     return Array.from(new Set(allColors.map(c => c.colorType).filter(type => type && type.trim())))
       .sort()
   }, [allColors])
