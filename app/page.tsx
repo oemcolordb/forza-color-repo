@@ -539,7 +539,7 @@ export default function HomePage() {
                   <ColorRouletteHarmony
                     colors={allColors}
                     isDarkMode={isDarkMode}
-                    onColorSelect={handleColorSelect}
+                    onColorSelect={showColorHSB}
                     onHarmonyGenerated={(colors: CarColor[], mode: string) => {
                       setHarmonyColors(colors)
                       setHarmonyMode(mode)
