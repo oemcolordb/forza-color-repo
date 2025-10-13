@@ -44,7 +44,7 @@ export default function Blog() {
         <h1 className="text-4xl font-bold mb-8">🚗 Automotive Color Blog</h1>
         
         <div className="grid gap-6">
-          {blogPosts.map((post) => (
+          {blogPosts && Array.isArray(blogPosts) ? blogPosts.map((post) => (
             <article key={post.slug} className={`rounded-xl p-6 ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg`}>
               <div className="flex items-center gap-2 mb-2">
                 <span className="px-2 py-1 text-xs rounded bg-blue-100 text-blue-800">{post.category}</span>
@@ -54,7 +54,7 @@ export default function Blog() {
               <p className="mb-4 text-gray-600">{post.excerpt}</p>
               <Link href={`/blog/${post.slug}`} className="text-blue-600 hover:underline">Read More →</Link>
             </article>
-          ))}
+          )) : null}
         </div>
       </div>
     </div>
