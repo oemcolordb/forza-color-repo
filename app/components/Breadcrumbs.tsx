@@ -11,6 +11,8 @@ interface BreadcrumbsProps {
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ isDarkMode }) => {
   const pathname = usePathname()
   
+  if (!pathname) return null
+  
   const pathSegments = pathname.split('/').filter(segment => segment !== '')
   
   const breadcrumbs = [
