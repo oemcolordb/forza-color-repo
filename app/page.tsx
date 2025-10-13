@@ -37,7 +37,6 @@ import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
 
 
-import Breadcrumbs from './components/Breadcrumbs'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
@@ -456,7 +455,6 @@ export default function HomePage() {
 
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
-        <Breadcrumbs isDarkMode={isDarkMode} />
         
         {/* Error Display */}
         {error && (
