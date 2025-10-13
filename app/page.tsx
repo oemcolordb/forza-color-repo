@@ -35,6 +35,13 @@ import CriticalCSS from './components/CriticalCSS'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
+import StructuredData from './components/StructuredData'
+import ColorComparison from './components/ColorComparison'
+import ColorSearch from './components/ColorSearch'
+import ColorExport from './components/ColorExport'
+import ColorHistory from './components/ColorHistory'
+import Breadcrumbs from './components/Breadcrumbs'
+import KeyboardShortcuts from './components/KeyboardShortcuts'
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 export default function HomePage() {
@@ -65,6 +72,9 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null)
   const [hsbPopupColor, setHsbPopupColor] = useState<CarColor | null>(null)
   const [showHsbPopup, setShowHsbPopup] = useState(false)
+  const [searchResults, setSearchResults] = useState<CarColor[]>([])
+  const [showComparison, setShowComparison] = useState(false)
+  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
   const ITEMS_PER_PAGE: number = useMemo(() => deviceInfo.isMobile ? 30 : 60, [deviceInfo.isMobile])
   const { track } = useAnalytics()
@@ -444,8 +454,10 @@ export default function HomePage() {
           ? 'bg-slate-900 text-white' 
           : 'bg-white text-gray-900'
       }`}>
+        <StructuredData colors={allColors} type="color" />
         <SecurityHeaders />
         <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
+        <Breadcrumbs isDarkMode={isDarkMode} />
         
         {/* Error Display */}
         {error && (
@@ -581,6 +593,37 @@ export default function HomePage() {
                 isMobile={deviceInfo.isMobile}
               />
             </GamingErrorBoundary>
+          </div>
+          
+          {/* Advanced Tools */}
+          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+            isDarkMode ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50' : 'bg-gradient-to-r from-orange-100 to-red-100'
+          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">🛠️</span>
+              <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ADVANCED TOOLS</span>
+            </div>
+            <div className={`grid gap-4 ${
+              deviceInfo.isMobile ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'
+            }`}>
+              <ColorSearch
+                colors={allColors}
+                onColorsFound={setSearchResults}
+                isDarkMode={isDarkMode}
+              />
+              <ColorComparison
+                colors={allColors}
+                isDarkMode={isDarkMode}
+              />
+              <ColorExport
+                colors={searchResults.length > 0 ? searchResults : filteredColors}
+                isDarkMode={isDarkMode}
+              />
+              <ColorHistory
+                isDarkMode={isDarkMode}
+                onColorSelect={showColorHSB}
+              />
+            </div>
           </div>
           
           {/* Results Display */}
@@ -749,6 +792,13 @@ export default function HomePage() {
           color={hsbPopupColor}
           isOpen={showHsbPopup}
           onClose={() => setShowHsbPopup(false)}
+          isDarkMode={isDarkMode}
+        />
+        
+        <KeyboardShortcuts
+          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+          onToggleSearch={() => setShowAdvancedSearch(!showAdvancedSearch)}
+          onToggleComparison={() => setShowComparison(!showComparison)}
           isDarkMode={isDarkMode}
         />
       </div>

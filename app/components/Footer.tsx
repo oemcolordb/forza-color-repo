@@ -62,6 +62,14 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             >
               Terms
             </a>
+            <a 
+              href="/blog" 
+              className={`hover:underline transition-colors ${
+                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Blog
+            </a>
           </nav>
         </div>
         
