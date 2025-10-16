@@ -536,7 +536,7 @@ export default function TuneForge() {
     setActiveTab('advanced')
   }
 
-  const saveTune = () => {
+  const saveTune = async () => {
     if (!selectedCar) return
     
     const tuneName = prompt('Enter tune name:')
@@ -550,6 +550,23 @@ export default function TuneForge() {
       tune: tuneData,
       timestamp: Date.now(),
       version: '1.0'
+    }
+    
+    try {
+      // Save to Turso database
+      await fetch('/api/tuneforge/tunes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: newTune.id,
+          name: tuneName,
+          car_make: selectedCar.manufacturer,
+          car_model: selectedCar.model,
+          tune_data: JSON.stringify(tuneData)
+        })
+      })
+    } catch (error) {
+      console.error('Failed to save to database:', error)
     }
     
     const updatedTunes = [...savedTunes, newTune]
