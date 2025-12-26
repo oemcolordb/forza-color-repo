@@ -26,7 +26,7 @@ multiprocessing-logging==0.3.4
 
 # Database and caching
 aiofiles==23.2.1
-python-multipart==0.0.6
+python-multipart==0.0.18
 
 # Development
 pytest==7.4.2
