@@ -41,8 +41,17 @@ const LocationTypeIcon: React.FC<{ type: LocationType }> = ({ type }) => {
 }
 
 const LocationCard: React.FC<LocationCardProps> = ({ location, isSelected, onSelect }) => {
+  const [showCopied, setShowCopied] = React.useState(false)
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(location.name)
+    setShowCopied(true)
+    setTimeout(() => setShowCopied(false), 2000)
+  }
+
   const cardClasses = `
-    p-4 rounded-lg cursor-pointer transition-all duration-300 ease-in-out border
+    p-4 rounded-lg cursor-pointer transition-all duration-300 ease-in-out border relative
     ${isSelected 
       ? 'bg-blue-600/30 border-blue-500 shadow-lg scale-105' 
       : 'bg-gray-700/50 border-gray-700/50 hover:bg-gray-700 hover:border-gray-600'}
@@ -50,12 +59,17 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, isSelected, onSel
 
   return (
     <div className={cardClasses} onClick={onSelect}>
-      <div className="flex items-start gap-4">
+      {showCopied && (
+        <div className="absolute -top-2 right-2 bg-green-500 text-white text-xs px-3 py-1.5 rounded-full animate-bounce z-20 shadow-lg">
+          ✓ Copied!
+        </div>
+      )}
+      <div className="flex items-start gap-3">
         <div className="mt-1 flex-shrink-0">
           <LocationTypeIcon type={location.type} />
         </div>
-        <div>
-          <div className="flex items-center gap-2">
+        <div className="flex-grow min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
             <h3 className="font-bold text-white">{location.name}</h3>
             <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isSelected ? 'bg-blue-200 text-blue-800' : 'bg-gray-600 text-gray-200'}`}>
               {location.type}
@@ -63,6 +77,13 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, isSelected, onSel
           </div>
           <p className="text-sm text-gray-300 mt-1">{location.description}</p>
         </div>
+        <button
+          onClick={handleCopy}
+          className="flex-shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md z-10"
+          title="Copy location name"
+        >
+          📋
+        </button>
       </div>
     </div>
   )
