@@ -70,6 +70,12 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
             🔧 TuneForge Lab
           </a>
           <a 
+            href="/location-finder"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+          >
+            📍 Location Finder
+          </a>
+          <a 
             href="/how-to-use"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
           >
