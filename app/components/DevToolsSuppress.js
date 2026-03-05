@@ -21,6 +21,10 @@ export const DevToolsSuppress = () => {
         ) {
           return // Suppress these messages
         }
+        // Allow console.warn and console.error
+        if (args[0] && typeof args[0] === 'object' && args[0].level === 'warn') {
+          return originalLog.apply(console, args)
+        }
         originalLog.apply(console, args)
       }
     }

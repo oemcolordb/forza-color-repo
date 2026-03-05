@@ -194,7 +194,7 @@ export default function TuneForge() {
     const piValue = selectedCar.pi.value
     const power = selectedCar.engine?.horsepower || 400
     
-    let optimalUpgrades = { ...upgrades }
+    const optimalUpgrades = { ...upgrades }
     
     // Engine upgrades based on tune type and power
     if (tuneType === 'Track' || tuneType === 'Basic (General)') {

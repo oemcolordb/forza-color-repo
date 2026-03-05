@@ -220,3 +220,47 @@ class AdvancedColorAnalyzer:
             }
         
         return trends
+
+    def predict_next_year_trends(self, colors_data: List[Dict], top_n: int = 10) -> Dict:
+        """Forecast which colors are likely to trend next year.
+
+        This is a simple linear-projection model based on yearly counts for each
+        color name.  It returns the names with the highest upward slope and a
+        basic predicted count for the upcoming year.
+        """
+        # build dataframe of year / colorName counts
+        df = pd.DataFrame(colors_data)
+        if 'year' not in df.columns or df['year'].isnull().all():
+            return {"error": "No temporal data available for prediction"}
+
+        df = df[df['year'].notnull()]
+        df['year'] = df['year'].astype(int)
+        counts = df.groupby(['year', 'colorName']).size().reset_index(name='count')
+        pivot = counts.pivot(index='year', columns='colorName', values='count').fillna(0)
+
+        if pivot.shape[0] < 2:
+            return {"error": "Not enough historical years to predict"}
+
+        slopes = {}
+        predictions = {}
+        years = pivot.index.values
+        next_year = years.max() + 1
+
+        for color in pivot.columns:
+            y = pivot[color].values
+            # linear fit: slope, intercept
+            m, b = np.polyfit(years, y, 1)
+            slopes[color] = m
+            predictions[color] = m * next_year + b
+
+        # select top colors by slope
+        sorted_colors = sorted(slopes.items(), key=lambda x: x[1], reverse=True)[:top_n]
+        forecast = []
+        for color, slope in sorted_colors:
+            forecast.append({
+                "colorName": color,
+                "slope": float(slope),
+                "predicted_count": float(predictions.get(color, 0))
+            })
+
+        return {"next_year": next_year, "forecast": forecast}

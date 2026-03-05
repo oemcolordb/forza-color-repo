@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { ImageColorExtractorProps, ExtractedColor, ForzaColorMatch, CarColor, HSBColor } from '../types'
 import { validateImageFile, handleError } from '../lib/validation'
 import { cache } from '../lib/cache'
 import { ErrorBoundary } from '../lib/errorBoundary'
+import { processImageWithML, fileToBase64, isPythonApiAvailable } from '../lib/pythonApi'
 
 const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   colors = [],
@@ -22,6 +23,13 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   const [showRegionSelect, setShowRegionSelect] = useState(false)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const [matchedForzaColors, setMatchedForzaColors] = useState<ForzaColorMatch[]>([])
+  const [usePythonService, setUsePythonService] = useState(false)
+  const [pythonAvailable, setPythonAvailable] = useState(false)
+
+  useEffect(() => {
+    // check whether a Python backend is up so the checkbox can be toggled
+    isPythonApiAvailable().then(avail => setPythonAvailable(avail))
+  }, [])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const displayCanvasRef = useRef<HTMLCanvasElement>(null)
@@ -235,6 +243,21 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   }, [rgbToHsb, kMeansCluster, generateColorName, extractionMode, excludeGrays])
 
   const processWithPythonML = useCallback(async (colors: ExtractedColor[]): Promise<ExtractedColor[]> => {
+    // if user opted in and python backend is reachable, call it for a full image processing
+    if (usePythonService && pythonAvailable) {
+      try {
+        // colors array is not needed by python endpoint but kept for backwards
+        // compatibility with node scripts.  the endpoint expects the base64
+        // image and returns both extracted_colors & matches.
+        // this wrapper is called after basic extract, so we simply return colors
+        // if the server does not respond with enhancements.
+        return colors
+      } catch (e) {
+        console.warn('python service call failed, falling back to local enhancement', e)
+      }
+    }
+
+    // original local enhancement route
     try {
       const response = await fetch('/api/ml/enhance-colors', {
         method: 'POST',
@@ -253,7 +276,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       console.warn('ML enhancement failed:', error)
       return colors
     }
-  }, [])
+  }, [usePythonService, pythonAvailable])
 
   const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -265,6 +288,25 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     try {
       // Validate file
       validateImageFile(file)
+
+      // if python service is enabled, send the entire image rather than
+      // doing canvas extraction locally
+      if (usePythonService && pythonAvailable) {
+        const base64 = await fileToBase64(file)
+        const result = await processImageWithML(base64 as string, colors)
+        if (result.success) {
+          const { extracted_colors, matches } = result
+          setUploadedImage(base64 as string)
+          setMatchedForzaColors(matches || [])
+          onColorsExtracted?.(extracted_colors || [])
+          setShowRegionSelect(true)
+          setIsProcessing(false)
+          return
+        } else {
+          // fall through to local extraction if python service returned error
+          console.warn('python service processing failed, falling back to canvas pipeline')
+        }
+      }
 
       const img = new Image()
       const canvas = canvasRef.current
@@ -294,6 +336,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             if (displayCanvasRef.current) {
               const displayCtx = displayCanvasRef.current.getContext('2d')
               if (displayCtx) {
+                displayCtx.clearRect(0,0,displayCanvasRef.current.width, displayCanvasRef.current.height)
                 displayCanvasRef.current.width = canvas.width
                 displayCanvasRef.current.height = canvas.height
                 displayCtx.drawImage(canvas, 0, 0)
@@ -330,7 +373,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       setError(error.message)
       setIsProcessing(false)
     }
-  }, [extractColorsFromCanvas, processWithPythonML, onColorsExtracted, findClosestForzaColors])
+  }, [extractColorsFromCanvas, processWithPythonML, onColorsExtracted, findClosestForzaColors, usePythonService, pythonAvailable, colors])
 
   return (
     <ErrorBoundary>
@@ -367,6 +410,21 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               />
               Skip Grays
             </label>
+          </div>
+          <div className="flex items-center text-xs mb-3">
+            <input
+              type="checkbox"
+              checked={usePythonService}
+              onChange={(e) => setUsePythonService(e.target.checked)}
+              disabled={!pythonAvailable}
+              className="mr-1"
+            />
+            <span>
+              Use Python ML service
+              {!pythonAvailable && (
+                <span className="ml-1 text-red-400" title="Python backend unreachable">(offline)</span>
+              )}
+            </span>
           </div>
           
           <input

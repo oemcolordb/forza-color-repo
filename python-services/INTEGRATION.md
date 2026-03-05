@@ -65,30 +65,72 @@ export async function analyzeColors(colors: CarColor[]) {
 
 ```typescript
 // app/components/ImageColorExtractor.tsx
-import { processImageWithML } from '../lib/pythonApi'
+import { processImageWithML, fileToBase64, isPythonApiAvailable } from '../lib/pythonApi'
 
-const processImage = useCallback(async (file: File) => {
-  setIsProcessing(true)
-  
-  try {
-    // Convert file to base64
-    const base64 = await fileToBase64(file)
-    
-    // Use Python ML service
-    const result = await processImageWithML(base64, colors)
-    
-    if (result.success) {
-      setExtractedColors(result.extracted_colors)
-      onColorsFound(result.matches)
-    } else {
-      setError(result.error)
+const ImageColorExtractor = (...) => {
+  const [usePythonService, setUsePythonService] = useState(false)
+  const [pythonAvailable, setPythonAvailable] = useState(false)
+
+  useEffect(() => {
+    isPythonApiAvailable().then(avail => setPythonAvailable(avail))
+  }, [])
+
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setIsProcessing(true)
+    setError(null)
+
+    try {
+      validateImageFile(file)
+
+      if (usePythonService && pythonAvailable) {
+        const base64 = await fileToBase64(file)
+        const result = await processImageWithML(base64 as string, colors)
+        if (result.success) {
+          setUploadedImage(base64 as string)
+          setMatchedForzaColors(result.matches || [])
+          onColorsExtracted?.(result.extracted_colors || [])
+          setShowRegionSelect(true)
+          setIsProcessing(false)
+          return
+        }
+      }
+
+      // ...fallback to local canvas extraction (see earlier example)...
+    } catch (err) {
+      setError(handleError(err).message)
+      setIsProcessing(false)
     }
-  } catch (error) {
-    setError('Failed to process image')
-  } finally {
-    setIsProcessing(false)
-  }
-}, [colors, onColorsFound])
+  }, [colors, usePythonService, pythonAvailable])
+```
+
+Added a checkbox in the UI allowing users to toggle the Python backend; it is
+disabled if `isPythonApiAvailable()` returns false.  The component still
+behaves offline using the built‑in `/api/ml/enhance-colors` route.
+
+### Optional standalone page
+
+The new `app/image-match/page.tsx` demonstrates a minimal upload tool that
+reuses `ImageColorExtractor` but lives at `/image-match`.  Visitors can try
+the feature without navigating through the garage UI.
+
+```tsx
+// app/image-match/page.tsx
+import React, { useState } from 'react'
+import ImageColorExtractor from '../../app/components/ImageColorExtractor'
+import colorData from '../../services/colordata'
+
+export default function ImageMatchPage() { /* ...shown earlier... */ }
+```
+
+The page shows extracted colors, the top paint matches and exposes the
+Python toggle.  It can be linked from anywhere in your app (e.g. header or
+homepage) to provide a quick clean interface.
+
+```html
+<a href="/image-match">Image paint scanner</a>
 ```
 
 ### Add Color Analytics Dashboard
@@ -206,6 +248,26 @@ const trends = await fetch('http://localhost:8000/api/color-trends/year')
 // Display trending colors by year
 <TrendChart data={trends.trends} />
 ```
+
+### 1a. Predicting Next-Year Trends
+
+A simple linear projection can forecast which names will gain momentum
+in the coming year.  Use the new `/color-trends/predict` endpoint:
+
+```typescript
+// ask Python service to predict top colors for next year
+const prediction = await fetch('http://localhost:8000/api/color-trends/predict')
+  .then(r => r.json())
+
+if (prediction.success) {
+  console.log('forecast', prediction.forecast)
+  // e.g. display forecast.next_year and forecast.forecast array
+}
+```
+
+The backend implementation lives in `color_analysis/analyzer.py` where
+`predict_next_year_trends` calculates a slope for each color name and
+returns the highest‑growing names along with a projected count.
 
 ### 2. ML-Powered Recommendations
 

@@ -1,35 +1,31 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next'
+import createWithVercelToolbar from '@vercel/toolbar/plugins/next'
+
+const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
   },
-  // Gaming SEO and mobile performance optimizations
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
   
-  // Reduce console warnings
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
   },
   
-  // Suppress React DevTools warning in production
   env: {
     NEXT_TELEMETRY_DISABLED: '1',
     INLINE_RUNTIME_CHUNK: 'false'
   },
   
-  // Mobile gaming performance
   experimental: {
     optimizeCss: true,
-    gzipSize: true,
-    isrMemoryCacheSize: 0
+    gzipSize: true
   },
   
   webpack: (config, { dev, isServer }) => {
-    // Suppress specific warnings
     config.ignoreWarnings = [
       /Critical dependency: the request of a dependency is an expression/,
       /Module not found: Can't resolve 'fs'/,
@@ -40,19 +36,18 @@ const nextConfig = {
     if (!dev) {
       config.devtool = 'source-map'
       
-      // Gaming performance optimizations
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
           gaming: {
             name: 'gaming',
-            test: /[\/\\]components[\/\\](Color|Gaming|Mobile)/,
+            test: /[\\/]components[\\/](Color|Gaming|Mobile)/,
             priority: 20,
             reuseExistingChunk: true
           },
           vendor: {
             name: 'vendor',
-            test: /[\/\\]node_modules[\/\\]/,
+            test: /[\\/]node_modules[\\/]/,
             priority: 10,
             reuseExistingChunk: true
           }
@@ -60,7 +55,6 @@ const nextConfig = {
       }
     }
     
-    // Mobile-first bundle optimization
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -74,4 +68,5 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+const withVercelToolbar = createWithVercelToolbar()
+export default withVercelToolbar(nextConfig)

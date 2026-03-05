@@ -33,7 +33,7 @@ const VirtualizedColorGrid: React.FC<VirtualizedColorGridProps> = React.memo(({
 
   // Advanced sorting
   const processedColors = useMemo(() => {
-    let sorted = [...colors]
+    const sorted = [...colors]
     
     switch (sortBy) {
       case 'manufacturer':

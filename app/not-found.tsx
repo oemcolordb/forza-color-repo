@@ -1,11 +1,11 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function NotFound() {
+  const router = useRouter()
+  const [countdown, setCountdown] = useState(10)
   const [carPosition, setCarPosition] = useState(50)
   const [paintColor, setPaintColor] = useState('#ff0000')
   const [score, setScore] = useState(0)
@@ -13,6 +13,19 @@ export default function NotFound() {
   const [paintDrops, setPaintDrops] = useState<Array<{id: number, x: number, y: number, color: string}>>([])
 
   const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#800080']
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          router.push('/')
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [router])
 
   useEffect(() => {
     if (!gameActive) return
@@ -74,8 +87,11 @@ export default function NotFound() {
           404
         </h1>
         <h2 className="text-2xl mb-2">🏁 Lost in the Garage!</h2>
-        <p className="text-gray-300 mb-6">
+        <p className="text-gray-300 mb-2">
           Your car got stuck in the paint booth. Help it collect colors to escape!
+        </p>
+        <p className="text-yellow-400 font-semibold">
+          Redirecting to home in {countdown}s...
         </p>
       </div>
 
@@ -174,12 +190,12 @@ export default function NotFound() {
 
       {/* Navigation */}
       <div className="text-center">
-        <Link 
-          href="/"
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 inline-block"
+        <button
+          onClick={() => router.push('/')}
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105"
         >
-          🏠 Back to Color Universe
-        </Link>
+          🏠 Back to Color Universe Now
+        </button>
         <p className="text-gray-400 text-sm mt-4">
           Use the arrow buttons to move your car and catch falling paint drops!
         </p>

@@ -288,6 +288,38 @@ async def get_color_trends(timeframe: str = "year"):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Trends analysis failed: {str(e)}")
 
+
+@app.get("/api/color-trends/predict")
+async def predict_color_trends():
+    """Return a simple forecast of which colors are likely to trend next year"""
+    if not color_database:
+        raise HTTPException(status_code=400, detail="No color database loaded")
+    
+    cache_key = "trends:predict"
+    if redis_available:
+        try:
+            cached_result = redis_client.get(cache_key)
+            if cached_result:
+                return json.loads(cached_result)
+        except:
+            pass
+    
+    try:
+        forecast = color_analyzer.predict_next_year_trends(color_database)
+        result = {
+            "success": True,
+            "forecast": forecast,
+            "total_colors_analyzed": len(color_database)
+        }
+        if redis_available:
+            try:
+                redis_client.setex(cache_key, 7200, json.dumps(result))
+            except:
+                pass
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+
 @app.get("/api/stats")
 async def get_api_stats():
     """Get API statistics and health"""

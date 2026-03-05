@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { fetchTrendPrediction } from '../lib/pythonApi'
 
 const PALETTE_CATEGORIES = {
   'Ferrari Reds': { makes: ['Ferrari'], colorNames: ['rosso', 'red', 'rouge'], icon: '🏎️' },
@@ -25,11 +26,28 @@ const PaletteGenerator = ({
   const [generationMode, setGenerationMode] = useState('random')
   const [lastGenerated, setLastGenerated] = useState([])
 
-  const generatePalette = (category) => {
+  const generatePalette = async (category) => {
     const config = PALETTE_CATEGORIES[category]
     if (!config) return []
 
-    let filteredColors = colors.filter(color => {
+    if (generationMode === 'trending') {
+      // call python service for prediction and match those names
+      try {
+        const prediction = await fetchTrendPrediction()
+        if (prediction.success && prediction.forecast) {
+          const trendingNames = prediction.forecast.forecast.map(f => f.colorName.toLowerCase())
+          const trending = colors.filter(c =>
+            trendingNames.includes(c.colorName.toLowerCase())
+          )
+          return trending.slice(0, paletteSize)
+        }
+      } catch (err) {
+        console.error('trend prediction failed', err)
+      }
+      // fallback to random if prediction not available
+    }
+
+    const filteredColors = colors.filter(color => {
       const makeMatch = config.makes.length === 0 || config.makes.includes(color.make)
       const nameMatch = config.colorNames.length === 0 || 
         config.colorNames.some(name => 
@@ -43,9 +61,9 @@ const PaletteGenerator = ({
     return shuffled.slice(0, paletteSize)
   }
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!selectedCategory) return
-    const palette = generatePalette(selectedCategory)
+    const palette = await generatePalette(selectedCategory)
     setLastGenerated(palette)
     onPaletteGenerated(palette)
   }

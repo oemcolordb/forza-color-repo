@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(false)
   }, [])
 
-  const login = async (email: string, password: string) => {
+  const login = async (_email: string, _password: string) => {
     const response = await fetch('/.netlify/functions/auth-login', {
       method: 'POST',
       headers: { 
@@ -77,7 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(userData)
   }
 
-  const signup = async (email: string, password: string, name: string) => {
+  const signup = async (_email: string, _password: string, _name: string) => {
     const response = await fetch('/.netlify/functions/auth-signup', {
       method: 'POST',
       headers: { 

@@ -41,6 +41,8 @@ import AdvancedTools from './components/AdvancedTools'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 
 import KeyboardShortcuts from './components/KeyboardShortcuts'
+import ColorAnalyticsDashboard from './components/ColorAnalyticsDashboard'
+
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 export default function HomePage() {
@@ -573,6 +575,14 @@ export default function HomePage() {
                     onColorSelect={showColorHSB}
                     isDarkMode={isDarkMode}
                   />
+                  <div className="mt-2 text-xs text-center">
+                    <a
+                      href="/image-match"
+                      className="text-blue-500 hover:underline"
+                    >
+                      Try standalone image‑to‑paint tool
+                    </a>
+                  </div>
                 </div>
                 
                 <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
@@ -642,6 +652,13 @@ export default function HomePage() {
                   onColorSelect={showColorHSB}
                 />
               </GamingErrorBoundary>
+            </div>
+          )}
+          
+          {/* Color Analytics */}
+          {allColors.length > 0 && (
+            <div className="mb-6">
+              <ColorAnalyticsDashboard colors={allColors} isDarkMode={isDarkMode} />
             </div>
           )}
           

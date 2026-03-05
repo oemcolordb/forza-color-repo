@@ -20,6 +20,7 @@
 - 🌓 **Dark/Light Mode**: Seamless theme switching with system preference detection
 - 📱 **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - ⚡ **Performance Optimized**: Lazy loading, virtual scrolling, and efficient rendering
+- 📸 **Paint Scanner**: upload a photo to extract colors and get Forza paint suggestions (standalone `/image-match` page + optional Python ML backend)
 - 🎯 **Accessibility**: WCAG compliant with keyboard navigation and screen reader support
 - 💾 **Favorites System**: Save and manage your favorite colors locally
 - 📊 **Color Analytics**: Detailed HSB values and color type information

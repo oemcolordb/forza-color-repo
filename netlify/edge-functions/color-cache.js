@@ -1,3 +1,18 @@
+/**
+ * Color Cache Edge Function
+ * 
+ * Caches color API responses at the edge for improved performance.
+ * Reduces origin server load and improves response times globally.
+ * 
+ * @param {Request} request - Incoming HTTP request
+ * @param {Object} context - Netlify edge context with cookies and next()
+ * @returns {Response} Cached or fresh response with cache headers
+ * 
+ * @example
+ * // Automatically caches responses for 1 hour
+ * // GET /api/colors?make=Ferrari
+ * // Response headers: X-Cache: HIT or MISS
+ */
 export default async (request, context) => {
   const url = new URL(request.url)
   const cacheKey = `colors-${url.searchParams.toString()}`
@@ -37,6 +52,11 @@ export default async (request, context) => {
   return response
 }
 
+/**
+ * Edge function configuration
+ * @type {Object}
+ * @property {string} path - URL pattern to match
+ */
 export const config = {
   path: '/api/colors/*'
 }

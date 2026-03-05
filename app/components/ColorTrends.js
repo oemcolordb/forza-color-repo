@@ -1,6 +1,9 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
+import { fetchTrendPrediction } from '../lib/pythonApi'
 
 const ColorTrends = ({ colors, favorites, isDarkMode }) => {
+  const [prediction, setPrediction] = useState(null)
+
   const trends = useMemo(() => {
     // Color type distribution
     const colorTypes = colors.reduce((acc, color) => {
@@ -144,6 +147,26 @@ const ColorTrends = ({ colors, favorites, isDarkMode }) => {
             ))}
           </div>
         </div>
+
+        {/* Predicted Colors */}
+        {prediction && prediction.forecast && (
+          <div className={`p-4 rounded-lg mt-6 ${isDarkMode ? 'bg-slate-800/50' : 'bg-white/50'}`}>
+            <h4 className={`font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              🔮 Predicted Trends ({prediction.next_year})
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {prediction.forecast.map(item => (
+                <span
+                  key={item.colorName}
+                  className="px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-pink-500 to-yellow-500 text-white"
+                  title={`slope: ${item.slope.toFixed(2)}, count: ${item.predicted_count.toFixed(0)}`}
+                >
+                  {item.colorName}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

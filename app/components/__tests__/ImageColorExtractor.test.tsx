@@ -39,9 +39,9 @@ describe('ImageColorExtractor', () => {
       />
     )
 
-    expect(screen.getByText('Find Matching Car Colors')).toBeInTheDocument()
-    expect(screen.getByText('Upload an image to extract colors and find matching automotive paints')).toBeInTheDocument()
-    expect(screen.getByText('Choose Image')).toBeInTheDocument()
+    expect(screen.getByText('Extract Colors from Image')).toBeInTheDocument()
+    // the file input uses an aria-label rather than visible text
+    expect(screen.getByLabelText('Upload image to extract colors')).toBeInTheDocument()
   })
 
   it('shows processing state when processing image', () => {
