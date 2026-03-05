@@ -1,4 +1,6 @@
 'use client'
+
+export const dynamic = 'force-dynamic'
 import { useState, useEffect } from 'react'
 import TelemetryDashboard from '../components/TelemetryDashboard'
 import TokyoBackground from '../components/TokyoBackground'

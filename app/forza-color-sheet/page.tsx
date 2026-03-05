@@ -1,3 +1,7 @@
+'use client'
+
+export const dynamic = 'force-dynamic'
+
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 

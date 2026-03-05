@@ -1,3 +1,7 @@
+'use client'
+
+export const dynamic = 'force-dynamic'
+
 export default function Blog() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
