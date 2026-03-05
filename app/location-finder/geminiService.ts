@@ -29,7 +29,7 @@ Types must be: Parking, Photo Op, Landmark, or Scenic View`
 
     const data = await response.json()
     const text = data.candidates[0].content.parts[0].text
-    const jsonMatch = text.match(/\[.*\]/s)
+    const jsonMatch = text.match(/\[[\s\S]*\]/)
     if (!jsonMatch) return getMockLocations()
     
     const locations: Location[] = JSON.parse(jsonMatch[0])
