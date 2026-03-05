@@ -4,6 +4,10 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
+  // Disable all static optimization
+  experimental: {
+    isrMemoryCacheSize: 0,
+  },
   // Gaming SEO and mobile performance optimizations
   compress: true,
   poweredByHeader: false,
