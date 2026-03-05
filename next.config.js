@@ -1,12 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true
-  },
-  // Disable all static optimization
-  experimental: {
-    isrMemoryCacheSize: 0,
   },
   // Gaming SEO and mobile performance optimizations
   compress: true,
@@ -28,7 +25,8 @@ const nextConfig = {
   // Mobile gaming performance
   experimental: {
     optimizeCss: true,
-    gzipSize: true
+    gzipSize: true,
+    isrMemoryCacheSize: 0
   },
   
   webpack: (config, { dev, isServer }) => {

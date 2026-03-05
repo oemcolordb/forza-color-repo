@@ -8,11 +8,6 @@ import { DevToolsSuppress } from './components/DevToolsSuppress'
 import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
 import { SecurityEnforcer } from './components/SecurityEnforcer'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-export const fetchCache = 'force-no-store'
-export const runtime = 'nodejs'
-
 const inter = Inter({ 
   subsets: ['latin'],
   display: 'swap'
