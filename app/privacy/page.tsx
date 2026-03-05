@@ -2,13 +2,6 @@
 
 export const dynamic = 'force-dynamic'
 
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Privacy Policy - Forza Color Universe',
-  description: 'Privacy Policy for Forza Color Universe. Learn how we handle your data and protect your privacy.',
-}
-
 export default function Privacy() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100">

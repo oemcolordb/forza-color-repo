@@ -2,13 +2,6 @@
 
 export const dynamic = 'force-dynamic'
 
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'Terms of Service - Forza Color Universe',
-  description: 'Terms of Service for Forza Color Universe. Read our terms and conditions for using our platform.',
-}
-
 export default function Terms() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100">
