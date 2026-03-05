@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Testing
+coverage
+__tests__
+
+# Build
+.next
+out
+dist
+
+# Misc
+.DS_Store
+*.log
+.env*.local
+
+# Scripts
+scripts/migrate.*
+migrations
+
+# Documentation
+*.md
+!README.md
+
+# Python services
+python-services

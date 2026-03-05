@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next'
-import createWithVercelToolbar from '@vercel/toolbar/plugins/next'
 
 const nextConfig: NextConfig = {
   trailingSlash: true,
@@ -68,5 +67,4 @@ const nextConfig: NextConfig = {
   }
 }
 
-const withVercelToolbar = createWithVercelToolbar()
-export default withVercelToolbar(nextConfig)
+export default nextConfig
