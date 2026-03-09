@@ -1,8 +1,9 @@
-@tailwind base;
 @import './critical.css';
+@import './animations.css';
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './animations.css';
 
 /* Component-specific styles */
 @layer components {

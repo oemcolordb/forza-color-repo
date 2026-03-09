@@ -3,8 +3,10 @@ import { Location, LocationType } from './types'
 export const fetchLocations = async (): Promise<Location[]> => {
   const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
+  // If no API key, use mock data without throwing error
   if (!apiKey) {
-    throw new Error('NEXT_PUBLIC_GEMINI_API_KEY environment variable not set.')
+    console.log('Using mock locations (Gemini API key not configured)')
+    return getMockLocations()
   }
 
   const prompt = `Generate a JSON array of 40 interesting locations from Forza Horizon 5 Mexico map. Return ONLY valid JSON array with this exact format:
@@ -24,17 +26,22 @@ Types must be: Parking, Photo Op, Landmark, or Scenic View`
     )
 
     if (!response.ok) {
+      console.log('Gemini API request failed, using mock locations')
       return getMockLocations()
     }
 
     const data = await response.json()
     const text = data.candidates[0].content.parts[0].text
     const jsonMatch = text.match(/\[[\s\S]*\]/)
-    if (!jsonMatch) return getMockLocations()
+    if (!jsonMatch) {
+      console.log('Failed to parse Gemini response, using mock locations')
+      return getMockLocations()
+    }
 
     const locations: Location[] = JSON.parse(jsonMatch[0])
     return locations
   } catch (error) {
+    console.log('Error fetching from Gemini API, using mock locations:', error)
     return getMockLocations()
   }
 }

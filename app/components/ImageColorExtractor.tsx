@@ -498,17 +498,17 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               type="checkbox"
               checked={usePythonService}
               onChange={e => setUsePythonService(e.target.checked)}
-              disabled={!pythonAvailable}
               className="mr-1"
+              id="python-ml-checkbox"
             />
-            <span>
+            <label htmlFor="python-ml-checkbox" className="cursor-pointer">
               Use Python ML service
               {!pythonAvailable && (
-                <span className="ml-1 text-red-400" title="Python backend unreachable">
-                  (offline)
+                <span className="ml-1 text-yellow-400" title="Python backend is offline - will use fallback processing">
+                  (offline - fallback enabled)
                 </span>
               )}
-            </span>
+            </label>
           </div>
 
           <input
