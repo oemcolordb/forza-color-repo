@@ -33,16 +33,19 @@ python-services/
 ## 🛠️ Installation
 
 ### Prerequisites
+
 - Python 3.8 or higher
 - pip package manager
 
 ### Quick Setup
+
 ```bash
 cd python-services
 python setup.py
 ```
 
 This will:
+
 - Install all required dependencies
 - Create necessary directories
 - Test all services
@@ -50,6 +53,7 @@ This will:
 - Generate configuration files
 
 ### Manual Installation
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -57,6 +61,7 @@ pip install -r requirements.txt
 ## 🚀 Usage
 
 ### Start the API Server
+
 ```bash
 # Windows
 start_api.bat
@@ -69,9 +74,11 @@ python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### API Documentation
+
 Visit `http://localhost:8000/docs` for interactive Swagger documentation.
 
 ### Script Replacements
+
 Replace Node.js scripts with enhanced Python versions:
 
 ```bash
@@ -91,6 +98,7 @@ python batch_processing/replace_node_scripts.py update-database
 ## 🔧 API Endpoints
 
 ### Core Services
+
 - `POST /api/load-colors` - Load color database for analysis
 - `POST /api/analyze-colors` - Advanced color distribution analysis
 - `POST /api/match-colors` - ML-powered color matching
@@ -98,6 +106,7 @@ python batch_processing/replace_node_scripts.py update-database
 - `POST /api/recommendations` - Get personalized color recommendations
 
 ### Analytics
+
 - `GET /api/color-trends/{timeframe}` - Color trend analysis
 - `POST /api/batch-analyze` - Batch process multiple color sets
 - `GET /api/stats` - API health and statistics
@@ -105,6 +114,7 @@ python batch_processing/replace_node_scripts.py update-database
 ## 🧪 Example Usage
 
 ### Color Analysis
+
 ```python
 from color_analysis.analyzer import AdvancedColorAnalyzer
 
@@ -124,6 +134,7 @@ print(f"Harmony Score: {analysis['harmony_analysis']['harmony_score']}")
 ```
 
 ### ML Color Matching
+
 ```python
 from ml_services.color_matcher import AdvancedColorMatcher
 
@@ -138,6 +149,7 @@ for match in matches[:5]:
 ```
 
 ### Image Processing
+
 ```python
 from ml_services.image_processor import AdvancedImageProcessor
 
@@ -177,6 +189,7 @@ Edit `config.json` to customize behavior:
 See [INTEGRATION.md](INTEGRATION.md) for detailed integration instructions.
 
 ### Quick Integration Example
+
 ```typescript
 // app/lib/pythonApi.ts
 const PYTHON_API_BASE = 'http://localhost:8000/api'
@@ -185,9 +198,9 @@ export async function analyzeColors(colors: CarColor[]) {
   const response = await fetch(`${PYTHON_API_BASE}/analyze-colors`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ colors, analysisType: 'full' })
+    body: JSON.stringify({ colors, analysisType: 'full' }),
   })
-  
+
   return response.json()
 }
 ```
@@ -228,12 +241,15 @@ CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--worker
 ## 📈 Monitoring
 
 ### Health Check
+
 ```bash
 curl http://localhost:8000/api/stats
 ```
 
 ### Performance Metrics
+
 The API provides detailed statistics about:
+
 - Processing times
 - Cache hit rates
 - Memory usage
@@ -244,11 +260,13 @@ The API provides detailed statistics about:
 ### Common Issues
 
 1. **Import Errors**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 2. **Port Already in Use**
+
    ```bash
    # Change port in config.json or use different port
    python -m uvicorn api.main:app --port 8001
@@ -263,6 +281,7 @@ The API provides detailed statistics about:
    - Increase system memory or use smaller datasets
 
 ### Debug Mode
+
 ```bash
 python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug
 ```

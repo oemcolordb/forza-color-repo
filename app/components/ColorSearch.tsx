@@ -18,11 +18,11 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
     const r = parseInt(hex.slice(1, 3), 16) / 255
     const g = parseInt(hex.slice(3, 5), 16) / 255
     const b = parseInt(hex.slice(5, 7), 16) / 255
-    
+
     const max = Math.max(r, g, b)
     const min = Math.min(r, g, b)
     const diff = max - min
-    
+
     let h = 0
     if (diff !== 0) {
       if (max === r) h = ((g - b) / diff) % 6
@@ -31,19 +31,24 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
     }
     h = Math.round(h * 60)
     if (h < 0) h += 360
-    
+
     const s = max === 0 ? 0 : diff / max
     return { h: h / 360, s, b: max }
   }
 
   const findSimilarColors = (targetHsb: { h: number; s: number; b: number }, tolerance = 0.1) => {
-    return colors.filter(color => {
-      const hDiff = Math.min(Math.abs(color.color1.h - targetHsb.h), 1 - Math.abs(color.color1.h - targetHsb.h))
-      const sDiff = Math.abs(color.color1.s - targetHsb.s)
-      const bDiff = Math.abs(color.color1.b - targetHsb.b)
-      
-      return hDiff <= tolerance && sDiff <= tolerance && bDiff <= tolerance
-    }).slice(0, 20)
+    return colors
+      .filter(color => {
+        const hDiff = Math.min(
+          Math.abs(color.color1.h - targetHsb.h),
+          1 - Math.abs(color.color1.h - targetHsb.h)
+        )
+        const sDiff = Math.abs(color.color1.s - targetHsb.s)
+        const bDiff = Math.abs(color.color1.b - targetHsb.b)
+
+        return hDiff <= tolerance && sDiff <= tolerance && bDiff <= tolerance
+      })
+      .slice(0, 20)
   }
 
   const searchByHex = () => {
@@ -56,11 +61,19 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
 
   const searchByRgb = () => {
     const r = parseInt(rgbSearch.r) / 255
-    const g = parseInt(rgbSearch.g) / 255  
+    const g = parseInt(rgbSearch.g) / 255
     const b = parseInt(rgbSearch.b) / 255
-    
+
     if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
-      const hsb = hexToHsb(`#${Math.round(r*255).toString(16).padStart(2,'0')}${Math.round(g*255).toString(16).padStart(2,'0')}${Math.round(b*255).toString(16).padStart(2,'0')}`)
+      const hsb = hexToHsb(
+        `#${Math.round(r * 255)
+          .toString(16)
+          .padStart(2, '0')}${Math.round(g * 255)
+          .toString(16)
+          .padStart(2, '0')}${Math.round(b * 255)
+          .toString(16)
+          .padStart(2, '0')}`
+      )
       const similar = findSimilarColors(hsb)
       onColorsFound(similar)
     }
@@ -70,7 +83,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
     const h = parseFloat(hsbSearch.h) / 360
     const s = parseFloat(hsbSearch.s) / 100
     const b = parseFloat(hsbSearch.b) / 100
-    
+
     if (!isNaN(h) && !isNaN(s) && !isNaN(b)) {
       const similar = findSimilarColors({ h, s, b })
       onColorsFound(similar)
@@ -82,10 +95,12 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
       <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         🎯 Advanced Color Search
       </h3>
-      
+
       <div className="space-y-4">
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Search by HEX
           </label>
           <div className="flex gap-2">
@@ -93,7 +108,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               type="text"
               placeholder="#FF0000"
               value={hexSearch}
-              onChange={(e) => setHexSearch(e.target.value)}
+              onChange={e => setHexSearch(e.target.value)}
               className={`flex-1 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}
@@ -108,7 +123,9 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
         </div>
 
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Search by RGB
           </label>
           <div className="flex gap-2">
@@ -118,7 +135,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               min="0"
               max="255"
               value={rgbSearch.r}
-              onChange={(e) => setRgbSearch({...rgbSearch, r: e.target.value})}
+              onChange={e => setRgbSearch({ ...rgbSearch, r: e.target.value })}
               className={`w-20 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}
@@ -129,7 +146,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               min="0"
               max="255"
               value={rgbSearch.g}
-              onChange={(e) => setRgbSearch({...rgbSearch, g: e.target.value})}
+              onChange={e => setRgbSearch({ ...rgbSearch, g: e.target.value })}
               className={`w-20 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}
@@ -140,7 +157,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               min="0"
               max="255"
               value={rgbSearch.b}
-              onChange={(e) => setRgbSearch({...rgbSearch, b: e.target.value})}
+              onChange={e => setRgbSearch({ ...rgbSearch, b: e.target.value })}
               className={`w-20 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}
@@ -155,7 +172,9 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
         </div>
 
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Search by HSB
           </label>
           <div className="flex gap-2">
@@ -165,7 +184,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               min="0"
               max="360"
               value={hsbSearch.h}
-              onChange={(e) => setHsbSearch({...hsbSearch, h: e.target.value})}
+              onChange={e => setHsbSearch({ ...hsbSearch, h: e.target.value })}
               className={`w-20 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}
@@ -176,7 +195,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               min="0"
               max="100"
               value={hsbSearch.s}
-              onChange={(e) => setHsbSearch({...hsbSearch, s: e.target.value})}
+              onChange={e => setHsbSearch({ ...hsbSearch, s: e.target.value })}
               className={`w-20 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}
@@ -187,7 +206,7 @@ const ColorSearch: React.FC<ColorSearchProps> = ({ colors, onColorsFound, isDark
               min="0"
               max="100"
               value={hsbSearch.b}
-              onChange={(e) => setHsbSearch({...hsbSearch, b: e.target.value})}
+              onChange={e => setHsbSearch({ ...hsbSearch, b: e.target.value })}
               className={`w-20 p-2 rounded border ${
                 isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-gray-300'
               }`}

@@ -15,22 +15,30 @@ export default function TelemetryPage() {
   }, [])
 
   return (
-    <div className={`min-h-screen ${
-      isDarkMode 
-        ? 'bg-gray-900 text-gray-100' 
-        : 'bg-gray-100 text-gray-800'
-    }`}>
+    <div
+      className={`min-h-screen ${
+        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-800'
+      }`}
+    >
       <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
-      
+
       <div className="relative z-10 max-w-6xl mx-auto p-4">
         {/* Engine Bay - Header */}
-        <div className={`relative mb-6 rounded-xl overflow-hidden ${
-          isDarkMode ? 'bg-gradient-to-r from-gray-800 to-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
-        } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}>
+        <div
+          className={`relative mb-6 rounded-xl overflow-hidden ${
+            isDarkMode
+              ? 'bg-gradient-to-r from-gray-800 to-gray-900'
+              : 'bg-gradient-to-r from-gray-100 to-gray-200'
+          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}
+        >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-              <span className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>TELEMETRY SYSTEM</span>
+              <span
+                className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}
+              >
+                TELEMETRY SYSTEM
+              </span>
             </div>
           </div>
           <div className="mt-4">
@@ -39,15 +47,23 @@ export default function TelemetryPage() {
             </h1>
           </div>
         </div>
-        
+
         {/* Dashboard - Setup Instructions */}
-        <div className={`relative mb-6 rounded-xl overflow-hidden ${
-          isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-slate-100 to-slate-200'
-        } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}>
+        <div
+          className={`relative mb-6 rounded-xl overflow-hidden ${
+            isDarkMode
+              ? 'bg-gradient-to-r from-slate-800 to-slate-900'
+              : 'bg-gradient-to-r from-slate-100 to-slate-200'
+          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}
+        >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-              <span className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>SETUP GUIDE</span>
+              <span
+                className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
+              >
+                SETUP GUIDE
+              </span>
             </div>
           </div>
           <div className="mt-6">
@@ -65,13 +81,21 @@ export default function TelemetryPage() {
         </div>
 
         {/* Control Panel - Telemetry Dashboard */}
-        <div className={`relative rounded-xl overflow-hidden ${
-          isDarkMode ? 'bg-gradient-to-r from-green-800 to-green-900' : 'bg-gradient-to-r from-green-100 to-green-200'
-        } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}>
+        <div
+          className={`relative rounded-xl overflow-hidden ${
+            isDarkMode
+              ? 'bg-gradient-to-r from-green-800 to-green-900'
+              : 'bg-gradient-to-r from-green-100 to-green-200'
+          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}
+        >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-              <span className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>LIVE DATA</span>
+              <span
+                className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}
+              >
+                LIVE DATA
+              </span>
             </div>
           </div>
           <div className="mt-6">
@@ -82,4 +106,3 @@ export default function TelemetryPage() {
     </div>
   )
 }
-

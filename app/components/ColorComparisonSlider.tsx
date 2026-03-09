@@ -9,7 +9,11 @@ interface ColorComparisonSliderProps {
   isDarkMode: boolean
 }
 
-export default function ColorComparisonSlider({ original, matched, isDarkMode }: ColorComparisonSliderProps) {
+export default function ColorComparisonSlider({
+  original,
+  matched,
+  isDarkMode,
+}: ColorComparisonSliderProps) {
   const [sliderValue, setSliderValue] = useState(50)
 
   const originalCSS = `hsl(${original.h * 360}, ${original.s * 100}%, ${original.b * 100}%)`
@@ -18,15 +22,12 @@ export default function ColorComparisonSlider({ original, matched, isDarkMode }:
   return (
     <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
       <div className="relative h-32 rounded-lg overflow-hidden mb-4">
-        <div
-          className="absolute inset-0"
-          style={{ background: originalCSS }}
-        />
+        <div className="absolute inset-0" style={{ background: originalCSS }} />
         <div
           className="absolute inset-0 transition-all"
           style={{
             background: matchedCSS,
-            clipPath: `inset(0 ${100 - sliderValue}% 0 0)`
+            clipPath: `inset(0 ${100 - sliderValue}% 0 0)`,
           }}
         />
         <div
@@ -46,7 +47,9 @@ export default function ColorComparisonSlider({ original, matched, isDarkMode }:
 
       <div className="flex justify-between mt-2 text-sm">
         <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>Original</span>
-        <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>Matched: {matched.colorName}</span>
+        <span className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
+          Matched: {matched.colorName}
+        </span>
       </div>
     </div>
   )

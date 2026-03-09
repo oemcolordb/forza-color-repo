@@ -8,7 +8,10 @@ interface ColorAnalyticsDashboardProps {
   isDarkMode: boolean
 }
 
-export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAnalyticsDashboardProps) {
+export default function ColorAnalyticsDashboard({
+  colors,
+  isDarkMode,
+}: ColorAnalyticsDashboardProps) {
   const analytics = useMemo(() => {
     const makeCount = new Map<string, number>()
     const typeCount = new Map<string, number>()
@@ -16,7 +19,8 @@ export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAna
 
     colors.forEach(color => {
       makeCount.set(color.make, (makeCount.get(color.make) || 0) + 1)
-      typeCount.set(color.colorType, (typeCount.get(color.colorType) || 0) + 1)
+      const colorType = color.colorType || 'Unknown'
+      typeCount.set(colorType, (typeCount.get(colorType) || 0) + 1)
       colorFrequency.set(color.colorName, (colorFrequency.get(color.colorName) || 0) + 1)
     })
 
@@ -24,12 +28,11 @@ export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAna
       topMakes: Array.from(makeCount.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10),
-      topTypes: Array.from(typeCount.entries())
-        .sort((a, b) => b[1] - a[1]),
+      topTypes: Array.from(typeCount.entries()).sort((a, b) => b[1] - a[1]),
       mostCommon: Array.from(colorFrequency.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10),
-      total: colors.length
+      total: colors.length,
     }
   }, [colors])
 
@@ -42,7 +45,9 @@ export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAna
       {/* Total Colors */}
       <div className={`mb-6 p-4 rounded-lg ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
         <div className="text-4xl font-bold text-blue-500">{analytics.total.toLocaleString()}</div>
-        <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Total Colors</div>
+        <div className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          Total Colors
+        </div>
       </div>
 
       {/* Top Manufacturers */}
@@ -53,13 +58,19 @@ export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAna
         <div className="space-y-2">
           {analytics.topMakes.map(([make, count], index) => (
             <div key={make} className="flex items-center gap-2">
-              <span className={`text-sm font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <span
+                className={`text-sm font-mono ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}
+              >
                 #{index + 1}
               </span>
               <div className="flex-1">
                 <div className="flex justify-between mb-1">
-                  <span className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{make}</span>
-                  <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{count}</span>
+                  <span className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    {make}
+                  </span>
+                  <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                    {count}
+                  </span>
                 </div>
                 <div className={`h-2 rounded-full ${isDarkMode ? 'bg-slate-700' : 'bg-gray-200'}`}>
                   <div
@@ -80,9 +91,16 @@ export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAna
         </h3>
         <div className="grid grid-cols-2 gap-3">
           {analytics.topTypes.map(([type, count]) => (
-            <div key={type} className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}>
-              <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{count}</div>
-              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>{type}</div>
+            <div
+              key={type}
+              className={`p-3 rounded-lg ${isDarkMode ? 'bg-slate-700' : 'bg-gray-100'}`}
+            >
+              <div className={`text-lg font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                {count}
+              </div>
+              <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                {type}
+              </div>
             </div>
           ))}
         </div>
@@ -95,9 +113,14 @@ export default function ColorAnalyticsDashboard({ colors, isDarkMode }: ColorAna
         </h3>
         <div className="space-y-1">
           {analytics.mostCommon.map(([name, count]) => (
-            <div key={name} className={`flex justify-between text-sm p-2 rounded ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}>
+            <div
+              key={name}
+              className={`flex justify-between text-sm p-2 rounded ${isDarkMode ? 'hover:bg-slate-700' : 'hover:bg-gray-100'}`}
+            >
               <span className={isDarkMode ? 'text-gray-300' : 'text-gray-700'}>{name}</span>
-              <span className={`font-mono ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>{count}x</span>
+              <span className={`font-mono ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
+                {count}x
+              </span>
             </div>
           ))}
         </div>

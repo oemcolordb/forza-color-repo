@@ -5,6 +5,7 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18.0 or higher
 - npm or yarn package manager
 - Git
@@ -33,6 +34,7 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
 ## 🛠️ Development Workflow
 
 ### Branch Naming Convention
+
 - `feature/description` - New features
 - `fix/description` - Bug fixes
 - `docs/description` - Documentation updates
@@ -42,6 +44,7 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
 ### Making Changes
 
 1. **Create a new branch**:
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -49,6 +52,7 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
 2. **Make your changes** following our coding standards
 
 3. **Test your changes**:
+
    ```bash
    npm run test
    npm run lint
@@ -56,12 +60,14 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
    ```
 
 4. **Commit your changes**:
+
    ```bash
    git add .
    git commit -m "feat: add your feature description"
    ```
 
 5. **Push to your fork**:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -71,24 +77,28 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
 ## 📝 Coding Standards
 
 ### TypeScript
+
 - Use strict TypeScript configuration
 - Define interfaces for all props and data structures
 - Use type imports when importing types only
 - Avoid `any` type - use proper typing
 
 ### React Components
+
 - Use functional components with hooks
 - Follow the single responsibility principle
 - Use descriptive component and prop names
 - Implement proper error boundaries
 
 ### Styling
+
 - Use Tailwind CSS utility classes
 - Follow mobile-first responsive design
 - Maintain consistent spacing and colors
 - Use CSS custom properties for theming
 
 ### Performance
+
 - Implement lazy loading for large datasets
 - Use React.memo for expensive components
 - Optimize images and assets
@@ -97,12 +107,14 @@ Thank you for your interest in contributing to Forza Color Universe! This docume
 ## 🧪 Testing
 
 ### Writing Tests
+
 - Write unit tests for utility functions
 - Write integration tests for components
 - Test accessibility features
 - Test responsive behavior
 
 ### Running Tests
+
 ```bash
 npm run test          # Run all tests
 npm run test:watch    # Run tests in watch mode
@@ -112,12 +124,15 @@ npm run test:coverage # Run tests with coverage
 ## 📚 Documentation
 
 ### Code Documentation
+
 - Use JSDoc comments for functions and components
 - Document complex algorithms and business logic
 - Keep README and documentation up to date
 
 ### Commit Messages
+
 Follow conventional commit format:
+
 - `feat:` - New features
 - `fix:` - Bug fixes
 - `docs:` - Documentation changes
@@ -129,6 +144,7 @@ Follow conventional commit format:
 ## 🐛 Bug Reports
 
 When reporting bugs, please include:
+
 - Clear description of the issue
 - Steps to reproduce
 - Expected vs actual behavior
@@ -138,6 +154,7 @@ When reporting bugs, please include:
 ## 💡 Feature Requests
 
 For feature requests, please provide:
+
 - Clear description of the feature
 - Use case and benefits
 - Possible implementation approach
@@ -146,6 +163,7 @@ For feature requests, please provide:
 ## 🔍 Code Review Process
 
 ### Pull Request Requirements
+
 - [ ] Code follows project standards
 - [ ] Tests pass and coverage is maintained
 - [ ] Documentation is updated
@@ -153,6 +171,7 @@ For feature requests, please provide:
 - [ ] Accessibility standards are met
 
 ### Review Criteria
+
 - Code quality and maintainability
 - Performance impact
 - Security considerations
@@ -162,12 +181,14 @@ For feature requests, please provide:
 ## 🎨 Color Data Contributions
 
 ### Adding New Colors
+
 - Ensure color data follows the established schema
 - Verify HSB values are accurate
 - Include proper manufacturer and model information
 - Test color rendering across different themes
 
 ### Data Quality Standards
+
 - Accurate color names and types
 - Consistent manufacturer naming
 - Valid HSB color values (0-1 range)
@@ -176,6 +197,7 @@ For feature requests, please provide:
 ## 📞 Getting Help
 
 If you need help or have questions:
+
 - Check existing issues and discussions
 - Join our community discussions
 - Reach out to maintainers

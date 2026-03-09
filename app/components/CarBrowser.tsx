@@ -1,61 +1,53 @@
-import React, { useState, useEffect } from 'react';
-import { Car, CarFilters } from '../types/car';
-import { useCars } from '../hooks/useCars';
-import { getCountryFlag, formatPrice } from '../lib/countryFlags';
-import CarSelector from './CarSelector';
+import React, { useState, useEffect } from 'react'
+import { Car, CarFilters } from '../types/car'
+import { useCars } from '../hooks/useCars'
+import { getCountryFlag, formatPrice } from '../lib/countryFlags'
+import CarSelector from './CarSelector'
 
 interface CarBrowserProps {
-  onCarSelect?: (car: Car) => void;
-  className?: string;
+  onCarSelect?: (car: Car) => void
+  className?: string
 }
 
 const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) => {
-  const { 
-    cars, 
-    manufacturers, 
-    types, 
-    loading, 
-    error, 
-    searchCars, 
-    getRandomCars 
-  } = useCars();
-  
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<CarFilters>({});
-  const [viewMode, setViewMode] = useState<'selector' | 'search' | 'random'>('selector');
+  const { cars, manufacturers, types, loading, error, searchCars, getRandomCars } = useCars()
+
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filters, setFilters] = useState<CarFilters>({})
+  const [viewMode, setViewMode] = useState<'selector' | 'search' | 'random'>('selector')
 
   // Load random cars on initial mount
   useEffect(() => {
     if (viewMode === 'random') {
-      getRandomCars(20);
+      getRandomCars(20)
     }
-  }, [viewMode, getRandomCars]);
+  }, [viewMode, getRandomCars])
 
   const handleSearch = () => {
     searchCars({
       query: searchQuery,
       filters,
-      limit: 50
-    });
-  };
+      limit: 50,
+    })
+  }
 
   const handleCarSelect = (car: Car | null) => {
-    setSelectedCar(car);
+    setSelectedCar(car)
     if (car && onCarSelect) {
-      onCarSelect(car);
+      onCarSelect(car)
     }
-  };
+  }
 
   const handleFilterChange = (key: keyof CarFilters, value: string) => {
-    const newFilters = { ...filters };
+    const newFilters = { ...filters }
     if (value) {
-      (newFilters as any)[key] = value;
+      ;(newFilters as any)[key] = value
     } else {
-      delete newFilters[key];
+      delete newFilters[key]
     }
-    setFilters(newFilters);
-  };
+    setFilters(newFilters)
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -95,10 +87,7 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
 
       {/* Car Selector Mode */}
       {viewMode === 'selector' && (
-        <CarSelector
-          selectedCar={selectedCar}
-          onCarSelect={handleCarSelect}
-        />
+        <CarSelector selectedCar={selectedCar} onCarSelect={handleCarSelect} />
       )}
 
       {/* Search & Filter Mode */}
@@ -113,7 +102,7 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search by manufacturer, model, or year..."
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
@@ -135,11 +124,11 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
               </label>
               <select
                 value={filters.manufacturer || ''}
-                onChange={(e) => handleFilterChange('manufacturer', e.target.value)}
+                onChange={e => handleFilterChange('manufacturer', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="">All Manufacturers</option>
-                {manufacturers.map((manufacturer) => (
+                {manufacturers.map(manufacturer => (
                   <option key={manufacturer} value={manufacturer}>
                     {manufacturer}
                   </option>
@@ -153,11 +142,11 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
               </label>
               <select
                 value={filters.type || ''}
-                onChange={(e) => handleFilterChange('type', e.target.value)}
+                onChange={e => handleFilterChange('type', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="">All Types</option>
-                {types.map((type) => (
+                {types.map(type => (
                   <option key={type} value={type}>
                     {type}
                   </option>
@@ -171,7 +160,7 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
               </label>
               <select
                 value={filters.piClass || ''}
-                onChange={(e) => handleFilterChange('piClass', e.target.value)}
+                onChange={e => handleFilterChange('piClass', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="">All Classes</option>
@@ -192,9 +181,7 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
       {viewMode === 'random' && (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              Random Cars
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Random Cars</h3>
             <button
               onClick={() => getRandomCars(20)}
               disabled={loading}
@@ -224,7 +211,9 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
             >
               <h4 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                 <span>{getCountryFlag(car.country)}</span>
-                <span>{car.year} {car.manufacturer} {car.model}</span>
+                <span>
+                  {car.year} {car.manufacturer} {car.model}
+                </span>
               </h4>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 {car.type} • {car.pi.class} {car.pi.value} • {car.rarity}
@@ -247,7 +236,7 @@ const CarBrowser: React.FC<CarBrowserProps> = ({ onCarSelect, className = '' }) 
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CarBrowser;
+export default CarBrowser

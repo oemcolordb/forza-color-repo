@@ -1,37 +1,37 @@
 // Lazy loading wrapper for the large color data
-let colorDataCache = null;
-let colorDataPromise = null;
+let colorDataCache = null
+let colorDataPromise = null
 
 export const getColorData = () => {
   if (colorDataCache) {
-    return Promise.resolve(colorDataCache);
+    return Promise.resolve(colorDataCache)
   }
 
   if (colorDataPromise) {
-    return colorDataPromise;
+    return colorDataPromise
   }
 
   colorDataPromise = import('./colorData').then(module => {
-    colorDataCache = module.default;
-    return colorDataCache || [];
-  });
+    colorDataCache = module.default
+    return colorDataCache || []
+  })
 
-  return colorDataPromise;
-};
+  return colorDataPromise
+}
 
 // Get unique makes with caching
-let makesCache = null;
+let makesCache = null
 
 export const getMakes = async () => {
   if (makesCache) {
-    return makesCache;
+    return makesCache
   }
 
-  const colors = await getColorData();
-  const uniqueMakes = Array.from(new Set(colors.map(color => color.make)));
-  makesCache = uniqueMakes.sort();
-  return makesCache;
-};
+  const colors = await getColorData()
+  const uniqueMakes = Array.from(new Set(colors.map(color => color.make)))
+  makesCache = uniqueMakes.sort()
+  return makesCache
+}
 
 // Get color chunks for progressive loading
 export const getColorChunk = async (offset = 0, limit = 500) => {
@@ -66,34 +66,35 @@ export const getFilteredColors = async (
   page = 1,
   pageSize = 50
 ) => {
-  const allColors = await getColorData();
-  
-  let filteredColors = allColors;
-  
+  const allColors = await getColorData()
+
+  let filteredColors = allColors
+
   if (searchQuery || selectedMake) {
-    const searchLower = searchQuery.toLowerCase();
+    const searchLower = searchQuery.toLowerCase()
     filteredColors = allColors.filter(color => {
-      const matchesSearch = !searchQuery || 
+      const matchesSearch =
+        !searchQuery ||
         color.colorName.toLowerCase().includes(searchLower) ||
         color.make.toLowerCase().includes(searchLower) ||
         color.model.toLowerCase().includes(searchLower) ||
         (color.year && color.year.toString().includes(searchLower)) ||
-        (color.colorType && color.colorType.toLowerCase().includes(searchLower));
+        (color.colorType && color.colorType.toLowerCase().includes(searchLower))
 
-      const matchesMake = !selectedMake || color.make === selectedMake;
+      const matchesMake = !selectedMake || color.make === selectedMake
 
-      return matchesSearch && matchesMake;
-    });
+      return matchesSearch && matchesMake
+    })
   }
 
-  const totalCount = filteredColors.length;
-  const totalPages = Math.ceil(totalCount / pageSize);
-  const startIndex = (page - 1) * pageSize;
-  const colors = filteredColors.slice(startIndex, startIndex + pageSize);
+  const totalCount = filteredColors.length
+  const totalPages = Math.ceil(totalCount / pageSize)
+  const startIndex = (page - 1) * pageSize
+  const colors = filteredColors.slice(startIndex, startIndex + pageSize)
 
   return {
     colors,
     totalCount,
-    totalPages
-  };
-};
+    totalPages,
+  }
+}

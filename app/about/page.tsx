@@ -14,22 +14,30 @@ export default function About() {
   }, [])
 
   return (
-    <div className={`min-h-screen ${
-      isDarkMode 
-        ? 'bg-gray-900 text-gray-100' 
-        : 'bg-gray-100 text-gray-800'
-    }`}>
+    <div
+      className={`min-h-screen ${
+        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-800'
+      }`}
+    >
       <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
-      
+
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
         {/* Engine Bay - Header */}
-        <div className={`relative mb-8 rounded-xl overflow-hidden ${
-          isDarkMode ? 'bg-gradient-to-r from-gray-800 to-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
-        } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}>
+        <div
+          className={`relative mb-8 rounded-xl overflow-hidden ${
+            isDarkMode
+              ? 'bg-gradient-to-r from-gray-800 to-gray-900'
+              : 'bg-gradient-to-r from-gray-100 to-gray-200'
+          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}
+        >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-              <span className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ABOUT SYSTEM</span>
+              <span
+                className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}
+              >
+                ABOUT SYSTEM
+              </span>
             </div>
           </div>
           <div className="mt-4">
@@ -38,16 +46,24 @@ export default function About() {
             </h1>
           </div>
         </div>
-        
+
         <div className="space-y-8">
           {/* Dashboard - Mission */}
-          <div className={`relative rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-slate-100 to-slate-200'
-          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}>
+          <div
+            className={`relative rounded-xl overflow-hidden ${
+              isDarkMode
+                ? 'bg-gradient-to-r from-slate-800 to-slate-900'
+                : 'bg-gradient-to-r from-slate-100 to-slate-200'
+            } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}
+          >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>MISSION</span>
+                <span
+                  className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
+                >
+                  MISSION
+                </span>
               </div>
             </div>
             <div className="mt-6">
@@ -55,21 +71,30 @@ export default function About() {
                 🎯 <span>Our Mission</span>
               </h2>
               <p className="text-lg leading-relaxed">
-                Forza Color Universe is the most comprehensive digital catalog of automotive paint colors 
-                extracted from the Forza racing game series. We preserve and make accessible over 10,000 
-                official automotive colors for enthusiasts, designers, and developers worldwide.
+                Forza Color Universe is the most comprehensive digital catalog of automotive paint
+                colors extracted from the Forza racing game series. We preserve and make accessible
+                over 10,000 official automotive colors for enthusiasts, designers, and developers
+                worldwide.
               </p>
             </div>
           </div>
 
           {/* Paint Booth - Features */}
-          <div className={`relative rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-purple-800 to-purple-900' : 'bg-gradient-to-r from-purple-100 to-purple-200'
-          } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'} p-6`}>
+          <div
+            className={`relative rounded-xl overflow-hidden ${
+              isDarkMode
+                ? 'bg-gradient-to-r from-purple-800 to-purple-900'
+                : 'bg-gradient-to-r from-purple-100 to-purple-200'
+            } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'} p-6`}
+          >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>FEATURES</span>
+                <span
+                  className={`text-xs font-mono ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}
+                >
+                  FEATURES
+                </span>
               </div>
             </div>
             <div className="mt-6">
@@ -89,13 +114,21 @@ export default function About() {
           </div>
 
           {/* Control Panel - Technology */}
-          <div className={`relative rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-green-800 to-green-900' : 'bg-gradient-to-r from-green-100 to-green-200'
-          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}>
+          <div
+            className={`relative rounded-xl overflow-hidden ${
+              isDarkMode
+                ? 'bg-gradient-to-r from-green-800 to-green-900'
+                : 'bg-gradient-to-r from-green-100 to-green-200'
+            } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}
+          >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>TECHNOLOGY</span>
+                <span
+                  className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}
+                >
+                  TECHNOLOGY
+                </span>
               </div>
             </div>
             <div className="mt-6">
@@ -103,21 +136,30 @@ export default function About() {
                 🔧 <span>Technology Stack</span>
               </h2>
               <p className="leading-relaxed">
-                Built with modern web technologies including Next.js, TypeScript, and Tailwind CSS. 
-                Features real-time UDP telemetry processing, advanced color analysis algorithms, 
-                and performance optimizations like virtual scrolling for handling massive datasets efficiently.
+                Built with modern web technologies including Next.js, TypeScript, and Tailwind CSS.
+                Features real-time UDP telemetry processing, advanced color analysis algorithms, and
+                performance optimizations like virtual scrolling for handling massive datasets
+                efficiently.
               </p>
             </div>
           </div>
 
           {/* Paint Guide - How to Use */}
-          <div className={`relative rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-pink-800 to-pink-900' : 'bg-gradient-to-r from-pink-100 to-pink-200'
-          } border-2 ${isDarkMode ? 'border-pink-500/30' : 'border-pink-400/40'} p-6`}>
+          <div
+            className={`relative rounded-xl overflow-hidden ${
+              isDarkMode
+                ? 'bg-gradient-to-r from-pink-800 to-pink-900'
+                : 'bg-gradient-to-r from-pink-100 to-pink-200'
+            } border-2 ${isDarkMode ? 'border-pink-500/30' : 'border-pink-400/40'} p-6`}
+          >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-pink-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-pink-400' : 'text-pink-600'}`}>PAINT GUIDE</span>
+                <span
+                  className={`text-xs font-mono ${isDarkMode ? 'text-pink-400' : 'text-pink-600'}`}
+                >
+                  PAINT GUIDE
+                </span>
               </div>
             </div>
             <div className="mt-6">
@@ -127,43 +169,78 @@ export default function About() {
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold mb-2">1. Enter the Paint & Design Menu</h3>
-                  <p className="text-sm opacity-90">Go to your Garage → Upgrades & Tuning → Paint Car. Select Body Paint to start customizing.</p>
+                  <p className="text-sm opacity-90">
+                    Go to your Garage → Upgrades & Tuning → Paint Car. Select Body Paint to start
+                    customizing.
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">2. Choose a Base Color</h3>
-                  <p className="text-sm opacity-90">Pick a solid or metallic base that will act as your "undercoat." Darker bases (like black, navy, or deep purple) make pearlescent highlights pop more.</p>
+                  <p className="text-sm opacity-90">
+                    Pick a solid or metallic base that will act as your "undercoat." Darker bases
+                    (like black, navy, or deep purple) make pearlescent highlights pop more.
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">3. Apply a Special Finish</h3>
-                  <p className="text-sm opacity-90">Select Polished Metal or Aluminum finishes. These reflect light differently and give you that shimmering depth. Adjust the brightness and saturation to control how strong the effect looks.</p>
+                  <p className="text-sm opacity-90">
+                    Select Polished Metal or Aluminum finishes. These reflect light differently and
+                    give you that shimmering depth. Adjust the brightness and saturation to control
+                    how strong the effect looks.
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">4. Use Two-Tone or Dual-Color Fine Tuning</h3>
-                  <p className="text-sm opacity-90">In the Advanced Color Editor, you can fine-tune both the highlight and lowlight colors. For a pearlescent effect, make the highlight a bright, contrasting color (like teal over black, or pink over purple). Keep the lowlight close to your base color for subtle blending.</p>
+                  <p className="text-sm opacity-90">
+                    In the Advanced Color Editor, you can fine-tune both the highlight and lowlight
+                    colors. For a pearlescent effect, make the highlight a bright, contrasting color
+                    (like teal over black, or pink over purple). Keep the lowlight close to your
+                    base color for subtle blending.
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">5. Experiment with Layers & Vinyls</h3>
-                  <p className="text-sm opacity-90">Add transparent gradient vinyls with different hues. This can mimic the "color-shift" effect of real pearlescent paint.</p>
+                  <p className="text-sm opacity-90">
+                    Add transparent gradient vinyls with different hues. This can mimic the
+                    "color-shift" effect of real pearlescent paint.
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">6. Test in Different Lighting</h3>
-                  <p className="text-sm opacity-90">Drive your car in daylight, sunset, and night to see how the paint reacts. Pearlescent effects look best under changing light.</p>
+                  <p className="text-sm opacity-90">
+                    Drive your car in daylight, sunset, and night to see how the paint reacts.
+                    Pearlescent effects look best under changing light.
+                  </p>
                 </div>
-                <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? 'bg-pink-900/50' : 'bg-pink-200/50'}`}>
-                  <p className="text-sm font-medium">✅ Pro Tip: The best pearlescent looks come from contrast—dark base + bright highlight. For example, black with teal highlights or deep purple with pink highlights creates that "color-shift" magic.</p>
+                <div
+                  className={`mt-4 p-3 rounded-lg ${isDarkMode ? 'bg-pink-900/50' : 'bg-pink-200/50'}`}
+                >
+                  <p className="text-sm font-medium">
+                    ✅ Pro Tip: The best pearlescent looks come from contrast—dark base + bright
+                    highlight. For example, black with teal highlights or deep purple with pink
+                    highlights creates that "color-shift" magic.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Showroom - Acknowledgments */}
-          <div className={`relative rounded-xl overflow-hidden ${
-            isDarkMode ? 'bg-gradient-to-r from-yellow-800 to-yellow-900' : 'bg-gradient-to-r from-yellow-100 to-yellow-200'
-          } border-2 ${isDarkMode ? 'border-yellow-500/30' : 'border-yellow-400/40'} p-6`}>
+          <div
+            className={`relative rounded-xl overflow-hidden ${
+              isDarkMode
+                ? 'bg-gradient-to-r from-yellow-800 to-yellow-900'
+                : 'bg-gradient-to-r from-yellow-100 to-yellow-200'
+            } border-2 ${isDarkMode ? 'border-yellow-500/30' : 'border-yellow-400/40'} p-6`}
+          >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                <span className={`text-xs font-mono ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`}>CREDITS</span>
+                <span
+                  className={`text-xs font-mono ${isDarkMode ? 'text-yellow-400' : 'text-yellow-600'}`}
+                >
+                  CREDITS
+                </span>
               </div>
             </div>
             <div className="mt-6">
@@ -171,7 +248,10 @@ export default function About() {
                 🏆 <span>Acknowledgments</span>
               </h2>
               <p className="leading-relaxed">
-                Credits: To the GTPlanet community, with special thanks to Terronium-12 (original creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and MadaraxUchiha, whose dedication built and maintained the Forza Color Database Spreadsheet.
+                Credits: To the GTPlanet community, with special thanks to Terronium-12 (original
+                creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and
+                MadaraxUchiha, whose dedication built and maintained the Forza Color Database
+                Spreadsheet.
               </p>
             </div>
           </div>

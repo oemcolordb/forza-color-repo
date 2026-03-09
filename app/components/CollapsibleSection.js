@@ -14,9 +14,7 @@ const CollapsibleSection = ({ title, children, defaultOpen = false, isDarkMode }
         <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
           {title}
         </span>
-        <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
-          ▼
-        </span>
+        <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>▼</span>
       </button>
       {isOpen && (
         <div className={`p-4 border-t ${isDarkMode ? 'border-slate-600' : 'border-gray-300'}`}>

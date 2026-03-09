@@ -17,14 +17,18 @@ interface CarStatsRadarChartProps {
   isDarkMode?: boolean
 }
 
-export function CarStatsRadarChart({ stats, size = 200, isDarkMode = true }: CarStatsRadarChartProps) {
+export function CarStatsRadarChart({
+  stats,
+  size = 200,
+  isDarkMode = true,
+}: CarStatsRadarChartProps) {
   const center = size / 2
-  const radius = (size / 2) - 20
+  const radius = size / 2 - 20
   const maxValue = 10
 
   const statKeys = ['speed', 'handling', 'acceleration', 'launch', 'braking', 'offroad'] as const
   const statLabels = ['SPD', 'HAN', 'ACC', 'LAU', 'BRA', 'OFF']
-  
+
   const points = statKeys.map((key, index) => {
     const angle = (index * 60 - 90) * (Math.PI / 180)
     const value = stats[key] / maxValue
@@ -49,9 +53,9 @@ export function CarStatsRadarChart({ stats, size = 200, isDarkMode = true }: Car
     return { x, y, label: statLabels[index] }
   })
 
-  const pathData = points.map((point, index) => 
-    `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
-  ).join(' ') + ' Z'
+  const pathData =
+    points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ') +
+    ' Z'
 
   return (
     <div className="flex justify-center">
@@ -67,7 +71,7 @@ export function CarStatsRadarChart({ stats, size = 200, isDarkMode = true }: Car
             opacity={0.3}
           />
         ))}
-        
+
         {/* Axis lines */}
         {axisLines.map((axis, index) => (
           <g key={index}>
@@ -91,7 +95,7 @@ export function CarStatsRadarChart({ stats, size = 200, isDarkMode = true }: Car
             </text>
           </g>
         ))}
-        
+
         {/* Data area */}
         <path
           d={pathData}
@@ -99,7 +103,7 @@ export function CarStatsRadarChart({ stats, size = 200, isDarkMode = true }: Car
           stroke={isDarkMode ? '#3b82f6' : '#2563eb'}
           strokeWidth="2"
         />
-        
+
         {/* Data points */}
         {points.map((point, index) => (
           <circle
@@ -112,14 +116,9 @@ export function CarStatsRadarChart({ stats, size = 200, isDarkMode = true }: Car
             strokeWidth="2"
           />
         ))}
-        
+
         {/* Center point */}
-        <circle
-          cx={center}
-          cy={center}
-          r="2"
-          fill={isDarkMode ? '#6b7280' : '#9ca3af'}
-        />
+        <circle cx={center} cy={center} r="2" fill={isDarkMode ? '#6b7280' : '#9ca3af'} />
       </svg>
     </div>
   )

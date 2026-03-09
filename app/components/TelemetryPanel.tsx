@@ -15,10 +15,18 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
       <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
         <h4 className="font-bold mb-3">🎮 Accessing Telemetry in FH5</h4>
         <div className="text-sm space-y-2">
-          <div><strong>PC:</strong> Press 'T' key to cycle through telemetry screens</div>
-          <div><strong>Xbox:</strong> Hold View button + Right on D-pad</div>
-          <div><strong>Menu:</strong> Settings → HUD and Gameplay → Telemetry</div>
-          <div className="text-xs opacity-75 mt-2">Enable "Detailed" telemetry for maximum data</div>
+          <div>
+            <strong>PC:</strong> Press 'T' key to cycle through telemetry screens
+          </div>
+          <div>
+            <strong>Xbox:</strong> Hold View button + Right on D-pad
+          </div>
+          <div>
+            <strong>Menu:</strong> Settings → HUD and Gameplay → Telemetry
+          </div>
+          <div className="text-xs opacity-75 mt-2">
+            Enable "Detailed" telemetry for maximum data
+          </div>
         </div>
       </div>
 
@@ -29,7 +37,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
           <div>
             <strong className="text-green-400">Optimal Range:</strong> 85-95°C (185-203°F)
           </div>
-          
+
           <div>
             <strong className="text-blue-400">Too Cold (Blue):</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -38,7 +46,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Drive more aggressively to generate heat</li>
             </ul>
           </div>
-          
+
           <div>
             <strong className="text-red-400">Overheating (Red):</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -47,14 +55,22 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Lower downforce if available</li>
             </ul>
           </div>
-          
+
           <div>
             <strong>Temperature Distribution:</strong>
             <ul className="ml-4 mt-1 space-y-1">
-              <li>• <strong>Inside hotter:</strong> Too much camber</li>
-              <li>• <strong>Outside hotter:</strong> Not enough camber</li>
-              <li>• <strong>Middle hotter:</strong> Too much pressure</li>
-              <li>• <strong>Edges hotter:</strong> Too little pressure</li>
+              <li>
+                • <strong>Inside hotter:</strong> Too much camber
+              </li>
+              <li>
+                • <strong>Outside hotter:</strong> Not enough camber
+              </li>
+              <li>
+                • <strong>Middle hotter:</strong> Too much pressure
+              </li>
+              <li>
+                • <strong>Edges hotter:</strong> Too little pressure
+              </li>
             </ul>
           </div>
         </div>
@@ -67,7 +83,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
           <div>
             <strong className="text-green-400">Target Range:</strong> 25-75% travel
           </div>
-          
+
           <div>
             <strong className="text-red-400">Bottoming Out (100%):</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -76,7 +92,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Stiffen bump damping</li>
             </ul>
           </div>
-          
+
           <div>
             <strong className="text-yellow-400">Too Stiff (0-20%):</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -100,7 +116,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Check suspension travel in fast corners</li>
             </ul>
           </div>
-          
+
           <div>
             <strong className="text-orange-400">Drift:</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -109,7 +125,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Monitor throttle vs steering input</li>
             </ul>
           </div>
-          
+
           <div>
             <strong className="text-cyan-400">Drag Racing:</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -118,7 +134,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Check gear shift points for optimal acceleration</li>
             </ul>
           </div>
-          
+
           <div>
             <strong className="text-green-400">Cross Country:</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -142,7 +158,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Consistent G-forces = balanced setup</li>
             </ul>
           </div>
-          
+
           <div>
             <strong>Speed vs RPM:</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -151,7 +167,7 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
               <li>• Optimize for track's longest straight</li>
             </ul>
           </div>
-          
+
           <div>
             <strong>Brake Analysis:</strong>
             <ul className="ml-4 mt-1 space-y-1">
@@ -169,16 +185,30 @@ export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanel
           <h4 className="font-bold mb-3">🎯 Your Tune - What to Watch</h4>
           <div className="space-y-2 text-sm">
             {tuneData['tire-pressure-front'] && (
-              <div>• <strong>Tire Pressure:</strong> {tuneData['tire-pressure-front']} PSI front - Watch for {tuneData['tire-pressure-front'] > 30 ? 'overheating' : 'cold tires'}</div>
+              <div>
+                • <strong>Tire Pressure:</strong> {tuneData['tire-pressure-front']} PSI front -
+                Watch for {tuneData['tire-pressure-front'] > 30 ? 'overheating' : 'cold tires'}
+              </div>
             )}
             {tuneData['camber-front'] && (
-              <div>• <strong>Camber:</strong> {tuneData['camber-front']}° - Monitor {Math.abs(tuneData['camber-front']) > 2.5 ? 'inside edge heating' : 'even tire wear'}</div>
+              <div>
+                • <strong>Camber:</strong> {tuneData['camber-front']}° - Monitor{' '}
+                {Math.abs(tuneData['camber-front']) > 2.5
+                  ? 'inside edge heating'
+                  : 'even tire wear'}
+              </div>
             )}
             {tuneData['final-drive'] && (
-              <div>• <strong>Gearing:</strong> {tuneData['final-drive']} final - Check if you're hitting rev limiter</div>
+              <div>
+                • <strong>Gearing:</strong> {tuneData['final-drive']} final - Check if you're
+                hitting rev limiter
+              </div>
             )}
             {tuneData['aero-front'] && (
-              <div>• <strong>Downforce:</strong> {tuneData['aero-front']}kg - Monitor cornering speeds vs straight-line speed</div>
+              <div>
+                • <strong>Downforce:</strong> {tuneData['aero-front']}kg - Monitor cornering speeds
+                vs straight-line speed
+              </div>
             )}
           </div>
         </div>

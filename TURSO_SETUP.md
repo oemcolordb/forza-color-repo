@@ -3,11 +3,13 @@
 ## Option 1: Automated Script (Recommended)
 
 ### Windows:
+
 ```bash
 .\scripts\migrate.bat
 ```
 
 ### Mac/Linux:
+
 ```bash
 chmod +x scripts/migrate.sh
 ./scripts/migrate.sh
@@ -20,36 +22,43 @@ chmod +x scripts/migrate.sh
 ### Step 1: Install Turso CLI
 
 **Windows (PowerShell):**
+
 ```powershell
 irm https://get.tur.so/install.ps1 | iex
 ```
 
 **Mac/Linux:**
+
 ```bash
 curl -sSfL https://get.tur.so/install.sh | bash
 ```
 
 ### Step 2: Login to Turso
+
 ```bash
 turso auth login
 ```
 
 ### Step 3: Create Database (if not exists)
+
 ```bash
 turso db create forza-color-repo
 ```
 
 ### Step 4: Run Migration
+
 ```bash
 turso db shell forza-color-repo < migrations/001_create_scans_table.sql
 ```
 
 ### Step 5: Verify Tables
+
 ```bash
 turso db shell forza-color-repo "SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
 Expected output:
+
 ```
 scans
 users
@@ -97,10 +106,12 @@ curl "http://localhost:3000/api/scans?userId=test-user"
 ## Troubleshooting
 
 ### "turso: command not found"
+
 - Restart terminal after installation
 - Check PATH includes Turso binary
 
 ### "database not found"
+
 ```bash
 # List your databases
 turso db list
@@ -110,13 +121,16 @@ turso db shell YOUR_DATABASE_NAME < migrations/001_create_scans_table.sql
 ```
 
 ### "TURSO_DATABASE_URL not set"
+
 Add to `.env.local`:
+
 ```env
 TURSO_DATABASE_URL=libsql://your-database.turso.io
 TURSO_AUTH_TOKEN=your-token-here
 ```
 
 Get values:
+
 ```bash
 turso db show forza-color-repo --url
 turso db tokens create forza-color-repo

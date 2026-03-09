@@ -18,7 +18,7 @@ const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ isDarkMode }) => {
     }
 
     window.addEventListener('beforeinstallprompt', handler)
-    
+
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setShowInstall(false)
@@ -32,11 +32,11 @@ const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ isDarkMode }) => {
 
     deferredPrompt.prompt()
     const { outcome } = await deferredPrompt.userChoice
-    
+
     if (outcome === 'accepted') {
       setShowInstall(false)
     }
-    
+
     setDeferredPrompt(null)
   }
 

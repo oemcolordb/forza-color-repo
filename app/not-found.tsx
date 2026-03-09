@@ -10,9 +10,20 @@ export default function NotFound() {
   const [paintColor, setPaintColor] = useState('#ff0000')
   const [score, setScore] = useState(0)
   const [gameActive, setGameActive] = useState(false)
-  const [paintDrops, setPaintDrops] = useState<Array<{id: number, x: number, y: number, color: string}>>([])
+  const [paintDrops, setPaintDrops] = useState<
+    Array<{ id: number; x: number; y: number; color: string }>
+  >([])
 
-  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#800080']
+  const colors = [
+    '#ff0000',
+    '#00ff00',
+    '#0000ff',
+    '#ffff00',
+    '#ff00ff',
+    '#00ffff',
+    '#ffa500',
+    '#800080',
+  ]
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -38,12 +49,15 @@ export default function NotFound() {
 
       // Add new paint drop
       if (Math.random() < 0.3) {
-        setPaintDrops(prev => [...prev, {
-          id: Date.now(),
-          x: Math.random() * 300,
-          y: 0,
-          color: colors[Math.floor(Math.random() * colors.length)]
-        }])
+        setPaintDrops(prev => [
+          ...prev,
+          {
+            id: Date.now(),
+            x: Math.random() * 300,
+            y: 0,
+            color: colors[Math.floor(Math.random() * colors.length)],
+          },
+        ])
       }
     }, 100)
 
@@ -60,16 +74,14 @@ export default function NotFound() {
   const catchPaint = () => {
     const carX = (carPosition / 100) * 300
     setPaintDrops(prev => {
-      const caught = prev.filter(drop => 
-        Math.abs(drop.x - carX) < 30 && drop.y > 300 && drop.y < 350
+      const caught = prev.filter(
+        drop => Math.abs(drop.x - carX) < 30 && drop.y > 300 && drop.y < 350
       )
       if (caught.length > 0) {
         setScore(s => s + caught.length * 10)
         setPaintColor(caught[0].color)
       }
-      return prev.filter(drop => 
-        !(Math.abs(drop.x - carX) < 30 && drop.y > 300 && drop.y < 350)
-      )
+      return prev.filter(drop => !(Math.abs(drop.x - carX) < 30 && drop.y > 300 && drop.y < 350))
     })
   }
 
@@ -90,9 +102,7 @@ export default function NotFound() {
         <p className="text-gray-300 mb-2">
           Your car got stuck in the paint booth. Help it collect colors to escape!
         </p>
-        <p className="text-yellow-400 font-semibold">
-          Redirecting to home in {countdown}s...
-        </p>
+        <p className="text-yellow-400 font-semibold">Redirecting to home in {countdown}s...</p>
       </div>
 
       {/* Game Area */}
@@ -115,7 +125,7 @@ export default function NotFound() {
               left: `${drop.x}px`,
               top: `${drop.y}px`,
               backgroundColor: drop.color,
-              boxShadow: `0 0 10px ${drop.color}`
+              boxShadow: `0 0 10px ${drop.color}`,
             }}
           />
         ))}
@@ -123,12 +133,12 @@ export default function NotFound() {
         {/* Car */}
         <div
           className="absolute bottom-8 w-12 h-8 transition-all duration-200"
-          style={{ 
+          style={{
             left: `${carPosition}%`,
-            transform: 'translateX(-50%)'
+            transform: 'translateX(-50%)',
           }}
         >
-          <div 
+          <div
             className="w-full h-full rounded-lg border-2 border-white transition-colors duration-300"
             style={{ backgroundColor: paintColor }}
           >
@@ -183,9 +193,7 @@ export default function NotFound() {
         <p className="text-lg">
           🎨 Paint Score: <span className="font-bold text-yellow-400">{score}</span>
         </p>
-        {score > 100 && (
-          <p className="text-green-400 animate-bounce">🏆 Master Painter!</p>
-        )}
+        {score > 100 && <p className="text-green-400 animate-bounce">🏆 Master Painter!</p>}
       </div>
 
       {/* Navigation */}

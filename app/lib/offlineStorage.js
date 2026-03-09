@@ -6,10 +6,13 @@ class OfflineStorage {
   async storeColors(colors) {
     try {
       localStorage.setItem(COLORS_KEY, JSON.stringify(colors))
-      localStorage.setItem(METADATA_KEY, JSON.stringify({
-        lastUpdated: new Date().toISOString(),
-        count: colors.length
-      }))
+      localStorage.setItem(
+        METADATA_KEY,
+        JSON.stringify({
+          lastUpdated: new Date().toISOString(),
+          count: colors.length,
+        })
+      )
     } catch (error) {
       throw new Error('Failed to store colors offline')
     }
@@ -27,11 +30,12 @@ class OfflineStorage {
   async searchColors(query) {
     const colors = await this.getColors()
     const searchTerm = query.toLowerCase()
-    
-    return colors.filter(color => 
-      color.colorName.toLowerCase().includes(searchTerm) ||
-      color.make.toLowerCase().includes(searchTerm) ||
-      (color.model && color.model.toLowerCase().includes(searchTerm))
+
+    return colors.filter(
+      color =>
+        color.colorName.toLowerCase().includes(searchTerm) ||
+        color.make.toLowerCase().includes(searchTerm) ||
+        (color.model && color.model.toLowerCase().includes(searchTerm))
     )
   }
 
@@ -39,10 +43,10 @@ class OfflineStorage {
     try {
       const metadata = localStorage.getItem(METADATA_KEY)
       const parsed = metadata ? JSON.parse(metadata) : null
-      
+
       return {
         size: parsed?.count || 0,
-        lastUpdated: parsed?.lastUpdated || null
+        lastUpdated: parsed?.lastUpdated || null,
       }
     } catch (error) {
       return { size: 0, lastUpdated: null }

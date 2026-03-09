@@ -62,12 +62,14 @@ This document describes the TuneForge modules that have been converted from Type
 ## Integration Points
 
 ### TuneForge Page Updates
+
 - Updated `/app/tuneforge/page.tsx` to use new modules
 - Added CarStatsRadarChart component integration
 - Enhanced car loading with JSON data source
 - Improved error handling and fallback mechanisms
 
 ### Key Features Preserved
+
 - Advanced base tune calculation based on car characteristics
 - Template system (Speed, Grip, Drift, Drag, Offroad)
 - Meta templates for competitive tuning
@@ -79,22 +81,23 @@ This document describes the TuneForge modules that have been converted from Type
 
 ```javascript
 // Import modules
-import { TuningAlgorithms, CarDataManager, FORZA_LIMITS } from '../lib/tuneforge';
+import { TuningAlgorithms, CarDataManager, FORZA_LIMITS } from '../lib/tuneforge'
 
 // Calculate base tune
-const baseTune = TuningAlgorithms.calculateBaseTune(selectedCar);
+const baseTune = TuningAlgorithms.calculateBaseTune(selectedCar)
 
 // Apply template
-const gripTune = TuningAlgorithms.getMetaTune('Grip', selectedCar);
+const gripTune = TuningAlgorithms.getMetaTune('Grip', selectedCar)
 
 // Load cars
-const cars = await CarDataManager.loadCars();
+const cars = await CarDataManager.loadCars()
 
 // Validate tune
-const validation = validateTuneData(tuneData);
+const validation = validateTuneData(tuneData)
 ```
 
 ## File Structure
+
 ```
 app/
 ├── lib/tuneforge/
@@ -115,6 +118,7 @@ public/
 ```
 
 ## Benefits of JavaScript Conversion
+
 - No TypeScript compilation required
 - Direct integration with existing React components
 - Maintained all original functionality

@@ -4,7 +4,7 @@ export async function processImageWithML(imageData: string, colors: any[]) {
   const response = await fetch(`${PYTHON_API_BASE}/process-image`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ imageData, colors })
+    body: JSON.stringify({ imageData, colors }),
   })
   return response.json()
 }
@@ -13,7 +13,7 @@ export async function analyzeColors(colors: any[]) {
   const response = await fetch(`${PYTHON_API_BASE}/analyze-colors`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ colors, analysisType: 'full' })
+    body: JSON.stringify({ colors, analysisType: 'full' }),
   })
   return response.json()
 }
@@ -22,7 +22,7 @@ export async function getColorRecommendations(userPreferences: any[], colors: an
   const response = await fetch(`${PYTHON_API_BASE}/recommendations`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userPreferences, colors })
+    body: JSON.stringify({ userPreferences, colors }),
   })
   return response.json()
 }
@@ -35,4 +35,28 @@ export async function fetchColorTrends(timeframe: string) {
 export async function fetchTrendPrediction() {
   const response = await fetch(`${PYTHON_API_BASE}/color-trends/predict`)
   return response.json()
+}
+
+export function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () => reject(new Error('Failed to read file'))
+    reader.onload = () => resolve(String(reader.result || ''))
+    reader.readAsDataURL(file)
+  })
+}
+
+export async function isPythonApiAvailable(): Promise<boolean> {
+  try {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 1500)
+    const response = await fetch(`${PYTHON_API_BASE}/health`, {
+      method: 'GET',
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
+    return response.ok
+  } catch {
+    return false
+  }
 }

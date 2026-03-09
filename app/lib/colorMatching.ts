@@ -3,15 +3,16 @@ import { CarColor } from '../types'
 /**
  * Calculate color distance using Delta E (CIE76) formula
  */
-function colorDistance(color1: { h: number; s: number; b: number }, color2: { h: number; s: number; b: number }): number {
+function colorDistance(
+  color1: { h: number; s: number; b: number },
+  color2: { h: number; s: number; b: number }
+): number {
   const h1 = color1.h * 360
   const h2 = color2.h * 360
   const hDiff = Math.min(Math.abs(h1 - h2), 360 - Math.abs(h1 - h2))
-  
+
   return Math.sqrt(
-    Math.pow(hDiff / 360, 2) +
-    Math.pow(color1.s - color2.s, 2) +
-    Math.pow(color1.b - color2.b, 2)
+    Math.pow(hDiff / 360, 2) + Math.pow(color1.s - color2.s, 2) + Math.pow(color1.b - color2.b, 2)
   )
 }
 
@@ -26,17 +27,17 @@ export function findClosestColors(
   const matches = colors.map(color => ({
     color,
     distance: colorDistance(targetColor, color.color1),
-    similarity: 0
+    similarity: 0,
   }))
 
   matches.sort((a, b) => a.distance - b.distance)
-  
+
   const closest = matches.slice(0, limit)
   const maxDistance = closest[closest.length - 1]?.distance || 1
-  
+
   return closest.map(match => ({
     ...match,
-    similarity: Math.round((1 - match.distance / maxDistance) * 100)
+    similarity: Math.round((1 - match.distance / maxDistance) * 100),
   }))
 }
 
@@ -56,6 +57,6 @@ export function generateColorDiff(
     hDiff: Math.abs(original.h - matched.h) * 360,
     sDiff: Math.abs(original.s - matched.s) * 100,
     bDiff: Math.abs(original.b - matched.b) * 100,
-    totalDiff: colorDistance(original, matched)
+    totalDiff: colorDistance(original, matched),
   }
 }

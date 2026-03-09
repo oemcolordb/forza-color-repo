@@ -9,27 +9,27 @@
   .color-card {
     @apply rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl;
   }
-  
+
   .color-card-gradient {
     @apply h-32 w-full relative overflow-hidden;
   }
-  
+
   .btn-primary {
     @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
   }
-  
+
   .btn-secondary {
     @apply px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
   }
-  
+
   .input-field {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors;
   }
-  
+
   .modal-overlay {
     @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4;
   }
-  
+
   .modal-content {
     @apply bg-white dark:bg-slate-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative;
   }
@@ -40,27 +40,27 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  
+
   .gradient-text {
     @apply bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-400 bg-clip-text text-transparent;
   }
-  
+
   /* Performance optimizations */
   .gpu-accelerated {
     transform: translateZ(0);
     backface-visibility: hidden;
     perspective: 1000px;
   }
-  
+
   .mobile-card {
     will-change: transform;
     transform: translateZ(0);
@@ -68,13 +68,13 @@
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   .mobile-text {
     text-rendering: optimizeSpeed;
     font-smooth: never;
     -webkit-font-smoothing: none;
   }
-  
+
   /* Responsive optimizations */
   @media (max-width: 768px) {
     .mobile-optimized {
@@ -82,18 +82,18 @@
       backface-visibility: hidden;
       perspective: 1000px;
     }
-    
+
     /* Reduce expensive effects on mobile */
     .shadow-xl {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-    
+
     /* Optimize animations for mobile */
     .animate-pulse {
       animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
     * {
       animation-duration: 0.01ms !important;
@@ -101,36 +101,37 @@
       transition-duration: 0.01ms !important;
     }
   }
-  
+
   /* High contrast mode support */
   @media (prefers-contrast: high) {
     .color-card {
       border-width: 2px;
     }
   }
-  
+
   /* Cross-browser text-size-adjust support */
-  html, :host {
+  html,
+  :host {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
-  
+
   /* Cross-browser backdrop-filter support */
   .backdrop-blur-sm {
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }
-  
+
   .backdrop-blur {
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
   }
-  
+
   .backdrop-blur-md {
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
   }
-  
+
   .glass-effect {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -139,20 +140,42 @@
 
 /* Tokyo Neon Animations */
 @keyframes neon-glow {
-  0%, 100% {
-    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor, 0 0 20px currentColor;
+  0%,
+  100% {
+    text-shadow:
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor,
+      0 0 20px currentColor;
   }
   50% {
-    text-shadow: 0 0 2px currentColor, 0 0 5px currentColor, 0 0 8px currentColor, 0 0 12px currentColor;
+    text-shadow:
+      0 0 2px currentColor,
+      0 0 5px currentColor,
+      0 0 8px currentColor,
+      0 0 12px currentColor;
   }
 }
 
 @keyframes neon-flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
     opacity: 1;
-    text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor, 0 0 20px currentColor;
+    text-shadow:
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor,
+      0 0 20px currentColor;
   }
-  20%, 24%, 55% {
+  20%,
+  24%,
+  55% {
     opacity: 0.4;
     text-shadow: none;
   }
@@ -189,7 +212,8 @@
 
 /* New Dynamic Background Animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   25% {
@@ -261,31 +285,33 @@
 /* Mobile touch optimizations */
 @media (max-width: 768px) {
   /* Improve touch targets */
-  button, .btn-primary, .btn-secondary {
+  button,
+  .btn-primary,
+  .btn-secondary {
     min-height: 44px;
     min-width: 44px;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   /* Optimize button feedback */
   button:active {
     transform: scale(0.95);
     transition: transform 0.1s ease;
   }
-  
+
   /* Improve text size for mobile */
   .text-2xs {
     font-size: 0.625rem;
     line-height: 0.75rem;
   }
-  
+
   /* Mobile-specific color generator styles */
   .mobile-color-generator {
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   .mobile-color-generator button {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -297,12 +323,14 @@
     -moz-user-select: none;
     -ms-user-select: none;
   }
-  
+
   /* Prevent zoom on input focus */
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 16px;
   }
-  
+
   /* Improve scrolling performance */
   .mobile-scroll {
     -webkit-overflow-scrolling: touch;
@@ -325,11 +353,11 @@
   .hover\:scale-105:active {
     transform: scale(0.95);
   }
-  
+
   .hover\:bg-blue-700:active {
     background-color: rgb(29 78 216);
   }
-  
+
   .hover\:bg-purple-700:active {
     background-color: rgb(126 34 206);
   }

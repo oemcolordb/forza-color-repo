@@ -3,11 +3,12 @@
 export class PerformanceCache {
   private cache = new Map<string, { data: any; timestamp: number; ttl: number }>()
 
-  set(key: string, data: any, ttl: number = 300000) { // 5 minutes default
+  set(key: string, data: any, ttl: number = 300000) {
+    // 5 minutes default
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl
+      ttl,
     })
   }
 
@@ -39,12 +40,12 @@ export const createImageObserver = (callback: (entry: IntersectionObserverEntry)
   if (typeof window === 'undefined') return null
 
   return new IntersectionObserver(
-    (entries) => {
+    entries => {
       entries.forEach(callback)
     },
     {
       rootMargin: '50px',
-      threshold: 0.1
+      threshold: 0.1,
     }
   )
 }
@@ -72,6 +73,6 @@ export const calculateVisibleRange = (
   const start = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan)
   const visibleCount = Math.ceil(containerHeight / itemHeight)
   const end = Math.min(totalItems, start + visibleCount + overscan * 2)
-  
+
   return { start, end }
 }

@@ -44,9 +44,9 @@ export async function processImageWithML(imageData: string, colors: CarColor[]) 
   const response = await fetch(`${PYTHON_API_BASE}/process-image`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ imageData, colors })
+    body: JSON.stringify({ imageData, colors }),
   })
-  
+
   return response.json()
 }
 
@@ -54,9 +54,9 @@ export async function analyzeColors(colors: CarColor[]) {
   const response = await fetch(`${PYTHON_API_BASE}/analyze-colors`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ colors, analysisType: 'full' })
+    body: JSON.stringify({ colors, analysisType: 'full' }),
   })
-  
+
   return response.json()
 }
 ```
@@ -107,13 +107,13 @@ const ImageColorExtractor = (...) => {
 ```
 
 Added a checkbox in the UI allowing users to toggle the Python backend; it is
-disabled if `isPythonApiAvailable()` returns false.  The component still
+disabled if `isPythonApiAvailable()` returns false. The component still
 behaves offline using the built‑in `/api/ml/enhance-colors` route.
 
 ### Optional standalone page
 
 The new `app/image-match/page.tsx` demonstrates a minimal upload tool that
-reuses `ImageColorExtractor` but lives at `/image-match`.  Visitors can try
+reuses `ImageColorExtractor` but lives at `/image-match`. Visitors can try
 the feature without navigating through the garage UI.
 
 ```tsx
@@ -122,11 +122,13 @@ import React, { useState } from 'react'
 import ImageColorExtractor from '../../app/components/ImageColorExtractor'
 import colorData from '../../services/colordata'
 
-export default function ImageMatchPage() { /* ...shown earlier... */ }
+export default function ImageMatchPage() {
+  /* ...shown earlier... */
+}
 ```
 
 The page shows extracted colors, the top paint matches and exposes the
-Python toggle.  It can be linked from anywhere in your app (e.g. header or
+Python toggle. It can be linked from anywhere in your app (e.g. header or
 homepage) to provide a quick clean interface.
 
 ```html
@@ -141,7 +143,7 @@ import { analyzeColors } from '../lib/pythonApi'
 
 export default function ColorAnalytics({ colors }: { colors: CarColor[] }) {
   const [analysis, setAnalysis] = useState(null)
-  
+
   useEffect(() => {
     analyzeColors(colors).then(result => {
       if (result.success) {
@@ -149,28 +151,28 @@ export default function ColorAnalytics({ colors }: { colors: CarColor[] }) {
       }
     })
   }, [colors])
-  
+
   if (!analysis) return <LoadingSpinner />
-  
+
   return (
     <div className="analytics-dashboard">
       <h3>Color Analytics</h3>
-      
+
       <div className="stats-grid">
-        <StatCard 
-          title="Total Colors" 
-          value={analysis.total_colors} 
+        <StatCard
+          title="Total Colors"
+          value={analysis.total_colors}
         />
-        <StatCard 
-          title="Harmony Score" 
-          value={analysis.harmony_analysis.harmony_score.toFixed(1)} 
+        <StatCard
+          title="Harmony Score"
+          value={analysis.harmony_analysis.harmony_score.toFixed(1)}
         />
-        <StatCard 
-          title="Manufacturers" 
-          value={Object.keys(analysis.manufacturer_analysis).length} 
+        <StatCard
+          title="Manufacturers"
+          value={Object.keys(analysis.manufacturer_analysis).length}
         />
       </div>
-      
+
       <ColorTypeChart data={analysis.color_type_distribution} />
       <ManufacturerChart data={analysis.manufacturer_analysis} />
     </div>
@@ -252,12 +254,11 @@ const trends = await fetch('http://localhost:8000/api/color-trends/year')
 ### 1a. Predicting Next-Year Trends
 
 A simple linear projection can forecast which names will gain momentum
-in the coming year.  Use the new `/color-trends/predict` endpoint:
+in the coming year. Use the new `/color-trends/predict` endpoint:
 
 ```typescript
 // ask Python service to predict top colors for next year
-const prediction = await fetch('http://localhost:8000/api/color-trends/predict')
-  .then(r => r.json())
+const prediction = await fetch('http://localhost:8000/api/color-trends/predict').then(r => r.json())
 
 if (prediction.success) {
   console.log('forecast', prediction.forecast)
@@ -278,8 +279,8 @@ const recommendations = await fetch('http://localhost:8000/api/recommendations',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     userPreferences: favoriteColors,
-    colors: allColors
-  })
+    colors: allColors,
+  }),
 }).then(r => r.json())
 ```
 
@@ -319,16 +320,19 @@ Edit `config.json` to customize behavior:
 ## Deployment
 
 ### Development
+
 ```bash
 python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### Production
+
 ```bash
 python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
 ### Docker (Optional)
+
 ```dockerfile
 FROM python:3.11-slim
 
@@ -345,11 +349,13 @@ CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ## Monitoring
 
 ### Health Check
+
 ```bash
 curl http://localhost:8000/api/stats
 ```
 
 ### API Documentation
+
 Visit `http://localhost:8000/docs` for interactive Swagger documentation.
 
 ## Troubleshooting

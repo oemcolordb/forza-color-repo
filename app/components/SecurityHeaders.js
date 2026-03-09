@@ -5,7 +5,8 @@ export const SecurityHeaders = () => {
     // Content Security Policy
     const meta = document.createElement('meta')
     meta.httpEquiv = 'Content-Security-Policy'
-    meta.content = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://generativelanguage.googleapis.com"
+    meta.content =
+      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://generativelanguage.googleapis.com"
     document.head.appendChild(meta)
 
     // Prevent clickjacking

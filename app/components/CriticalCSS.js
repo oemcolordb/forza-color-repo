@@ -27,11 +27,11 @@ const CriticalCSS = () => {
         100% { transform: rotate(360deg); }
       }
     `
-    
+
     const styleSheet = document.createElement('style')
     styleSheet.textContent = criticalStyles
     document.head.appendChild(styleSheet)
-    
+
     return () => {
       document.head.removeChild(styleSheet)
     }

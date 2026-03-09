@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             id: userData.sub,
             email: userData.email,
             name: userData.name,
-            role: userData.role || 'user'
+            role: userData.role || 'user',
           })
         } else {
           sessionStorage.removeItem('forza-auth-token')
@@ -56,15 +56,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(false)
   }, [])
 
-  const login = async (_email: string, _password: string) => {
+  const login = async (email: string, password: string) => {
     const response = await fetch('/.netlify/functions/auth-login', {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
       },
       credentials: 'same-origin',
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
     })
 
     if (!response.ok) {
@@ -77,15 +77,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(userData)
   }
 
-  const signup = async (_email: string, _password: string, _name: string) => {
+  const signup = async (email: string, password: string, name: string) => {
     const response = await fetch('/.netlify/functions/auth-signup', {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
       },
       credentials: 'same-origin',
-      body: JSON.stringify({ email, password, name })
+      body: JSON.stringify({ email, password, name }),
     })
 
     if (!response.ok) {

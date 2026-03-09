@@ -4,7 +4,7 @@ export interface CarColor {
   model?: string
   year?: number | null
   colorName: string
-  colorType: string
+  colorType?: string
   color1: HSBColor
   color2: HSBColor
   isGenerated?: boolean
@@ -59,11 +59,12 @@ export interface HeaderProps {
 export interface ImageColorExtractorProps {
   colors?: CarColor[]
   onColorsExtracted?: (colors: ExtractedColor[]) => void
-  onColorsFound?: () => void
+  onColorsFound?: (matches: ForzaColorMatch[]) => void
   onColorSelect?: (color: CarColor) => void
   isDarkMode: boolean
   showTutorial?: boolean
   onTutorialClose?: () => void
+  onImageUpload?: (file: File, dataUrl: string) => void
 }
 
 // Error Types

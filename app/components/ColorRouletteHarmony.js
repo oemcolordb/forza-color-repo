@@ -3,12 +3,12 @@
 import React, { useState, useMemo, useCallback } from 'react'
 
 const HARMONY_MODES = {
-  'Monochromatic': { icon: '🎯', desc: 'Same hue, different saturation/brightness' },
-  'Complementary': { icon: '⚖️', desc: 'Opposite colors on color wheel' },
-  'Triadic': { icon: '🔺', desc: 'Three evenly spaced colors' },
-  'Analogous': { icon: '🌈', desc: 'Adjacent colors on wheel' },
+  Monochromatic: { icon: '🎯', desc: 'Same hue, different saturation/brightness' },
+  Complementary: { icon: '⚖️', desc: 'Opposite colors on color wheel' },
+  Triadic: { icon: '🔺', desc: 'Three evenly spaced colors' },
+  Analogous: { icon: '🌈', desc: 'Adjacent colors on wheel' },
   'Split-Complementary': { icon: '🎪', desc: 'Base + two adjacent to complement' },
-  'Tetradic': { icon: '⬜', desc: 'Four colors forming rectangle' },
+  Tetradic: { icon: '⬜', desc: 'Four colors forming rectangle' },
   'Warm Temperature': { icon: '🔥', desc: 'Warm colors (reds, oranges, yellows)' },
   'Cool Temperature': { icon: '❄️', desc: 'Cool colors (blues, greens, purples)' },
   'High Saturation': { icon: '💎', desc: 'Vibrant, intense colors' },
@@ -22,24 +22,19 @@ const HARMONY_MODES = {
   'Fall Palette': { icon: '🍂', desc: 'Warm, earthy, rich colors' },
   'Winter Palette': { icon: '❄️', desc: 'Cool, crisp, high contrast colors' },
   'Random Roulette': { icon: '🎰', desc: 'Pure random selection' },
-  'Brand Harmony': { icon: '🏷️', desc: 'Colors from same manufacturer' }
+  'Brand Harmony': { icon: '🏷️', desc: 'Colors from same manufacturer' },
 }
 
 const CATEGORIES = {
   'All Colors': { makes: [], colors: [] },
-  'Supercars': { makes: ['Ferrari', 'Lamborghini', 'McLaren', 'Bugatti'], colors: [] },
-  'Luxury': { makes: ['Mercedes-Benz', 'BMW', 'Audi', 'Porsche'], colors: [] },
-  'JDM': { makes: ['Honda', 'Toyota', 'Nissan', 'Mazda', 'Subaru'], colors: [] },
-  'American': { makes: ['Ford', 'Chevrolet', 'Dodge'], colors: [] },
-  'Racing Colors': { makes: [], colors: ['racing', 'sport', 'competition'] }
+  Supercars: { makes: ['Ferrari', 'Lamborghini', 'McLaren', 'Bugatti'], colors: [] },
+  Luxury: { makes: ['Mercedes-Benz', 'BMW', 'Audi', 'Porsche'], colors: [] },
+  JDM: { makes: ['Honda', 'Toyota', 'Nissan', 'Mazda', 'Subaru'], colors: [] },
+  American: { makes: ['Ford', 'Chevrolet', 'Dodge'], colors: [] },
+  'Racing Colors': { makes: [], colors: ['racing', 'sport', 'competition'] },
 }
 
-const ColorRouletteHarmony = ({
-  colors,
-  isDarkMode,
-  onColorSelect,
-  onHarmonyGenerated
-}) => {
+const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGenerated }) => {
   const [harmonyMode, setHarmonyMode] = useState('Random Roulette')
   const [category, setCategory] = useState('All Colors')
   const [harmonySize, setHarmonySize] = useState(5)
@@ -51,28 +46,29 @@ const ColorRouletteHarmony = ({
     const config = CATEGORIES[category]
     return colors.filter(color => {
       const makeMatch = config.makes.length === 0 || config.makes.includes(color.make)
-      const colorMatch = config.colors.length === 0 || 
+      const colorMatch =
+        config.colors.length === 0 ||
         config.colors.some(c => color.colorName.toLowerCase().includes(c))
       return makeMatch && (config.colors.length === 0 || colorMatch)
     })
   }, [colors, category])
 
-  const isWarmColor = (hue) => (hue >= 0 && hue <= 60) || (hue >= 300 && hue <= 360)
-  const isCoolColor = (hue) => hue >= 120 && hue <= 300
-  
+  const isWarmColor = hue => (hue >= 0 && hue <= 60) || (hue >= 300 && hue <= 360)
+  const isCoolColor = hue => hue >= 120 && hue <= 300
+
   const getSeasonalColors = (season, colors) => {
     return colors.filter(color => {
       const h = color.color1.h * 360
       const s = color.color1.s
       const b = color.color1.b
-      
+
       switch (season) {
         case 'Spring':
           return b > 0.6 && s > 0.3 && (isCoolColor(h) || (h >= 60 && h <= 120))
         case 'Summer':
           return b > 0.5 && s > 0.5 && isWarmColor(h)
         case 'Fall':
-          return b < 0.7 && s > 0.4 && (h >= 15 && h <= 45 || h >= 300 && h <= 360)
+          return b < 0.7 && s > 0.4 && ((h >= 15 && h <= 45) || (h >= 300 && h <= 360))
         case 'Winter':
           return (b > 0.7 || b < 0.3) && s > 0.4 && isCoolColor(h)
         default:
@@ -92,7 +88,7 @@ const ColorRouletteHarmony = ({
     switch (harmonyMode) {
       case 'Monochromatic':
         harmony = filteredColors
-          .filter(c => Math.abs((c.color1.h * 360) - baseHue) < 15)
+          .filter(c => Math.abs(c.color1.h * 360 - baseHue) < 15)
           .sort((a, b) => a.color1.s - b.color1.s)
           .slice(0, harmonySize)
         if (harmony.length === 0) harmony = [baseColor]
@@ -101,7 +97,7 @@ const ColorRouletteHarmony = ({
       case 'Complementary':
         const compHue = (baseHue + 180) % 360
         const complementary = filteredColors
-          .filter(c => Math.abs((c.color1.h * 360) - compHue) < 20)
+          .filter(c => Math.abs(c.color1.h * 360 - compHue) < 20)
           .sort(() => Math.random() - 0.5)[0]
         harmony = complementary ? [baseColor, complementary] : [baseColor]
         break
@@ -109,17 +105,25 @@ const ColorRouletteHarmony = ({
       case 'Triadic':
         const tri1 = (baseHue + 120) % 360
         const tri2 = (baseHue + 240) % 360
-        const triad1 = filteredColors.find(c => Math.abs((c.color1.h * 360) - tri1) < 20)
-        const triad2 = filteredColors.find(c => Math.abs((c.color1.h * 360) - tri2) < 20)
+        const triad1 = filteredColors.find(c => Math.abs(c.color1.h * 360 - tri1) < 20)
+        const triad2 = filteredColors.find(c => Math.abs(c.color1.h * 360 - tri2) < 20)
         harmony = [baseColor, ...(triad1 ? [triad1] : []), ...(triad2 ? [triad2] : [])]
         break
 
       case 'Split-Complementary':
         const splitComp1 = (baseHue + 150) % 360
         const splitComp2 = (baseHue + 210) % 360
-        const split1Colors = filteredColors.filter(c => Math.abs((c.color1.h * 360) - splitComp1) < 30)
-        const split2Colors = filteredColors.filter(c => Math.abs((c.color1.h * 360) - splitComp2) < 30)
-        harmony = [baseColor, ...split1Colors.slice(0, Math.floor((harmonySize - 1) / 2)), ...split2Colors.slice(0, Math.ceil((harmonySize - 1) / 2))]
+        const split1Colors = filteredColors.filter(
+          c => Math.abs(c.color1.h * 360 - splitComp1) < 30
+        )
+        const split2Colors = filteredColors.filter(
+          c => Math.abs(c.color1.h * 360 - splitComp2) < 30
+        )
+        harmony = [
+          baseColor,
+          ...split1Colors.slice(0, Math.floor((harmonySize - 1) / 2)),
+          ...split2Colors.slice(0, Math.ceil((harmonySize - 1) / 2)),
+        ]
         if (harmony.length < harmonySize) {
           const additional = filteredColors
             .filter(c => !harmony.includes(c))
@@ -134,9 +138,9 @@ const ColorRouletteHarmony = ({
         const tet2 = (baseHue + 180) % 360
         const tet3 = (baseHue + 270) % 360
         const tetColors = [
-          ...filteredColors.filter(c => Math.abs((c.color1.h * 360) - tet1) < 30),
-          ...filteredColors.filter(c => Math.abs((c.color1.h * 360) - tet2) < 30),
-          ...filteredColors.filter(c => Math.abs((c.color1.h * 360) - tet3) < 30)
+          ...filteredColors.filter(c => Math.abs(c.color1.h * 360 - tet1) < 30),
+          ...filteredColors.filter(c => Math.abs(c.color1.h * 360 - tet2) < 30),
+          ...filteredColors.filter(c => Math.abs(c.color1.h * 360 - tet3) < 30),
         ]
         harmony = [baseColor, ...tetColors.slice(0, harmonySize - 1)]
         if (harmony.length < harmonySize) {
@@ -156,8 +160,14 @@ const ColorRouletteHarmony = ({
             return diff <= 30 && diff > 0
           })
           .sort((a, b) => {
-            const aDiff = Math.min(Math.abs((a.color1.h * 360) - baseHue), 360 - Math.abs((a.color1.h * 360) - baseHue))
-            const bDiff = Math.min(Math.abs((b.color1.h * 360) - baseHue), 360 - Math.abs((b.color1.h * 360) - baseHue))
+            const aDiff = Math.min(
+              Math.abs(a.color1.h * 360 - baseHue),
+              360 - Math.abs(a.color1.h * 360 - baseHue)
+            )
+            const bDiff = Math.min(
+              Math.abs(b.color1.h * 360 - baseHue),
+              360 - Math.abs(b.color1.h * 360 - baseHue)
+            )
             return aDiff - bDiff
           })
           .slice(0, harmonySize - 1)
@@ -252,9 +262,7 @@ const ColorRouletteHarmony = ({
         break
 
       default: // Random Roulette
-        harmony = filteredColors
-          .sort(() => Math.random() - 0.5)
-          .slice(0, harmonySize)
+        harmony = filteredColors.sort(() => Math.random() - 0.5).slice(0, harmonySize)
     }
 
     return harmony.length > 0 ? harmony : [baseColor]
@@ -262,7 +270,7 @@ const ColorRouletteHarmony = ({
 
   const spinRoulette = useCallback(async () => {
     setIsSpinning(true)
-    
+
     // Animate spinning effect
     for (let i = 0; i < 10; i++) {
       const tempHarmony = generateHarmony()
@@ -281,16 +289,43 @@ const ColorRouletteHarmony = ({
     const c = b * s
     const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
     const m = b - c
-    let r = 0, g = 0, bl = 0
+    let r = 0,
+      g = 0,
+      bl = 0
 
-    if (h >= 0 && h < 60) { r = c; g = x; bl = 0 }
-    else if (h >= 60 && h < 120) { r = x; g = c; bl = 0 }
-    else if (h >= 120 && h < 180) { r = 0; g = c; bl = x }
-    else if (h >= 180 && h < 240) { r = 0; g = x; bl = c }
-    else if (h >= 240 && h < 300) { r = x; g = 0; bl = c }
-    else if (h >= 300 && h < 360) { r = c; g = 0; bl = x }
+    if (h >= 0 && h < 60) {
+      r = c
+      g = x
+      bl = 0
+    } else if (h >= 60 && h < 120) {
+      r = x
+      g = c
+      bl = 0
+    } else if (h >= 120 && h < 180) {
+      r = 0
+      g = c
+      bl = x
+    } else if (h >= 180 && h < 240) {
+      r = 0
+      g = x
+      bl = c
+    } else if (h >= 240 && h < 300) {
+      r = x
+      g = 0
+      bl = c
+    } else if (h >= 300 && h < 360) {
+      r = c
+      g = 0
+      bl = x
+    }
 
-    return `#${Math.round((r + m) * 255).toString(16).padStart(2, '0')}${Math.round((g + m) * 255).toString(16).padStart(2, '0')}${Math.round((bl + m) * 255).toString(16).padStart(2, '0')}`
+    return `#${Math.round((r + m) * 255)
+      .toString(16)
+      .padStart(2, '0')}${Math.round((g + m) * 255)
+      .toString(16)
+      .padStart(2, '0')}${Math.round((bl + m) * 255)
+      .toString(16)
+      .padStart(2, '0')}`
   }
 
   return (
@@ -298,50 +333,60 @@ const ColorRouletteHarmony = ({
       <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         🎰 Color Roulette Harmony
       </h3>
-      
+
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <label
+              className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Harmony Mode
             </label>
             <select
               value={harmonyMode}
-              onChange={(e) => setHarmonyMode(e.target.value)}
+              onChange={e => setHarmonyMode(e.target.value)}
               className={`w-full p-2 text-sm rounded border ${
-                isDarkMode 
-                  ? 'bg-slate-700 border-slate-600 text-white' 
+                isDarkMode
+                  ? 'bg-slate-700 border-slate-600 text-white'
                   : 'bg-white border-gray-300 text-gray-900'
               }`}
             >
               {Object.entries(HARMONY_MODES).map(([mode, config]) => (
-                <option key={mode} value={mode}>{config.icon} {mode}</option>
+                <option key={mode} value={mode}>
+                  {config.icon} {mode}
+                </option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <label
+              className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Category
             </label>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={e => setCategory(e.target.value)}
               className={`w-full p-2 text-sm rounded border ${
-                isDarkMode 
-                  ? 'bg-slate-700 border-slate-600 text-white' 
+                isDarkMode
+                  ? 'bg-slate-700 border-slate-600 text-white'
                   : 'bg-white border-gray-300 text-gray-900'
               }`}
             >
               {Object.keys(CATEGORIES).map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
         </div>
 
         <div>
-          <label className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-xs font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Colors: {harmonySize}
           </label>
           <input
@@ -349,7 +394,7 @@ const ColorRouletteHarmony = ({
             min="2"
             max="8"
             value={harmonySize}
-            onChange={(e) => setHarmonySize(Number(e.target.value))}
+            onChange={e => setHarmonySize(Number(e.target.value))}
             aria-label={`Number of colors in harmony: ${harmonySize}`}
             className="w-full"
           />
@@ -369,17 +414,17 @@ const ColorRouletteHarmony = ({
 
         {currentHarmony.length > 0 && (
           <div>
-            <h4 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <h4
+              className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Current Harmony ({currentHarmony.length} colors)
             </h4>
-            
 
-            
             <div className="grid grid-cols-4 gap-1 mb-2">
               {currentHarmony.map((color, index) => (
                 <button
                   key={index}
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault()
                     e.stopPropagation()
                     onColorSelect?.(color)
@@ -388,7 +433,7 @@ const ColorRouletteHarmony = ({
                     index === 0 ? 'border-white' : 'border-gray-300'
                   }`}
                   style={{
-                    background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))})`
+                    background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 240) * Math.PI) / 180)))})`,
                   }}
                   title={`${color.colorName} - ${color.make} (H:${(color.color1.h * 360).toFixed(0)} S:${(color.color1.s * 100).toFixed(0)} B:${(color.color1.b * 100).toFixed(0)})`}
                 />

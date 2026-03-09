@@ -1,5 +1,6 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
+import { screen } from '@testing-library/dom'
 import WindSystem from '../WindSystem'
 
 // Mock window dimensions
@@ -33,9 +34,9 @@ describe('WindSystem', () => {
 
   it('renders wind indicators', () => {
     render(<WindSystem isDarkMode={true} />)
-    
+
     // Should have wind direction and strength indicators
-    const container = screen.getByRole('generic')
+    const container = screen.getByTestId('wind-system')
     expect(container).toBeInTheDocument()
   })
 })

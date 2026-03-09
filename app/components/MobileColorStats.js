@@ -11,17 +11,21 @@ const MobileColorStats = ({ colors, favorites, colorHistory, isDarkMode }) => {
       totalColors: colors.length,
       totalMakes: Object.keys(makeCount).length,
       totalFavorites: favorites.length,
-      totalViewed: colorHistory.length
+      totalViewed: colorHistory.length,
     }
   }, [colors, favorites, colorHistory])
 
   return (
-    <div className={`p-3 rounded-lg border ${
-      isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
-    }`}>
+    <div
+      className={`p-3 rounded-lg border ${
+        isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'
+      }`}
+    >
       <div className="grid grid-cols-4 gap-2 text-center">
         <div>
-          <div className="text-lg font-bold text-fuchsia-500">{(stats.totalColors / 1000).toFixed(1)}K</div>
+          <div className="text-lg font-bold text-fuchsia-500">
+            {(stats.totalColors / 1000).toFixed(1)}K
+          </div>
           <div className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>Colors</div>
         </div>
         <div>

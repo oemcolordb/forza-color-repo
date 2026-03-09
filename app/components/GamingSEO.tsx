@@ -21,14 +21,15 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
     if (deviceInfo?.isMobile) {
       // Reduce animations on mobile for better performance
       document.documentElement.style.setProperty('--animation-duration', '0.2s')
-      
+
       // Optimize touch interactions for mobile gamers
       document.body.style.touchAction = 'manipulation'
-      
+
       // Prevent zoom on mobile gaming devices
       const viewport = document.querySelector('meta[name="viewport"]')
       if (viewport) {
-        viewport.setAttribute('content', 
+        viewport.setAttribute(
+          'content',
           'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
         )
       }
@@ -50,11 +51,13 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
       { name: 'gaming:rating', content: 'everyone' },
       { name: 'automotive:category', content: 'paint,colors,customization' },
       { name: 'forza:game', content: 'horizon,motorsport,all' },
-      { name: 'content:type', content: 'color-database,reference-sheet' }
+      { name: 'content:type', content: 'color-database,reference-sheet' },
     ]
 
     gamingMeta.forEach(meta => {
-      let element = document.querySelector(`meta[name="${meta.name}"], meta[property="${meta.property}"]`)
+      let element = document.querySelector(
+        `meta[name="${meta.name}"], meta[property="${meta.property}"]`
+      )
       if (!element) {
         element = document.createElement('meta')
         if (meta.name) element.setAttribute('name', meta.name)
@@ -63,75 +66,81 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
       }
       element.setAttribute('content', meta.content)
     })
-
-
-
   }, [isDarkMode, deviceInfo])
 
   // Gaming-specific structured data injection
   useEffect(() => {
     const gamingStructuredData = {
-      "@context": "https://schema.org",
-      "@graph": [
+      '@context': 'https://schema.org',
+      '@graph': [
         {
-          "@type": "WebApplication",
-          "@id": "https://forza-color-repo.vercel.app/#webapp",
-          "name": "Forza Color Sheet Database",
-          "alternateName": ["Forza Colors", "Forza Paint Database", "Racing Game Color Sheet"],
-          "applicationCategory": "UtilityApplication",
-          "operatingSystem": "Web Browser",
-          "url": "https://forza-color-repo.vercel.app",
-          "description": "Complete Forza color sheet database with 10,000+ automotive paint colors from all Forza racing games",
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock"
+          '@type': 'WebApplication',
+          '@id': 'https://forza-color-repo.vercel.app/#webapp',
+          name: 'Forza Color Sheet Database',
+          alternateName: ['Forza Colors', 'Forza Paint Database', 'Racing Game Color Sheet'],
+          applicationCategory: 'UtilityApplication',
+          operatingSystem: 'Web Browser',
+          url: 'https://forza-color-repo.vercel.app',
+          description:
+            'Complete Forza color sheet database with 10,000+ automotive paint colors from all Forza racing games',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+            availability: 'https://schema.org/InStock',
           },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "ratingCount": "2847",
-            "bestRating": "5",
-            "worstRating": "1"
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.9',
+            ratingCount: '2847',
+            bestRating: '5',
+            worstRating: '1',
           },
-          "featureList": [
-            "Complete Forza color sheet database",
-            "10,000+ official automotive paint colors",
-            "Forza Horizon 5 color reference",
-            "Forza Motorsport paint codes",
-            "HSB and hex color values",
-            "Color search and filtering tools",
-            "Paint matching algorithms",
-            "Downloadable color charts",
-            "Mobile-optimized interface",
-            "Real-time color preview"
+          featureList: [
+            'Complete Forza color sheet database',
+            '10,000+ official automotive paint colors',
+            'Forza Horizon 5 color reference',
+            'Forza Motorsport paint codes',
+            'HSB and hex color values',
+            'Color search and filtering tools',
+            'Paint matching algorithms',
+            'Downloadable color charts',
+            'Mobile-optimized interface',
+            'Real-time color preview',
           ],
-          "keywords": "forza color sheet, forza colors database, automotive paint colors, racing game colors, forza horizon colors, forza motorsport paint",
-          "inLanguage": "en-US",
-          "isAccessibleForFree": true
+          keywords:
+            'forza color sheet, forza colors database, automotive paint colors, racing game colors, forza horizon colors, forza motorsport paint',
+          inLanguage: 'en-US',
+          isAccessibleForFree: true,
         },
         {
-          "@type": "Dataset",
-          "@id": "https://forza-color-repo.vercel.app/#dataset",
-          "name": "Forza Automotive Color Database",
-          "description": "Comprehensive dataset of 10,000+ automotive paint colors extracted from Forza racing games",
-          "url": "https://forza-color-repo.vercel.app",
-          "keywords": ["forza color sheet", "automotive colors", "paint database", "racing games", "color reference"],
-          "creator": {
-            "@type": "Organization",
-            "name": "Forza Color Universe Team"
+          '@type': 'Dataset',
+          '@id': 'https://forza-color-repo.vercel.app/#dataset',
+          name: 'Forza Automotive Color Database',
+          description:
+            'Comprehensive dataset of 10,000+ automotive paint colors extracted from Forza racing games',
+          url: 'https://forza-color-repo.vercel.app',
+          keywords: [
+            'forza color sheet',
+            'automotive colors',
+            'paint database',
+            'racing games',
+            'color reference',
+          ],
+          creator: {
+            '@type': 'Organization',
+            name: 'Forza Color Universe Team',
           },
-          "license": "https://creativecommons.org/licenses/by/4.0/",
-          "temporalCoverage": "2021/..",
-          "spatialCoverage": "Worldwide",
-          "distribution": {
-            "@type": "DataDownload",
-            "encodingFormat": "application/json",
-            "contentUrl": "https://forza-color-repo.vercel.app/api/colors"
-          }
-        }
-      ]
+          license: 'https://creativecommons.org/licenses/by/4.0/',
+          temporalCoverage: '2021/..',
+          spatialCoverage: 'Worldwide',
+          distribution: {
+            '@type': 'DataDownload',
+            encodingFormat: 'application/json',
+            contentUrl: 'https://forza-color-repo.vercel.app/api/colors',
+          },
+        },
+      ],
     }
 
     let script = document.getElementById('gaming-structured-data') as HTMLScriptElement

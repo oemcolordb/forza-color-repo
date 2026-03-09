@@ -20,7 +20,7 @@ const mockColors: CarColor[] = [
     colorType: 'Normal',
     color1: { h: 0.02, s: 0.85, b: 0.8 },
     color2: { h: 0.02, s: 0.85, b: 0.8 },
-  }
+  },
 ]
 
 const mockOnColorsFound = jest.fn()

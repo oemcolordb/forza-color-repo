@@ -13,6 +13,7 @@ This interactive guide will help you explore 10,000+ official Forza paint colors
 ## Step 2: Search & Filter
 
 ### Quick Search
+
 ```
 Type in the search box:
 - "Ferrari" - Find all Ferrari colors
@@ -21,6 +22,7 @@ Type in the search box:
 ```
 
 ### Advanced Filters
+
 - **Manufacturer**: Select from 200+ brands
 - **Color Type**: Metal Flake, Normal, Two-Tone, Matte, Carbon Fiber
 - **Favorites**: Click "FAVORITES" to view saved colors
@@ -28,17 +30,20 @@ Type in the search box:
 ## Step 3: Use Tools
 
 ### 🎨 Paint Scanner
+
 1. Click "Upload Image"
 2. Select a car photo
 3. Extract dominant colors
 4. Find matching Forza paints
 
 ### 🎰 Color Roulette
+
 1. Click "Spin" for random colors
 2. Generate harmony palettes (Complementary, Triadic, Analogous)
 3. Discover new color combinations
 
 ### 🔧 TuneForge
+
 1. Click the TuneForge button (bottom right)
 2. Select your car
 3. Get AI-powered tuning recommendations

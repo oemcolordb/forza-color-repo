@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 
   if (event.httpMethod === 'OPTIONS') {
@@ -20,14 +20,14 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         count: makes.length,
-        makes: makes
-      })
+        makes: makes,
+      }),
     }
   } catch (error) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ error: 'Internal server error' }),
     }
   }
 }

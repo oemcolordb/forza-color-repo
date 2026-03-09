@@ -9,11 +9,13 @@ interface LazyLoadConfig {
   useWorker: boolean
 }
 
-export function useLazyLoadColors(config: LazyLoadConfig = {
-  chunkSize: 100,
-  preloadThreshold: 0.8,
-  useWorker: true
-}) {
+export function useLazyLoadColors(
+  config: LazyLoadConfig = {
+    chunkSize: 100,
+    preloadThreshold: 0.8,
+    useWorker: true,
+  }
+) {
   const [allColors, setAllColors] = useState<CarColor[]>([])
   const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
   const [loading, setLoading] = useState(true)
@@ -28,7 +30,7 @@ export function useLazyLoadColors(config: LazyLoadConfig = {
       const colorWorker = new Worker(new URL('../workers/colorWorker.ts', import.meta.url))
       setWorker(colorWorker)
 
-      colorWorker.onmessage = (e) => {
+      colorWorker.onmessage = e => {
         const { type, payload } = e.data
 
         switch (type) {
@@ -73,58 +75,62 @@ export function useLazyLoadColors(config: LazyLoadConfig = {
     }
   }
 
-  const loadNextChunk = useCallback((colors: CarColor[], chunk: number) => {
-    const start = chunk * config.chunkSize
-    const end = start + config.chunkSize
-    const newColors = colors.slice(start, end)
+  const loadNextChunk = useCallback(
+    (colors: CarColor[], chunk: number) => {
+      const start = chunk * config.chunkSize
+      const end = start + config.chunkSize
+      const newColors = colors.slice(start, end)
 
-    if (newColors.length === 0) {
-      setHasMore(false)
-      return
-    }
+      if (newColors.length === 0) {
+        setHasMore(false)
+        return
+      }
 
-    setDisplayedColors(prev => [...prev, ...newColors])
-    setCurrentChunk(chunk)
-    setHasMore(end < colors.length)
-    setLoadingMore(false)
-  }, [config.chunkSize])
+      setDisplayedColors(prev => [...prev, ...newColors])
+      setCurrentChunk(chunk)
+      setHasMore(end < colors.length)
+      setLoadingMore(false)
+    },
+    [config.chunkSize]
+  )
 
   const loadMore = useCallback(() => {
     if (loadingMore || !hasMore) return
 
     setLoadingMore(true)
-    
+
     // Simulate async loading
     setTimeout(() => {
       loadNextChunk(allColors, currentChunk + 1)
     }, 100)
   }, [loadingMore, hasMore, allColors, currentChunk, loadNextChunk])
 
-  const filterColors = useCallback((filters: {
-    make?: string
-    type?: string
-    search?: string
-  }) => {
-    if (worker) {
-      worker.postMessage({
-        type: 'FILTER_COLORS',
-        payload: { colors: allColors, filters }
-      })
-    } else {
-      // Fallback filtering
-      const filtered = allColors.filter(color => {
-        if (filters.make && color.make !== filters.make) return false
-        if (filters.type && color.colorType !== filters.type) return false
-        if (filters.search) {
-          const search = filters.search.toLowerCase()
-          return color.colorName.toLowerCase().includes(search) ||
-                 color.make.toLowerCase().includes(search)
-        }
-        return true
-      })
-      setDisplayedColors(filtered)
-    }
-  }, [allColors, worker])
+  const filterColors = useCallback(
+    (filters: { make?: string; type?: string; search?: string }) => {
+      if (worker) {
+        worker.postMessage({
+          type: 'FILTER_COLORS',
+          payload: { colors: allColors, filters },
+        })
+      } else {
+        // Fallback filtering
+        const filtered = allColors.filter(color => {
+          if (filters.make && color.make !== filters.make) return false
+          if (filters.type && color.colorType !== filters.type) return false
+          if (filters.search) {
+            const search = filters.search.toLowerCase()
+            return (
+              color.colorName.toLowerCase().includes(search) ||
+              color.make.toLowerCase().includes(search)
+            )
+          }
+          return true
+        })
+        setDisplayedColors(filtered)
+      }
+    },
+    [allColors, worker]
+  )
 
   return {
     colors: displayedColors,
@@ -133,22 +139,19 @@ export function useLazyLoadColors(config: LazyLoadConfig = {
     hasMore,
     loadMore,
     filterColors,
-    totalColors: allColors.length
+    totalColors: allColors.length,
   }
 }
 
 // Intersection Observer hook for infinite scroll
-export function useInfiniteScroll(
-  callback: () => void,
-  options: IntersectionObserverInit = {}
-) {
+export function useInfiniteScroll(callback: () => void, options: IntersectionObserverInit = {}) {
   const [node, setNode] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!node) return
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting) {
           callback()
         }
@@ -173,7 +176,7 @@ export function useLazyImage(src: string) {
     if (!imageRef) return
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting) {
           setImageSrc(src)
           observer.disconnect()

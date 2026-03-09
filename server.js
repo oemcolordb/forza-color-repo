@@ -1,9 +1,9 @@
 /**
  * Forza Horizon 5 Telemetry Bridge Server
- * 
+ *
  * This server bridges UDP telemetry data from Forza Horizon 5 to WebSocket clients.
  * It enables real-time dashboard displays and data forwarding to multiple endpoints.
- * 
+ *
  * @module server
  * @requires ./services/telemetryBridge.js
  * @requires ./scripts/fix-microsoft-store.js
@@ -22,7 +22,7 @@ const bridge = new TelemetryBridge(9999, 8080)
 /**
  * Add UDP forwarders for multiple applications
  * Uncomment and configure for additional endpoints:
- * 
+ *
  * @example
  * bridge.addForwarder('192.168.1.100', 9998) // Motion rig
  * bridge.addForwarder('192.168.1.101', 9997) // Secondary dashboard

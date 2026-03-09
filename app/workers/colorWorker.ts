@@ -3,7 +3,12 @@
  * Prevents blocking the main thread during data operations
  */
 
-self.addEventListener('message', async (e) => {
+type WorkerMessage =
+  | { type: 'LOAD_COLORS'; payload?: unknown }
+  | { type: 'FILTER_COLORS'; payload: { colors: any[]; filters: any } }
+  | { type: 'SORT_COLORS'; payload: { colors: any[]; sortBy: string } }
+
+self.addEventListener('message', async (e: MessageEvent<WorkerMessage>) => {
   const { type, payload } = e.data
 
   switch (type) {
@@ -13,19 +18,22 @@ self.addEventListener('message', async (e) => {
         const colors = await response.json()
         self.postMessage({ type: 'COLORS_LOADED', payload: colors })
       } catch (error) {
-        self.postMessage({ type: 'ERROR', payload: error.message })
+        const message = error instanceof Error ? error.message : String(error)
+        self.postMessage({ type: 'ERROR', payload: message })
       }
       break
 
     case 'FILTER_COLORS':
       const { colors, filters } = payload
-      const filtered = colors.filter(color => {
+      const filtered = colors.filter((color: any) => {
         if (filters.make && color.make !== filters.make) return false
         if (filters.type && color.colorType !== filters.type) return false
         if (filters.search) {
           const search = filters.search.toLowerCase()
-          return color.colorName.toLowerCase().includes(search) ||
-                 color.make.toLowerCase().includes(search)
+          return (
+            color.colorName.toLowerCase().includes(search) ||
+            color.make.toLowerCase().includes(search)
+          )
         }
         return true
       })

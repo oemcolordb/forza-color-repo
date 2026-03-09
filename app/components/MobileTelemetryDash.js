@@ -16,10 +16,10 @@ const MobileTelemetryDash = () => {
     if (!serverIP) return
 
     const ws = new WebSocket(`ws://${serverIP}:8080`)
-    
+
     ws.onopen = () => setConnected(true)
     ws.onclose = () => setConnected(false)
-    ws.onmessage = (event) => setData(JSON.parse(event.data))
+    ws.onmessage = event => setData(JSON.parse(event.data))
     ws.onerror = () => setConnected(false)
 
     return () => ws.close()
@@ -42,13 +42,10 @@ const MobileTelemetryDash = () => {
               type="text"
               placeholder="PC IP Address (e.g., 192.168.1.100)"
               value={serverIP}
-              onChange={(e) => setServerIP(e.target.value)}
+              onChange={e => setServerIP(e.target.value)}
               className="w-full p-3 bg-gray-800 rounded text-white"
             />
-            <button
-              onClick={handleConnect}
-              className="w-full p-3 bg-blue-600 rounded font-bold"
-            >
+            <button onClick={handleConnect} className="w-full p-3 bg-blue-600 rounded font-bold">
               Connect
             </button>
           </div>
@@ -86,7 +83,7 @@ const MobileTelemetryDash = () => {
           <div className="text-3xl font-bold text-red-400">{data.currentEngineRpm.toFixed(0)}</div>
           <div className="text-sm text-gray-400">RPM</div>
           <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
-            <div 
+            <div
               className="bg-red-500 h-2 rounded-full transition-all"
               style={{ width: `${(data.currentEngineRpm / data.engineMaxRpm) * 100}%` }}
             />
@@ -119,16 +116,20 @@ const MobileTelemetryDash = () => {
         <div className="text-sm text-gray-400 mb-2">Tire Temperatures</div>
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="flex justify-between">
-            <span>FL:</span><span>{data.tireTemp[0].toFixed(0)}°C</span>
+            <span>FL:</span>
+            <span>{data.tireTemp[0].toFixed(0)}°C</span>
           </div>
           <div className="flex justify-between">
-            <span>FR:</span><span>{data.tireTemp[1].toFixed(0)}°C</span>
+            <span>FR:</span>
+            <span>{data.tireTemp[1].toFixed(0)}°C</span>
           </div>
           <div className="flex justify-between">
-            <span>RL:</span><span>{data.tireTemp[2].toFixed(0)}°C</span>
+            <span>RL:</span>
+            <span>{data.tireTemp[2].toFixed(0)}°C</span>
           </div>
           <div className="flex justify-between">
-            <span>RR:</span><span>{data.tireTemp[3].toFixed(0)}°C</span>
+            <span>RR:</span>
+            <span>{data.tireTemp[3].toFixed(0)}°C</span>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@
 **Error:** `Module not found: Can't resolve 'X'`
 
 **Fix:**
+
 ```bash
 # Clean install
 rm -rf node_modules package-lock.json
@@ -18,6 +19,7 @@ npm install --legacy-peer-deps
 **Error:** `Type error: ...`
 
 **Fix in `tsconfig.json`:**
+
 ```json
 {
   "compilerOptions": {
@@ -36,12 +38,14 @@ npm install --legacy-peer-deps
 ### 4. Environment Variables
 
 **Required in Vercel Dashboard:**
+
 - `TURSO_DATABASE_URL`
 - `TURSO_AUTH_TOKEN`
 - `NEXT_PUBLIC_DISCORD_CLIENT_ID` (optional)
 - `NEXT_PUBLIC_XBOX_CLIENT_ID` (optional)
 
 **Set in Vercel:**
+
 1. Go to Project Settings
 2. Environment Variables
 3. Add each variable
@@ -50,6 +54,7 @@ npm install --legacy-peer-deps
 ### 5. Build Command
 
 **In Vercel Project Settings:**
+
 - Build Command: `npm run build`
 - Install Command: `npm install --legacy-peer-deps`
 - Output Directory: `.next`
@@ -57,11 +62,13 @@ npm install --legacy-peer-deps
 ### 6. Node Version
 
 **Add `.nvmrc`:**
+
 ```
 20
 ```
 
 **Or in `package.json`:**
+
 ```json
 {
   "engines": {
@@ -113,6 +120,7 @@ git push
 ### Common Issues:
 
 **Import errors:**
+
 ```typescript
 // Bad
 import colorData from '../../services/colordata'
@@ -122,15 +130,17 @@ import colorData from '../../services/colorData'
 ```
 
 **Missing dependencies:**
+
 ```bash
 npm install @react-three/fiber @react-three/drei three
 ```
 
 **API route errors:**
+
 ```typescript
 // Ensure all API routes export properly
-export async function GET(request: Request) { }
-export async function POST(request: Request) { }
+export async function GET(request: Request) {}
+export async function POST(request: Request) {}
 ```
 
 ---
@@ -138,6 +148,7 @@ export async function POST(request: Request) { }
 ## Force Clean Build
 
 In Vercel Dashboard:
+
 1. Settings → General
 2. Scroll to "Build & Development Settings"
 3. Click "Clear Build Cache"
@@ -148,6 +159,7 @@ In Vercel Dashboard:
 ## Contact Support
 
 If still failing, share:
+
 - Build log (last 50 lines)
 - `package.json`
 - `next.config.ts`

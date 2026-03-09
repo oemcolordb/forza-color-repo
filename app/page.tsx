@@ -7,7 +7,6 @@ import { cache } from './lib/cache'
 import { sanitizeSearchQuery, handleError } from './lib/validation'
 import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils'
 
-
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SimpleColorGrid from './components/SimpleColorGrid'
@@ -77,7 +76,10 @@ export default function HomePage() {
   const [showComparison, setShowComparison] = useState(false)
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
-  const ITEMS_PER_PAGE: number = useMemo(() => deviceInfo.isMobile ? 30 : 60, [deviceInfo.isMobile])
+  const ITEMS_PER_PAGE: number = useMemo(
+    () => (deviceInfo.isMobile ? 30 : 60),
+    [deviceInfo.isMobile]
+  )
   const { track } = useAnalytics()
   const { measureAsync } = usePerformance()
   const { isOnline, cacheColors, getOfflineColors } = useOfflineStorage()
@@ -86,17 +88,20 @@ export default function HomePage() {
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
 
   // Handle generated colors with error handling
-  const handleColorsGenerated = useCallback((newColors: CarColor[]) => {
-    try {
-      const updatedColors = [...colors, ...newColors]
-      setColors(updatedColors)
-      setAllColors(updatedColors)
-      cache.set('generated-colors', updatedColors)
-    } catch (err) {
-      const error = handleError(err)
-      setError(error.message)
-    }
-  }, [colors])
+  const handleColorsGenerated = useCallback(
+    (newColors: CarColor[]) => {
+      try {
+        const updatedColors = [...colors, ...newColors]
+        setColors(updatedColors)
+        setAllColors(updatedColors)
+        cache.set('generated-colors', updatedColors)
+      } catch (err) {
+        const error = handleError(err)
+        setError(error.message)
+      }
+    },
+    [colors]
+  )
 
   // Filter colors with caching and sanitization
   const filteredColors = useMemo(() => {
@@ -105,9 +110,9 @@ export default function HomePage() {
     if (cached && allColors.length > 0) {
       return cached
     }
-    
+
     let result: CarColor[]
-    
+
     if (selectedMake === 'FAVORITES') {
       result = allColors.filter(color => {
         const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
@@ -119,29 +124,28 @@ export default function HomePage() {
       } else {
         const sanitizedQuery = sanitizeSearchQuery(searchQuery)
         const searchLower = sanitizedQuery.toLowerCase()
-        
+
         result = allColors.filter(color => {
-          const matchesSearch = !sanitizedQuery || 
+          const matchesSearch =
+            !sanitizedQuery ||
             color.colorName.toLowerCase().includes(searchLower) ||
             color.make.toLowerCase().includes(searchLower) ||
             (color.model && color.model.toLowerCase().includes(searchLower))
-          
+
           const matchesMake = !selectedMake || color.make === selectedMake
           const matchesType = !selectedColorType || color.colorType === selectedColorType
-          
+
           return matchesSearch && matchesMake && matchesType
         })
       }
     }
-    
+
     if (allColors.length > 0) {
       cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
     }
     return result
   }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet])
 
-
-  
   useEffect(() => {
     const loadColors = async () => {
       try {
@@ -155,15 +159,15 @@ export default function HomePage() {
           setIsInitialLoad(false)
           return
         }
-        
+
         const { getColorData } = await import('../services/colorDataLazy')
         const originalColors = await getColorData()
-        
+
         // Validate data
         if (!Array.isArray(originalColors)) {
           throw new Error('Invalid color data format')
         }
-        
+
         setColors(originalColors)
         setAllColors(originalColors)
         cache.set('color-data', originalColors, 10 * 60 * 1000) // Cache for 10 minutes
@@ -179,7 +183,7 @@ export default function HomePage() {
         setIsInitialLoad(false)
       }
     }
-    
+
     // Fallback timeout
     const timeout = setTimeout(() => {
       if (loading) {
@@ -188,9 +192,9 @@ export default function HomePage() {
         setIsInitialLoad(false)
       }
     }, 15000)
-    
+
     loadColors()
-    
+
     return () => clearTimeout(timeout)
   }, [loading])
 
@@ -199,11 +203,12 @@ export default function HomePage() {
     if (!allColors || !Array.isArray(allColors)) return []
     return Array.from(new Set(allColors.map(c => c.make))).sort()
   }, [allColors])
-  
+
   const colorTypes = useMemo(() => {
     if (!allColors || !Array.isArray(allColors)) return []
-    return Array.from(new Set(allColors.map(c => c.colorType).filter(type => type && type.trim())))
-      .sort()
+    return Array.from(
+      new Set(allColors.map(c => c.colorType).filter(type => type && type.trim()))
+    ).sort()
   }, [allColors])
 
   // Load favorites from IndexedDB with localStorage fallback
@@ -216,7 +221,7 @@ export default function HomePage() {
           setFavorites(dbFavorites)
           return
         }
-        
+
         // Fallback to localStorage
         const saved = localStorage.getItem('forza-favorites')
         if (saved) {
@@ -232,7 +237,7 @@ export default function HomePage() {
         setFavorites([])
       }
     }
-    
+
     loadFavorites()
   }, [])
 
@@ -249,13 +254,11 @@ export default function HomePage() {
         setError('Failed to save favorites')
       }
     }
-    
+
     if (favorites.length > 0) {
       saveFavorites()
     }
   }, [favorites])
-
-
 
   // Toggle favorite function
   const toggleFavorite = useCallback((colorId: string) => {
@@ -275,18 +278,22 @@ export default function HomePage() {
   }, [])
 
   // Handle color selection with history tracking
-  const handleColorSelect = useCallback((color: CarColor) => {
-    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-    setExpandedColorId(expandedColorId === colorId ? null : colorId)
-    setColorHistory(prev => {
-      const filtered = prev.filter(id => id !== colorId)
-      return [colorId, ...filtered.slice(0, 49)] // Keep last 50
-    })
-  }, [expandedColorId])
+  const handleColorSelect = useCallback(
+    (color: CarColor) => {
+      const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+      setExpandedColorId(expandedColorId === colorId ? null : colorId)
+      setColorHistory(prev => {
+        const filtered = prev.filter(id => id !== colorId)
+        return [colorId, ...filtered.slice(0, 49)] // Keep last 50
+      })
+    },
+    [expandedColorId]
+  )
 
   if (isInitialLoad) {
-    const videoUrl = '/Mp%204%20H%20280%203%20Q%20Nlf%203%20J%20O%20Aem%208%20Kv%20Cu%20Uuya%20AN%20Cr%20O%20Du%20C%20Qs%2063%20S%20Vq%20Z%20Rad%206%20O%2011%20BZ.mp4'
-    
+    const videoUrl =
+      '/Mp%204%20H%20280%203%20Q%20Nlf%203%20J%20O%20Aem%208%20Kv%20Cu%20Uuya%20AN%20Cr%20O%20Du%20C%20Qs%2063%20S%20Vq%20Z%20Rad%206%20O%2011%20BZ.mp4'
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
         {/* Background Video */}
@@ -299,10 +306,10 @@ export default function HomePage() {
         >
           <source src={videoUrl} type="video/mp4" />
         </video>
-        
+
         {/* Forge Background Glow */}
         <div className="absolute inset-0 bg-gradient-radial from-orange-600/20 via-red-600/10 to-transparent animate-pulse"></div>
-        
+
         {/* Anvil Background */}
         <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 opacity-20">
           <svg width="200" height="120" viewBox="0 0 200 120" className="fill-gray-600">
@@ -312,7 +319,7 @@ export default function HomePage() {
             <circle cx="100" cy="40" r="8" className="fill-gray-500" />
           </svg>
         </div>
-        
+
         <div className="text-center z-10">
           <div className="relative mb-8">
             {/* Engine Block */}
@@ -330,78 +337,101 @@ export default function HomePage() {
                     <stop offset="100%" stopColor="#d97706" />
                   </linearGradient>
                   <filter id="engineGlow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                    <feMerge> 
-                      <feMergeNode in="coloredBlur"/>
-                      <feMergeNode in="SourceGraphic"/> 
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
                     </feMerge>
                   </filter>
                 </defs>
-                
+
                 {/* Engine Block */}
-                <rect x="10" y="30" width="100" height="40" rx="5" fill="url(#engineGradient)" filter="url(#engineGlow)" />
-                
+                <rect
+                  x="10"
+                  y="30"
+                  width="100"
+                  height="40"
+                  rx="5"
+                  fill="url(#engineGradient)"
+                  filter="url(#engineGlow)"
+                />
+
                 {/* Cylinder Heads */}
                 <rect x="15" y="25" width="15" height="10" rx="2" fill="#4b5563" />
                 <rect x="35" y="25" width="15" height="10" rx="2" fill="#4b5563" />
                 <rect x="55" y="25" width="15" height="10" rx="2" fill="#4b5563" />
                 <rect x="75" y="25" width="15" height="10" rx="2" fill="#4b5563" />
                 <rect x="95" y="25" width="10" height="10" rx="2" fill="#4b5563" />
-                
+
                 {/* Animated Pistons */}
-                {[0, 1, 2, 3, 4].map((i) => {
-                  const x = 17.5 + (i * 20)
+                {[0, 1, 2, 3, 4].map(i => {
+                  const x = 17.5 + i * 20
                   const delay = i * 0.2
                   return (
                     <g key={i}>
-                      <rect 
-                        x={x} 
-                        y="15" 
-                        width="5" 
-                        height="15" 
-                        rx="1" 
+                      <rect
+                        x={x}
+                        y="15"
+                        width="5"
+                        height="15"
+                        rx="1"
                         fill="url(#pistonGradient)"
                         filter="url(#engineGlow)"
                         className="animate-bounce"
                         style={{
                           animationDuration: '1s',
                           animationDelay: `${delay}s`,
-                          transformOrigin: 'center bottom'
+                          transformOrigin: 'center bottom',
                         }}
                       />
                       {/* Connecting Rod */}
-                      <line 
-                        x1={x + 2.5} 
-                        y1="30" 
-                        x2={x + 2.5} 
-                        y2="15" 
-                        stroke="#9ca3af" 
+                      <line
+                        x1={x + 2.5}
+                        y1="30"
+                        x2={x + 2.5}
+                        y2="15"
+                        stroke="#9ca3af"
                         strokeWidth="1.5"
                         className="animate-pulse"
                         style={{
                           animationDuration: '1s',
-                          animationDelay: `${delay}s`
+                          animationDelay: `${delay}s`,
                         }}
                       />
                     </g>
                   )
                 })}
-                
+
                 {/* Crankshaft */}
                 <ellipse cx="60" cy="55" rx="45" ry="3" fill="#1f2937" opacity="0.8" />
                 <rect x="15" y="53" width="90" height="4" rx="2" fill="#374151" />
-                
+
                 {/* Engine Details */}
-                <circle cx="25" cy="50" r="3" fill="#ef4444" opacity="0.8" className="animate-pulse" />
-                <circle cx="95" cy="50" r="3" fill="#10b981" opacity="0.8" className="animate-pulse" style={{animationDelay: '0.5s'}} />
-                
+                <circle
+                  cx="25"
+                  cy="50"
+                  r="3"
+                  fill="#ef4444"
+                  opacity="0.8"
+                  className="animate-pulse"
+                />
+                <circle
+                  cx="95"
+                  cy="50"
+                  r="3"
+                  fill="#10b981"
+                  opacity="0.8"
+                  className="animate-pulse"
+                  style={{ animationDelay: '0.5s' }}
+                />
+
                 {/* Exhaust Pipes */}
                 <rect x="110" y="35" width="8" height="3" rx="1" fill="#6b7280" />
                 <rect x="110" y="42" width="8" height="3" rx="1" fill="#6b7280" />
                 <rect x="110" y="49" width="8" height="3" rx="1" fill="#6b7280" />
               </svg>
             </div>
-            
+
             {/* Exhaust Smoke */}
             <div className="absolute top-0 right-4">
               {[...Array(3)].map((_, i) => (
@@ -413,58 +443,61 @@ export default function HomePage() {
                     animationDuration: '2s',
                     position: 'absolute',
                     top: `${i * 8}px`,
-                    right: `${i * 2}px`
+                    right: `${i * 2}px`,
                   }}
                 />
               ))}
             </div>
-            
+
             {/* RPM Gauge */}
             <div className="absolute top-2 left-8 w-8 h-8">
               <svg className="w-full h-full" viewBox="0 0 40 40">
                 <circle cx="20" cy="20" r="18" fill="none" stroke="#374151" strokeWidth="2" />
                 <circle cx="20" cy="20" r="15" fill="#1f2937" />
-                <line 
-                  x1="20" 
-                  y1="20" 
-                  x2="20" 
-                  y2="8" 
-                  stroke="#ef4444" 
-                  strokeWidth="2" 
+                <line
+                  x1="20"
+                  y1="20"
+                  x2="20"
+                  y2="8"
+                  stroke="#ef4444"
+                  strokeWidth="2"
                   className="animate-spin"
-                  style={{animationDuration: '0.5s', transformOrigin: '20px 20px'}}
+                  style={{ animationDuration: '0.5s', transformOrigin: '20px 20px' }}
                 />
                 <circle cx="20" cy="20" r="2" fill="#ef4444" />
               </svg>
             </div>
           </div>
-          
+
           <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text animate-pulse">
             🔧 TuneForge Loading...
           </h1>
           <p className="text-lg text-slate-300 mb-4">Forging your automotive experience...</p>
-          
+
           {/* Loading Bar */}
           <div className="w-64 h-3 bg-gray-700 rounded-full mx-auto mb-4 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-pulse" style={{width: `${loadingProgress}%`, transition: 'width 0.3s ease'}}></div>
+            <div
+              className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-pulse"
+              style={{ width: `${loadingProgress}%`, transition: 'width 0.3s ease' }}
+            ></div>
           </div>
-          
+
           {/* Sparks Animation */}
           <div className="flex justify-center items-center gap-1 mt-4">
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="w-1 h-1 bg-yellow-400 rounded-full animate-ping"
-                style={{animationDelay: `${i * 200}ms`, animationDuration: '1s'}}
+                style={{ animationDelay: `${i * 200}ms`, animationDuration: '1s' }}
               ></div>
             ))}
           </div>
-          
+
           <p className="text-sm text-orange-300 mt-2 opacity-75">
-            {loadingProgress < 30 && "Heating the forge..."}
-            {loadingProgress >= 30 && loadingProgress < 60 && "Shaping the gears..."}
-            {loadingProgress >= 60 && loadingProgress < 90 && "Tempering the steel..."}
-            {loadingProgress >= 90 && "Almost ready..."}
+            {loadingProgress < 30 && 'Heating the forge...'}
+            {loadingProgress >= 30 && loadingProgress < 60 && 'Shaping the gears...'}
+            {loadingProgress >= 60 && loadingProgress < 90 && 'Tempering the steel...'}
+            {loadingProgress >= 90 && 'Almost ready...'}
           </p>
         </div>
       </div>
@@ -477,27 +510,34 @@ export default function HomePage() {
       <CriticalCSS />
       <GamingErrorBoundary>
         <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
-        <ForzaColorSheetSEO 
-          colorCount={allColors.length} 
-          manufacturerCount={makes.length} 
-          isDarkMode={isDarkMode} 
+        <ForzaColorSheetSEO
+          colorCount={allColors.length}
+          manufacturerCount={makes.length}
+          isDarkMode={isDarkMode}
         />
         <MobileGamingOptimizer deviceInfo={deviceInfo} />
       </GamingErrorBoundary>
-      <div className={`font-sans min-h-screen ${
-        isDarkMode 
-          ? 'bg-slate-900 text-white' 
-          : 'bg-white text-gray-900'
-      }`}>
-
+      <div
+        className={`font-sans min-h-screen ${
+          isDarkMode ? 'bg-slate-900 text-white' : 'bg-white text-gray-900'
+        }`}
+      >
         <SecurityHeaders />
-        <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} onShowAuth={() => setShowAuthModal(true)} />
-        
+        <Header
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+          onShowAuth={() => setShowAuthModal(true)}
+        />
+
         {/* Error Display */}
         {error && (
-          <div className={`mx-4 mb-4 p-3 rounded-lg border ${
-            isDarkMode ? 'bg-red-900/30 border-red-700 text-red-200' : 'bg-red-50 border-red-200 text-red-700'
-          }`}>
+          <div
+            className={`mx-4 mb-4 p-3 rounded-lg border ${
+              isDarkMode
+                ? 'bg-red-900/30 border-red-700 text-red-200'
+                : 'bg-red-50 border-red-200 text-red-700'
+            }`}
+          >
             <div className="flex items-center gap-2">
               <span className="text-lg">⚠️</span>
               <span className="font-medium">Error:</span>
@@ -513,13 +553,17 @@ export default function HomePage() {
             </div>
           </div>
         )}
-        
+
         <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
-        <ProgressiveLoader progress={loadingProgress} isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
-        
+        <ProgressiveLoader
+          progress={loadingProgress}
+          isDarkMode={isDarkMode}
+          deviceInfo={deviceInfo}
+        />
+
         {/* TuneForge Quick Access */}
         <div className="fixed bottom-6 right-6 z-40">
-          <a 
+          <a
             href="/tuneforge"
             className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
             title="Open TuneForge Lab"
@@ -527,325 +571,391 @@ export default function HomePage() {
             🔧 TuneForge
           </a>
         </div>
-        
+
         <ErrorBoundary
-          onError={(error) => {
+          onError={error => {
             setError(error.message)
           }}
         >
           <ResponsiveLayout>
-          {/* Garage Stats */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-            isDarkMode ? 'bg-gradient-to-r from-slate-800 to-slate-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'
-          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🏁</span>
-              <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>FORZA GARAGE</span>
-            </div>
-            <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-              {allColors.length} colors • {makes.length} manufacturers • {favorites.length} favorites
-            </div>
-          </div>
-          
-          {/* Tuning Tools */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-            isDarkMode ? 'bg-gradient-to-r from-purple-900/50 to-blue-900/50' : 'bg-gradient-to-r from-purple-100 to-blue-100'
-          } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'}`}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🔧</span>
-              <span className={`font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>TUNING TOOLS</span>
-            </div>
-            <GamingErrorBoundary>
-              <div className={`grid gap-3 ${
-                deviceInfo.isMobile 
-                  ? 'grid-cols-1' 
-                  : deviceInfo.isTablet 
-                  ? 'grid-cols-2' 
-                  : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-              }`}>
-                <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">📸</span>
-                    <span className={`text-sm font-semibold ${isDarkMode ? 'text-cyan-400' : 'text-cyan-600'}`}>PAINT SCANNER</span>
-                  </div>
-                  <ImageColorExtractor
-                    colors={allColors}
-                    onColorsExtracted={setExtractedColors}
-                    onColorsFound={() => {}}
-                    onColorSelect={showColorHSB}
-                    isDarkMode={isDarkMode}
-                  />
-                  <div className="mt-2 text-xs text-center">
-                    <a
-                      href="/image-match"
-                      className="text-blue-500 hover:underline"
-                    >
-                      Try standalone image‑to‑paint tool
-                    </a>
-                  </div>
-                </div>
-                
-                <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">🎰</span>
-                    <span className={`text-sm font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>COLOR ROULETTE</span>
-                  </div>
-                  <ColorRouletteHarmony
-                    colors={allColors}
-                    isDarkMode={isDarkMode}
-                    onColorSelect={showColorHSB}
-                    onHarmonyGenerated={(colors: CarColor[], mode: string) => {
-                      setHarmonyColors(colors)
-                      setHarmonyMode(mode)
-                    }}
-                  />
-                </div>
-                
-                <div className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">🎨</span>
-                    <span className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>HARMONY DISPLAY</span>
-                  </div>
-                  <HarmonyVisualizer
-                    currentHarmony={harmonyColors}
-                    harmonyMode={harmonyMode}
-                    isDarkMode={isDarkMode}
-                    onColorSelect={showColorHSB}
-                  />
-                </div>
-              </div>
-            </GamingErrorBoundary>
-          </div>
-          
-          {/* Paint Booth */}
-          <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-            isDarkMode ? 'bg-gradient-to-r from-green-900/50 to-teal-900/50' : 'bg-gradient-to-r from-green-100 to-teal-100'
-          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'}`}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">🎨</span>
-              <span className={`font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>PAINT BOOTH</span>
-            </div>
-            <GamingErrorBoundary>
-              <ColorGenerator
-                colors={colors}
-                isDarkMode={isDarkMode}
-                onColorsGenerated={handleColorsGenerated}
-                isMobile={deviceInfo.isMobile}
-              />
-            </GamingErrorBoundary>
-          </div>
-          
-          {/* Advanced Tools */}
-          {allColors.length > 0 && (
-            <div className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-              isDarkMode ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50' : 'bg-gradient-to-r from-orange-100 to-red-100'
-            } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}>
+            {/* Garage Stats */}
+            <div
+              className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+                isDarkMode
+                  ? 'bg-gradient-to-r from-slate-800 to-slate-900'
+                  : 'bg-gradient-to-r from-gray-100 to-gray-200'
+              } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+            >
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-2xl">🛠️</span>
-                <span className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}>ADVANCED TOOLS</span>
+                <span className="text-2xl">🏁</span>
+                <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                  FORZA GARAGE
+                </span>
+              </div>
+              <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                {allColors.length} colors • {makes.length} manufacturers • {favorites.length}{' '}
+                favorites
+              </div>
+            </div>
+
+            {/* Tuning Tools */}
+            <div
+              className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+                isDarkMode
+                  ? 'bg-gradient-to-r from-purple-900/50 to-blue-900/50'
+                  : 'bg-gradient-to-r from-purple-100 to-blue-100'
+              } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'}`}
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">🔧</span>
+                <span className={`font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                  TUNING TOOLS
+                </span>
               </div>
               <GamingErrorBoundary>
-                <AdvancedTools
-                  colors={allColors}
+                <div
+                  className={`grid gap-3 ${
+                    deviceInfo.isMobile
+                      ? 'grid-cols-1'
+                      : deviceInfo.isTablet
+                        ? 'grid-cols-2'
+                        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                  }`}
+                >
+                  <div
+                    className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">📸</span>
+                      <span
+                        className={`text-sm font-semibold ${isDarkMode ? 'text-cyan-400' : 'text-cyan-600'}`}
+                      >
+                        PAINT SCANNER
+                      </span>
+                    </div>
+                    <ImageColorExtractor
+                      colors={allColors}
+                      onColorsExtracted={setExtractedColors}
+                      onColorsFound={() => {}}
+                      onColorSelect={showColorHSB}
+                      isDarkMode={isDarkMode}
+                    />
+                    <div className="mt-2 text-xs text-center">
+                      <a href="/image-match" className="text-blue-500 hover:underline">
+                        Try standalone image‑to‑paint tool
+                      </a>
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">🎰</span>
+                      <span
+                        className={`text-sm font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}
+                      >
+                        COLOR ROULETTE
+                      </span>
+                    </div>
+                    <ColorRouletteHarmony
+                      colors={allColors}
+                      isDarkMode={isDarkMode}
+                      onColorSelect={showColorHSB}
+                      onHarmonyGenerated={(colors: CarColor[], mode: string) => {
+                        setHarmonyColors(colors)
+                        setHarmonyMode(mode)
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-lg">🎨</span>
+                      <span
+                        className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}
+                      >
+                        HARMONY DISPLAY
+                      </span>
+                    </div>
+                    <HarmonyVisualizer
+                      currentHarmony={harmonyColors}
+                      harmonyMode={harmonyMode}
+                      isDarkMode={isDarkMode}
+                      onColorSelect={showColorHSB}
+                    />
+                  </div>
+                </div>
+              </GamingErrorBoundary>
+            </div>
+
+            {/* Paint Booth */}
+            <div
+              className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+                isDarkMode
+                  ? 'bg-gradient-to-r from-green-900/50 to-teal-900/50'
+                  : 'bg-gradient-to-r from-green-100 to-teal-100'
+              } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'}`}
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-2xl">🎨</span>
+                <span className={`font-bold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
+                  PAINT BOOTH
+                </span>
+              </div>
+              <GamingErrorBoundary>
+                <ColorGenerator
+                  colors={colors}
                   isDarkMode={isDarkMode}
+                  onColorsGenerated={handleColorsGenerated}
                   isMobile={deviceInfo.isMobile}
-                  onColorSelect={showColorHSB}
                 />
               </GamingErrorBoundary>
             </div>
-          )}
-          
-          {/* Color Analytics */}
-          {allColors.length > 0 && (
-            <div className="mb-6">
-              <ColorAnalyticsDashboard colors={allColors} isDarkMode={isDarkMode} />
-            </div>
-          )}
-          
 
-          
-          {/* Results Display */}
-          {(extractedColors.length > 0 || harmonyColors.length > 0) && (
-            <div className={`mb-4 rounded-lg backdrop-blur-sm shadow-lg animate-slide-up ${
-              isDarkMode ? 'bg-slate-800/90' : 'bg-gray-50/95'
-            } ${
-              deviceInfo.isMobile ? 'p-2' : 'p-3'
-            }`}>
-              {extractedColors.length > 0 && (
-                <div className={deviceInfo.isMobile ? 'mb-2' : 'mb-3'}>
-                  <h3 className={`font-semibold mb-2 text-readable ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
-                    deviceInfo.isMobile ? 'text-sm' : 'text-sm'
-                  }`}>
-                    🎨 Extracted Colors
-                  </h3>
-                  <div className="flex flex-wrap gap-1">
-                    {extractedColors.slice(0, deviceInfo.isMobile ? 6 : 8).map((color, index) => (
-                      <button
-                        key={index}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          const rgbToHsb = (r: number, g: number, b: number) => {
-                            r /= 255; g /= 255; b /= 255
-                            const max = Math.max(r, g, b), min = Math.min(r, g, b)
-                            const diff = max - min
-                            const brightness = max
-                            const saturation = max === 0 ? 0 : diff / max
-                            let hue = 0
-                            if (diff !== 0) {
-                              switch (max) {
-                                case r: hue = (g - b) / diff + (g < b ? 6 : 0); break
-                                case g: hue = (b - r) / diff + 2; break
-                                case b: hue = (r - g) / diff + 4; break
-                              }
-                              hue /= 6
-                            }
-                            return { h: hue, s: saturation, b: brightness }
-                          }
-                          const hsb = rgbToHsb(color.rgb[0], color.rgb[1], color.rgb[2])
-                          const fakeColor: CarColor = {
-                            colorName: `Extracted Color ${index + 1}`,
-                            make: 'Image Extract',
-                            model: '',
-                            year: null,
-                            colorType: 'Extracted',
-                            color1: hsb,
-                            color2: hsb
-                          }
-                          showColorHSB(fakeColor)
-                        }}
-                        className={`rounded border border-gray-300 hover:border-blue-500 transition-colors cursor-pointer gpu-accelerated ${
-                          deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
-                        }`}
-                        style={{
-                          backgroundColor: `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`
-                        }}
-                        title={`${color.percentage}% - Click to view`}
-                      />
-                    ))}
-                  </div>
+            {/* Advanced Tools */}
+            {allColors.length > 0 && (
+              <div
+                className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+                  isDarkMode
+                    ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50'
+                    : 'bg-gradient-to-r from-orange-100 to-red-100'
+                } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🛠️</span>
+                  <span
+                    className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}
+                  >
+                    ADVANCED TOOLS
+                  </span>
                 </div>
-              )}
-              
-              {harmonyColors.length > 0 && (
-                <div>
-                  <h3 className={`font-semibold mb-2 text-readable ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
-                    deviceInfo.isMobile ? 'text-sm' : 'text-sm'
-                  }`}>
-                    🎰 Harmony Colors
-                  </h3>
-                  <div className="flex flex-wrap gap-1">
-                    {harmonyColors.slice(0, deviceInfo.isMobile ? 4 : 6).map((color, index) => (
-                      <button
-                        key={index}
-                        onClick={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          showColorHSB(color)
-                        }}
-                        className={`rounded border border-gray-300 hover:border-blue-500 transition-colors gpu-accelerated focus-visible ${
-                          deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
-                        }`}
-                        style={{
-                          background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`
-                        }}
-                        title={`${color.colorName} - ${color.make}`}
-                        aria-label={`Select ${color.colorName} from ${color.make}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Search Controls */}
-          <OptimizedSearchControls
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            selectedMake={selectedMake}
-            onMakeChange={setSelectedMake}
-            selectedColorType={selectedColorType}
-            onColorTypeChange={setSelectedColorType}
-            makes={makes}
-            colorTypes={colorTypes}
-            isDarkMode={isDarkMode}
-            showManufacturerBorders={showManufacturerBorders}
-            onToggleManufacturerBorders={() => setShowManufacturerBorders(!showManufacturerBorders)}
-          />
-          
-          {/* Color Gallery */}
-          <div className={`relative rounded-xl overflow-hidden p-4 ${
-            isDarkMode ? 'bg-gradient-to-br from-slate-800 to-slate-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'
-          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🏆</span>
-              <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>COLOR GALLERY</span>
-              <div className="ml-auto flex items-center gap-2">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                </div>
-                <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-                  {filteredColors.length} colors
-                </span>
+                <GamingErrorBoundary>
+                  <AdvancedTools
+                    colors={allColors}
+                    isDarkMode={isDarkMode}
+                    isMobile={deviceInfo.isMobile}
+                    onColorSelect={showColorHSB}
+                  />
+                </GamingErrorBoundary>
               </div>
-            </div>
-            
-            {/* Simple car decoration */}
-            <div className="absolute top-4 right-16 opacity-20">
-              <svg width="60" height="20" viewBox="0 0 60 20" className={isDarkMode ? 'fill-blue-400' : 'fill-blue-600'}>
-                <path d="M5 15 Q8 10 15 12 L25 10 Q35 8 45 10 L50 12 Q52 15 50 16 L45 17 L15 17 L10 16 Q5 15 5 15 Z" />
-                <circle cx="15" cy="17" r="2" />
-                <circle cx="45" cy="17" r="2" />
-              </svg>
-            </div>
-            
-            {filteredColors.length > 1000 ? (
-              <VirtualColorGrid
-                colors={filteredColors}
-                onColorSelect={handleColorSelect}
-                onShowInfo={showColorHSB}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-                isDarkMode={isDarkMode}
-                expandedColorId={expandedColorId}
-              />
-            ) : (
-              <SimpleColorGrid
-                colors={filteredColors}
-                onColorSelect={handleColorSelect}
-                onShowInfo={showColorHSB}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-                isDarkMode={isDarkMode}
-                expandedColorId={expandedColorId}
-              />
             )}
-          </div>
+
+            {/* Color Analytics */}
+            {allColors.length > 0 && (
+              <div className="mb-6">
+                <ColorAnalyticsDashboard colors={allColors} isDarkMode={isDarkMode} />
+              </div>
+            )}
+
+            {/* Results Display */}
+            {(extractedColors.length > 0 || harmonyColors.length > 0) && (
+              <div
+                className={`mb-4 rounded-lg backdrop-blur-sm shadow-lg animate-slide-up ${
+                  isDarkMode ? 'bg-slate-800/90' : 'bg-gray-50/95'
+                } ${deviceInfo.isMobile ? 'p-2' : 'p-3'}`}
+              >
+                {extractedColors.length > 0 && (
+                  <div className={deviceInfo.isMobile ? 'mb-2' : 'mb-3'}>
+                    <h3
+                      className={`font-semibold mb-2 text-readable ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
+                        deviceInfo.isMobile ? 'text-sm' : 'text-sm'
+                      }`}
+                    >
+                      🎨 Extracted Colors
+                    </h3>
+                    <div className="flex flex-wrap gap-1">
+                      {extractedColors.slice(0, deviceInfo.isMobile ? 6 : 8).map((color, index) => (
+                        <button
+                          key={index}
+                          onClick={e => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            const rgbToHsb = (r: number, g: number, b: number) => {
+                              r /= 255
+                              g /= 255
+                              b /= 255
+                              const max = Math.max(r, g, b),
+                                min = Math.min(r, g, b)
+                              const diff = max - min
+                              const brightness = max
+                              const saturation = max === 0 ? 0 : diff / max
+                              let hue = 0
+                              if (diff !== 0) {
+                                switch (max) {
+                                  case r:
+                                    hue = (g - b) / diff + (g < b ? 6 : 0)
+                                    break
+                                  case g:
+                                    hue = (b - r) / diff + 2
+                                    break
+                                  case b:
+                                    hue = (r - g) / diff + 4
+                                    break
+                                }
+                                hue /= 6
+                              }
+                              return { h: hue, s: saturation, b: brightness }
+                            }
+                            const hsb = rgbToHsb(color.rgb[0], color.rgb[1], color.rgb[2])
+                            const fakeColor: CarColor = {
+                              colorName: `Extracted Color ${index + 1}`,
+                              make: 'Image Extract',
+                              model: '',
+                              year: null,
+                              colorType: 'Extracted',
+                              color1: hsb,
+                              color2: hsb,
+                            }
+                            showColorHSB(fakeColor)
+                          }}
+                          className={`rounded border border-gray-300 hover:border-blue-500 transition-colors cursor-pointer gpu-accelerated ${
+                            deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
+                          }`}
+                          style={{
+                            backgroundColor: `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`,
+                          }}
+                          title={`${color.percentage}% - Click to view`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {harmonyColors.length > 0 && (
+                  <div>
+                    <h3
+                      className={`font-semibold mb-2 text-readable ${isDarkMode ? 'text-white' : 'text-gray-900'} ${
+                        deviceInfo.isMobile ? 'text-sm' : 'text-sm'
+                      }`}
+                    >
+                      🎰 Harmony Colors
+                    </h3>
+                    <div className="flex flex-wrap gap-1">
+                      {harmonyColors.slice(0, deviceInfo.isMobile ? 4 : 6).map((color, index) => (
+                        <button
+                          key={index}
+                          onClick={e => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            showColorHSB(color)
+                          }}
+                          className={`rounded border border-gray-300 hover:border-blue-500 transition-colors gpu-accelerated focus-visible ${
+                            deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
+                          }`}
+                          style={{
+                            background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
+                          }}
+                          title={`${color.colorName} - ${color.make}`}
+                          aria-label={`Select ${color.colorName} from ${color.make}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Search Controls */}
+            <OptimizedSearchControls
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedMake={selectedMake}
+              onMakeChange={setSelectedMake}
+              selectedColorType={selectedColorType}
+              onColorTypeChange={setSelectedColorType}
+              makes={makes}
+              colorTypes={colorTypes.filter((t): t is string => typeof t === 'string')}
+              isDarkMode={isDarkMode}
+              showManufacturerBorders={showManufacturerBorders}
+              onToggleManufacturerBorders={() =>
+                setShowManufacturerBorders(!showManufacturerBorders)
+              }
+            />
+
+            {/* Color Gallery */}
+            <div
+              className={`relative rounded-xl overflow-hidden p-4 ${
+                isDarkMode
+                  ? 'bg-gradient-to-br from-slate-800 to-slate-900'
+                  : 'bg-gradient-to-br from-gray-100 to-gray-200'
+              } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-2xl">🏆</span>
+                <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                  COLOR GALLERY
+                </span>
+                <div className="ml-auto flex items-center gap-2">
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  </div>
+                  <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                    {filteredColors.length} colors
+                  </span>
+                </div>
+              </div>
+
+              {/* Simple car decoration */}
+              <div className="absolute top-4 right-16 opacity-20">
+                <svg
+                  width="60"
+                  height="20"
+                  viewBox="0 0 60 20"
+                  className={isDarkMode ? 'fill-blue-400' : 'fill-blue-600'}
+                >
+                  <path d="M5 15 Q8 10 15 12 L25 10 Q35 8 45 10 L50 12 Q52 15 50 16 L45 17 L15 17 L10 16 Q5 15 5 15 Z" />
+                  <circle cx="15" cy="17" r="2" />
+                  <circle cx="45" cy="17" r="2" />
+                </svg>
+              </div>
+
+              {filteredColors.length > 1000 ? (
+                <VirtualColorGrid
+                  colors={filteredColors}
+                  onColorSelect={handleColorSelect}
+                  onShowInfo={showColorHSB}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  expandedColorId={expandedColorId}
+                />
+              ) : (
+                <SimpleColorGrid
+                  colors={filteredColors}
+                  onColorSelect={handleColorSelect}
+                  onShowInfo={showColorHSB}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  expandedColorId={expandedColorId}
+                />
+              )}
+            </div>
           </ResponsiveLayout>
         </ErrorBoundary>
 
-
-
         <Footer isDarkMode={isDarkMode} />
-        
-        <AuthModal 
-          isOpen={showAuthModal} 
-          onClose={() => setShowAuthModal(false)} 
-          isDarkMode={isDarkMode} 
+
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          isDarkMode={isDarkMode}
         />
-        
+
         <PerformanceMonitor isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
-        
+
         <HSBPopup
           color={hsbPopupColor}
           isOpen={showHsbPopup}
           onClose={() => setShowHsbPopup(false)}
           isDarkMode={isDarkMode}
         />
-        
+
         <KeyboardShortcuts
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
           onToggleSearch={() => setShowAdvancedSearch(!showAdvancedSearch)}

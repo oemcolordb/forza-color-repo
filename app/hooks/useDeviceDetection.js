@@ -9,7 +9,7 @@ export const useDeviceDetection = () => {
     isDesktop: true,
     isTouchDevice: false,
     screenSize: 'lg',
-    orientation: 'landscape'
+    orientation: 'landscape',
   })
 
   useEffect(() => {
@@ -17,25 +17,25 @@ export const useDeviceDetection = () => {
       const width = window.innerWidth
       const height = window.innerHeight
       const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
-      
+
       const deviceInfo = {
         isMobile: width < 768,
         isTablet: width >= 768 && width < 1024,
         isDesktop: width >= 1024,
         isTouchDevice,
         screenSize: width < 640 ? 'sm' : width < 768 ? 'md' : width < 1024 ? 'lg' : 'xl',
-        orientation: width > height ? 'landscape' : 'portrait'
+        orientation: width > height ? 'landscape' : 'portrait',
       }
-      
+
       setDeviceInfo(deviceInfo)
     }
 
     updateDeviceInfo()
-    
+
     const debouncedUpdate = debounce(updateDeviceInfo, 150)
     window.addEventListener('resize', debouncedUpdate)
     window.addEventListener('orientationchange', debouncedUpdate)
-    
+
     return () => {
       window.removeEventListener('resize', debouncedUpdate)
       window.removeEventListener('orientationchange', debouncedUpdate)

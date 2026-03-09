@@ -17,6 +17,7 @@ turso db shell forza-color-repo < migrations/001_create_scans_table.sql
 ```
 
 Or manually in Turso console:
+
 ```sql
 CREATE TABLE IF NOT EXISTS scans (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,12 +52,15 @@ SELECT * FROM scans;
 ## 🔌 API Endpoints
 
 ### GET /api/scans
+
 Get user's saved scans
 
 **Query Parameters:**
+
 - `userId` (required): User ID
 
 **Response:**
+
 ```json
 [
   {
@@ -72,6 +76,7 @@ Get user's saved scans
 ```
 
 **Example:**
+
 ```bash
 curl "https://your-domain.com/api/scans?userId=user123"
 ```
@@ -79,16 +84,16 @@ curl "https://your-domain.com/api/scans?userId=user123"
 ---
 
 ### POST /api/scans
+
 Save new scan
 
 **Body:**
+
 ```json
 {
   "userId": "user123",
   "imageName": "ferrari.jpg",
-  "extractedColors": [
-    { "rgb": [255, 0, 0], "percentage": 45 }
-  ],
+  "extractedColors": [{ "rgb": [255, 0, 0], "percentage": 45 }],
   "matches": [
     {
       "forza": {
@@ -103,6 +108,7 @@ Save new scan
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -112,6 +118,7 @@ Save new scan
 ```
 
 **Example:**
+
 ```bash
 curl -X POST https://your-domain.com/api/scans \
   -H "Content-Type: application/json" \
@@ -121,13 +128,16 @@ curl -X POST https://your-domain.com/api/scans \
 ---
 
 ### DELETE /api/scans
+
 Delete scan
 
 **Query Parameters:**
+
 - `scanId` (required): Scan ID
 - `userId` (required): User ID (for authorization)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -136,6 +146,7 @@ Delete scan
 ```
 
 **Example:**
+
 ```bash
 curl -X DELETE "https://your-domain.com/api/scans?scanId=123&userId=user123"
 ```
@@ -152,9 +163,9 @@ The enhanced image-match page checks for authenticated user:
 const { user } = useAuth()
 
 // Only show save button if user is signed in
-{user && (
-  <button onClick={saveScan}>Save Scan</button>
-)}
+{
+  user && <button onClick={saveScan}>Save Scan</button>
+}
 ```
 
 ### Sign In Flow:
@@ -172,17 +183,20 @@ const { user } = useAuth()
 ### Updated Image Match Page Features:
 
 ✅ **Cloud Sync**
+
 - Auto-save scans when signed in
 - Load scan history from cloud
 - Delete old scans
 
 ✅ **History Panel**
+
 - View last 50 scans
 - Preview extracted colors
 - One-click reload
 - Delete functionality
 
 ✅ **Enhanced UI**
+
 - Beautiful gradient background
 - Match quality indicators (90%+ = green)
 - Numbered rankings
@@ -257,20 +271,24 @@ curl https://your-domain.com/api/scans?userId=test
 ## 🔒 Security Features
 
 ✅ **User Authorization**
+
 - Scans tied to userId
 - Can only delete own scans
 - Query filtering by userId
 
 ✅ **Input Validation**
+
 - Required field checks
 - JSON parsing with error handling
 - SQL injection prevention (parameterized queries)
 
 ✅ **Rate Limiting**
+
 - Netlify edge functions handle rate limiting
 - 100 requests/minute per IP
 
 ✅ **Data Privacy**
+
 - Images stored as base64 (optional)
 - Can be excluded to save space
 - User data isolated by userId
@@ -280,17 +298,20 @@ curl https://your-domain.com/api/scans?userId=test
 ## 📊 Performance Optimizations
 
 ### Database Indexes:
+
 ```sql
 CREATE INDEX idx_scans_user ON scans(userId);
 CREATE INDEX idx_scans_created ON scans(createdAt DESC);
 ```
 
 ### Query Limits:
+
 - Max 50 scans per user (configurable)
 - Ordered by most recent first
 - Pagination ready (add OFFSET)
 
 ### Image Storage:
+
 - Optional base64 thumbnails
 - Recommend max 100KB per image
 - Consider external storage (S3) for production
@@ -370,12 +391,14 @@ console.log(`[SCANS] Loaded ${result.rows.length} scans for user ${userId}`)
 ## 🔄 Future Enhancements
 
 ### Phase 2:
+
 - [ ] Share scans with other users
 - [ ] Public scan gallery
 - [ ] Export scans as PDF
 - [ ] Batch upload multiple images
 
 ### Phase 3:
+
 - [ ] AI-powered color suggestions
 - [ ] Integration with Python ML backend
 - [ ] Real-time collaboration
@@ -386,20 +409,24 @@ console.log(`[SCANS] Loaded ${result.rows.length} scans for user ${userId}`)
 ## 🆘 Troubleshooting
 
 ### "userId required" error
+
 - Ensure user is signed in
 - Check `useAuth()` returns valid user object
 
 ### Scans not loading
+
 - Verify database connection
 - Check TURSO_DATABASE_URL is set
 - Run migration script
 
 ### Save button disabled
+
 - Complete a scan first (upload image)
 - Sign in to enable saving
 - Check browser console for errors
 
 ### Images not displaying
+
 - imageData is optional
 - Check base64 encoding is valid
 - Consider reducing image size

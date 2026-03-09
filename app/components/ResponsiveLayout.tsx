@@ -10,12 +10,12 @@ interface ResponsiveLayoutProps {
 
 const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className = '' }) => {
   const deviceInfo = useDeviceDetection()
-  
+
   const layoutClasses = React.useMemo(() => {
     const { isMobile, isTablet, isDesktop, screenWidth } = deviceInfo
-    
+
     let classes = 'container mx-auto relative z-10 '
-    
+
     if (isMobile) {
       classes += 'px-2 py-2 max-w-full '
       if (screenWidth < 400) {
@@ -26,15 +26,11 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className
     } else if (isDesktop) {
       classes += 'px-4 py-4 max-w-7xl '
     }
-    
+
     return classes + className
   }, [deviceInfo, className])
 
-  return (
-    <main className={layoutClasses}>
-      {children}
-    </main>
-  )
+  return <main className={layoutClasses}>{children}</main>
 }
 
 export default ResponsiveLayout

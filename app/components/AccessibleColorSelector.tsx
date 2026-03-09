@@ -13,7 +13,7 @@ interface AccessibleColorSelectorProps {
 export default function AccessibleColorSelector({
   colors,
   onSelect,
-  isDarkMode
+  isDarkMode,
 }: AccessibleColorSelectorProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [focusedIndex, setFocusedIndex] = useState(0)
@@ -53,7 +53,7 @@ export default function AccessibleColorSelector({
         announceSelection(colors[focusedIndex])
       }
     },
-    enabled: true
+    enabled: true,
   })
 
   // Focus management
@@ -64,9 +64,9 @@ export default function AccessibleColorSelector({
   const announceColor = (color: CarColor) => {
     setAnnounceText(
       `${color.colorName} by ${color.make}. ${color.colorType} finish. ` +
-      `Hue ${Math.round(color.color1.h * 360)} degrees, ` +
-      `Saturation ${Math.round(color.color1.s * 100)} percent, ` +
-      `Brightness ${Math.round(color.color1.b * 100)} percent.`
+        `Hue ${Math.round(color.color1.h * 360)} degrees, ` +
+        `Saturation ${Math.round(color.color1.s * 100)} percent, ` +
+        `Brightness ${Math.round(color.color1.b * 100)} percent.`
     )
   }
 
@@ -85,12 +85,7 @@ export default function AccessibleColorSelector({
       tabIndex={-1}
     >
       {/* Screen reader announcements */}
-      <div
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      >
+      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
         {announceText}
       </div>
 
@@ -105,10 +100,7 @@ export default function AccessibleColorSelector({
       </div>
 
       {/* Color Grid */}
-      <div
-        className="grid gap-3"
-        style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}
-      >
+      <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}>
         {colors.map((color, index) => {
           const row = Math.floor(index / COLS) + 1
           const col = (index % COLS) + 1
@@ -118,7 +110,9 @@ export default function AccessibleColorSelector({
           return (
             <button
               key={`${color.make}-${color.colorName}-${index}`}
-              ref={(el) => (itemRefs.current[index] = el)}
+              ref={el => {
+                itemRefs.current[index] = el
+              }}
               role="gridcell"
               aria-rowindex={row}
               aria-colindex={col}
@@ -143,7 +137,7 @@ export default function AccessibleColorSelector({
                 hover:scale-105 focus:outline-none
               `}
               style={{
-                background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`
+                background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
               }}
             >
               {/* Selected indicator */}
@@ -188,9 +182,9 @@ export default function AccessibleColorSelector({
             <div className="flex justify-between">
               <dt className="font-semibold">HSB:</dt>
               <dd>
-                H:{Math.round(colors[selectedIndex].color1.h * 360)}° 
-                S:{Math.round(colors[selectedIndex].color1.s * 100)}% 
-                B:{Math.round(colors[selectedIndex].color1.b * 100)}%
+                H:{Math.round(colors[selectedIndex].color1.h * 360)}° S:
+                {Math.round(colors[selectedIndex].color1.s * 100)}% B:
+                {Math.round(colors[selectedIndex].color1.b * 100)}%
               </dd>
             </div>
           </dl>

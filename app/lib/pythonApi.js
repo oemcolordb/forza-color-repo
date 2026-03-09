@@ -11,7 +11,7 @@ class PythonApiClient {
     try {
       const response = await fetch(`${this.baseUrl}/stats`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
       this.isServerAvailable = response.ok
     } catch {
@@ -28,14 +28,14 @@ class PythonApiClient {
       const response = await fetch(`${this.baseUrl}/load-colors`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(colors)
+        body: JSON.stringify(colors),
       })
 
       return await response.json()
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Failed to load colors' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to load colors',
       }
     }
   }
@@ -49,14 +49,14 @@ class PythonApiClient {
       const response = await fetch(`${this.baseUrl}/analyze-colors`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ colors, analysisType })
+        body: JSON.stringify({ colors, analysisType }),
       })
 
       return await response.json()
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Color analysis failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Color analysis failed',
       }
     }
   }
@@ -69,19 +69,19 @@ class PythonApiClient {
     try {
       const response = await fetch(`${this.baseUrl}/process-image`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
+          'X-Requested-With': 'XMLHttpRequest',
         },
         credentials: 'same-origin',
-        body: JSON.stringify({ imageData, colors })
+        body: JSON.stringify({ imageData, colors }),
       })
 
       return await response.json()
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Image processing failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Image processing failed',
       }
     }
   }
@@ -95,14 +95,14 @@ class PythonApiClient {
       const response = await fetch(`${this.baseUrl}/match-colors`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ extractedColors, colors, maxMatches })
+        body: JSON.stringify({ extractedColors, colors, maxMatches }),
       })
 
       return await response.json()
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Color matching failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Color matching failed',
       }
     }
   }
@@ -116,14 +116,14 @@ class PythonApiClient {
       const response = await fetch(`${this.baseUrl}/recommendations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userPreferences, colors })
+        body: JSON.stringify({ userPreferences, colors }),
       })
 
       return await response.json()
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Recommendations failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Recommendations failed',
       }
     }
   }
@@ -137,9 +137,9 @@ class PythonApiClient {
       const response = await fetch(`${this.baseUrl}/color-trends/${timeframe}`)
       return await response.json()
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Trends analysis failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Trends analysis failed',
       }
     }
   }
@@ -152,9 +152,9 @@ class PythonApiClient {
       return result
     } catch (error) {
       this.isServerAvailable = false
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'API not available' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'API not available',
       }
     }
   }

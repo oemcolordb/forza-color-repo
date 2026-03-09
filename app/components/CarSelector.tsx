@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Car } from '../types/car';
-import { useCars, useModelsByManufacturer } from '../hooks/useCars';
-import { getCountryFlag, formatPrice } from '../lib/countryFlags';
+import React, { useState, useEffect } from 'react'
+import { Car } from '../types/car'
+import { useCars, useModelsByManufacturer } from '../hooks/useCars'
+import { getCountryFlag, formatPrice } from '../lib/countryFlags'
 
 interface CarSelectorProps {
-  selectedCar?: Car | null;
-  onCarSelect: (car: Car | null) => void;
-  className?: string;
+  selectedCar?: Car | null
+  onCarSelect: (car: Car | null) => void
+  className?: string
 }
 
-const CarSelector: React.FC<CarSelectorProps> = ({
-  selectedCar,
-  onCarSelect,
-  className = ''
-}) => {
-  const { manufacturers, loading: manufacturersLoading } = useCars();
-  const [selectedManufacturer, setSelectedManufacturer] = useState<string>('');
-  const [selectedModel, setSelectedModel] = useState<string>('');
-  const [selectedYear, setSelectedYear] = useState<string>('');
-  const [availableCars, setAvailableCars] = useState<Car[]>([]);
-  
-  const { models, loading: modelsLoading } = useModelsByManufacturer(selectedManufacturer);
-  const { searchCars, cars, loading: carsLoading } = useCars();
+const CarSelector: React.FC<CarSelectorProps> = ({ selectedCar, onCarSelect, className = '' }) => {
+  const { manufacturers, loading: manufacturersLoading } = useCars()
+  const [selectedManufacturer, setSelectedManufacturer] = useState<string>('')
+  const [selectedModel, setSelectedModel] = useState<string>('')
+  const [selectedYear, setSelectedYear] = useState<string>('')
+  const [availableCars, setAvailableCars] = useState<Car[]>([])
+
+  const { models, loading: modelsLoading } = useModelsByManufacturer(selectedManufacturer)
+  const { searchCars, cars, loading: carsLoading } = useCars()
 
   // Load cars when manufacturer and model are selected
   useEffect(() => {
@@ -29,59 +25,57 @@ const CarSelector: React.FC<CarSelectorProps> = ({
       searchCars({
         filters: {
           manufacturer: selectedManufacturer,
-          model: selectedModel
-        }
-      });
+          model: selectedModel,
+        },
+      })
     }
-  }, [selectedManufacturer, selectedModel, searchCars]);
+  }, [selectedManufacturer, selectedModel, searchCars])
 
   // Update available cars when search results change
   useEffect(() => {
-    setAvailableCars(cars);
-  }, [cars]);
+    setAvailableCars(cars)
+  }, [cars])
 
   // Get unique years for selected manufacturer and model
   const availableYears = React.useMemo(() => {
-    return Array.from(new Set(availableCars.map(car => car.year))).sort();
-  }, [availableCars]);
+    return Array.from(new Set(availableCars.map(car => car.year))).sort()
+  }, [availableCars])
 
   const handleManufacturerChange = (manufacturer: string) => {
-    setSelectedManufacturer(manufacturer);
-    setSelectedModel('');
-    setSelectedYear('');
-    setAvailableCars([]);
-    onCarSelect(null);
-  };
+    setSelectedManufacturer(manufacturer)
+    setSelectedModel('')
+    setSelectedYear('')
+    setAvailableCars([])
+    onCarSelect(null)
+  }
 
   const handleModelChange = (model: string) => {
-    setSelectedModel(model);
-    setSelectedYear('');
-    onCarSelect(null);
-  };
+    setSelectedModel(model)
+    setSelectedYear('')
+    onCarSelect(null)
+  }
 
   const handleYearChange = (year: string) => {
-    setSelectedYear(year);
-    
+    setSelectedYear(year)
+
     if (year && selectedManufacturer && selectedModel) {
-      const car = availableCars.find(c => 
-        c.manufacturer === selectedManufacturer && 
-        c.model === selectedModel && 
-        c.year === year
-      );
-      onCarSelect(car || null);
+      const car = availableCars.find(
+        c => c.manufacturer === selectedManufacturer && c.model === selectedModel && c.year === year
+      )
+      onCarSelect(car || null)
     } else {
-      onCarSelect(null);
+      onCarSelect(null)
     }
-  };
+  }
 
   // Set initial values if selectedCar is provided
   useEffect(() => {
     if (selectedCar) {
-      setSelectedManufacturer(selectedCar.manufacturer);
-      setSelectedModel(selectedCar.model);
-      setSelectedYear(selectedCar.year);
+      setSelectedManufacturer(selectedCar.manufacturer)
+      setSelectedModel(selectedCar.model)
+      setSelectedYear(selectedCar.year)
     }
-  }, [selectedCar]);
+  }, [selectedCar])
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -92,14 +86,14 @@ const CarSelector: React.FC<CarSelectorProps> = ({
         </label>
         <select
           value={selectedManufacturer}
-          onChange={(e) => handleManufacturerChange(e.target.value)}
+          onChange={e => handleManufacturerChange(e.target.value)}
           disabled={manufacturersLoading}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
           <option value="">
             {manufacturersLoading ? 'Loading manufacturers...' : 'Select Manufacturer'}
           </option>
-          {manufacturers.map((manufacturer) => (
+          {manufacturers.map(manufacturer => (
             <option key={manufacturer} value={manufacturer}>
               {manufacturer}
             </option>
@@ -114,19 +108,18 @@ const CarSelector: React.FC<CarSelectorProps> = ({
         </label>
         <select
           value={selectedModel}
-          onChange={(e) => handleModelChange(e.target.value)}
+          onChange={e => handleModelChange(e.target.value)}
           disabled={!selectedManufacturer || modelsLoading}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 disabled:opacity-50"
         >
           <option value="">
-            {!selectedManufacturer 
-              ? 'Select manufacturer first' 
-              : modelsLoading 
-                ? 'Loading models...' 
-                : 'Select Model'
-            }
+            {!selectedManufacturer
+              ? 'Select manufacturer first'
+              : modelsLoading
+                ? 'Loading models...'
+                : 'Select Model'}
           </option>
-          {models.map((model) => (
+          {models.map(model => (
             <option key={model} value={model}>
               {model}
             </option>
@@ -141,21 +134,20 @@ const CarSelector: React.FC<CarSelectorProps> = ({
         </label>
         <select
           value={selectedYear}
-          onChange={(e) => handleYearChange(e.target.value)}
+          onChange={e => handleYearChange(e.target.value)}
           disabled={!selectedModel || carsLoading || availableYears.length === 0}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 disabled:opacity-50"
         >
           <option value="">
-            {!selectedModel 
-              ? 'Select model first' 
-              : carsLoading 
-                ? 'Loading years...' 
+            {!selectedModel
+              ? 'Select model first'
+              : carsLoading
+                ? 'Loading years...'
                 : availableYears.length === 0
                   ? 'No years available'
-                  : 'Select Year'
-            }
+                  : 'Select Year'}
           </option>
-          {availableYears.map((year) => (
+          {availableYears.map(year => (
             <option key={year} value={year}>
               {year}
             </option>
@@ -171,22 +163,38 @@ const CarSelector: React.FC<CarSelectorProps> = ({
             <span>Selected Car</span>
           </h3>
           <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-            <p><span className="font-medium">Make:</span> {selectedCar.manufacturer}</p>
-            <p><span className="font-medium">Model:</span> {selectedCar.model}</p>
-            <p><span className="font-medium">Year:</span> {selectedCar.year}</p>
-            <p><span className="font-medium">Type:</span> {selectedCar.type}</p>
-            <p><span className="font-medium">PI:</span> {selectedCar.pi.class} {selectedCar.pi.value}</p>
-            <p><span className="font-medium">Rarity:</span> {selectedCar.rarity}</p>
-            <p><span className="font-medium">Price:</span> {formatPrice(selectedCar.price)}</p>
+            <p>
+              <span className="font-medium">Make:</span> {selectedCar.manufacturer}
+            </p>
+            <p>
+              <span className="font-medium">Model:</span> {selectedCar.model}
+            </p>
+            <p>
+              <span className="font-medium">Year:</span> {selectedCar.year}
+            </p>
+            <p>
+              <span className="font-medium">Type:</span> {selectedCar.type}
+            </p>
+            <p>
+              <span className="font-medium">PI:</span> {selectedCar.pi.class} {selectedCar.pi.value}
+            </p>
+            <p>
+              <span className="font-medium">Rarity:</span> {selectedCar.rarity}
+            </p>
+            <p>
+              <span className="font-medium">Price:</span> {formatPrice(selectedCar.price)}
+            </p>
             <p className="flex items-center gap-1">
-              <span className="font-medium">Country:</span> 
-              <span>{getCountryFlag(selectedCar.country)} {selectedCar.country}</span>
+              <span className="font-medium">Country:</span>
+              <span>
+                {getCountryFlag(selectedCar.country)} {selectedCar.country}
+              </span>
             </p>
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CarSelector;
+export default CarSelector

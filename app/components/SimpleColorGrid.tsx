@@ -21,14 +21,14 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   onShowInfo,
   onToggleFavorite,
   isDarkMode,
-  expandedColorId
+  expandedColorId,
 }) => {
   const [displayCount, setDisplayCount] = useState(100)
   const [isLoading, setIsLoading] = useState(false)
 
   const loadMore = useCallback(() => {
     if (isLoading || displayCount >= colors.length) return
-    
+
     setIsLoading(true)
     setTimeout(() => {
       setDisplayCount(prev => Math.min(prev + 100, colors.length))
@@ -38,7 +38,10 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1000) {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 1000
+      ) {
         loadMore()
       }
     }
@@ -69,7 +72,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
           const uniqueKey = `${colorId}-${index}`
           const isFavorite = favorites.includes(colorId)
           const isExpanded = expandedColorId === colorId
-          
+
           return (
             <React.Fragment key={uniqueKey}>
               <ColorCard
@@ -81,47 +84,88 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                 isDarkMode={isDarkMode}
               />
               {isExpanded && (
-                <div className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bg-slate-800 border-blue-500' : 'bg-gray-50 border-blue-400'}`}>
+                <div
+                  className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bg-slate-800 border-blue-500' : 'bg-gray-50 border-blue-400'}`}
+                >
                   <div className="grid grid-cols-3 gap-2 mb-4">
                     <div className="text-center">
-                      <div className="w-full h-16 rounded border mb-1" style={{ background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))})` }} />
-                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Color 1</div>
-                      <div className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
-                        {color.color1.h.toFixed(2)} {color.color1.s.toFixed(2)} {color.color1.b.toFixed(2)}
+                      <div
+                        className="w-full h-16 rounded border mb-1"
+                        style={{
+                          background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 240) * Math.PI) / 180)))})`,
+                        }}
+                      />
+                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                        Color 1
+                      </div>
+                      <div
+                        className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}
+                      >
+                        {color.color1.h.toFixed(2)} {color.color1.s.toFixed(2)}{' '}
+                        {color.color1.b.toFixed(2)}
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="w-full h-16 rounded border mb-1" style={{ background: `rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 240) * Math.PI / 180)))})` }} />
-                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Color 2</div>
-                      <div className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}>
-                        {color.color2.h.toFixed(2)} {color.color2.s.toFixed(2)} {color.color2.b.toFixed(2)}
+                      <div
+                        className="w-full h-16 rounded border mb-1"
+                        style={{
+                          background: `rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 240) * Math.PI) / 180)))})`,
+                        }}
+                      />
+                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                        Color 2
+                      </div>
+                      <div
+                        className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}
+                      >
+                        {color.color2.h.toFixed(2)} {color.color2.s.toFixed(2)}{' '}
+                        {color.color2.b.toFixed(2)}
                       </div>
                     </div>
                     <div className="text-center">
-                      <div className="w-full h-16 rounded border mb-1" style={{ background: `linear-gradient(45deg, rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 - 240) * Math.PI / 180)))}), rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 120) * Math.PI / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 - 240) * Math.PI / 180)))}))` }} />
-                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>Blend</div>
+                      <div
+                        className="w-full h-16 rounded border mb-1"
+                        style={{
+                          background: `linear-gradient(45deg, rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 240) * Math.PI) / 180)))}), rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 240) * Math.PI) / 180)))}))`,
+                        }}
+                      />
+                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                        Blend
+                      </div>
                     </div>
                   </div>
                   <div className="space-y-1 text-sm mb-4">
                     <div className="flex justify-between">
                       <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Make:</span>
-                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.make}</span>
+                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                        {color.make}
+                      </span>
                     </div>
                     {color.model && (
                       <div className="flex justify-between">
-                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Model:</span>
-                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.model}</span>
+                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>
+                          Model:
+                        </span>
+                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                          {color.model}
+                        </span>
                       </div>
                     )}
                     {color.year && (
                       <div className="flex justify-between">
-                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Year:</span>
-                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.year}</span>
+                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>
+                          Year:
+                        </span>
+                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                          {color.year}
+                        </span>
                       </div>
                     )}
                     <div className="flex justify-between">
                       <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Type:</span>
-                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{color.colorType}</span>
+                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                        {color.colorType}
+                      </span>
                     </div>
                   </div>
                   <button
@@ -130,8 +174,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                       favorites.includes(colorId)
                         ? 'bg-red-500 hover:bg-red-600 text-white'
                         : isDarkMode
-                        ? 'bg-slate-700 hover:bg-slate-600 text-white'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                          ? 'bg-slate-700 hover:bg-slate-600 text-white'
+                          : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
                     }`}
                   >
                     {favorites.includes(colorId) ? '❤️ Favorited' : '🤍 Add to Favorites'}
@@ -142,7 +186,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
           )
         })}
       </div>
-      
+
       {displayCount < colors.length && (
         <div className="text-center py-6">
           {isLoading ? (
@@ -157,8 +201,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
               <button
                 onClick={loadMore}
                 className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                  isDarkMode 
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                  isDarkMode
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
                     : 'bg-blue-500 hover:bg-blue-600 text-white'
                 }`}
               >

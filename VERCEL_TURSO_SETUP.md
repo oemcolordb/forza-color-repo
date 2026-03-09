@@ -3,6 +3,7 @@
 ## Why Turso for Vercel?
 
 ✅ **Perfect Match:**
+
 - Turso = SQLite for the edge (built by Vercel's team)
 - Global replication across Vercel regions
 - Sub-10ms latency worldwide
@@ -16,11 +17,13 @@
 ### 1. Install Turso CLI
 
 **PowerShell (Windows):**
+
 ```powershell
 irm https://get.tur.so/install.ps1 | iex
 ```
 
 **Mac/Linux:**
+
 ```bash
 curl -sSfL https://get.tur.so/install.sh | bash
 ```
@@ -42,6 +45,7 @@ turso db tokens create forza-color-repo
 ### 3. Add to Vercel
 
 **Option A: Vercel Dashboard**
+
 1. Go to: https://vercel.com/your-project/settings/environment-variables
 2. Add:
    - `TURSO_DATABASE_URL` = `libsql://forza-color-repo-xxx.turso.io`
@@ -49,6 +53,7 @@ turso db tokens create forza-color-repo
 3. Redeploy
 
 **Option B: Vercel CLI**
+
 ```bash
 vercel env add TURSO_DATABASE_URL
 vercel env add TURSO_AUTH_TOKEN
@@ -57,11 +62,13 @@ vercel env add TURSO_AUTH_TOKEN
 ### 4. Run Migration
 
 **PowerShell:**
+
 ```powershell
 Get-Content migrations\001_create_scans_table.sql | turso db shell forza-color-repo
 ```
 
 **Bash:**
+
 ```bash
 turso db shell forza-color-repo < migrations/001_create_scans_table.sql
 ```
@@ -73,6 +80,7 @@ turso db shell forza-color-repo "SELECT name FROM sqlite_master WHERE type='tabl
 ```
 
 Expected output:
+
 ```
 scans
 users
@@ -85,16 +93,18 @@ users
 ### ✅ Already Configured:
 
 **1. API Routes** (`/app/api/scans/route.ts`)
+
 ```typescript
 import { createClient } from '@libsql/client'
 
 const client = createClient({
   url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!
+  authToken: process.env.TURSO_AUTH_TOKEN!,
 })
 ```
 
 **2. Vercel Functions** (`vercel.json`)
+
 ```json
 {
   "functions": {
@@ -107,6 +117,7 @@ const client = createClient({
 ```
 
 **3. Environment Variables**
+
 - Automatically injected into Vercel Functions
 - Secure (not exposed to client)
 - Available in all regions
@@ -148,7 +159,7 @@ const client = createClient({
   url: process.env.TURSO_DATABASE_URL!,
   authToken: process.env.TURSO_AUTH_TOKEN!,
   syncUrl: process.env.TURSO_SYNC_URL, // Optional: local replica
-  syncInterval: 60 // Sync every 60 seconds
+  syncInterval: 60, // Sync every 60 seconds
 })
 ```
 
@@ -205,13 +216,13 @@ CREATE INDEX idx_scans_created ON scans(createdAt DESC);
 // Good: Use indexes
 const result = await client.execute({
   sql: 'SELECT * FROM scans WHERE userId = ? ORDER BY createdAt DESC LIMIT 50',
-  args: [userId]
+  args: [userId],
 })
 
 // Bad: Full table scan
 const result = await client.execute({
   sql: 'SELECT * FROM scans WHERE imageName LIKE ?',
-  args: ['%test%']
+  args: ['%test%'],
 })
 ```
 
@@ -262,7 +273,7 @@ try {
   if (process.env.VERCEL) {
     console.log('[TURSO_ERROR]', {
       query: query.sql,
-      error: error.message
+      error: error.message,
     })
   }
 }
@@ -273,12 +284,14 @@ try {
 ## Cost Optimization
 
 ### Free Tier Limits:
+
 - ✅ 500 databases
 - ✅ 1 GB storage per database
 - ✅ 1 billion row reads/month
 - ✅ 25 million row writes/month
 
 ### Tips:
+
 1. Use indexes to reduce row reads
 2. Limit query results (LIMIT clause)
 3. Cache frequently accessed data
@@ -291,6 +304,7 @@ try {
 ### "Failed to connect to database"
 
 **Check:**
+
 ```bash
 # Verify database exists
 turso db list
@@ -305,6 +319,7 @@ turso db tokens create forza-color-repo
 ### "Environment variables not set"
 
 **Vercel:**
+
 1. Settings → Environment Variables
 2. Ensure variables are set for all environments (Production, Preview, Development)
 3. Redeploy after adding variables
@@ -327,6 +342,7 @@ turso db shell forza-color-repo "SELECT name FROM sqlite_master WHERE type='tabl
 
 1. Create migration file: `migrations/002_add_new_table.sql`
 2. Run migration:
+
 ```bash
 turso db shell forza-color-repo < migrations/002_add_new_table.sql
 ```
@@ -375,12 +391,14 @@ CREATE INDEX idx_scans_user ON scans(userId);
 ## Next Steps
 
 1. **Test API Endpoints:**
+
    ```bash
    # After deployment
    curl "https://your-app.vercel.app/api/scans?userId=test"
    ```
 
 2. **Monitor Usage:**
+
    ```bash
    turso org usage
    ```

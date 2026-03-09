@@ -36,7 +36,7 @@ exports.handler = async (event, context) => {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 
   if (event.httpMethod === 'OPTIONS') {
@@ -51,16 +51,24 @@ exports.handler = async (event, context) => {
     const { email, password, name } = JSON.parse(event.body)
 
     if (!email || !password) {
-      return { statusCode: 400, headers, body: JSON.stringify({ message: 'Email and password required' }) }
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ message: 'Email and password required' }),
+      }
     }
 
     if (password.length < 8) {
-      return { statusCode: 400, headers, body: JSON.stringify({ message: 'Password must be at least 8 characters' }) }
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ message: 'Password must be at least 8 characters' }),
+      }
     }
 
     const users = loadUsers()
     const emailLower = email.toLowerCase()
-    
+
     if (users[emailLower]) {
       return { statusCode: 409, headers, body: JSON.stringify({ message: 'User already exists' }) }
     }
@@ -74,7 +82,7 @@ exports.handler = async (event, context) => {
       name: name || email.split('@')[0],
       passwordHash,
       role: 'user',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     }
 
     users[emailLower] = user
@@ -86,7 +94,7 @@ exports.handler = async (event, context) => {
         email: user.email,
         name: user.name,
         role: user.role,
-        exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) // 7 days
+        exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days
       },
       JWT_SECRET
     )
@@ -100,16 +108,16 @@ exports.handler = async (event, context) => {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role
-        }
-      })
+          role: user.role,
+        },
+      }),
     }
   } catch (error) {
     console.error('Signup error:', error)
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ message: 'Internal server error' })
+      body: JSON.stringify({ message: 'Internal server error' }),
     }
   }
 }

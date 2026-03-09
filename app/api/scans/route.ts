@@ -3,7 +3,7 @@ import { createClient } from '@libsql/client'
 
 const client = createClient({
   url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!
+  authToken: process.env.TURSO_AUTH_TOKEN!,
 })
 
 export async function GET(request: Request) {
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
     const result = await client.execute({
       sql: 'SELECT * FROM scans WHERE userId = ? ORDER BY createdAt DESC LIMIT 50',
-      args: [userId]
+      args: [userId],
     })
 
     return NextResponse.json(result.rows)
@@ -43,14 +43,14 @@ export async function POST(request: Request) {
         imageName,
         JSON.stringify(extractedColors),
         JSON.stringify(matches),
-        imageData
-      ]
+        imageData,
+      ],
     })
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       id: result.lastInsertRowid,
-      message: 'Scan saved successfully'
+      message: 'Scan saved successfully',
     })
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
@@ -69,7 +69,7 @@ export async function DELETE(request: Request) {
 
     await client.execute({
       sql: 'DELETE FROM scans WHERE id = ? AND userId = ?',
-      args: [scanId, userId]
+      args: [scanId, userId],
     })
 
     return NextResponse.json({ success: true, message: 'Scan deleted' })

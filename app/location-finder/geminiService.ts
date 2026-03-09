@@ -2,7 +2,7 @@ import { Location, LocationType } from './types'
 
 export const fetchLocations = async (): Promise<Location[]> => {
   const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
-  
+
   if (!apiKey) {
     throw new Error('NEXT_PUBLIC_GEMINI_API_KEY environment variable not set.')
   }
@@ -18,8 +18,8 @@ Types must be: Parking, Photo Op, Landmark, or Scenic View`
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }]
-        })
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
       }
     )
 
@@ -31,7 +31,7 @@ Types must be: Parking, Photo Op, Landmark, or Scenic View`
     const text = data.candidates[0].content.parts[0].text
     const jsonMatch = text.match(/\[[\s\S]*\]/)
     if (!jsonMatch) return getMockLocations()
-    
+
     const locations: Location[] = JSON.parse(jsonMatch[0])
     return locations
   } catch (error) {
@@ -41,15 +41,35 @@ Types must be: Parking, Photo Op, Landmark, or Scenic View`
 
 function getMockLocations(): Location[] {
   return [
-    { name: 'Guanajuato', description: 'Historic colonial city with colorful buildings', type: LocationType.Landmark },
-    { name: 'Playa Azul', description: 'Beautiful beach on the Pacific coast', type: LocationType.PhotoOp },
-    { name: 'La Gran Caldera', description: 'Massive volcanic crater', type: LocationType.ScenicView },
+    {
+      name: 'Guanajuato',
+      description: 'Historic colonial city with colorful buildings',
+      type: LocationType.Landmark,
+    },
+    {
+      name: 'Playa Azul',
+      description: 'Beautiful beach on the Pacific coast',
+      type: LocationType.PhotoOp,
+    },
+    {
+      name: 'La Gran Caldera',
+      description: 'Massive volcanic crater',
+      type: LocationType.ScenicView,
+    },
     { name: 'Tulum', description: 'Ancient Mayan coastal ruins', type: LocationType.Landmark },
     { name: 'Estadio', description: 'Large stadium complex', type: LocationType.Parking },
     { name: 'Horizon Festival', description: 'Main festival site', type: LocationType.Parking },
     { name: 'Ek Balam', description: 'Mayan pyramid ruins', type: LocationType.Landmark },
-    { name: 'Copper Canyon', description: 'Dramatic canyon overlook', type: LocationType.ScenicView },
-    { name: 'Cascadas de Agua Azul', description: 'Stunning blue waterfalls', type: LocationType.PhotoOp },
+    {
+      name: 'Copper Canyon',
+      description: 'Dramatic canyon overlook',
+      type: LocationType.ScenicView,
+    },
+    {
+      name: 'Cascadas de Agua Azul',
+      description: 'Stunning blue waterfalls',
+      type: LocationType.PhotoOp,
+    },
     { name: 'Dunas Blancas', description: 'White sand dunes', type: LocationType.PhotoOp },
     { name: 'Mulege', description: 'Coastal town', type: LocationType.PhotoOp },
     { name: 'Hotel Castillo', description: 'Luxury hilltop hotel', type: LocationType.Parking },
@@ -57,7 +77,11 @@ function getMockLocations(): Location[] {
     { name: 'Horizon Apex', description: 'Racing festival hub', type: LocationType.Parking },
     { name: 'Aeródromo en la Selva', description: 'Jungle airstrip', type: LocationType.Parking },
     { name: 'Puente de Piedra', description: 'Historic stone bridge', type: LocationType.Landmark },
-    { name: 'Mirador Balderrama', description: 'Mountain viewpoint', type: LocationType.ScenicView },
+    {
+      name: 'Mirador Balderrama',
+      description: 'Mountain viewpoint',
+      type: LocationType.ScenicView,
+    },
     { name: 'Pantano de las Ranas', description: 'Swamp area', type: LocationType.PhotoOp },
     { name: 'Aeródromo Desértico', description: 'Desert airstrip', type: LocationType.Parking },
     { name: 'Cañón de Cobre', description: 'Copper canyon roads', type: LocationType.ScenicView },
@@ -73,13 +97,25 @@ function getMockLocations(): Location[] {
     { name: 'Mirador del Océano', description: 'Ocean overlook', type: LocationType.ScenicView },
     { name: 'Casa Bella', description: 'Beautiful mansion estate', type: LocationType.Landmark },
     { name: 'Puente Colgante', description: 'Suspension bridge', type: LocationType.PhotoOp },
-    { name: 'Mirador de las Montañas', description: 'Mountain peak lookout', type: LocationType.ScenicView },
+    {
+      name: 'Mirador de las Montañas',
+      description: 'Mountain peak lookout',
+      type: LocationType.ScenicView,
+    },
     { name: 'Playa Tranquila', description: 'Peaceful beach cove', type: LocationType.PhotoOp },
     { name: 'Aeródromo Central', description: 'Central airfield', type: LocationType.Parking },
-    { name: 'Ruinas del Templo', description: 'Temple ruins in jungle', type: LocationType.Landmark },
+    {
+      name: 'Ruinas del Templo',
+      description: 'Temple ruins in jungle',
+      type: LocationType.Landmark,
+    },
     { name: 'Cañón Profundo', description: 'Deep canyon valley', type: LocationType.ScenicView },
     { name: 'Pueblo Fantasma', description: 'Abandoned ghost town', type: LocationType.Landmark },
-    { name: 'Mirador del Valle', description: 'Valley overlook point', type: LocationType.ScenicView },
-    { name: 'Playa del Sol', description: 'Sunny beach paradise', type: LocationType.PhotoOp }
+    {
+      name: 'Mirador del Valle',
+      description: 'Valley overlook point',
+      type: LocationType.ScenicView,
+    },
+    { name: 'Playa del Sol', description: 'Sunny beach paradise', type: LocationType.PhotoOp },
   ]
 }

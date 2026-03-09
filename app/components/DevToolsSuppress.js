@@ -7,7 +7,7 @@ export const DevToolsSuppress = () => {
     if (typeof window !== 'undefined') {
       if (window.__devToolsSuppressed) return
       window.__devToolsSuppressed = true
-      
+
       // Suppress development console messages
       const originalLog = console.log
       console.log = (...args) => {

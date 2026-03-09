@@ -1,6 +1,7 @@
 # Security Vulnerabilities Fix
 
 ## Current Status
+
 - 8 vulnerabilities (2 moderate, 6 high)
 
 ## Quick Fix
@@ -29,4 +30,5 @@ git push origin main
 ```
 
 ## Note
+
 Most vulnerabilities are in dev dependencies (eslint, testing libs) and don't affect production.

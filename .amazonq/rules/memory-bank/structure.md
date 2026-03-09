@@ -3,6 +3,7 @@
 ## Directory Organization
 
 ### Core Application (`/app`)
+
 ```
 app/
 ├── components/          # React UI components
@@ -21,6 +22,7 @@ app/
 ```
 
 ### Services Layer (`/services`)
+
 ```
 services/
 ├── colorData.ts        # Main color data management
@@ -30,6 +32,7 @@ services/
 ```
 
 ### Data Processing (`/scripts`)
+
 ```
 scripts/
 ├── addNewColorsToDatabase.js    # Database updates
@@ -40,6 +43,7 @@ scripts/
 ```
 
 ### Deployment & Infrastructure
+
 ```
 netlify/
 ├── functions/          # Serverless functions
@@ -63,17 +67,20 @@ src-tauri/             # Native desktop (Rust)
 ## Architectural Patterns
 
 ### Component Architecture
+
 - **Atomic Design**: Components organized by complexity (atoms → molecules → organisms)
 - **Container/Presentational**: Clear separation of logic and presentation
 - **Compound Components**: Complex components with sub-components (ColorCard, ColorPalette)
 
 ### Data Flow Architecture
+
 - **Unidirectional Data Flow**: Props down, events up pattern
 - **Service Layer**: Centralized data management in `/services`
 - **Lazy Loading**: Performance optimization with dynamic imports
 - **Caching Strategy**: Multi-level caching (memory, localStorage, edge)
 
 ### Performance Architecture
+
 - **Virtual Scrolling**: Efficient rendering of large color datasets
 - **Code Splitting**: Dynamic imports for non-critical components
 - **Image Optimization**: Next.js Image component with Sharp processing
@@ -82,6 +89,7 @@ src-tauri/             # Native desktop (Rust)
 ## Core Components Relationships
 
 ### Color Display System
+
 ```
 ColorPalette (Container)
 ├── VirtualGrid (Performance)
@@ -92,6 +100,7 @@ ColorPalette (Container)
 ```
 
 ### Background & Animation System
+
 ```
 TokyoBackground (Visual)
 ├── WindSystem (Physics)
@@ -100,6 +109,7 @@ TokyoBackground (Visual)
 ```
 
 ### Data Management Flow
+
 ```
 colorData.ts (Core)
 ├── colorDataManager.ts (Operations)
@@ -110,16 +120,19 @@ colorData.ts (Core)
 ## Multi-Platform Architecture
 
 ### Web Application (Primary)
+
 - **Framework**: Next.js 15 with App Router
 - **Deployment**: Netlify with edge functions
 - **Performance**: Static generation + ISR
 
 ### Desktop Applications
+
 - **Electron**: Cross-platform desktop with web technologies
 - **Tauri**: Native performance with Rust backend
 - **Portable**: Self-contained HTTP server version
 
 ### Mobile Optimization
+
 - **PWA**: Progressive Web App capabilities
 - **Responsive**: Mobile-first design approach
 - **Touch**: Optimized touch interactions
@@ -127,18 +140,21 @@ colorData.ts (Core)
 ## Configuration & Build System
 
 ### Build Tools
+
 - **Next.js**: Primary build system and framework
 - **TypeScript**: Type safety and development experience
 - **Tailwind CSS**: Utility-first styling system
 - **PostCSS**: CSS processing and optimization
 
 ### Quality Assurance
+
 - **ESLint**: Code linting and style enforcement
 - **Jest**: Unit and integration testing
 - **React Testing Library**: Component testing utilities
 - **TypeScript**: Compile-time type checking
 
 ### Environment Management
+
 - **Development**: Hot reloading with Next.js dev server
 - **Production**: Optimized builds with static export
 - **Testing**: Isolated test environment with jsdom
@@ -147,12 +163,14 @@ colorData.ts (Core)
 ## Data Architecture
 
 ### Color Data Structure
+
 - **Primary Dataset**: JSON files with color information
 - **Indexing**: Manufacturer, model, and type-based organization
 - **Relationships**: Color-to-model associations and variants
 - **Metadata**: HSB values, color types, and manufacturer details
 
 ### Performance Optimizations
+
 - **Lazy Loading**: On-demand data fetching
 - **Virtual Scrolling**: Efficient large dataset rendering
 - **Caching**: Multi-level caching strategy

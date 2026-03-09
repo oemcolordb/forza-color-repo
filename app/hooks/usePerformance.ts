@@ -4,5 +4,5 @@ export const usePerformance = () => ({
     const result = await fn()
     console.log(`${name}: ${performance.now() - start}ms`)
     return result
-  }
+  },
 })

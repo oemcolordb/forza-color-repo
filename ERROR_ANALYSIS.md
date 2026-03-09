@@ -3,8 +3,10 @@
 ## Critical Issues
 
 ### 1. ESLint Errors (30+ instances)
+
 **Issue**: Unescaped quotes and apostrophes in JSX
-**Files Affected**: 
+**Files Affected**:
+
 - app/about/page.tsx (6 errors)
 - app/blog/page.tsx (5 errors)
 - app/telemetry/page.tsx (16 errors)
@@ -18,7 +20,9 @@
 **Fix**: Replace quotes with HTML entities or use proper escaping
 
 ### 2. React Hooks Dependency Warnings (7 instances)
+
 **Files Affected**:
+
 - app/components/ColorHistory.tsx - missing 'addToHistory'
 - app/components/ColorRouletteHarmony.js - missing 'getSeasonalColors', 'harmonyMode'
 - app/components/ImageColorExtractor.tsx - missing 'generateColorName'
@@ -28,13 +32,16 @@
 **Impact**: Potential stale closures and bugs
 
 ### 3. TypeScript Test Errors (60+ errors)
+
 **Issue**: Missing test dependencies
-**Files**: All __tests__ files
+**Files**: All **tests** files
 **Missing**:
+
 - @testing-library/react
 - @types/jest
 
 ### 4. Next.js Image Optimization Warning
+
 **File**: app/components/ImageColorExtractor.tsx:410
 **Issue**: Using <img> instead of next/image
 **Impact**: Slower LCP, higher bandwidth
@@ -42,19 +49,24 @@
 ## Recommendations
 
 ### Priority 1 - Fix ESLint Errors
+
 Replace all unescaped quotes/apostrophes:
+
 - " → &quot; or use {'"'}
 - ' → &apos; or use {"'"}
 
 ### Priority 2 - Fix Hook Dependencies
+
 Add missing dependencies or use useCallback/useMemo properly
 
 ### Priority 3 - Install Test Dependencies
+
 ```bash
 npm install --save-dev @testing-library/react @types/jest
 ```
 
 ### Priority 4 - Replace img with Image
+
 Use next/image for better performance
 
 ## Files Requiring Immediate Attention
@@ -66,5 +78,6 @@ Use next/image for better performance
 5. app/how-to-use/page.tsx (5 errors)
 
 ## Unused Code Analysis Needed
+
 Run: `npx depcheck` to find unused dependencies
 Run: `npx ts-prune` to find unused exports

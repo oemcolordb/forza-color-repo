@@ -3,7 +3,7 @@ import { createClient } from '@libsql/client'
 
 const client = createClient({
   url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!
+  authToken: process.env.TURSO_AUTH_TOKEN!,
 })
 
 export async function GET(request: Request) {
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     query += ' LIMIT 50'
 
     const result = await client.execute({ sql: query, args: params })
-    
+
     return NextResponse.json(result.rows)
   } catch (error) {
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     const result = await client.execute({
       sql: `INSERT INTO schemes (name, description, colors, tags, authorId, rating, ratingCount, downloads, createdAt)
             VALUES (?, ?, ?, ?, ?, 0, 0, 0, datetime('now'))`,
-      args: [name, description, JSON.stringify(colors), JSON.stringify(tags), authorId]
+      args: [name, description, JSON.stringify(colors), JSON.stringify(tags), authorId],
     })
 
     return NextResponse.json({ success: true, id: result.lastInsertRowid })

@@ -3,18 +3,21 @@
 ## Code Quality Standards
 
 ### TypeScript Usage
+
 - **Strict typing**: All components use explicit TypeScript interfaces and types
 - **Type definitions**: Centralized in `/app/types/` directory (e.g., `CarColor` interface)
 - **Props interfaces**: Every React component has a dedicated props interface
 - **Null safety**: Consistent handling of optional properties with `?.` operator and null checks
 
 ### Component Architecture
+
 - **Functional components**: All components use React functional components with hooks
 - **React.memo**: Performance-critical components wrapped with `React.memo` for optimization
 - **Custom hooks**: Reusable logic extracted into custom hooks (`useAnalytics`, `usePerformance`)
 - **Component composition**: Complex components broken into smaller, focused sub-components
 
 ### File Organization
+
 - **Consistent naming**: PascalCase for components, camelCase for utilities
 - **Co-location**: Test files placed in `__tests__` directories alongside components
 - **Barrel exports**: Clean import/export patterns throughout the codebase
@@ -23,6 +26,7 @@
 ## Structural Conventions
 
 ### React Component Patterns
+
 ```typescript
 // Standard component structure
 interface ComponentProps {
@@ -31,23 +35,23 @@ interface ComponentProps {
   onAction?: (param: Type) => void
 }
 
-const Component: React.FC<ComponentProps> = React.memo(({ 
-  isDarkMode, 
-  onAction 
+const Component: React.FC<ComponentProps> = React.memo(({
+  isDarkMode,
+  onAction
 }) => {
   // Hooks at the top
   const [state, setState] = useState<Type>(initialValue)
-  
+
   // Memoized values
   const computedValue = useMemo(() => {
     // computation
   }, [dependencies])
-  
+
   // Event handlers with useCallback
   const handleEvent = useCallback(() => {
     // handler logic
   }, [dependencies])
-  
+
   return (
     // JSX with conditional classes
   )
@@ -58,12 +62,14 @@ export default Component
 ```
 
 ### State Management Patterns
+
 - **Local state**: `useState` for component-specific state
 - **Derived state**: `useMemo` for computed values from props/state
 - **Effect management**: `useEffect` with proper dependency arrays and cleanup
 - **Performance optimization**: `useCallback` for event handlers to prevent re-renders
 
 ### Conditional Rendering
+
 - **Theme-based styling**: Consistent dark/light mode pattern using `isDarkMode` prop
 - **Responsive design**: Mobile-first approach with `isMobile` state detection
 - **Feature flags**: Progressive enhancement with capability detection
@@ -71,6 +77,7 @@ export default Component
 ## Semantic Patterns
 
 ### Color Data Management
+
 ```typescript
 // Standard color object structure
 interface CarColor {
@@ -85,12 +92,14 @@ interface CarColor {
 ```
 
 ### Event Handling Patterns
+
 - **Callback props**: Consistent naming (`onSelect`, `onToggle`, `onAction`)
 - **Event prevention**: Proper `e.preventDefault()` and `e.stopPropagation()` usage
 - **Async operations**: Error handling with try-catch blocks and loading states
 - **User feedback**: Loading indicators and error messages for all async operations
 
 ### Performance Optimization
+
 - **Virtual scrolling**: Implemented for large datasets (10,000+ colors)
 - **Lazy loading**: Dynamic imports for non-critical components
 - **Memoization**: Strategic use of `useMemo` and `useCallback`
@@ -99,6 +108,7 @@ interface CarColor {
 ## Internal API Usage & Patterns
 
 ### Service Layer Integration
+
 ```typescript
 // Color data service usage
 import { default: colorData } from '../services/colorData'
@@ -116,6 +126,7 @@ const loadColors = async () => {
 ```
 
 ### Custom Hook Patterns
+
 ```typescript
 // Analytics hook usage
 const { track } = useAnalytics()
@@ -129,6 +140,7 @@ const result = await measureAsync('Operation Name', async () => {
 ```
 
 ### Local Storage Integration
+
 ```typescript
 // Consistent localStorage patterns
 useEffect(() => {
@@ -144,11 +156,12 @@ useEffect(() => {
 ## Frequently Used Code Idioms
 
 ### Conditional Class Names
+
 ```typescript
 // Theme-based conditional classes
 className={`base-classes ${
-  isDarkMode 
-    ? 'dark-theme-classes' 
+  isDarkMode
+    ? 'dark-theme-classes'
     : 'light-theme-classes'
 }`}
 
@@ -161,12 +174,13 @@ className={`base-classes ${
 ```
 
 ### Array Processing Patterns
+
 ```typescript
 // Filtering with multiple conditions
 const filteredColors = useMemo(() => {
   return colors.filter(color => {
-    const matchesSearch = !searchQuery || 
-      color.colorName.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch =
+      !searchQuery || color.colorName.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesMake = !selectedMake || color.make === selectedMake
     return matchesSearch && matchesMake
   })
@@ -180,6 +194,7 @@ const makes = useMemo(() => {
 ```
 
 ### Error Handling Patterns
+
 ```typescript
 // Comprehensive error handling
 try {
@@ -196,6 +211,7 @@ try {
 ## Popular Annotations & Comments
 
 ### JSDoc-style Comments
+
 ```typescript
 /**
  * Extracts colors from image data using advanced algorithms
@@ -208,18 +224,20 @@ const extractColorsFromImage = useCallback((imageData: ImageData): ExtractedColo
 ```
 
 ### Inline Documentation
+
 ```typescript
 // Sample every pixel for better accuracy
 for (let i = 0; i < data.length; i += 4) {
   // Skip transparent/semi-transparent pixels
   if (alpha < 200) continue
-  
+
   // Use smaller grouping for better color accuracy
-  const key = `${Math.floor(r/5)*5}-${Math.floor(g/5)*5}-${Math.floor(b/5)*5}`
+  const key = `${Math.floor(r / 5) * 5}-${Math.floor(g / 5) * 5}-${Math.floor(b / 5) * 5}`
 }
 ```
 
 ### Configuration Comments
+
 ```typescript
 // Change background every 30 minutes based on timestamp
 const thirtyMinuteSlots = Math.floor(now.getTime() / (30 * 60 * 1000))
@@ -232,6 +250,7 @@ const scale = Math.min(maxSize / img.width, maxSize / img.height, 1)
 ## Testing Standards
 
 ### Component Testing Patterns
+
 ```typescript
 // Standard test structure
 describe('ComponentName', () => {
@@ -247,7 +266,7 @@ describe('ComponentName', () => {
   it('handles user interactions', () => {
     const mockHandler = jest.fn()
     render(<Component onAction={mockHandler} />)
-    
+
     fireEvent.click(screen.getByRole('button'))
     expect(mockHandler).toHaveBeenCalledWith(expectedArgs)
   })
@@ -255,6 +274,7 @@ describe('ComponentName', () => {
 ```
 
 ### Mock Patterns
+
 ```typescript
 // Consistent mock object structure
 const mockColor: CarColor = {
@@ -271,14 +291,15 @@ const mockColor: CarColor = {
 ## Styling Conventions
 
 ### Tailwind CSS Patterns
+
 ```typescript
 // Responsive design classes
 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 
 // Theme-aware styling
 className={`transition-colors ${
-  isDarkMode 
-    ? 'bg-slate-800 text-slate-100' 
+  isDarkMode
+    ? 'bg-slate-800 text-slate-100'
     : 'bg-white text-gray-900'
 }`}
 
@@ -287,11 +308,12 @@ className="hover:scale-105 transition-transform cursor-pointer"
 ```
 
 ### Animation Classes
+
 ```typescript
 // Custom animations from tailwind.config.js
-className="animate-fade-in-up"
-className="animate-bounce-in"
-className="animate-shimmer"
+className = 'animate-fade-in-up'
+className = 'animate-bounce-in'
+className = 'animate-shimmer'
 ```
 
 This codebase demonstrates modern React development practices with strong TypeScript integration, performance optimization, and comprehensive testing coverage.

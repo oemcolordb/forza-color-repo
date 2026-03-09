@@ -20,8 +20,8 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       const FallbackComponent = this.props.fallback || DefaultErrorFallback
       return (
-        <FallbackComponent 
-          error={this.state.error} 
+        <FallbackComponent
+          error={this.state.error}
           reset={() => this.setState({ hasError: false, error: undefined })}
         />
       )

@@ -16,7 +16,7 @@ export default function AdvancedColorMatching({
   targetColor,
   colors,
   isDarkMode,
-  onColorSelect
+  onColorSelect,
 }: AdvancedColorMatchingProps) {
   const [selectedMatch, setSelectedMatch] = useState<CarColor | null>(null)
   const [showComparison, setShowComparison] = useState(false)
@@ -47,7 +47,7 @@ export default function AdvancedColorMatching({
           <div
             className="w-20 h-20 rounded-lg border-2 border-gray-300"
             style={{
-              background: `hsl(${targetColor.h * 360}, ${targetColor.s * 100}%, ${targetColor.b * 100}%)`
+              background: `hsl(${targetColor.h * 360}, ${targetColor.s * 100}%, ${targetColor.b * 100}%)`,
             }}
           />
           <div className="text-sm">
@@ -66,7 +66,7 @@ export default function AdvancedColorMatching({
         <div className="space-y-3">
           {matches.map(({ color, distance, similarity }, index) => {
             const diff = generateColorDiff(targetColor, color.color1)
-            
+
             return (
               <div
                 key={`${color.make}-${color.colorName}-${index}`}
@@ -74,8 +74,8 @@ export default function AdvancedColorMatching({
                   selectedMatch === color
                     ? 'border-blue-500'
                     : isDarkMode
-                    ? 'border-slate-700 hover:border-slate-600'
-                    : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-slate-700 hover:border-slate-600'
+                      : 'border-gray-200 hover:border-gray-300'
                 }`}
                 onClick={() => {
                   setSelectedMatch(color)
@@ -84,17 +84,19 @@ export default function AdvancedColorMatching({
               >
                 <div className="flex items-center gap-4">
                   {/* Rank Badge */}
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                    index === 0
-                      ? 'bg-yellow-500 text-white'
-                      : index === 1
-                      ? 'bg-gray-400 text-white'
-                      : index === 2
-                      ? 'bg-orange-600 text-white'
-                      : isDarkMode
-                      ? 'bg-slate-700 text-gray-300'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}>
+                  <div
+                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                      index === 0
+                        ? 'bg-yellow-500 text-white'
+                        : index === 1
+                          ? 'bg-gray-400 text-white'
+                          : index === 2
+                            ? 'bg-orange-600 text-white'
+                            : isDarkMode
+                              ? 'bg-slate-700 text-gray-300'
+                              : 'bg-gray-200 text-gray-600'
+                    }`}
+                  >
                     {index + 1}
                   </div>
 
@@ -102,7 +104,7 @@ export default function AdvancedColorMatching({
                   <div
                     className="w-16 h-16 rounded-lg border-2 border-gray-300"
                     style={{
-                      background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`
+                      background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
                     }}
                   />
 
@@ -115,9 +117,11 @@ export default function AdvancedColorMatching({
                       {color.make} {color.model && `• ${color.model}`}
                     </div>
                     <div className="flex gap-2 mt-1">
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
-                      }`}>
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${
+                          isDarkMode ? 'bg-slate-700' : 'bg-gray-100'
+                        }`}
+                      >
                         {color.colorType}
                       </span>
                     </div>
@@ -125,19 +129,21 @@ export default function AdvancedColorMatching({
 
                   {/* Match Quality */}
                   <div className="text-right">
-                    <div className={`text-2xl font-bold ${
-                      similarity >= 95
-                        ? 'text-green-500'
-                        : similarity >= 85
-                        ? 'text-blue-500'
-                        : similarity >= 75
-                        ? 'text-yellow-500'
-                        : 'text-orange-500'
-                    }`}>
+                    <div
+                      className={`text-2xl font-bold ${
+                        similarity >= 95
+                          ? 'text-green-500'
+                          : similarity >= 85
+                            ? 'text-blue-500'
+                            : similarity >= 75
+                              ? 'text-yellow-500'
+                              : 'text-orange-500'
+                      }`}
+                    >
                       {similarity}%
                     </div>
                     <div className="text-xs text-gray-500">Match</div>
-                    
+
                     {/* Difference Indicators */}
                     <div className="mt-2 space-y-1">
                       {diff.hDiff > 10 && (
@@ -155,7 +161,7 @@ export default function AdvancedColorMatching({
                   {/* Action Buttons */}
                   <div className="flex flex-col gap-2">
                     <button
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation()
                         onColorSelect(color)
                       }}
@@ -164,7 +170,7 @@ export default function AdvancedColorMatching({
                       View
                     </button>
                     <button
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation()
                         setSelectedMatch(color)
                         setShowComparison(true)

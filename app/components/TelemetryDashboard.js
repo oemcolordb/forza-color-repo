@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 
-const formatTime = (seconds) => {
+const formatTime = seconds => {
   if (!seconds || seconds === 0) return '--:--'
   const mins = Math.floor(seconds / 60)
   const secs = (seconds % 60).toFixed(3)
@@ -15,10 +15,10 @@ const TelemetryDashboard = () => {
   useEffect(() => {
     // WebSocket connection for real-time telemetry data
     const ws = new WebSocket('ws://localhost:8080/telemetry')
-    
+
     ws.onopen = () => setIsConnected(true)
     ws.onclose = () => setIsConnected(false)
-    ws.onmessage = (event) => {
+    ws.onmessage = event => {
       const data = JSON.parse(event.data)
       setTelemetryData(data)
     }
@@ -30,7 +30,9 @@ const TelemetryDashboard = () => {
     return (
       <div className="p-4 bg-gray-900 text-white rounded-lg">
         <div className="flex items-center gap-2 mb-4">
-          <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <div
+            className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}
+          ></div>
           <span>Forza Telemetry {isConnected ? 'Connected' : 'Disconnected'}</span>
         </div>
         <p>Waiting for telemetry data...</p>
@@ -56,9 +58,11 @@ const TelemetryDashboard = () => {
           <div className="text-sm text-gray-400">RPM</div>
           <div className="text-xl font-bold">{telemetryData.currentEngineRpm.toFixed(0)}</div>
           <div className="w-full bg-gray-700 rounded-full h-2 mt-1">
-            <div 
+            <div
               className="bg-red-500 h-2 rounded-full transition-all"
-              style={{ width: `${(telemetryData.currentEngineRpm / telemetryData.engineMaxRpm) * 100}%` }}
+              style={{
+                width: `${(telemetryData.currentEngineRpm / telemetryData.engineMaxRpm) * 100}%`,
+              }}
             ></div>
           </div>
         </div>
@@ -72,7 +76,9 @@ const TelemetryDashboard = () => {
 
         <div className="bg-gray-800 p-3 rounded">
           <div className="text-sm text-gray-400">Throttle</div>
-          <div className="text-xl font-bold">{((telemetryData.throttle / 255) * 100).toFixed(0)}%</div>
+          <div className="text-xl font-bold">
+            {((telemetryData.throttle / 255) * 100).toFixed(0)}%
+          </div>
         </div>
       </div>
 
@@ -111,17 +117,17 @@ const TelemetryDashboard = () => {
           <div className="text-sm text-gray-400">Power</div>
           <div className="text-xl font-bold">{telemetryData.power.toFixed(0)} HP</div>
         </div>
-        
+
         <div className="bg-gray-800 p-3 rounded">
           <div className="text-sm text-gray-400">Boost</div>
           <div className="text-xl font-bold">{telemetryData.boost.toFixed(1)} PSI</div>
         </div>
-        
+
         <div className="bg-gray-800 p-3 rounded">
           <div className="text-sm text-gray-400">Fuel</div>
           <div className="text-xl font-bold">{telemetryData.fuel.toFixed(1)}%</div>
         </div>
-        
+
         <div className="bg-gray-800 p-3 rounded">
           <div className="text-sm text-gray-400">Best Lap</div>
           <div className="text-xl font-bold">{formatTime(telemetryData.bestLap)}</div>

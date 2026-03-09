@@ -11,12 +11,12 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       screens: {
-        'xs': '475px',
+        xs: '475px',
         '3xl': '1600px',
       },
       spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
+        18: '4.5rem',
+        88: '22rem',
       },
       fontSize: {
         '2xs': ['0.625rem', { lineHeight: '0.75rem' }],
@@ -46,7 +46,7 @@ module.exports = {
     },
   },
   plugins: [
-    function({ addUtilities }) {
+    function ({ addUtilities }) {
       const newUtilities = {
         '.text-shadow': {
           textShadow: '0 2px 4px rgba(0,0,0,0.10)',
@@ -102,6 +102,6 @@ module.exports = {
         },
       }
       addUtilities(newUtilities)
-    }
+    },
   ],
 }

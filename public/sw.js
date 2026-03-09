@@ -9,13 +9,13 @@ const STATIC_ASSETS = [
   '/offline.html',
   '/_next/static/css/app/layout.css',
   '/_next/static/chunks/webpack.js',
-  '/_next/static/chunks/main.js'
+  '/_next/static/chunks/main.js',
 ]
 
 // Install event
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => {
+    caches.open(STATIC_CACHE).then(cache => {
       return cache.addAll(STATIC_ASSETS)
     })
   )
@@ -23,11 +23,11 @@ self.addEventListener('install', (event) => {
 })
 
 // Activate event
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
+        cacheNames.map(cacheName => {
           if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
             return caches.delete(cacheName)
           }
@@ -39,7 +39,7 @@ self.addEventListener('activate', (event) => {
 })
 
 // Fetch event
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event
   const url = new URL(request.url)
 
@@ -47,9 +47,9 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
-        .then((response) => {
+        .then(response => {
           const responseClone = response.clone()
-          caches.open(DYNAMIC_CACHE).then((cache) => {
+          caches.open(DYNAMIC_CACHE).then(cache => {
             cache.put(request, responseClone)
           })
           return response
@@ -64,7 +64,7 @@ self.addEventListener('fetch', (event) => {
   // Handle static assets
   if (STATIC_ASSETS.includes(url.pathname)) {
     event.respondWith(
-      caches.match(request).then((response) => {
+      caches.match(request).then(response => {
         return response || fetch(request)
       })
     )
@@ -75,9 +75,9 @@ self.addEventListener('fetch', (event) => {
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
+        .then(response => {
           const responseClone = response.clone()
-          caches.open(DYNAMIC_CACHE).then((cache) => {
+          caches.open(DYNAMIC_CACHE).then(cache => {
             cache.put(request, responseClone)
           })
           return response
@@ -91,33 +91,36 @@ self.addEventListener('fetch', (event) => {
 
   // Handle other requests
   event.respondWith(
-    caches.match(request).then((response) => {
-      return response || fetch(request).then((fetchResponse) => {
-        const responseClone = fetchResponse.clone()
-        caches.open(DYNAMIC_CACHE).then((cache) => {
-          cache.put(request, responseClone)
+    caches.match(request).then(response => {
+      return (
+        response ||
+        fetch(request).then(fetchResponse => {
+          const responseClone = fetchResponse.clone()
+          caches.open(DYNAMIC_CACHE).then(cache => {
+            cache.put(request, responseClone)
+          })
+          return fetchResponse
         })
-        return fetchResponse
-      })
+      )
     })
   )
 })
 
 // Background sync for offline actions
-self.addEventListener('sync', (event) => {
+self.addEventListener('sync', event => {
   if (event.tag === 'background-sync') {
     event.waitUntil(
       // Handle offline actions when back online
       self.registration.showNotification('Forza Colors', {
         body: 'Your offline changes have been synced!',
-        icon: '/icon-192.png'
+        icon: '/icon-192.png',
       })
     )
   }
 })
 
 // Push notifications
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
   const options = {
     body: event.data ? event.data.text() : 'New colors available!',
     icon: '/icon-192.png',
@@ -125,11 +128,9 @@ self.addEventListener('push', (event) => {
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
-      primaryKey: 1
-    }
+      primaryKey: 1,
+    },
   }
 
-  event.waitUntil(
-    self.registration.showNotification('Forza Colors', options)
-  )
+  event.waitUntil(self.registration.showNotification('Forza Colors', options))
 })

@@ -6,7 +6,7 @@ class TelemetryLogger {
     this.logDir = logDir
     this.currentSession = null
     this.logStream = null
-    
+
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { recursive: true })
     }
@@ -15,19 +15,46 @@ class TelemetryLogger {
   startSession(sessionName = null) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
     this.currentSession = sessionName || `session-${timestamp}`
-    
+
     const logFile = path.join(this.logDir, `${this.currentSession}.csv`)
     this.logStream = fs.createWriteStream(logFile)
-    
+
     // CSV header
-    this.logStream.write([
-      'timestamp', 'speed', 'rpm', 'gear', 'throttle', 'brake', 'steering',
-      'power', 'boost', 'fuel', 'lapTime', 'bestLap', 'position',
-      'tireTemp_FL', 'tireTemp_FR', 'tireTemp_RL', 'tireTemp_RR',
-      'tireSlip_FL', 'tireSlip_FR', 'tireSlip_RL', 'tireSlip_RR',
-      'suspensionTravel_FL', 'suspensionTravel_FR', 'suspensionTravel_RL', 'suspensionTravel_RR',
-      'posX', 'posY', 'posZ', 'yaw', 'pitch', 'roll'
-    ].join(',') + '\n')
+    this.logStream.write(
+      [
+        'timestamp',
+        'speed',
+        'rpm',
+        'gear',
+        'throttle',
+        'brake',
+        'steering',
+        'power',
+        'boost',
+        'fuel',
+        'lapTime',
+        'bestLap',
+        'position',
+        'tireTemp_FL',
+        'tireTemp_FR',
+        'tireTemp_RL',
+        'tireTemp_RR',
+        'tireSlip_FL',
+        'tireSlip_FR',
+        'tireSlip_RL',
+        'tireSlip_RR',
+        'suspensionTravel_FL',
+        'suspensionTravel_FR',
+        'suspensionTravel_RL',
+        'suspensionTravel_RR',
+        'posX',
+        'posY',
+        'posZ',
+        'yaw',
+        'pitch',
+        'roll',
+      ].join(',') + '\n'
+    )
   }
 
   logData(telemetryData) {
@@ -55,9 +82,9 @@ class TelemetryLogger {
       telemetryData.positionZ,
       telemetryData.yaw,
       telemetryData.pitch,
-      telemetryData.roll
+      telemetryData.roll,
     ]
-    
+
     this.logStream.write(row.join(',') + '\n')
   }
 

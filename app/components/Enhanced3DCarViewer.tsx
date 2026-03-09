@@ -12,8 +12,8 @@ interface Enhanced3DCarViewerProps {
 
 function CarModel({ color, rimColor, interiorColor }: any) {
   const meshRef = useRef<THREE.Mesh>(null)
-  
-  useFrame((state) => {
+
+  useFrame(state => {
     if (meshRef.current) {
       meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
     }
@@ -47,7 +47,12 @@ function CarModel({ color, rimColor, interiorColor }: any) {
       </mesh>
 
       {/* Wheels */}
-      {[[-0.8, 0, 1.2], [0.8, 0, 1.2], [-0.8, 0, -1.2], [0.8, 0, -1.2]].map((pos, i) => (
+      {[
+        [-0.8, 0, 1.2],
+        [0.8, 0, 1.2],
+        [-0.8, 0, -1.2],
+        [0.8, 0, -1.2],
+      ].map((pos, i) => (
         <group key={i} position={pos as [number, number, number]}>
           <mesh rotation={[0, 0, Math.PI / 2]} castShadow>
             <cylinderGeometry args={[0.4, 0.4, 0.3, 32]} />
@@ -74,7 +79,9 @@ function CarModel({ color, rimColor, interiorColor }: any) {
 }
 
 export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCarViewerProps) {
-  const [lightingPreset, setLightingPreset] = useState<'studio' | 'sunset' | 'night' | 'warehouse'>('studio')
+  const [lightingPreset, setLightingPreset] = useState<'studio' | 'sunset' | 'night' | 'warehouse'>(
+    'studio'
+  )
   const [rimColor, setRimColor] = useState({ h: 0, s: 0, b: 0.2 })
   const [interiorColor, setInteriorColor] = useState({ h: 0, s: 0, b: 0.1 })
   const [showCustomization, setShowCustomization] = useState(false)
@@ -84,7 +91,7 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onload = (event) => {
+      reader.onload = event => {
         setUploadedDecal(event.target?.result as string)
       }
       reader.readAsDataURL(file)
@@ -113,10 +120,12 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
 
         {/* Lighting Controls */}
         <div className="absolute top-4 left-4 space-y-2">
-          <div className={`px-3 py-2 rounded-lg ${isDarkMode ? 'bg-slate-900/80' : 'bg-white/80'} backdrop-blur`}>
+          <div
+            className={`px-3 py-2 rounded-lg ${isDarkMode ? 'bg-slate-900/80' : 'bg-white/80'} backdrop-blur`}
+          >
             <div className="text-xs font-semibold mb-2">Lighting</div>
             <div className="flex gap-2">
-              {(['studio', 'sunset', 'night', 'warehouse'] as const).map((preset) => (
+              {(['studio', 'sunset', 'night', 'warehouse'] as const).map(preset => (
                 <button
                   key={preset}
                   onClick={() => setLightingPreset(preset)}
@@ -124,8 +133,8 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
                     lightingPreset === preset
                       ? 'bg-blue-600 text-white'
                       : isDarkMode
-                      ? 'bg-slate-700 text-gray-300'
-                      : 'bg-gray-200 text-gray-700'
+                        ? 'bg-slate-700 text-gray-300'
+                        : 'bg-gray-200 text-gray-700'
                   }`}
                 >
                   {preset}
@@ -153,7 +162,9 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
 
           {/* Rim Color */}
           <div className="mb-4">
-            <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <label
+              className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Rim Color
             </label>
             <div className="flex gap-2">
@@ -162,7 +173,7 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
                 { h: 0, s: 0, b: 0.8, name: 'Silver' },
                 { h: 0.1, s: 0.8, b: 0.5, name: 'Gold' },
                 { h: 0, s: 0.8, b: 0.3, name: 'Bronze' },
-              ].map((preset) => (
+              ].map(preset => (
                 <button
                   key={preset.name}
                   onClick={() => setRimColor(preset)}
@@ -170,7 +181,7 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
                     rimColor === preset ? 'border-blue-500' : 'border-gray-300'
                   }`}
                   style={{
-                    background: `hsl(${preset.h * 360}, ${preset.s * 100}%, ${preset.b * 100}%)`
+                    background: `hsl(${preset.h * 360}, ${preset.s * 100}%, ${preset.b * 100}%)`,
                   }}
                   title={preset.name}
                 />
@@ -180,7 +191,9 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
 
           {/* Interior Color */}
           <div className="mb-4">
-            <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <label
+              className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Interior Color
             </label>
             <div className="flex gap-2">
@@ -189,7 +202,7 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
                 { h: 0, s: 0, b: 0.5, name: 'Gray' },
                 { h: 0.05, s: 0.5, b: 0.4, name: 'Tan' },
                 { h: 0, s: 0.7, b: 0.3, name: 'Red' },
-              ].map((preset) => (
+              ].map(preset => (
                 <button
                   key={preset.name}
                   onClick={() => setInteriorColor(preset)}
@@ -197,7 +210,7 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
                     interiorColor === preset ? 'border-blue-500' : 'border-gray-300'
                   }`}
                   style={{
-                    background: `hsl(${preset.h * 360}, ${preset.s * 100}%, ${preset.b * 100}%)`
+                    background: `hsl(${preset.h * 360}, ${preset.s * 100}%, ${preset.b * 100}%)`,
                   }}
                   title={preset.name}
                 />
@@ -207,7 +220,9 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
 
           {/* Decal Upload */}
           <div>
-            <label className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <label
+              className={`block text-sm font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Upload Decal/Pattern
             </label>
             <input
@@ -220,7 +235,11 @@ export default function Enhanced3DCarViewer({ color, isDarkMode }: Enhanced3DCar
             />
             {uploadedDecal && (
               <div className="mt-2">
-                <img src={uploadedDecal} alt="Decal preview" className="w-20 h-20 object-cover rounded" />
+                <img
+                  src={uploadedDecal}
+                  alt="Decal preview"
+                  className="w-20 h-20 object-cover rounded"
+                />
               </div>
             )}
           </div>

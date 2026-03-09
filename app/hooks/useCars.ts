@@ -1,25 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Car, CarFilters, CarSearchOptions } from '../types/car';
-import { carDatabase } from '../../services/carDatabase';
+import { useState, useEffect, useCallback } from 'react'
+import { Car, CarFilters, CarSearchOptions } from '../types/car'
+import { carDatabase } from '../../services/carDatabase'
 
 interface UseCarState {
-  cars: Car[];
-  manufacturers: string[];
-  models: string[];
-  types: string[];
-  countries: string[];
-  loading: boolean;
-  error: string | null;
+  cars: Car[]
+  manufacturers: string[]
+  models: string[]
+  types: string[]
+  countries: string[]
+  loading: boolean
+  error: string | null
 }
 
 interface UseCarActions {
-  searchCars: (options?: CarSearchOptions) => Promise<void>;
-  getCarsByManufacturer: (manufacturer: string) => Promise<void>;
-  getCarsByType: (type: string) => Promise<void>;
-  getRandomCars: (count?: number) => Promise<void>;
-  getTopCarsByStats: (statName: keyof Car['stats'], limit?: number) => Promise<void>;
-  clearCars: () => void;
-  refreshData: () => Promise<void>;
+  searchCars: (options?: CarSearchOptions) => Promise<void>
+  getCarsByManufacturer: (manufacturer: string) => Promise<void>
+  getCarsByType: (type: string) => Promise<void>
+  getRandomCars: (count?: number) => Promise<void>
+  getTopCarsByStats: (statName: keyof Car['stats'], limit?: number) => Promise<void>
+  clearCars: () => void
+  refreshData: () => Promise<void>
 }
 
 export function useCars(): UseCarState & UseCarActions {
@@ -30,34 +30,34 @@ export function useCars(): UseCarState & UseCarActions {
     types: [],
     countries: [],
     loading: false,
-    error: null
-  });
+    error: null,
+  })
 
   const setLoading = (loading: boolean) => {
-    setState(prev => ({ ...prev, loading }));
-  };
+    setState(prev => ({ ...prev, loading }))
+  }
 
   const setError = (error: string | null) => {
-    setState(prev => ({ ...prev, error }));
-  };
+    setState(prev => ({ ...prev, error }))
+  }
 
   const setCars = (cars: Car[]) => {
-    setState(prev => ({ ...prev, cars }));
-  };
+    setState(prev => ({ ...prev, cars }))
+  }
 
   // Load initial data
   useEffect(() => {
     const loadInitialData = async () => {
-      setLoading(true);
-      setError(null);
-      
+      setLoading(true)
+      setError(null)
+
       try {
         const [manufacturers, models, types, countries] = await Promise.all([
           carDatabase.getManufacturers(),
           carDatabase.getModels(),
           carDatabase.getTypes(),
-          carDatabase.getCountries()
-        ]);
+          carDatabase.getCountries(),
+        ])
 
         setState(prev => ({
           ...prev,
@@ -65,102 +65,105 @@ export function useCars(): UseCarState & UseCarActions {
           models,
           types,
           countries,
-          loading: false
-        }));
+          loading: false,
+        }))
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load car data');
-        setLoading(false);
+        setError(err instanceof Error ? err.message : 'Failed to load car data')
+        setLoading(false)
       }
-    };
+    }
 
-    loadInitialData();
-  }, []);
+    loadInitialData()
+  }, [])
 
   const searchCars = useCallback(async (options: CarSearchOptions = {}) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      const cars = await carDatabase.searchCars(options);
-      setCars(cars);
+      const cars = await carDatabase.searchCars(options)
+      setCars(cars)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to search cars');
+      setError(err instanceof Error ? err.message : 'Failed to search cars')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   const getCarsByManufacturer = useCallback(async (manufacturer: string) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      const cars = await carDatabase.getCarsByManufacturer(manufacturer);
-      setCars(cars);
+      const cars = await carDatabase.getCarsByManufacturer(manufacturer)
+      setCars(cars)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to get cars by manufacturer');
+      setError(err instanceof Error ? err.message : 'Failed to get cars by manufacturer')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   const getCarsByType = useCallback(async (type: string) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      const cars = await carDatabase.getCarsByType(type);
-      setCars(cars);
+      const cars = await carDatabase.getCarsByType(type)
+      setCars(cars)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to get cars by type');
+      setError(err instanceof Error ? err.message : 'Failed to get cars by type')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   const getRandomCars = useCallback(async (count: number = 10) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
-      const cars = await carDatabase.getRandomCars(count);
-      setCars(cars);
+      const cars = await carDatabase.getRandomCars(count)
+      setCars(cars)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to get random cars');
+      setError(err instanceof Error ? err.message : 'Failed to get random cars')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
-  const getTopCarsByStats = useCallback(async (statName: keyof Car['stats'], limit: number = 10) => {
-    setLoading(true);
-    setError(null);
+  const getTopCarsByStats = useCallback(
+    async (statName: keyof Car['stats'], limit: number = 10) => {
+      setLoading(true)
+      setError(null)
 
-    try {
-      const cars = await carDatabase.getTopCarsByStats(statName, limit);
-      setCars(cars);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to get top cars by stats');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        const cars = await carDatabase.getTopCarsByStats(statName, limit)
+        setCars(cars)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to get top cars by stats')
+      } finally {
+        setLoading(false)
+      }
+    },
+    []
+  )
 
   const clearCars = useCallback(() => {
-    setCars([]);
-  }, []);
+    setCars([])
+  }, [])
 
   const refreshData = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
       const [manufacturers, models, types, countries] = await Promise.all([
         carDatabase.getManufacturers(),
         carDatabase.getModels(),
         carDatabase.getTypes(),
-        carDatabase.getCountries()
-      ]);
+        carDatabase.getCountries(),
+      ])
 
       setState(prev => ({
         ...prev,
@@ -168,13 +171,13 @@ export function useCars(): UseCarState & UseCarActions {
         models,
         types,
         countries,
-        loading: false
-      }));
+        loading: false,
+      }))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to refresh data');
-      setLoading(false);
+      setError(err instanceof Error ? err.message : 'Failed to refresh data')
+      setLoading(false)
     }
-  }, []);
+  }, [])
 
   return {
     ...state,
@@ -184,70 +187,70 @@ export function useCars(): UseCarState & UseCarActions {
     getRandomCars,
     getTopCarsByStats,
     clearCars,
-    refreshData
-  };
+    refreshData,
+  }
 }
 
 // Hook for getting a specific car
 export function useCar(manufacturer?: string, model?: string, year?: string) {
-  const [car, setCar] = useState<Car | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [car, setCar] = useState<Car | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!manufacturer || !model || !year) {
-      setCar(null);
-      return;
+      setCar(null)
+      return
     }
 
     const loadCar = async () => {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
       try {
-        const foundCar = await carDatabase.getCarById(manufacturer, model, year);
-        setCar(foundCar);
+        const foundCar = await carDatabase.getCarById(manufacturer, model, year)
+        setCar(foundCar)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load car');
+        setError(err instanceof Error ? err.message : 'Failed to load car')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    loadCar();
-  }, [manufacturer, model, year]);
+    loadCar()
+  }, [manufacturer, model, year])
 
-  return { car, loading, error };
+  return { car, loading, error }
 }
 
 // Hook for getting models by manufacturer
 export function useModelsByManufacturer(manufacturer?: string) {
-  const [models, setModels] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [models, setModels] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!manufacturer) {
-      setModels([]);
-      return;
+      setModels([])
+      return
     }
 
     const loadModels = async () => {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
 
       try {
-        const manufacturerModels = await carDatabase.getModels(manufacturer);
-        setModels(manufacturerModels);
+        const manufacturerModels = await carDatabase.getModels(manufacturer)
+        setModels(manufacturerModels)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load models');
+        setError(err instanceof Error ? err.message : 'Failed to load models')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    loadModels();
-  }, [manufacturer]);
+    loadModels()
+  }, [manufacturer])
 
-  return { models, loading, error };
+  return { models, loading, error }
 }

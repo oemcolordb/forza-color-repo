@@ -7,7 +7,7 @@ export function useOfflineStorage() {
     cacheSize: 0,
     lastUpdated: null,
     isLoading: false,
-    error: null
+    error: null,
   })
 
   const updateCacheInfo = useCallback(async () => {
@@ -16,31 +16,34 @@ export function useOfflineStorage() {
       setState(prev => ({
         ...prev,
         cacheSize: info.size,
-        lastUpdated: info.lastUpdated
+        lastUpdated: info.lastUpdated,
       }))
     } catch (error) {
       setState(prev => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Cache info failed'
+        error: error instanceof Error ? error.message : 'Cache info failed',
       }))
     }
   }, [])
 
-  const cacheColors = useCallback(async (colors) => {
-    setState(prev => ({ ...prev, isLoading: true, error: null }))
-    
-    try {
-      await offlineStorage.storeColors(colors)
-      await updateCacheInfo()
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: error instanceof Error ? error.message : 'Caching failed'
-      }))
-    } finally {
-      setState(prev => ({ ...prev, isLoading: false }))
-    }
-  }, [updateCacheInfo])
+  const cacheColors = useCallback(
+    async colors => {
+      setState(prev => ({ ...prev, isLoading: true, error: null }))
+
+      try {
+        await offlineStorage.storeColors(colors)
+        await updateCacheInfo()
+      } catch (error) {
+        setState(prev => ({
+          ...prev,
+          error: error instanceof Error ? error.message : 'Caching failed',
+        }))
+      } finally {
+        setState(prev => ({ ...prev, isLoading: false }))
+      }
+    },
+    [updateCacheInfo]
+  )
 
   const getOfflineColors = useCallback(async () => {
     try {
@@ -48,19 +51,19 @@ export function useOfflineStorage() {
     } catch (error) {
       setState(prev => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Offline retrieval failed'
+        error: error instanceof Error ? error.message : 'Offline retrieval failed',
       }))
       return []
     }
   }, [])
 
-  const searchOfflineColors = useCallback(async (query) => {
+  const searchOfflineColors = useCallback(async query => {
     try {
       return await offlineStorage.searchColors(query)
     } catch (error) {
       setState(prev => ({
         ...prev,
-        error: error instanceof Error ? error.message : 'Offline search failed'
+        error: error instanceof Error ? error.message : 'Offline search failed',
       }))
       return []
     }
@@ -68,13 +71,13 @@ export function useOfflineStorage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    
+
     const handleOnline = () => setState(prev => ({ ...prev, isOnline: true }))
     const handleOffline = () => setState(prev => ({ ...prev, isOnline: false }))
 
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
-    
+
     // Initialize cache info
     updateCacheInfo()
 
@@ -89,6 +92,6 @@ export function useOfflineStorage() {
     cacheColors,
     getOfflineColors,
     searchOfflineColors,
-    updateCacheInfo
+    updateCacheInfo,
   }
 }

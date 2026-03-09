@@ -41,7 +41,8 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
       preventZoom: () => {
         const viewport = document.querySelector('meta[name="viewport"]')
         if (viewport) {
-          viewport.setAttribute('content', 
+          viewport.setAttribute(
+            'content',
             'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
           )
         }
@@ -54,7 +55,7 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
         bodyStyle.transform = 'translateZ(0)'
         bodyStyle.backfaceVisibility = 'hidden'
         bodyStyle.perspective = '1000px'
-        
+
         // Optimize scrolling
         bodyStyle.overscrollBehavior = 'none'
         bodyStyle.webkitOverflowScrolling = 'touch'
@@ -64,7 +65,7 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
       addGamingStyles: () => {
         // Check if styles already exist
         if (document.getElementById('mobile-gaming-styles')) return
-        
+
         const style = document.createElement('style')
         style.id = 'mobile-gaming-styles'
         style.textContent = `
@@ -116,7 +117,7 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
           }
         `
         document.head.appendChild(style)
-        
+
         // Return cleanup function
         return () => {
           const existingStyle = document.getElementById('mobile-gaming-styles')
@@ -124,7 +125,7 @@ export default function MobileGamingOptimizer({ deviceInfo }: MobileGamingOptimi
             existingStyle.remove()
           }
         }
-      }
+      },
     }
 
     // Apply all optimizations and collect cleanup functions

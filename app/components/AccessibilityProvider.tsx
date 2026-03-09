@@ -28,10 +28,10 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     // Check for reduced motion preference
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
     setReducedMotion(mediaQuery.matches)
-    
+
     const handleChange = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
     mediaQuery.addEventListener('change', handleChange)
-    
+
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
@@ -39,10 +39,10 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     // Check for high contrast preference
     const mediaQuery = window.matchMedia('(prefers-contrast: high)')
     setHighContrast(mediaQuery.matches)
-    
+
     const handleChange = (e: MediaQueryListEvent) => setHighContrast(e.matches)
     mediaQuery.addEventListener('change', handleChange)
-    
+
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
@@ -52,29 +52,33 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
     announcement.setAttribute('aria-atomic', 'true')
     announcement.className = 'sr-only'
     announcement.textContent = message
-    
+
     document.body.appendChild(announcement)
-    
+
     setTimeout(() => {
       document.body.removeChild(announcement)
     }, 1000)
   }
 
   return (
-    <AccessibilityContext.Provider value={{
-      reducedMotion,
-      highContrast,
-      fontSize,
-      announceMessage
-    }}>
-      <div className={`
+    <AccessibilityContext.Provider
+      value={{
+        reducedMotion,
+        highContrast,
+        fontSize,
+        announceMessage,
+      }}
+    >
+      <div
+        className={`
         ${reducedMotion ? 'motion-reduce' : ''}
         ${highContrast ? 'high-contrast' : ''}
         ${fontSize === 'small' ? 'text-sm' : fontSize === 'large' ? 'text-lg' : ''}
-      `}>
+      `}
+      >
         {children}
       </div>
-      
+
       {/* Screen reader announcements */}
       <div aria-live="polite" aria-atomic="true" className="sr-only" />
     </AccessibilityContext.Provider>

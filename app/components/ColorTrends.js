@@ -41,17 +41,17 @@ const ColorTrends = ({ colors, favorites, isDarkMode }) => {
     return {
       totalColors: colors.length,
       colorTypes: Object.entries(colorTypes)
-        .sort(([,a], [,b]) => b - a)
+        .sort(([, a], [, b]) => b - a)
         .slice(0, 5),
       topMakes: Object.entries(makeStats)
-        .sort(([,a], [,b]) => b - a)
+        .sort(([, a], [, b]) => b - a)
         .slice(0, 5),
       decades: Object.entries(decades)
         .sort(([a], [b]) => Number(b) - Number(a))
         .slice(0, 6),
       popularWords: Object.entries(colorPatterns)
-        .sort(([,a], [,b]) => b - a)
-        .slice(0, 8)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, 8),
     }
   }, [colors])
 
@@ -61,12 +61,16 @@ const ColorTrends = ({ colors, favorites, isDarkMode }) => {
   }
 
   return (
-    <div className={`p-6 rounded-xl border-2 ${
-      isDarkMode 
-        ? 'bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-500/30' 
-        : 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200'
-    }`}>
-      <h3 className={`text-xl font-bold mb-6 text-center ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}>
+    <div
+      className={`p-6 rounded-xl border-2 ${
+        isDarkMode
+          ? 'bg-gradient-to-br from-emerald-900/20 to-teal-900/20 border-emerald-500/30'
+          : 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200'
+      }`}
+    >
+      <h3
+        className={`text-xl font-bold mb-6 text-center ${isDarkMode ? 'text-emerald-200' : 'text-emerald-800'}`}
+      >
         📊 Color Universe Stats
       </h3>
 
@@ -77,15 +81,23 @@ const ColorTrends = ({ colors, favorites, isDarkMode }) => {
             🎯 Quick Stats
           </h4>
           <div className="space-y-2 text-sm">
-            <div className={`flex justify-between ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <div
+              className={`flex justify-between ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+            >
               <span>Total Colors:</span>
-              <span className="font-bold text-emerald-500">{trends.totalColors.toLocaleString()}</span>
+              <span className="font-bold text-emerald-500">
+                {trends.totalColors.toLocaleString()}
+              </span>
             </div>
-            <div className={`flex justify-between ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <div
+              className={`flex justify-between ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+            >
               <span>Your Favorites:</span>
               <span className="font-bold text-pink-500">{favorites.length}</span>
             </div>
-            <div className={`flex justify-between ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+            <div
+              className={`flex justify-between ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}
+            >
               <span>Manufacturers:</span>
               <span className="font-bold text-blue-500">{trends.topMakes.length}+</span>
             </div>

@@ -6,9 +6,9 @@ export const ThirdPartyErrorBoundary = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       // Handle unhandled promise rejections (like CORS errors)
-      const handleUnhandledRejection = (event) => {
+      const handleUnhandledRejection = event => {
         const reason = event.reason?.toString() || ''
-        
+
         // Suppress known third-party errors
         if (
           reason.includes('dlnk.one') ||
@@ -20,12 +20,12 @@ export const ThirdPartyErrorBoundary = () => {
           return false
         }
       }
-      
+
       // Handle general errors
-      const handleError = (event) => {
+      const handleError = event => {
         const message = event.message?.toString() || ''
         const filename = event.filename?.toString() || ''
-        
+
         // Suppress known third-party errors
         if (
           message.includes('dlnk.one') ||
@@ -36,10 +36,10 @@ export const ThirdPartyErrorBoundary = () => {
           return false
         }
       }
-      
+
       window.addEventListener('unhandledrejection', handleUnhandledRejection)
       window.addEventListener('error', handleError)
-      
+
       return () => {
         window.removeEventListener('unhandledrejection', handleUnhandledRejection)
         window.removeEventListener('error', handleError)

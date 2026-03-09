@@ -10,23 +10,17 @@ interface ExtractedColor {
 export async function POST(request: NextRequest) {
   try {
     const { colors } = await request.json()
-    
+
     if (!colors || !Array.isArray(colors)) {
-      return NextResponse.json(
-        { error: 'Invalid colors data' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid colors data' }, { status: 400 })
     }
 
     const enhancedColors = enhanceColors(colors)
-    
+
     return NextResponse.json({ colors: enhancedColors })
   } catch (error) {
     console.error('Color enhancement error:', error)
-    return NextResponse.json(
-      { error: 'Enhancement failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Enhancement failed' }, { status: 500 })
   }
 }
 
@@ -34,13 +28,13 @@ function enhanceColors(colors: ExtractedColor[]): ExtractedColor[] {
   const clusters: ExtractedColor[][] = []
   const threshold = 30
   const maxClusters = 10
-  
+
   for (const color of colors) {
     if (clusters.length >= maxClusters) break
-    
+
     let bestCluster: ExtractedColor[] | null = null
     let minDistance = threshold
-    
+
     for (const cluster of clusters) {
       const distance = calculateRGBDistance(color.rgb, cluster[0].rgb)
       if (distance < minDistance) {
@@ -48,31 +42,36 @@ function enhanceColors(colors: ExtractedColor[]): ExtractedColor[] {
         bestCluster = cluster
       }
     }
-    
+
     if (bestCluster) {
       bestCluster.push(color)
     } else {
       clusters.push([color])
     }
   }
-  
-  return clusters.map(cluster => {
-    const avgR = Math.round(cluster.reduce((sum, c) => sum + c.rgb[0], 0) / cluster.length)
-    const avgG = Math.round(cluster.reduce((sum, c) => sum + c.rgb[1], 0) / cluster.length)
-    const avgB = Math.round(cluster.reduce((sum, c) => sum + c.rgb[2], 0) / cluster.length)
-    
-    const totalPercentage = cluster.reduce((sum, c) => sum + c.percentage, 0)
-    
-    return {
-      rgb: [avgR, avgG, avgB] as [number, number, number],
-      hsb: rgbToHsb(avgR, avgG, avgB),
-      percentage: Math.round(totalPercentage * 100) / 100,
-      name: predictColorName(avgR, avgG, avgB)
-    }
-  }).sort((a, b) => b.percentage - a.percentage)
+
+  return clusters
+    .map(cluster => {
+      const avgR = Math.round(cluster.reduce((sum, c) => sum + c.rgb[0], 0) / cluster.length)
+      const avgG = Math.round(cluster.reduce((sum, c) => sum + c.rgb[1], 0) / cluster.length)
+      const avgB = Math.round(cluster.reduce((sum, c) => sum + c.rgb[2], 0) / cluster.length)
+
+      const totalPercentage = cluster.reduce((sum, c) => sum + c.percentage, 0)
+
+      return {
+        rgb: [avgR, avgG, avgB] as [number, number, number],
+        hsb: rgbToHsb(avgR, avgG, avgB),
+        percentage: Math.round(totalPercentage * 100) / 100,
+        name: predictColorName(avgR, avgG, avgB),
+      }
+    })
+    .sort((a, b) => b.percentage - a.percentage)
 }
 
-function calculateRGBDistance(rgb1: [number, number, number], rgb2: [number, number, number]): number {
+function calculateRGBDistance(
+  rgb1: [number, number, number],
+  rgb2: [number, number, number]
+): number {
   const [r1, g1, b1] = rgb1
   const [r2, g2, b2] = rgb2
   return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2)
@@ -102,7 +101,7 @@ function rgbToHsb(r: number, g: number, b: number) {
   return {
     h: h / 360,
     s: Math.round(s * 100) / 100,
-    b: Math.round(brightness * 100) / 100
+    b: Math.round(brightness * 100) / 100,
   }
 }
 

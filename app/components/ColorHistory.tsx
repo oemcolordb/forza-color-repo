@@ -23,10 +23,11 @@ const ColorHistory: React.FC<ColorHistoryProps> = ({ isDarkMode, onColorSelect }
   }, [])
 
   const addToHistory = (color: CarColor) => {
-    const newHistory = [color, ...history.filter(c => 
-      !(c.colorName === color.colorName && c.make === color.make)
-    )].slice(0, 20)
-    
+    const newHistory = [
+      color,
+      ...history.filter(c => !(c.colorName === color.colorName && c.make === color.make)),
+    ].slice(0, 20)
+
     setHistory(newHistory)
     localStorage.setItem('forza-color-history', JSON.stringify(newHistory))
   }
@@ -38,7 +39,7 @@ const ColorHistory: React.FC<ColorHistoryProps> = ({ isDarkMode, onColorSelect }
 
   // Expose addToHistory function globally
   useEffect(() => {
-    (window as any).addColorToHistory = addToHistory
+    ;(window as any).addColorToHistory = addToHistory
   }, [history])
 
   if (history.length === 0) {
@@ -69,14 +70,16 @@ const ColorHistory: React.FC<ColorHistoryProps> = ({ isDarkMode, onColorSelect }
           Clear
         </button>
       </div>
-      
+
       <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
         {history.map((color, index) => (
           <button
             key={index}
             onClick={() => onColorSelect(color)}
             className="aspect-square rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-            style={{ backgroundColor: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)` }}
+            style={{
+              backgroundColor: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
+            }}
             title={`${color.colorName} - ${color.make}`}
           />
         ))}

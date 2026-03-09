@@ -45,9 +45,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-      <div className={`w-full max-w-md rounded-lg shadow-xl ${
-        isDarkMode ? 'bg-slate-800' : 'bg-white'
-      }`}>
+      <div
+        className={`w-full max-w-md rounded-lg shadow-xl ${
+          isDarkMode ? 'bg-slate-800' : 'bg-white'
+        }`}
+      >
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -64,15 +66,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <label className={`block text-sm font-medium mb-1 ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
-                }`}>
+                <label
+                  className={`block text-sm font-medium mb-1 ${
+                    isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                  }`}
+                >
                   Name
                 </label>
                 <input
                   type="text"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={e => setName(e.target.value)}
                   className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
                     isDarkMode
                       ? 'bg-slate-700 border-slate-600 text-white focus:ring-blue-500'
@@ -84,15 +88,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
             )}
 
             <div>
-              <label className={`block text-sm font-medium mb-1 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>
+              <label
+                className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}
+              >
                 Email
               </label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 required
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
                   isDarkMode
@@ -104,15 +110,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
             </div>
 
             <div>
-              <label className={`block text-sm font-medium mb-1 ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-700'
-              }`}>
+              <label
+                className={`block text-sm font-medium mb-1 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}
+              >
                 Password
               </label>
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
                 minLength={8}
                 className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
@@ -135,7 +143,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
               disabled={loading}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
+              {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
             </button>
           </form>
 

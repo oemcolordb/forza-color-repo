@@ -6,7 +6,7 @@ export const useDeviceDetection = () => {
     isTablet: false,
     isDesktop: true,
     screenWidth: 1024,
-    screenHeight: 768
+    screenHeight: 768,
   })
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export const useDeviceDetection = () => {
         isTablet: width >= 768 && width < 1024,
         isDesktop: width >= 1024,
         screenWidth: width,
-        screenHeight: height
+        screenHeight: height,
       })
     }
 

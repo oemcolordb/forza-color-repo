@@ -7,14 +7,14 @@ const PALETTES = {
   supercar: { makes: ['Lamborghini', 'Ferrari', 'Porsche'], colors: ['yellow', 'orange'] },
   jdm: { makes: ['Honda', 'Toyota', 'Nissan', 'Mazda'], colors: [] },
   british: { makes: ['McLaren', 'Aston Martin', 'Jaguar'], colors: ['green'] },
-  american: { makes: ['Ford', 'Chevrolet', 'Dodge'], colors: ['red', 'blue'] }
+  american: { makes: ['Ford', 'Chevrolet', 'Dodge'], colors: ['red', 'blue'] },
 }
 
 exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 
   if (event.httpMethod === 'OPTIONS') {
@@ -32,10 +32,11 @@ exports.handler = async (event, context) => {
 
     const colors = colorData.default || colorData
     const config = PALETTES[theme]
-    
-    let filtered = colors.filter(color => {
+
+    const filtered = colors.filter(color => {
       const makeMatch = config.makes.includes(color.make)
-      const colorMatch = config.colors.length === 0 || 
+      const colorMatch =
+        config.colors.length === 0 ||
         config.colors.some(c => color.colorName.toLowerCase().includes(c))
       return makeMatch && (config.colors.length === 0 || colorMatch)
     })
@@ -50,14 +51,14 @@ exports.handler = async (event, context) => {
         theme,
         size: shuffled.length,
         palette: shuffled,
-        availableThemes: Object.keys(PALETTES)
-      })
+        availableThemes: Object.keys(PALETTES),
+      }),
     }
   } catch (error) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ error: 'Internal server error' }),
     }
   }
 }

@@ -8,33 +8,35 @@ export class ImageOptimizer {
   static async checkWebPSupport(): Promise<boolean> {
     if (this.supportsWebP !== null) return this.supportsWebP
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const webP = new Image()
       webP.onload = webP.onerror = () => {
         this.supportsWebP = webP.height === 2
         resolve(this.supportsWebP)
       }
-      webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA'
+      webP.src =
+        'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA'
     })
   }
 
   static async checkAVIFSupport(): Promise<boolean> {
     if (this.supportsAVIF !== null) return this.supportsAVIF
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const avif = new Image()
       avif.onload = avif.onerror = () => {
         this.supportsAVIF = avif.height === 2
         resolve(this.supportsAVIF)
       }
-      avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A='
+      avif.src =
+        'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A='
     })
   }
 
   static async getOptimalFormat(): Promise<'avif' | 'webp' | 'jpg'> {
     const [supportsAVIF, supportsWebP] = await Promise.all([
       this.checkAVIFSupport(),
-      this.checkWebPSupport()
+      this.checkWebPSupport(),
     ])
 
     if (supportsAVIF) return 'avif'
@@ -44,16 +46,16 @@ export class ImageOptimizer {
 
   static getOptimizedImageUrl(baseUrl: string, width?: number, quality?: number): string {
     const url = new URL(baseUrl, window.location.origin)
-    
+
     if (width) url.searchParams.set('w', width.toString())
     if (quality) url.searchParams.set('q', quality.toString())
-    
+
     return url.toString()
   }
 
   static async loadOptimizedImage(src: string, width?: number, quality = 75): Promise<string> {
     const format = await this.getOptimalFormat()
-    
+
     // If it's already an optimized format or external URL, return as-is
     if (src.includes('http') && !src.includes(window.location.hostname)) {
       return src
@@ -61,7 +63,7 @@ export class ImageOptimizer {
 
     // Generate optimized URL
     const optimizedUrl = this.getOptimizedImageUrl(src, width, quality)
-    
+
     // Add format parameter if supported
     if (format !== 'jpg') {
       const url = new URL(optimizedUrl)
@@ -83,8 +85,8 @@ export class ImageOptimizer {
 
   static async preloadOptimizedImages(sources: string[], width?: number): Promise<void> {
     const format = await this.getOptimalFormat()
-    
-    const preloadPromises = sources.map(async (src) => {
+
+    const preloadPromises = sources.map(async src => {
       const optimizedSrc = await this.loadOptimizedImage(src, width)
       return this.preloadImage(optimizedSrc)
     })
@@ -92,10 +94,11 @@ export class ImageOptimizer {
     await Promise.all(preloadPromises)
   }
 
-  static createResponsiveImageSrcSet(baseSrc: string, sizes: number[] = [320, 640, 1024, 1280]): string {
-    return sizes
-      .map(size => `${this.getOptimizedImageUrl(baseSrc, size)} ${size}w`)
-      .join(', ')
+  static createResponsiveImageSrcSet(
+    baseSrc: string,
+    sizes: number[] = [320, 640, 1024, 1280]
+  ): string {
+    return sizes.map(size => `${this.getOptimizedImageUrl(baseSrc, size)} ${size}w`).join(', ')
   }
 
   static async compressImage(file: File, maxWidth = 1024, quality = 0.8): Promise<Blob> {
@@ -112,13 +115,17 @@ export class ImageOptimizer {
 
         // Draw and compress
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-        canvas.toBlob((blob) => {
-          if (blob) {
-            resolve(blob)
-          } else {
-            reject(new Error('Failed to compress image'))
-          }
-        }, 'image/jpeg', quality)
+        canvas.toBlob(
+          blob => {
+            if (blob) {
+              resolve(blob)
+            } else {
+              reject(new Error('Failed to compress image'))
+            }
+          },
+          'image/jpeg',
+          quality
+        )
       }
 
       img.src = URL.createObjectURL(file)
@@ -132,7 +139,7 @@ export function useImageOptimization() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    ImageOptimizer.getOptimalFormat().then((optimalFormat) => {
+    ImageOptimizer.getOptimalFormat().then(optimalFormat => {
       setFormat(optimalFormat)
       setIsLoading(false)
     })

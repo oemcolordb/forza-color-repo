@@ -53,15 +53,15 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       const response = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       })
-      
+
       if (!response.ok) throw new Error('Sign in failed')
-      
+
       const userData = await response.json()
       setUser(userData)
       localStorage.setItem('forza-user', JSON.stringify(userData))
-      
+
       // Sync data from cloud
       await syncFromCloud(userData.id)
     } catch (error) {
@@ -75,11 +75,11 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, username })
+        body: JSON.stringify({ email, password, username }),
       })
-      
+
       if (!response.ok) throw new Error('Sign up failed')
-      
+
       const userData = await response.json()
       setUser(userData)
       localStorage.setItem('forza-user', JSON.stringify(userData))
@@ -95,9 +95,9 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID
       const redirectUri = `${window.location.origin}/auth/discord/callback`
       const scope = 'identify email'
-      
+
       const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}`
-      
+
       window.location.href = authUrl
     } catch (error) {
       console.error('Discord sign in error:', error)
@@ -110,9 +110,9 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       // Xbox Live OAuth flow
       const clientId = process.env.NEXT_PUBLIC_XBOX_CLIENT_ID
       const redirectUri = `${window.location.origin}/auth/xbox/callback`
-      
+
       const authUrl = `https://login.live.com/oauth20_authorize.srf?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=XboxLive.signin`
-      
+
       window.location.href = authUrl
     } catch (error) {
       console.error('Xbox sign in error:', error)
@@ -127,14 +127,14 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
   const syncFavorites = async (favorites: string[]) => {
     if (!user) return
-    
+
     try {
       await fetch('/api/sync/favorites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, favorites })
+        body: JSON.stringify({ userId: user.id, favorites }),
       })
-      
+
       setUser({ ...user, favorites })
     } catch (error) {
       console.error('Sync favorites error:', error)
@@ -143,14 +143,14 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
   const syncTuningPresets = async (presets: any[]) => {
     if (!user) return
-    
+
     try {
       await fetch('/api/sync/presets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, presets })
+        body: JSON.stringify({ userId: user.id, presets }),
       })
-      
+
       setUser({ ...user, tuningPresets: presets })
     } catch (error) {
       console.error('Sync presets error:', error)
@@ -159,14 +159,14 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
   const syncColorSets = async (sets: any[]) => {
     if (!user) return
-    
+
     try {
       await fetch('/api/sync/colorsets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, sets })
+        body: JSON.stringify({ userId: user.id, sets }),
       })
-      
+
       setUser({ ...user, colorSets: sets })
     } catch (error) {
       console.error('Sync color sets error:', error)
@@ -177,7 +177,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     try {
       const response = await fetch(`/api/sync/all?userId=${userId}`)
       const data = await response.json()
-      
+
       if (data.favorites) {
         localStorage.setItem('forza-favorites', JSON.stringify(data.favorites))
       }
@@ -204,7 +204,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
         signOut,
         syncFavorites,
         syncTuningPresets,
-        syncColorSets
+        syncColorSets,
       }}
     >
       {children}

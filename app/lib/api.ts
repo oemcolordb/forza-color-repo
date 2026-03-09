@@ -23,7 +23,7 @@ class ApiClient {
       headers = {},
       body,
       cache: useCache = true,
-      timeout = this.defaultTimeout
+      timeout = this.defaultTimeout,
     } = options
 
     const url = `${this.baseUrl}${endpoint}`
@@ -43,10 +43,10 @@ class ApiClient {
         method,
         headers: {
           'Content-Type': 'application/json',
-          ...headers
+          ...headers,
         },
         body: body ? JSON.stringify(body) : undefined,
-        signal: controller.signal
+        signal: controller.signal,
       })
 
       clearTimeout(timeoutId)
@@ -65,11 +65,11 @@ class ApiClient {
       return data
     } catch (error) {
       clearTimeout(timeoutId)
-      
+
       if (error instanceof Error && error.name === 'AbortError') {
         throw new Error('Request timeout')
       }
-      
+
       throw handleError(error)
     }
   }
@@ -78,11 +78,19 @@ class ApiClient {
     return this.request<T>(endpoint, { ...options, method: 'GET' })
   }
 
-  post<T>(endpoint: string, body?: unknown, options?: Omit<ApiOptions, 'method' | 'body'>): Promise<T> {
+  post<T>(
+    endpoint: string,
+    body?: unknown,
+    options?: Omit<ApiOptions, 'method' | 'body'>
+  ): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'POST', body })
   }
 
-  put<T>(endpoint: string, body?: unknown, options?: Omit<ApiOptions, 'method' | 'body'>): Promise<T> {
+  put<T>(
+    endpoint: string,
+    body?: unknown,
+    options?: Omit<ApiOptions, 'method' | 'body'>
+  ): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'PUT', body })
   }
 
@@ -107,14 +115,14 @@ class RateLimiter {
   canMakeRequest(key: string): boolean {
     const now = Date.now()
     const requests = this.requests.get(key) || []
-    
+
     // Remove old requests outside the window
     const validRequests = requests.filter(time => now - time < this.windowMs)
-    
+
     if (validRequests.length >= this.maxRequests) {
       return false
     }
-    
+
     validRequests.push(now)
     this.requests.set(key, validRequests)
     return true

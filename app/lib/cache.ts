@@ -7,12 +7,12 @@ class MemoryCache implements ICacheManager {
   get<T>(key: string): T | null {
     const entry = this.cache.get(key)
     if (!entry) return null
-    
+
     if (Date.now() > entry.timestamp + entry.ttl) {
       this.cache.delete(key)
       return null
     }
-    
+
     return entry.data as T
   }
 
@@ -20,19 +20,19 @@ class MemoryCache implements ICacheManager {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      ttl
+      ttl,
     })
   }
 
   has(key: string): boolean {
     const entry = this.cache.get(key)
     if (!entry) return false
-    
+
     if (Date.now() > entry.timestamp + entry.ttl) {
       this.cache.delete(key)
       return false
     }
-    
+
     return true
   }
 

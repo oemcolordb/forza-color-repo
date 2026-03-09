@@ -5,28 +5,56 @@ import { fetchTrendPrediction } from '../lib/pythonApi'
 
 const PALETTE_CATEGORIES = {
   'Ferrari Reds': { makes: ['Ferrari'], colorNames: ['rosso', 'red', 'rouge'], icon: '🏎️' },
-  'Racing Blues': { makes: ['BMW', 'Ford', 'Subaru'], colorNames: ['blue', 'bleu', 'blu'], icon: '🏁' },
-  'Luxury Blacks': { makes: ['Mercedes-Benz', 'Audi', 'BMW'], colorNames: ['black', 'noir', 'nero'], icon: '💎' },
-  'Supercar Yellows': { makes: ['Lamborghini', 'Ferrari', 'Porsche'], colorNames: ['yellow', 'giallo', 'gelb'], icon: '⚡' },
-  'JDM Classics': { makes: ['Honda', 'Toyota', 'Nissan', 'Mazda'], colorNames: ['white', 'silver', 'black'], icon: '🗾' },
-  'German Engineering': { makes: ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche'], colorNames: [], icon: '🔧' },
-  'British Racing': { makes: ['McLaren', 'Aston Martin', 'Jaguar'], colorNames: ['green', 'racing'], icon: '🇬🇧' },
-  'American Muscle': { makes: ['Ford', 'Chevrolet', 'Dodge'], colorNames: ['red', 'blue', 'orange'], icon: '🦅' },
+  'Racing Blues': {
+    makes: ['BMW', 'Ford', 'Subaru'],
+    colorNames: ['blue', 'bleu', 'blu'],
+    icon: '🏁',
+  },
+  'Luxury Blacks': {
+    makes: ['Mercedes-Benz', 'Audi', 'BMW'],
+    colorNames: ['black', 'noir', 'nero'],
+    icon: '💎',
+  },
+  'Supercar Yellows': {
+    makes: ['Lamborghini', 'Ferrari', 'Porsche'],
+    colorNames: ['yellow', 'giallo', 'gelb'],
+    icon: '⚡',
+  },
+  'JDM Classics': {
+    makes: ['Honda', 'Toyota', 'Nissan', 'Mazda'],
+    colorNames: ['white', 'silver', 'black'],
+    icon: '🗾',
+  },
+  'German Engineering': {
+    makes: ['BMW', 'Mercedes-Benz', 'Audi', 'Porsche'],
+    colorNames: [],
+    icon: '🔧',
+  },
+  'British Racing': {
+    makes: ['McLaren', 'Aston Martin', 'Jaguar'],
+    colorNames: ['green', 'racing'],
+    icon: '🇬🇧',
+  },
+  'American Muscle': {
+    makes: ['Ford', 'Chevrolet', 'Dodge'],
+    colorNames: ['red', 'blue', 'orange'],
+    icon: '🦅',
+  },
   'Exotic Supercars': { makes: ['Bugatti', 'Koenigsegg', 'Pagani'], colorNames: [], icon: '🚀' },
-  'Rally Legends': { makes: ['Subaru', 'Mitsubishi', 'Lancia'], colorNames: ['rally', 'wrc'], icon: '🏔️' }
+  'Rally Legends': {
+    makes: ['Subaru', 'Mitsubishi', 'Lancia'],
+    colorNames: ['rally', 'wrc'],
+    icon: '🏔️',
+  },
 }
 
-const PaletteGenerator = ({
-  colors,
-  isDarkMode,
-  onPaletteGenerated
-}) => {
+const PaletteGenerator = ({ colors, isDarkMode, onPaletteGenerated }) => {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [paletteSize, setPaletteSize] = useState(6)
   const [generationMode, setGenerationMode] = useState('random')
   const [lastGenerated, setLastGenerated] = useState([])
 
-  const generatePalette = async (category) => {
+  const generatePalette = async category => {
     const config = PALETTE_CATEGORIES[category]
     if (!config) return []
 
@@ -36,9 +64,7 @@ const PaletteGenerator = ({
         const prediction = await fetchTrendPrediction()
         if (prediction.success && prediction.forecast) {
           const trendingNames = prediction.forecast.forecast.map(f => f.colorName.toLowerCase())
-          const trending = colors.filter(c =>
-            trendingNames.includes(c.colorName.toLowerCase())
-          )
+          const trending = colors.filter(c => trendingNames.includes(c.colorName.toLowerCase()))
           return trending.slice(0, paletteSize)
         }
       } catch (err) {
@@ -49,10 +75,9 @@ const PaletteGenerator = ({
 
     const filteredColors = colors.filter(color => {
       const makeMatch = config.makes.length === 0 || config.makes.includes(color.make)
-      const nameMatch = config.colorNames.length === 0 || 
-        config.colorNames.some(name => 
-          color.colorName.toLowerCase().includes(name.toLowerCase())
-        )
+      const nameMatch =
+        config.colorNames.length === 0 ||
+        config.colorNames.some(name => color.colorName.toLowerCase().includes(name.toLowerCase()))
       return makeMatch && (config.colorNames.length === 0 || nameMatch)
     })
 
@@ -73,38 +98,44 @@ const PaletteGenerator = ({
       <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         🎨 Palette Generator
       </h3>
-      
+
       <div className="space-y-4">
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Category
           </label>
           <select
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={e => setSelectedCategory(e.target.value)}
             className={`w-full p-2 rounded border ${
-              isDarkMode 
-                ? 'bg-slate-700 border-slate-600 text-white' 
+              isDarkMode
+                ? 'bg-slate-700 border-slate-600 text-white'
                 : 'bg-white border-gray-300 text-gray-900'
             }`}
           >
             <option value="">Select a category...</option>
             {Object.entries(PALETTE_CATEGORIES).map(([category, config]) => (
-              <option key={category} value={category}>{config.icon} {category}</option>
+              <option key={category} value={category}>
+                {config.icon} {category}
+              </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Generation Mode
           </label>
           <select
             value={generationMode}
-            onChange={(e) => setGenerationMode(e.target.value)}
+            onChange={e => setGenerationMode(e.target.value)}
             className={`w-full p-2 rounded border ${
-              isDarkMode 
-                ? 'bg-slate-700 border-slate-600 text-white' 
+              isDarkMode
+                ? 'bg-slate-700 border-slate-600 text-white'
                 : 'bg-white border-gray-300 text-gray-900'
             }`}
           >
@@ -115,7 +146,9 @@ const PaletteGenerator = ({
         </div>
 
         <div>
-          <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+          <label
+            className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+          >
             Palette Size: {paletteSize}
           </label>
           <input
@@ -123,7 +156,7 @@ const PaletteGenerator = ({
             min="3"
             max="12"
             value={paletteSize}
-            onChange={(e) => setPaletteSize(Number(e.target.value))}
+            onChange={e => setPaletteSize(Number(e.target.value))}
             className="w-full"
           />
         </div>
@@ -157,7 +190,9 @@ const PaletteGenerator = ({
 
         {lastGenerated.length > 0 && (
           <div className="mt-4">
-            <h4 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+            <h4
+              className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
+            >
               Preview ({lastGenerated.length} colors)
             </h4>
             <div className="flex gap-1 overflow-x-auto">
@@ -166,7 +201,7 @@ const PaletteGenerator = ({
                   key={index}
                   className="w-8 h-8 rounded border flex-shrink-0"
                   style={{
-                    background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 50}%)`
+                    background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 50}%)`,
                   }}
                   title={`${color.colorName} - ${color.make}`}
                 />

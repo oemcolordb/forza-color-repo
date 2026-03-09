@@ -2,6 +2,7 @@
 <img width="1200" height="475" alt="Forza Color Universe Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 
 # Forza Color Universe 🎨
+
 <!-- Deploy trigger -->
 
 **Explore 10,000+ Official Automotive Colors from Forza Racing Games**
@@ -30,18 +31,21 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Node.js** 18.0 or higher
 - **npm** or **yarn** package manager
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/your-username/forza-color-repo.git
    cd forza-color-repo
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    # or
@@ -49,16 +53,20 @@
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.local.example .env.local
    ```
+
    Edit `.env.local` and add your configuration:
+
    ```env
    NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
    NEXT_PUBLIC_APP_URL=http://localhost:3000
    ```
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    # or

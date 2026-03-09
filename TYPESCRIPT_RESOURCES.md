@@ -3,6 +3,7 @@
 ## 🏆 Top Picks (Start Here)
 
 ### 1. **Total TypeScript by Matt Pocock** ⭐ BEST
+
 - **Link**: https://www.totaltypescript.com
 - **Why**: Matt is THE TypeScript expert. Clear, practical, real-world examples
 - **Free Course**: TypeScript Beginners Tutorial
@@ -10,12 +11,14 @@
 - **Twitter**: @mattpocockuk (follow for daily tips!)
 
 ### 2. **Official TypeScript Handbook** ⭐ FREE
+
 - **Link**: https://www.typescriptlang.org/docs/handbook/
 - **Why**: Authoritative, comprehensive, always up-to-date
 - **Start**: Handbook → Everyday Types → Narrowing
 - **Time**: 2-3 hours to read basics
 
 ### 3. **TypeScript Deep Dive** ⭐ FREE
+
 - **Link**: https://basarat.gitbook.io/typescript/
 - **Why**: Free online book, very detailed
 - **Best For**: Reference and deep understanding
@@ -23,6 +26,7 @@
 ## 📺 Video Courses
 
 ### Free
+
 1. **Net Ninja - TypeScript Tutorial**
    - YouTube: Search "Net Ninja TypeScript"
    - 20 videos, ~3 hours total
@@ -38,6 +42,7 @@
    - Advanced patterns
 
 ### Paid (Worth It)
+
 1. **Frontend Masters - TypeScript Fundamentals**
    - By Mike North
    - ~$39/month subscription
@@ -51,38 +56,45 @@
 ## 🎮 Interactive Learning
 
 ### 1. **TypeScript Playground** ⭐ FREE
+
 - **Link**: https://www.typescriptlang.org/play
 - **Why**: Try code instantly, see errors in real-time
 - **Use**: Test every concept you learn
 
 ### 2. **Type Challenges** ⭐ FREE
+
 - **Link**: https://github.com/type-challenges/type-challenges
 - **Why**: Learn by solving puzzles
 - **Start**: Easy challenges first
 
 ### 3. **TypeScript Exercises**
+
 - **Link**: https://typescript-exercises.github.io
 - **Why**: Hands-on practice with solutions
 
 ## 📱 Daily Learning
 
 ### Twitter Follows (Free Tips Daily)
+
 - @mattpocockuk - Daily TypeScript tips
 - @buildsghost - TypeScript tricks
 - @AndaristRake - Advanced patterns
 
 ### Newsletters
+
 - **TypeScript Weekly** - https://typescript-weekly.com
 - **Bytes** - https://bytes.dev (includes TS content)
 
 ## 📚 Books
 
 ### 1. **Programming TypeScript** by Boris Cherny
+
 - Most comprehensive book
 - Great reference
 - ~$40
 
 ### 2. **Effective TypeScript** by Dan Vanderkam
+
 - 62 specific tips
 - Intermediate level
 - ~$35
@@ -90,6 +102,7 @@
 ## 🎯 Learning Path (4 Weeks)
 
 ### Week 1: Basics
+
 ```typescript
 // Learn these concepts
 - Basic types (string, number, boolean)
@@ -102,6 +115,7 @@
 ```
 
 ### Week 2: Intermediate
+
 ```typescript
 // Learn these concepts
 - Generics <T>
@@ -114,6 +128,7 @@
 ```
 
 ### Week 3: Advanced
+
 ```typescript
 // Learn these concepts
 - Conditional types
@@ -126,6 +141,7 @@
 ```
 
 ### Week 4: Real World
+
 ```typescript
 // Apply to your projects
 - Type React components properly
@@ -139,9 +155,11 @@
 ## 🚀 Quick Start (Right Now!)
 
 ### 1. Open TypeScript Playground
+
 https://www.typescriptlang.org/play
 
 ### 2. Try This Code:
+
 ```typescript
 // Basic typing
 function greet(name: string): string {
@@ -170,23 +188,27 @@ function isString(value: unknown): value is string {
 ```
 
 ### 3. Read This Page:
+
 https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
 
 ## 💡 Pro Tips
 
 ### 1. Don't Use `any`
+
 ```typescript
 ❌ const data: any = fetchData()
 ✅ const data: User = fetchData()
 ```
 
 ### 2. Let TypeScript Infer
+
 ```typescript
 ❌ const name: string = "John"
 ✅ const name = "John" // TS knows it's string
 ```
 
 ### 3. Use `unknown` Instead of `any`
+
 ```typescript
 ❌ function parse(data: any) { }
 ✅ function parse(data: unknown) {
@@ -197,6 +219,7 @@ https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
 ```
 
 ### 4. Create Types for Your Data
+
 ```typescript
 // Your Forza app
 interface CarColor {
@@ -252,6 +275,7 @@ interface CarColor {
 ## 🎯 Your First Goal
 
 **Type your entire Forza app properly in 30 days:**
+
 - Week 1: Type all interfaces (CarColor, etc.)
 - Week 2: Type all components
 - Week 3: Type all functions

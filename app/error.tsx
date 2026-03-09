@@ -17,13 +17,16 @@ export default function Error({
         <h1 className="text-6xl font-bold mb-4">500</h1>
         <p className="text-xl mb-8">Something went wrong</p>
         <div className="space-x-4">
-          <button 
+          <button
             onClick={reset}
             className="bg-fuchsia-500 hover:bg-fuchsia-600 px-6 py-3 rounded-lg transition-colors"
           >
             Try Again
           </button>
-          <Link href="/" className="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-lg transition-colors inline-block">
+          <Link
+            href="/"
+            className="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-lg transition-colors inline-block"
+          >
             Back to Colors
           </Link>
         </div>

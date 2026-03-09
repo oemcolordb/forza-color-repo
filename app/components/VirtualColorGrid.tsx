@@ -22,7 +22,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   onShowInfo,
   onToggleFavorite,
   isDarkMode,
-  expandedColorId
+  expandedColorId,
 }) => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const containerRef = useRef<HTMLDivElement>(null)
@@ -37,7 +37,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
 
   // Resize observer for responsive grid
   useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect
         setContainerSize({ width, height })
@@ -52,30 +52,33 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   }, [])
 
   // Memoized cell renderer for performance
-  const Cell = useCallback(({ columnIndex, rowIndex, style }: any) => {
-    const index = rowIndex * columnsCount + columnIndex
-    const color = colors[index]
+  const Cell = useCallback(
+    ({ columnIndex, rowIndex, style }: any) => {
+      const index = rowIndex * columnsCount + columnIndex
+      const color = colors[index]
 
-    if (!color) return null
+      if (!color) return null
 
-    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-    const isFavorite = favorites.includes(colorId)
+      const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+      const isFavorite = favorites.includes(colorId)
 
-    return (
-      <div style={style}>
-        <div style={{ padding: GAP / 2 }}>
-          <ColorCard
-            color={color}
-            onSelect={onColorSelect}
-            onShowInfo={onShowInfo}
-            isFavorite={isFavorite}
-            onToggleFavorite={() => onToggleFavorite(colorId)}
-            isDarkMode={isDarkMode}
-          />
+      return (
+        <div style={style}>
+          <div style={{ padding: GAP / 2 }}>
+            <ColorCard
+              color={color}
+              onSelect={onColorSelect}
+              onShowInfo={onShowInfo}
+              isFavorite={isFavorite}
+              onToggleFavorite={() => onToggleFavorite(colorId)}
+              isDarkMode={isDarkMode}
+            />
+          </div>
         </div>
-      </div>
-    )
-  }, [colors, favorites, onColorSelect, onShowInfo, onToggleFavorite, isDarkMode, columnsCount])
+      )
+    },
+    [colors, favorites, onColorSelect, onShowInfo, onToggleFavorite, isDarkMode, columnsCount]
+  )
 
   if (colors.length === 0) {
     return (

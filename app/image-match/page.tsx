@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import ImageColorExtractor from '../components/ImageColorExtractor'
 import colorData from '../../services/colorData'
 import { ForzaColorMatch, CarColor } from '../types'
-import { useAuth } from '../components/EnhancedAuthProvider'
+import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
 
 interface SavedScan {
   id: string
@@ -16,6 +16,14 @@ interface SavedScan {
 }
 
 export default function ImageMatchPage() {
+  return (
+    <EnhancedAuthProvider>
+      <ImageMatchPageInner />
+    </EnhancedAuthProvider>
+  )
+}
+
+function ImageMatchPageInner() {
   const [matches, setMatches] = useState<ForzaColorMatch[]>([])
   const [extracted, setExtracted] = useState<any[]>([])
   const [selected, setSelected] = useState<CarColor | null>(null)
@@ -38,11 +46,13 @@ export default function ImageMatchPage() {
     try {
       const response = await fetch(`/api/scans?userId=${user.id}`)
       const data = await response.json()
-      setSavedScans(data.map((scan: any) => ({
-        ...scan,
-        extractedColors: JSON.parse(scan.extractedColors),
-        matches: JSON.parse(scan.matches)
-      })))
+      setSavedScans(
+        data.map((scan: any) => ({
+          ...scan,
+          extractedColors: JSON.parse(scan.extractedColors),
+          matches: JSON.parse(scan.matches),
+        }))
+      )
     } catch (error) {
       console.error('Failed to load scans:', error)
     }
@@ -64,8 +74,8 @@ export default function ImageMatchPage() {
           imageName: currentImageName,
           extractedColors: extracted,
           matches,
-          imageData: currentImageData
-        })
+          imageData: currentImageData,
+        }),
       })
 
       const result = await response.json()
@@ -94,7 +104,7 @@ export default function ImageMatchPage() {
 
     try {
       await fetch(`/api/scans?scanId=${scanId}&userId=${user.id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       })
       loadSavedScans()
     } catch (error) {
@@ -118,7 +128,7 @@ export default function ImageMatchPage() {
               Upload a photo to extract colors and find matching Forza paints
             </p>
           </div>
-          
+
           {user && (
             <div className="flex gap-3">
               <button
@@ -173,7 +183,7 @@ export default function ImageMatchPage() {
                       <div
                         className="w-16 h-16 rounded border-2 border-gray-600"
                         style={{
-                          background: `hsl(${m.forza.color1.h * 360}, ${m.forza.color1.s * 100}%, ${m.forza.color1.b * 100}%)`
+                          background: `hsl(${m.forza.color1.h * 360}, ${m.forza.color1.s * 100}%, ${m.forza.color1.b * 100}%)`,
                         }}
                       />
                       <div className="flex-1">
@@ -182,11 +192,17 @@ export default function ImageMatchPage() {
                         <div className="text-xs text-gray-500">{m.forza.colorType}</div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-2xl font-bold ${
-                          m.similarity >= 90 ? 'text-green-400' :
-                          m.similarity >= 80 ? 'text-blue-400' :
-                          m.similarity >= 70 ? 'text-yellow-400' : 'text-orange-400'
-                        }`}>
+                        <div
+                          className={`text-2xl font-bold ${
+                            m.similarity >= 90
+                              ? 'text-green-400'
+                              : m.similarity >= 80
+                                ? 'text-blue-400'
+                                : m.similarity >= 70
+                                  ? 'text-yellow-400'
+                                  : 'text-orange-400'
+                          }`}
+                        >
                           {m.similarity.toFixed(0)}%
                         </div>
                         <div className="text-xs text-gray-500">Match</div>
@@ -207,7 +223,7 @@ export default function ImageMatchPage() {
                 <div
                   className="w-full h-32 rounded-lg mb-4"
                   style={{
-                    background: `hsl(${selected.color1.h * 360}, ${selected.color1.s * 100}%, ${selected.color1.b * 100}%)`
+                    background: `hsl(${selected.color1.h * 360}, ${selected.color1.s * 100}%, ${selected.color1.b * 100}%)`,
                   }}
                 />
                 <div className="space-y-2 text-sm">
@@ -226,8 +242,7 @@ export default function ImageMatchPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-400">HSB:</span>
                     <span className="font-mono text-xs">
-                      {Math.round(selected.color1.h * 360)}° 
-                      {Math.round(selected.color1.s * 100)}% 
+                      {Math.round(selected.color1.h * 360)}°{Math.round(selected.color1.s * 100)}%
                       {Math.round(selected.color1.b * 100)}%
                     </span>
                   </div>
@@ -243,7 +258,7 @@ export default function ImageMatchPage() {
                   <p className="text-gray-400 text-sm">No saved scans yet</p>
                 ) : (
                   <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {savedScans.map((scan) => (
+                    {savedScans.map(scan => (
                       <div
                         key={scan.id}
                         className="p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"

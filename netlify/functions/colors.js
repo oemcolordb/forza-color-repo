@@ -4,7 +4,7 @@ exports.handler = async (event, context) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   }
 
   if (event.httpMethod === 'OPTIONS') {
@@ -22,7 +22,9 @@ exports.handler = async (event, context) => {
 
     // Filter by color type
     if (queryStringParameters?.type) {
-      colors = colors.filter(c => c.colorType?.toLowerCase() === queryStringParameters.type.toLowerCase())
+      colors = colors.filter(
+        c => c.colorType?.toLowerCase() === queryStringParameters.type.toLowerCase()
+      )
     }
 
     // Search by name
@@ -40,14 +42,14 @@ exports.handler = async (event, context) => {
       headers,
       body: JSON.stringify({
         count: colors.length,
-        colors: colors
-      })
+        colors: colors,
+      }),
     }
   } catch (error) {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal server error' })
+      body: JSON.stringify({ error: 'Internal server error' }),
     }
   }
 }
