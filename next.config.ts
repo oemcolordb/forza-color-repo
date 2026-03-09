@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
     gzipSize: true,
   },
 
+  turbopack: {},
+
   webpack: (config, { dev, isServer }) => {
     config.ignoreWarnings = [
       /Critical dependency: the request of a dependency is an expression/,

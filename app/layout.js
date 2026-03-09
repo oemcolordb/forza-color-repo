@@ -181,9 +181,17 @@ export default function RootLayout({ children }) {
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js')
-      console.warn('SW registered')
-                    .catch(error => console.warn('SW registration failed', error))
+                  // Only register service worker in production
+                  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                    navigator.serviceWorker.register('/sw.js')
+                      .then(() => console.log('SW registered'))
+                      .catch(error => console.warn('SW registration failed', error))
+                  } else {
+                    // Unregister any existing service workers in development
+                    navigator.serviceWorker.getRegistrations().then(registrations => {
+                      registrations.forEach(registration => registration.unregister())
+                    })
+                  }
                 })
               }
             `,

@@ -3,6 +3,9 @@ const CACHE_NAME = 'forza-colors-v1'
 const STATIC_CACHE = 'forza-static-v1'
 const DYNAMIC_CACHE = 'forza-dynamic-v1'
 
+// Detect development mode
+const isDev = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1'
+
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -14,11 +17,15 @@ const STATIC_ASSETS = [
 
 // Install event
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(STATIC_CACHE).then(cache => {
-      return cache.addAll(STATIC_ASSETS)
-    })
-  )
+  if (!isDev) {
+    event.waitUntil(
+      caches.open(STATIC_CACHE).then(cache => {
+        return cache.addAll(STATIC_ASSETS).catch(err => {
+          console.warn('Cache addAll failed:', err)
+        })
+      })
+    )
+  }
   self.skipWaiting()
 })
 
@@ -40,6 +47,11 @@ self.addEventListener('activate', event => {
 
 // Fetch event
 self.addEventListener('fetch', event => {
+  // Skip service worker in development mode
+  if (isDev) {
+    return
+  }
+
   const { request } = event
   const url = new URL(request.url)
 
