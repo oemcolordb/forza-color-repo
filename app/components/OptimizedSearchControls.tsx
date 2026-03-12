@@ -15,6 +15,9 @@ interface OptimizedSearchControlsProps {
   isDarkMode: boolean
   showManufacturerBorders: boolean
   onToggleManufacturerBorders: () => void
+  favoritesCount?: number
+  showFavoritesOnly: boolean
+  onToggleShowFavoritesOnly: () => void
 }
 
 const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.memo(
@@ -28,20 +31,16 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
     makes,
     colorTypes,
     isDarkMode,
-    showManufacturerBorders,
-    onToggleManufacturerBorders,
+    showManufacturerBorders: _showManufacturerBorders,
+    onToggleManufacturerBorders: _onToggleManufacturerBorders,
+    favoritesCount = 0,
+    showFavoritesOnly,
+    onToggleShowFavoritesOnly,
   }) => {
-    const [favorites] = React.useState<string[]>([])
 
     const handleFavoritesToggle = useCallback(() => {
-      if (selectedMake === 'FAVORITES') {
-        onMakeChange('')
-      } else {
-        onMakeChange('FAVORITES')
-        onSearchChange('')
-        onColorTypeChange('')
-      }
-    }, [selectedMake, onMakeChange, onSearchChange, onColorTypeChange])
+      onToggleShowFavoritesOnly()
+    }, [onToggleShowFavoritesOnly])
 
     const inputClasses = React.useMemo(() => {
       return `flex-1 rounded-lg border backdrop-blur-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 px-3 py-2 text-sm ${
@@ -53,23 +52,23 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
 
     const selectClasses = React.useMemo(() => {
       return `rounded-lg border backdrop-blur-sm transition-colors px-3 py-2 text-sm ${
-        selectedMake === 'FAVORITES' ? 'opacity-50 cursor-not-allowed' : ''
+        ''
       } ${
         isDarkMode
           ? 'bg-slate-800/90 border-slate-600 text-white'
           : 'bg-white/90 border-gray-300 text-gray-900'
       }`
-    }, [isDarkMode, selectedMake])
+    }, [isDarkMode])
 
     const buttonClasses = React.useMemo(() => {
       return `rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 px-3 py-2 text-sm ${
-        selectedMake === 'FAVORITES'
+        showFavoritesOnly
           ? 'bg-red-500 text-white focus:ring-red-500'
           : isDarkMode
             ? 'bg-slate-700 text-slate-300 hover:bg-slate-600 focus:ring-slate-500'
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-gray-500'
       }`
-    }, [isDarkMode, selectedMake])
+    }, [isDarkMode, showFavoritesOnly])
 
     return (
       <div className="mb-4 animate-fade-in">
@@ -86,16 +85,41 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
             <button
               onClick={handleFavoritesToggle}
               className={buttonClasses}
-              aria-label={selectedMake === 'FAVORITES' ? 'Show all colors' : 'Show favorites only'}
+              aria-label={showFavoritesOnly ? 'Show all colors' : 'Show favorites only'}
+              style={{
+                position: 'relative',
+              }}
             >
-              ❤️ {favorites.length}
+              <span
+                style={{
+                  display: 'inline-block',
+                  transform: `scale(${Math.min(1 + favoritesCount * 0.02, 2)})`,
+                  transition: 'transform 0.3s ease',
+                }}
+              >
+                ❤️
+              </span>
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  fontSize: '0.7em',
+                  fontWeight: 'bold',
+                  color: 'white',
+                  textShadow: '0 0 2px rgba(0,0,0,0.8)',
+                  pointerEvents: 'none',
+                }}
+              >
+                {favoritesCount > 0 ? favoritesCount : ''}
+              </span>
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <select
-              value={selectedMake === 'FAVORITES' ? '' : selectedMake}
+              value={selectedMake}
               onChange={e => onMakeChange(e.target.value)}
-              disabled={selectedMake === 'FAVORITES'}
               className={selectClasses}
               aria-label="Filter by manufacturer"
             >
@@ -107,9 +131,8 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
               ))}
             </select>
             <select
-              value={selectedMake === 'FAVORITES' ? '' : selectedColorType}
+              value={selectedColorType}
               onChange={e => onColorTypeChange(e.target.value)}
-              disabled={selectedMake === 'FAVORITES'}
               className={selectClasses}
               aria-label="Filter by color type"
             >

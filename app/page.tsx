@@ -5,14 +5,12 @@ import { CarColor, DeviceInfo, ExtractedColor } from './types'
 import { ErrorBoundary } from './lib/errorBoundary'
 import { cache } from './lib/cache'
 import { sanitizeSearchQuery, handleError } from './lib/validation'
-import { createForzaGradient, hsbToCSS, formatHSBValues } from './lib/colorUtils'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SimpleColorGrid from './components/SimpleColorGrid'
 import VirtualColorGrid from './components/VirtualColorGrid'
 import { indexedDBManager } from './lib/indexedDB'
-import OptimizedVirtualGrid from './components/OptimizedVirtualGrid'
 import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ImageColorExtractor from './components/ImageColorExtractor'
 import ResponsiveLayout from './components/ResponsiveLayout'
@@ -38,6 +36,7 @@ import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
 import AdvancedTools from './components/AdvancedTools'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
+import ColorComparison from './components/ColorComparison'
 
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ColorAnalyticsDashboard from './components/ColorAnalyticsDashboard'
@@ -51,17 +50,11 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMake, setSelectedMake] = useState('')
   const [selectedColorType, setSelectedColorType] = useState('')
-  const [displayedColors, setDisplayedColors] = useState<CarColor[]>([])
-  const [hasMore, setHasMore] = useState(true)
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
-  const [colorHistory, setColorHistory] = useState<string[]>([])
+  const [, setColorHistory] = useState<string[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const [tokyoBackground, setTokyoBackground] = useState('')
-  const [page, setPage] = useState(1)
-  const [imageMatchedColors, setImageMatchedColors] = useState<CarColor[]>([])
-  const [showImageExtractor, setShowImageExtractor] = useState(false)
-  const [showTutorial, setShowTutorial] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
@@ -72,17 +65,14 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null)
   const [hsbPopupColor, setHsbPopupColor] = useState<CarColor | null>(null)
   const [showHsbPopup, setShowHsbPopup] = useState(false)
-  const [searchResults, setSearchResults] = useState<CarColor[]>([])
   const [showComparison, setShowComparison] = useState(false)
+  const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
-  const ITEMS_PER_PAGE: number = useMemo(
-    () => (deviceInfo.isMobile ? 30 : 60),
-    [deviceInfo.isMobile]
-  )
-  const { track } = useAnalytics()
-  const { measureAsync } = usePerformance()
-  const { isOnline, cacheColors, getOfflineColors } = useOfflineStorage()
+
+  useAnalytics()
+  usePerformance()
+  useOfflineStorage()
 
   // Create favorites set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
@@ -105,7 +95,7 @@ export default function HomePage() {
 
   // Filter colors with caching and sanitization
   const filteredColors = useMemo(() => {
-    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}`
+    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}-${showFavoritesOnly ? 'fav' : 'all'}`
     const cached = cache.get<CarColor[]>(cacheKey)
     if (cached && allColors.length > 0) {
       return cached
@@ -113,38 +103,34 @@ export default function HomePage() {
 
     let result: CarColor[]
 
-    if (selectedMake === 'FAVORITES') {
-      result = allColors.filter(color => {
-        const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-        return favoritesSet.has(colorId)
-      })
+    if (!searchQuery && !selectedMake && !selectedColorType && !showFavoritesOnly) {
+      result = allColors
     } else {
-      if (!searchQuery && !selectedMake && !selectedColorType) {
-        result = allColors
-      } else {
-        const sanitizedQuery = sanitizeSearchQuery(searchQuery)
-        const searchLower = sanitizedQuery.toLowerCase()
+      const sanitizedQuery = sanitizeSearchQuery(searchQuery)
+      const searchLower = sanitizedQuery.toLowerCase()
 
-        result = allColors.filter(color => {
-          const matchesSearch =
-            !sanitizedQuery ||
-            color.colorName.toLowerCase().includes(searchLower) ||
-            color.make.toLowerCase().includes(searchLower) ||
-            (color.model && color.model.toLowerCase().includes(searchLower))
+      result = allColors.filter(color => {
+        const matchesSearch =
+          !sanitizedQuery ||
+          color.colorName.toLowerCase().includes(searchLower) ||
+          color.make.toLowerCase().includes(searchLower) ||
+          (color.model && color.model.toLowerCase().includes(searchLower))
 
-          const matchesMake = !selectedMake || color.make === selectedMake
-          const matchesType = !selectedColorType || color.colorType === selectedColorType
+        const matchesMake = !selectedMake || color.make === selectedMake
+        const matchesType = !selectedColorType || color.colorType === selectedColorType
 
-          return matchesSearch && matchesMake && matchesType
-        })
-      }
+        const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+        const matchesFavorites = !showFavoritesOnly || favoritesSet.has(colorId)
+
+        return matchesSearch && matchesMake && matchesType && matchesFavorites
+      })
     }
 
     if (allColors.length > 0) {
       cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
     }
     return result
-  }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet])
+  }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet, showFavoritesOnly])
 
   useEffect(() => {
     const loadColors = async () => {
@@ -873,6 +859,9 @@ export default function HomePage() {
               onToggleManufacturerBorders={() =>
                 setShowManufacturerBorders(!showManufacturerBorders)
               }
+              favoritesCount={favorites.length}
+              showFavoritesOnly={showFavoritesOnly}
+              onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
             />
 
             {/* Color Gallery */}
@@ -954,6 +943,15 @@ export default function HomePage() {
           isOpen={showHsbPopup}
           onClose={() => setShowHsbPopup(false)}
           isDarkMode={isDarkMode}
+        />
+
+        <ColorComparison
+          colors={allColors}
+          isDarkMode={isDarkMode}
+          isOpen={showComparison}
+          onClose={() => setShowComparison(false)}
+          selectedColors={compareSelectedColors}
+          setSelectedColors={setCompareSelectedColors}
         />
 
         <KeyboardShortcuts
