@@ -551,6 +551,20 @@
   filter: drop-shadow(0 0 8px currentColor);
 }
 
+/* Shimmer animation for analytics bars */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
 /* Responsive animations */
 @media (prefers-reduced-motion: reduce) {
   .animate-color-shift,
