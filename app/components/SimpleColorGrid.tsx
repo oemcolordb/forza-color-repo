@@ -66,7 +66,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 p-2">
         {displayedColors.map((color, index) => {
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
           const uniqueKey = `${colorId}-${index}`
@@ -188,7 +188,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
       </div>
 
       {displayCount < colors.length && (
-        <div className="text-center py-6">
+        <div className="text-center py-8 mt-4">
           {isLoading ? (
             <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Loading more colors...

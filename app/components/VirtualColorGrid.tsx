@@ -30,7 +30,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   // Calculate grid dimensions
   const CARD_WIDTH = 280
   const CARD_HEIGHT = 200
-  const GAP = 16
+  const GAP = 20
 
   const columnsCount = Math.max(1, Math.floor((containerSize.width + GAP) / (CARD_WIDTH + GAP)))
   const rowsCount = Math.ceil(colors.length / columnsCount)
@@ -89,7 +89,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   }
 
   return (
-    <div ref={containerRef} className="w-full h-[600px]">
+    <div ref={containerRef} className="w-full h-[600px] p-2">
       {containerSize.width > 0 && (
         <Grid
           columnCount={columnsCount}
