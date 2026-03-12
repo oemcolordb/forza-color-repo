@@ -10,5 +10,18 @@
       "memory": 1024,
       "maxDuration": 10
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "forza-colour-repo.vercel.app"
+        }
+      ],
+      "destination": "https://forza-color-repo.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
 }
