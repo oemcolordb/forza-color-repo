@@ -4,7 +4,10 @@ import { Location, LocationType } from './types'
 interface LocationCardProps {
   location: Location
   isSelected: boolean
+  isFavorite: boolean
+  isVisited: boolean
   onSelect: () => void
+  onToggleFavorite: () => void
 }
 
 const LocationTypeIcon: React.FC<{ type: LocationType }> = ({ type }) => {
@@ -70,8 +73,23 @@ const LocationTypeIcon: React.FC<{ type: LocationType }> = ({ type }) => {
   )
 }
 
-const LocationCard: React.FC<LocationCardProps> = ({ location, isSelected, onSelect }) => {
+const LocationCard: React.FC<LocationCardProps> = ({ 
+  location, 
+  isSelected, 
+  isFavorite,
+  isVisited,
+  onSelect,
+  onToggleFavorite 
+}) => {
   const [showCopied, setShowCopied] = React.useState(false)
+  const [heartAnimating, setHeartAnimating] = React.useState(false)
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setHeartAnimating(true)
+    onToggleFavorite()
+    setTimeout(() => setHeartAnimating(false), 300)
+  }
 
   const handleCopy = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -82,6 +100,7 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, isSelected, onSel
 
   const cardClasses = `
     p-4 rounded-lg cursor-pointer transition-all duration-300 ease-in-out border relative
+    ${isVisited ? 'opacity-75' : ''}
     ${
       isSelected
         ? 'bg-blue-600/30 border-blue-500 shadow-lg scale-105'
@@ -97,11 +116,35 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, isSelected, onSel
         </div>
       )}
       <div className="flex items-start gap-3">
+        <button
+          onClick={handleFavoriteClick}
+          className={`mt-1 flex-shrink-0 transition-all duration-200 hover:scale-125 ${heartAnimating ? 'scale-150' : ''}`}
+          title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-6 w-6 transition-colors ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-400 hover:text-red-400'}`}
+            fill={isFavorite ? 'currentColor' : 'none'}
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </button>
         <div className="mt-1 flex-shrink-0">
           <LocationTypeIcon type={location.type} />
         </div>
         <div className="flex-grow min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
+            {isVisited && (
+              <span className="text-green-400 text-xs" title="Visited">✓</span>
+            )}
             <h3 className="font-bold text-white">{location.name}</h3>
             <span
               className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isSelected ? 'bg-blue-200 text-blue-800' : 'bg-gray-600 text-gray-200'}`}

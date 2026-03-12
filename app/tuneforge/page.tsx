@@ -810,6 +810,7 @@ export default function TuneForge() {
         <select
           value={sortBy}
           onChange={e => setSortBy(e.target.value)}
+          aria-label="Sort cars by"
           className={`p-2 rounded border ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
         >
           <option value="manufacturer-az">Manufacturer A-Z</option>
@@ -1025,6 +1026,7 @@ export default function TuneForge() {
                 <select
                   value={unitSystem}
                   onChange={e => setUnitSystem(e.target.value)}
+                  aria-label="Unit system"
                   className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
                 >
                   <option value="Imperial">Imperial (lbs)</option>
@@ -1049,6 +1051,7 @@ export default function TuneForge() {
                 />
                 <select
                   value={selectedCar?.drivetrain || 'RWD'}
+                  aria-label="Drivetrain type"
                   className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
                 >
                   <option value="RWD">RWD</option>
@@ -1075,6 +1078,7 @@ export default function TuneForge() {
                       <select
                         value={value}
                         onChange={e => setUpgrades({ ...upgrades, [key]: e.target.value })}
+                        aria-label={`${key.replace(/([A-Z])/g, ' $1').trim()} upgrade level`}
                         className={`flex-1 p-1 rounded text-xs ${isDarkMode ? 'bg-[#1a1a1a] text-white' : 'bg-white text-black'}`}
                       >
                         <option value="Stock">Stock</option>
@@ -1090,6 +1094,7 @@ export default function TuneForge() {
                 <select
                   value={tuneType}
                   onChange={e => setTuneType(e.target.value)}
+                  aria-label="Tune type"
                   className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
                 >
                   <option value="Basic (General)">Basic (General)</option>
@@ -1100,6 +1105,7 @@ export default function TuneForge() {
                 <select
                   value={weatherCondition}
                   onChange={e => setWeatherCondition(e.target.value)}
+                  aria-label="Weather condition"
                   className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
                 >
                   <option value="dry">☀️ Dry</option>
@@ -1122,6 +1128,7 @@ export default function TuneForge() {
                   max="10"
                   value={handlingBalance}
                   onChange={e => setHandlingBalance(Number(e.target.value))}
+                  aria-label="Handling balance slider"
                   className="w-full"
                 />
 
@@ -1135,6 +1142,7 @@ export default function TuneForge() {
                   max="100"
                   value={bumpStiffness}
                   onChange={e => setBumpStiffness(Number(e.target.value))}
+                  aria-label="Bump stiffness slider"
                   className="w-full"
                 />
               </div>
@@ -1745,6 +1753,7 @@ export default function TuneForge() {
                     step={config.step}
                     value={tuneData[key] || config.min}
                     onChange={e => updateTuneValue(key, parseFloat(e.target.value))}
+                    aria-label={config.label}
                     className="flex-1"
                   />
                   <span className="font-bold text-blue-500 min-w-[60px] text-right">

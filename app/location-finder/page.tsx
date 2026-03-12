@@ -2,20 +2,62 @@
 
 export const dynamic = 'force-dynamic'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Location, LocationType } from './types'
 import LocationCard from './LocationCard'
 import MapDisplay from './MapDisplay'
 import locationData from '@/public/data/fh5-locations.json'
+import { useMapPersistence } from '../hooks/useMapPersistence'
 
 export default function LocationFinderPage() {
   const [locations] = useState<Location[]>(locationData.locations as Location[])
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
-    locationData.locations[0] as Location
-  )
-  const [filters, setFilters] = useState<LocationType[]>(Object.values(LocationType))
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
+  
+  const {
+    progress,
+    isLoading,
+    lastSynced,
+    syncError,
+    markLocationVisited,
+    toggleFavoriteLocation,
+    setFilters: persistFilters,
+    setLastViewed,
+  } = useMapPersistence()
+
+  const filters = progress.activeFilters
+  const visitedSet = useMemo(() => new Set(progress.visitedLocations), [progress.visitedLocations])
+  const favoritesSet = useMemo(() => new Set(progress.favoriteLocations), [progress.favoriteLocations])
 
   const filteredLocations = locations.filter(l => filters.includes(l.type))
+
+  // Initialize selected location from saved progress or first location
+  useEffect(() => {
+    if (isLoading) return
+    
+    if (progress.lastViewedLocation) {
+      const lastViewed = locations.find(l => l.id === progress.lastViewedLocation)
+      if (lastViewed && filters.includes(lastViewed.type)) {
+        setSelectedLocation(lastViewed)
+        return
+      }
+    }
+    
+    if (filteredLocations.length > 0 && !selectedLocation) {
+      setSelectedLocation(filteredLocations[0])
+    }
+  }, [isLoading, progress.lastViewedLocation, locations, filters, filteredLocations, selectedLocation])
+
+  // Handle location selection with persistence
+  const handleSelectLocation = (location: Location) => {
+    setSelectedLocation(location)
+    setLastViewed(location.id)
+    markLocationVisited(location.id)
+  }
+
+  // Handle filter changes with persistence
+  const handleFiltersChange = (newFilters: LocationType[]) => {
+    persistFilters(newFilters)
+  }
   const sidebarBackgrounds = ['/2-3.jpeg', '/3-4.jpeg', '/4-4.jpeg', '/5-5.jpeg', '/6-6.jpg']
   const selectedIndex = selectedLocation
     ? Math.max(
@@ -64,6 +106,27 @@ export default function LocationFinderPage() {
               Location Finder
             </span>
           </h1>
+          <div className="ml-auto flex items-center gap-2 text-sm">
+            {isLoading ? (
+              <span className="text-yellow-400 flex items-center gap-1">
+                <span className="animate-spin">⟳</span> Loading...
+              </span>
+            ) : syncError ? (
+              <span className="text-red-400 flex items-center gap-1" title={syncError}>
+                ⚠ Offline
+              </span>
+            ) : lastSynced ? (
+              <span className="text-green-400 flex items-center gap-1" title={`Last synced: ${lastSynced.toLocaleTimeString()}`}>
+                ☁ Synced
+              </span>
+            ) : (
+              <span className="text-gray-400">Local only</span>
+            )}
+            <span className="text-gray-500">|</span>
+            <span className="text-gray-400">
+              {progress.visitedLocations.length} visited • {progress.favoriteLocations.length} ❤
+            </span>
+          </div>
         </div>
       </header>
 
@@ -89,7 +152,10 @@ export default function LocationFinderPage() {
                   key={location.id}
                   location={location}
                   isSelected={selectedLocation?.id === location.id}
-                  onSelect={() => setSelectedLocation(location)}
+                  isFavorite={favoritesSet.has(location.id)}
+                  isVisited={visitedSet.has(location.id)}
+                  onSelect={() => handleSelectLocation(location)}
+                  onToggleFavorite={() => toggleFavoriteLocation(location.id)}
                 />
               ))}
             </div>
@@ -100,7 +166,7 @@ export default function LocationFinderPage() {
             selectedLocation={selectedLocation}
             allLocations={locations}
             filters={filters}
-            onFiltersChange={setFilters}
+            onFiltersChange={handleFiltersChange}
           />
         </section>
       </main>
