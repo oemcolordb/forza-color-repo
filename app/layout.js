@@ -198,7 +198,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <SecurityEnforcer />
         <DevToolsSuppress />
         <ThirdPartyErrorBoundary />
