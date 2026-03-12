@@ -143,9 +143,9 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     return (
       <div
-        className={`group rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+        className={`group rounded-xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:scale-[1.03] hover:shadow-xl ${
           isDarkMode
-            ? 'bg-slate-800 border border-slate-700 hover:border-slate-500'
+            ? 'bg-slate-800 border border-slate-700/80 hover:border-slate-500'
             : 'bg-white border border-gray-200 hover:border-gray-400'
         }`}
         style={{
@@ -154,7 +154,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
         }}
       >
         <div
-          className={`w-full h-20 sm:h-24 relative overflow-hidden ${
+          className={`w-full h-24 sm:h-28 relative overflow-hidden ${
             finish === 'matte' ? '' : 'shadow-inner'
           }`}
           style={{ background: gradient }}
@@ -444,7 +444,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
             </div>
           </div>
         </div>
-        <div className="p-3 flex-grow flex flex-col color-info-area relative">
+        <div className="p-3 sm:p-4 flex-grow flex flex-col color-info-area relative">
           <button
             type="button"
             className="absolute inset-0"
@@ -453,24 +453,24 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
           />
           <div className="flex-grow relative z-10">
             <h3
-              className={`text-sm font-bold truncate leading-tight ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}
+              className={`text-sm font-bold truncate leading-snug ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}
             >
               {color.colorName}
             </h3>
             <p
-              className={`text-sm truncate leading-tight ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}
+              className={`text-xs sm:text-sm truncate leading-snug mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}
             >
               {displayText}
             </p>
             {color.colorType && (
               <div
-                className={`text-xs font-semibold mt-1 ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}
+                className={`text-xs font-semibold mt-1.5 inline-block px-1.5 py-0.5 rounded ${isDarkMode ? 'text-cyan-400 bg-cyan-400/10' : 'text-blue-600 bg-blue-50'}`}
               >
                 {color.colorType}
               </div>
             )}
           </div>
-          <div className="flex justify-center items-center gap-3 mt-3 relative z-10">
+          <div className={`flex justify-center items-center gap-3 mt-3 pt-2 border-t relative z-10 ${isDarkMode ? 'border-slate-700' : 'border-gray-100'}`}>
             {onToggleFavorite && (
               <button
                 onClick={e => {

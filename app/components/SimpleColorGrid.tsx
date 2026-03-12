@@ -66,7 +66,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 p-2 sm:p-3">
         {displayedColors.map((color, index) => {
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
           const uniqueKey = `${colorId}-${index}`
@@ -188,19 +188,19 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
       </div>
 
       {displayCount < colors.length && (
-        <div className="text-center py-6">
+        <div className="text-center py-8 px-4">
           {isLoading ? (
             <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
               Loading more colors...
             </div>
           ) : (
             <>
-              <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <div className={`text-sm mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 Showing {displayCount} of {colors.length} colors
               </div>
               <button
                 onClick={loadMore}
-                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-8 py-2.5 rounded-lg font-medium transition-all hover:scale-105 ${
                   isDarkMode
                     ? 'bg-blue-600 hover:bg-blue-700 text-white'
                     : 'bg-blue-500 hover:bg-blue-600 text-white'

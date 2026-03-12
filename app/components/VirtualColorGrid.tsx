@@ -89,7 +89,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   }
 
   return (
-    <div ref={containerRef} className="w-full h-[600px]">
+    <div ref={containerRef} className="w-full h-[600px] p-2 sm:p-3">
       {containerSize.width > 0 && (
         <Grid
           columnCount={columnsCount}
