@@ -66,7 +66,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 p-1">
         {displayedColors.map((color, index) => {
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
           const uniqueKey = `${colorId}-${index}`
@@ -188,27 +188,25 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
       </div>
 
       {displayCount < colors.length && (
-        <div className="text-center py-6">
-          {isLoading ? (
-            <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Loading more colors...
-            </div>
-          ) : (
-            <>
-              <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Showing {displayCount} of {colors.length} colors
-              </div>
-              <button
-                onClick={loadMore}
-                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                  isDarkMode
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                    : 'bg-blue-500 hover:bg-blue-600 text-white'
-                }`}
-              >
-                Load More Colors
-              </button>
-            </>
+        <div className={`flex flex-col items-center gap-3 py-6 mt-2 rounded-xl border ${
+          isDarkMode ? 'border-slate-700/50 bg-slate-800/40' : 'border-gray-200 bg-gray-50'
+        }`}>
+          <p className={`text-sm font-medium ${
+            isDarkMode ? 'text-slate-400' : 'text-gray-500'
+          }`}>
+            {isLoading ? 'Loading more colors…' : `Showing ${displayCount} of ${colors.length} colors`}
+          </p>
+          {!isLoading && (
+            <button
+              onClick={loadMore}
+              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all active:scale-95 ${
+                isDarkMode
+                  ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/30'
+                  : 'bg-blue-500 hover:bg-blue-600 text-white shadow-md'
+              }`}
+            >
+              Load More
+            </button>
           )}
         </div>
       )}

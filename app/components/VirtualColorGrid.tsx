@@ -31,8 +31,10 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   const CARD_WIDTH = 280
   const CARD_HEIGHT = 200
   const GAP = 16
+  const EDGE_PADDING = 8
 
-  const columnsCount = Math.max(1, Math.floor((containerSize.width + GAP) / (CARD_WIDTH + GAP)))
+  const availableWidth = Math.max(0, containerSize.width - EDGE_PADDING * 2)
+  const columnsCount = Math.max(1, Math.floor((availableWidth + GAP) / (CARD_WIDTH + GAP)))
   const rowsCount = Math.ceil(colors.length / columnsCount)
 
   // Resize observer for responsive grid
@@ -64,7 +66,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
 
       return (
         <div style={style}>
-          <div style={{ padding: GAP / 2 }}>
+          <div style={{ padding: GAP / 2, paddingLeft: GAP / 2, paddingRight: GAP / 2 }}>
             <ColorCard
               color={color}
               onSelect={onColorSelect}
@@ -91,18 +93,20 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   return (
     <div ref={containerRef} className="w-full h-[600px]">
       {containerSize.width > 0 && (
-        <Grid
-          columnCount={columnsCount}
-          columnWidth={CARD_WIDTH + GAP}
-          height={Math.min(600, containerSize.height)}
-          rowCount={rowsCount}
-          rowHeight={CARD_HEIGHT + GAP}
-          width={containerSize.width}
-          overscanRowCount={2}
-          overscanColumnCount={1}
-        >
-          {Cell}
-        </Grid>
+        <div style={{ paddingLeft: EDGE_PADDING, paddingRight: EDGE_PADDING }}>
+          <Grid
+            columnCount={columnsCount}
+            columnWidth={CARD_WIDTH + GAP}
+            height={Math.min(600, containerSize.height)}
+            rowCount={rowsCount}
+            rowHeight={CARD_HEIGHT + GAP}
+            width={availableWidth}
+            overscanRowCount={2}
+            overscanColumnCount={1}
+          >
+            {Cell}
+          </Grid>
+        </div>
       )}
     </div>
   )

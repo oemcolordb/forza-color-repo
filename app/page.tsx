@@ -866,31 +866,37 @@ export default function HomePage() {
 
             {/* Color Gallery */}
             <div
-              className={`relative rounded-xl overflow-hidden p-4 ${
+              className={`relative rounded-xl border-2 ${
                 isDarkMode
-                  ? 'bg-gradient-to-br from-slate-800 to-slate-900'
-                  : 'bg-gradient-to-br from-gray-100 to-gray-200'
-              } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+                  ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-blue-500/30'
+                  : 'bg-gradient-to-br from-gray-100 to-gray-200 border-blue-400/40'
+              }`}
             >
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">🏆</span>
-                <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+              {/* Gallery header */}
+              <div className="flex items-center gap-2 px-5 py-3">
+                <span className="text-xl">🏆</span>
+                <span className={`text-sm font-bold tracking-wide ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
                   COLOR GALLERY
                 </span>
-                <div className="ml-auto flex items-center gap-2">
+                <div className="ml-auto flex items-center gap-3">
                   <div className="flex gap-1">
                     <div className="w-2 h-2 bg-green-400 rounded-full"></div>
                     <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                     <div className="w-2 h-2 bg-red-400 rounded-full"></div>
                   </div>
-                  <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-                    {filteredColors.length} colors
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                    isDarkMode ? 'bg-slate-700 text-slate-300' : 'bg-white text-gray-600 shadow-sm'
+                  }`}>
+                    {filteredColors.length.toLocaleString()} colors
                   </span>
                 </div>
               </div>
 
+              {/* Divider */}
+              <div className={`mx-4 mb-4 border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-300/70'}`} />
+
               {/* Simple car decoration */}
-              <div className="absolute top-4 right-16 opacity-20">
+              <div className="absolute top-3 right-32 opacity-10 pointer-events-none">
                 <svg
                   width="60"
                   height="20"
@@ -903,27 +909,30 @@ export default function HomePage() {
                 </svg>
               </div>
 
-              {filteredColors.length > 1000 ? (
-                <VirtualColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                  expandedColorId={expandedColorId}
-                />
-              ) : (
-                <SimpleColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                  expandedColorId={expandedColorId}
-                />
-              )}
+              {/* Grid area with inset padding */}
+              <div className="px-4 pb-4">
+                {filteredColors.length > 1000 ? (
+                  <VirtualColorGrid
+                    colors={filteredColors}
+                    onColorSelect={handleColorSelect}
+                    onShowInfo={showColorHSB}
+                    favorites={favorites}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    expandedColorId={expandedColorId}
+                  />
+                ) : (
+                  <SimpleColorGrid
+                    colors={filteredColors}
+                    onColorSelect={handleColorSelect}
+                    onShowInfo={showColorHSB}
+                    favorites={favorites}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    expandedColorId={expandedColorId}
+                  />
+                )}
+              </div>
             </div>
           </ResponsiveLayout>
         </ErrorBoundary>
