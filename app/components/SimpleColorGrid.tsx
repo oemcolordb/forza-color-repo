@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import ColorCard from './ColorCard'
 import { CarColor } from '../types'
+import { useZoomDetection } from '../hooks/useZoomDetection'
 
 interface SimpleColorGridProps {
   colors: CarColor[]
@@ -12,6 +13,7 @@ interface SimpleColorGridProps {
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
   expandedColorId?: string | null
+  zoomInfo?: any
 }
 
 const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
@@ -22,9 +24,38 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   onToggleFavorite,
   isDarkMode,
   expandedColorId,
+  zoomInfo: externalZoomInfo,
 }) => {
   const [displayCount, setDisplayCount] = useState(100)
   const [isLoading, setIsLoading] = useState(false)
+  const internalZoomInfo = useZoomDetection()
+  const zoomInfo = externalZoomInfo || internalZoomInfo
+
+  // Dynamic grid classes based on zoom level
+  const getGridClasses = () => {
+    const baseClasses = 'grid transition-all duration-500 ease-out p-2'
+    
+    // Adjust columns based on zoom scale
+    const columnClasses = {
+      xs: 'grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12',
+      sm: 'grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10',
+      md: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6',
+      lg: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5',
+      xl: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4',
+      xxl: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3',
+    }
+
+    const gapClasses = {
+      xs: 'gap-2',
+      sm: 'gap-3',
+      md: 'gap-5',
+      lg: 'gap-6',
+      xl: 'gap-7',
+      xxl: 'gap-8',
+    }
+
+    return `${baseClasses} ${columnClasses[zoomInfo.scale]} ${gapClasses[zoomInfo.scale]}`
+  }
 
   const loadMore = useCallback(() => {
     if (isLoading || displayCount >= colors.length) return
@@ -66,7 +97,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5 p-2">
+      <div className={getGridClasses()}>
         {displayedColors.map((color, index) => {
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
           const uniqueKey = `${colorId}-${index}`

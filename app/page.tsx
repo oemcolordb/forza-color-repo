@@ -40,6 +40,7 @@ import ColorComparison from './components/ColorComparison'
 
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ColorAnalyticsDashboard from './components/ColorAnalyticsDashboard'
+import ZoomResponsiveContainer from './components/ZoomResponsiveContainer'
 
 const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
@@ -864,67 +865,69 @@ export default function HomePage() {
               onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
             />
 
-            {/* Color Gallery */}
-            <div
-              className={`relative rounded-xl overflow-hidden p-4 ${
-                isDarkMode
-                  ? 'bg-gradient-to-br from-slate-800 to-slate-900'
-                  : 'bg-gradient-to-br from-gray-100 to-gray-200'
-              } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-2xl">🏆</span>
-                <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                  COLOR GALLERY
-                </span>
-                <div className="ml-auto flex items-center gap-2">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                    <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                  </div>
-                  <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-                    {filteredColors.length} colors
+            {/* Color Gallery with Zoom-Responsive Container */}
+            <ZoomResponsiveContainer isDarkMode={isDarkMode}>
+              <div
+                className={`relative rounded-xl overflow-hidden p-4 ${
+                  isDarkMode
+                    ? 'bg-gradient-to-br from-slate-800 to-slate-900'
+                    : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">🏆</span>
+                  <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                    COLOR GALLERY
                   </span>
+                  <div className="ml-auto flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                      <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                    </div>
+                    <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                      {filteredColors.length} colors
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              {/* Simple car decoration */}
-              <div className="absolute top-4 right-16 opacity-20">
-                <svg
-                  width="60"
-                  height="20"
-                  viewBox="0 0 60 20"
-                  className={isDarkMode ? 'fill-blue-400' : 'fill-blue-600'}
-                >
-                  <path d="M5 15 Q8 10 15 12 L25 10 Q35 8 45 10 L50 12 Q52 15 50 16 L45 17 L15 17 L10 16 Q5 15 5 15 Z" />
-                  <circle cx="15" cy="17" r="2" />
-                  <circle cx="45" cy="17" r="2" />
-                </svg>
-              </div>
+                {/* Simple car decoration */}
+                <div className="absolute top-4 right-16 opacity-20">
+                  <svg
+                    width="60"
+                    height="20"
+                    viewBox="0 0 60 20"
+                    className={isDarkMode ? 'fill-blue-400' : 'fill-blue-600'}
+                  >
+                    <path d="M5 15 Q8 10 15 12 L25 10 Q35 8 45 10 L50 12 Q52 15 50 16 L45 17 L15 17 L10 16 Q5 15 5 15 Z" />
+                    <circle cx="15" cy="17" r="2" />
+                    <circle cx="45" cy="17" r="2" />
+                  </svg>
+                </div>
 
-              {filteredColors.length > 1000 ? (
-                <VirtualColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                  expandedColorId={expandedColorId}
-                />
-              ) : (
-                <SimpleColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                  expandedColorId={expandedColorId}
-                />
-              )}
-            </div>
+                {filteredColors.length > 1000 ? (
+                  <VirtualColorGrid
+                    colors={filteredColors}
+                    onColorSelect={handleColorSelect}
+                    onShowInfo={showColorHSB}
+                    favorites={favorites}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    expandedColorId={expandedColorId}
+                  />
+                ) : (
+                  <SimpleColorGrid
+                    colors={filteredColors}
+                    onColorSelect={handleColorSelect}
+                    onShowInfo={showColorHSB}
+                    favorites={favorites}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    expandedColorId={expandedColorId}
+                  />
+                )}
+              </div>
+            </ZoomResponsiveContainer>
           </ResponsiveLayout>
         </ErrorBoundary>
 
