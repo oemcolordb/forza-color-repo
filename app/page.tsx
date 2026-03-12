@@ -866,13 +866,17 @@ export default function HomePage() {
 
             {/* Color Gallery */}
             <div
-              className={`relative rounded-xl overflow-hidden p-4 ${
+              className={`relative rounded-2xl overflow-hidden p-4 sm:p-5 ${
                 isDarkMode
-                  ? 'bg-gradient-to-br from-slate-800 to-slate-900'
-                  : 'bg-gradient-to-br from-gray-100 to-gray-200'
-              } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+                  ? 'bg-gradient-to-br from-slate-800 to-slate-900 shadow-2xl shadow-slate-950/20'
+                  : 'bg-gradient-to-br from-gray-100 to-gray-200 shadow-xl shadow-gray-300/40'
+              } border ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
             >
-              <div className="flex items-center gap-2 mb-4">
+              <div
+                className={`mb-5 flex items-center gap-2 border-b pb-4 pr-16 ${
+                  isDarkMode ? 'border-slate-700/70' : 'border-gray-300/80'
+                }`}
+              >
                 <span className="text-2xl">🏆</span>
                 <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
                   COLOR GALLERY
@@ -890,7 +894,7 @@ export default function HomePage() {
               </div>
 
               {/* Simple car decoration */}
-              <div className="absolute top-4 right-16 opacity-20">
+              <div className="absolute right-6 top-5 opacity-20">
                 <svg
                   width="60"
                   height="20"

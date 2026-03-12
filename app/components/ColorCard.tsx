@@ -143,10 +143,10 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     return (
       <div
-        className={`group rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl ${
+        className={`group flex h-full flex-col overflow-hidden rounded-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
           isDarkMode
-            ? 'bg-slate-800 border border-slate-700 hover:border-slate-500'
-            : 'bg-white border border-gray-200 hover:border-gray-400'
+            ? 'border-slate-700/80 bg-slate-800/95 shadow-lg shadow-slate-950/20 hover:border-slate-500'
+            : 'border-gray-200 bg-white/95 shadow-md shadow-gray-300/30 hover:border-gray-400'
         }`}
         style={{
           WebkitTapHighlightColor: 'transparent',
@@ -444,14 +444,14 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
             </div>
           </div>
         </div>
-        <div className="p-3 flex-grow flex flex-col color-info-area relative">
+        <div className="color-info-area relative flex flex-grow flex-col p-3.5">
           <button
             type="button"
             className="absolute inset-0"
             onClick={() => onSelect(color)}
             aria-label={`Select ${color.colorName}`}
           />
-          <div className="flex-grow relative z-10">
+          <div className="relative z-10 flex-grow">
             <h3
               className={`text-sm font-bold truncate leading-tight ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}
             >
@@ -470,7 +470,11 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
               </div>
             )}
           </div>
-          <div className="flex justify-center items-center gap-3 mt-3 relative z-10">
+          <div
+            className={`relative z-10 mt-3 flex items-center justify-center gap-3 border-t pt-3 ${
+              isDarkMode ? 'border-slate-700/70' : 'border-gray-200'
+            }`}
+          >
             {onToggleFavorite && (
               <button
                 onClick={e => {
