@@ -88,7 +88,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
 }) => {
   const [zoom, setZoom] = useState(1)
   const [mapImageError, setMapImageError] = useState(false)
-  const [mapImageSrc, setMapImageSrc] = useState('/maps/fh5-mexico.webp')
+  const [mapImageSrc, setMapImageSrc] = useState('/maps/fh5-mexico.jpg')
   const uploadedMapUrlRef = useRef<string | null>(null)
 
   const selectedCoords = selectedLocation?.coordinates || null
@@ -216,10 +216,10 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
               className="w-full h-full object-cover select-none"
               draggable={false}
               onError={() => {
-                if (mapImageSrc === '/maps/fh5-mexico.webp') {
-                  setMapImageSrc('/maps/fh5-mexico.jpg')
-                } else if (mapImageSrc === '/maps/fh5-mexico.jpg') {
+                if (mapImageSrc === '/maps/fh5-mexico.jpg') {
                   setMapImageSrc('/maps/fh5-mexico.png')
+                } else if (mapImageSrc === '/maps/fh5-mexico.png') {
+                  setMapImageSrc('/maps/fh5-mexico.webp')
                 } else {
                   setMapImageError(true)
                 }

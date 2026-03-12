@@ -53,10 +53,10 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
     })
   }, [colors, category])
 
-  const isWarmColor = hue => (hue >= 0 && hue <= 60) || (hue >= 300 && hue <= 360)
-  const isCoolColor = hue => hue >= 120 && hue <= 300
+  const isWarmColor = useCallback(hue => (hue >= 0 && hue <= 60) || (hue >= 300 && hue <= 360), [])
+  const isCoolColor = useCallback(hue => hue >= 120 && hue <= 300, [])
 
-  const getSeasonalColors = (season, colors) => {
+  const getSeasonalColors = useCallback((season, colors) => {
     return colors.filter(color => {
       const h = color.color1.h * 360
       const s = color.color1.s
@@ -75,7 +75,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
           return true
       }
     })
-  }
+  }, [isCoolColor, isWarmColor])
 
   const generateHarmony = useCallback(() => {
     if (filteredColors.length === 0) return []
@@ -266,7 +266,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
     }
 
     return harmony.length > 0 ? harmony : [baseColor]
-  }, [filteredColors, harmonyMode, harmonySize])
+  }, [filteredColors, harmonyMode, harmonySize, getSeasonalColors, isWarmColor, isCoolColor])
 
   const spinRoulette = useCallback(async () => {
     setIsSpinning(true)
@@ -283,7 +283,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
     setSpinHistory(prev => [finalHarmony, ...prev.slice(0, 4)])
     onHarmonyGenerated(finalHarmony, harmonyMode)
     setIsSpinning(false)
-  }, [generateHarmony, onHarmonyGenerated])
+  }, [generateHarmony, onHarmonyGenerated, harmonyMode])
 
   const hsbToHex = (h, s, b) => {
     const c = b * s

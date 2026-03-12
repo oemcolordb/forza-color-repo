@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function NotFound() {
@@ -62,7 +62,7 @@ export default function NotFound() {
     }, 100)
 
     return () => clearInterval(interval)
-  }, [gameActive])
+  }, [gameActive, colors])
 
   const moveCar = (direction: 'left' | 'right') => {
     setCarPosition(prev => {
@@ -71,7 +71,7 @@ export default function NotFound() {
     })
   }
 
-  const catchPaint = () => {
+  const catchPaint = useCallback(() => {
     const carX = (carPosition / 100) * 300
     setPaintDrops(prev => {
       const caught = prev.filter(
@@ -83,14 +83,14 @@ export default function NotFound() {
       }
       return prev.filter(drop => !(Math.abs(drop.x - carX) < 30 && drop.y > 300 && drop.y < 350))
     })
-  }
+  }, [carPosition])
 
   useEffect(() => {
     if (gameActive) {
       const interval = setInterval(catchPaint, 50)
       return () => clearInterval(interval)
     }
-  }, [gameActive, carPosition])
+  }, [gameActive, catchPaint])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col items-center justify-center p-4">

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { CarColor } from '../types'
 
 interface ColorHistoryProps {
@@ -22,15 +22,16 @@ const ColorHistory: React.FC<ColorHistoryProps> = ({ isDarkMode, onColorSelect }
     }
   }, [])
 
-  const addToHistory = (color: CarColor) => {
-    const newHistory = [
-      color,
-      ...history.filter(c => !(c.colorName === color.colorName && c.make === color.make)),
-    ].slice(0, 20)
-
-    setHistory(newHistory)
-    localStorage.setItem('forza-color-history', JSON.stringify(newHistory))
-  }
+  const addToHistory = useCallback((color: CarColor) => {
+    setHistory(prevHistory => {
+      const newHistory = [
+        color,
+        ...prevHistory.filter(c => !(c.colorName === color.colorName && c.make === color.make)),
+      ].slice(0, 20)
+      localStorage.setItem('forza-color-history', JSON.stringify(newHistory))
+      return newHistory
+    })
+  }, [])
 
   const clearHistory = () => {
     setHistory([])
@@ -40,7 +41,7 @@ const ColorHistory: React.FC<ColorHistoryProps> = ({ isDarkMode, onColorSelect }
   // Expose addToHistory function globally
   useEffect(() => {
     ;(window as any).addColorToHistory = addToHistory
-  }, [history])
+  }, [addToHistory])
 
   if (history.length === 0) {
     return (
