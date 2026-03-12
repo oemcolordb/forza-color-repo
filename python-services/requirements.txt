@@ -7,7 +7,7 @@ redis==5.0.1
 # Data science and ML
 numpy==1.24.3
 pandas==2.0.3
-scikit-learn==1.3.0
+scikit-learn==1.5.0
 scipy==1.11.1
 
 # Image processing
@@ -20,15 +20,15 @@ colorspacious==1.1.2
 colour-science==0.4.2
 
 # Async and performance
-aiohttp==3.9.1
+aiohttp==3.13.3
 asyncio-throttle==1.0.2
 multiprocessing-logging==0.3.4
 
 # Database and caching
 aiofiles==23.2.1
-python-multipart==0.0.6
+python-multipart==0.0.22
 
 # Development
 pytest==7.4.2
 pytest-asyncio==0.21.1
-black==23.9.1
+black==26.3.1
