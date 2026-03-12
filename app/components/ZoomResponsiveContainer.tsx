@@ -18,15 +18,18 @@ const ZoomResponsiveContainer: React.FC<ZoomResponsiveContainerProps> = ({
   const [showIndicator, setShowIndicator] = useState(false)
   const [prevScale, setPrevScale] = useState<ZoomLevel['scale']>(zoomInfo.scale)
 
-  // Show colorful indicator when zoom changes
+  // Show colorful indicator when zoom changes - SKIP on mobile for performance
   useEffect(() => {
+    // Don't show fancy animations on mobile/touch devices
+    if (zoomInfo.isMobile || zoomInfo.isTouch) return
+
     if (zoomInfo.scale !== prevScale) {
       setShowIndicator(true)
       setPrevScale(zoomInfo.scale)
       const timer = setTimeout(() => setShowIndicator(false), 1500)
       return () => clearTimeout(timer)
     }
-  }, [zoomInfo.scale, prevScale])
+  }, [zoomInfo.scale, zoomInfo.isMobile, zoomInfo.isTouch, prevScale])
 
   // Dynamic classes based on zoom level
   const getContainerClasses = () => {
@@ -142,8 +145,8 @@ const ZoomResponsiveContainer: React.FC<ZoomResponsiveContainerProps> = ({
         </div>
       </div>
 
-      {/* Transitioning overlay effect */}
-      {zoomInfo.isTransitioning && (
+      {/* Transitioning overlay effect - Skip on mobile for performance */}
+      {zoomInfo.isTransitioning && !zoomInfo.isMobile && !zoomInfo.isTouch && (
         <div className="fixed inset-0 pointer-events-none z-40">
           {/* Corner sparkles */}
           {[

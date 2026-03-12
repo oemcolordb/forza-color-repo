@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 export interface ZoomLevel {
   zoom: number
@@ -9,10 +9,25 @@ export interface ZoomLevel {
   cardSize: 'compact' | 'normal' | 'large'
   fontSize: 'xs' | 'sm' | 'base' | 'lg'
   spacing: 'tight' | 'normal' | 'relaxed'
+  isMobile: boolean
+  isTouch: boolean
+}
+
+const isTouchDevice = (): boolean => {
+  if (typeof window === 'undefined') return false
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0
+}
+
+const isMobileDevice = (): boolean => {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 768 || isTouchDevice()
 }
 
 const getZoomLevel = (): number => {
   if (typeof window === 'undefined') return 100
+
+  // On mobile/touch devices, don't try to detect zoom - just return 100
+  if (isMobileDevice()) return 100
 
   // Calculate zoom from devicePixelRatio and window dimensions
   const screenWidth = window.screen.width
@@ -71,18 +86,33 @@ export const useZoomDetection = () => {
     cardSize: 'normal',
     fontSize: 'base',
     spacing: 'normal',
+    isMobile: false,
+    isTouch: false,
   })
 
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const lastUpdateRef = useRef<number>(0)
+  const isMobileRef = useRef<boolean>(false)
 
   const updateZoomInfo = useCallback(() => {
+    // Throttle updates on mobile for performance (max once per 500ms)
+    const now = Date.now()
+    if (isMobileRef.current && now - lastUpdateRef.current < 500) {
+      return
+    }
+    lastUpdateRef.current = now
+
+    const mobile = isMobileDevice()
+    const touch = isTouchDevice()
+    isMobileRef.current = mobile
+
     const zoom = getZoomLevel()
     
     setZoomInfo(prev => {
       const newScale = getScaleFromZoom(zoom)
       
-      // Only trigger transition if scale changed
-      if (prev.scale !== newScale) {
+      // Only trigger transition if scale changed and NOT on mobile (save performance)
+      if (prev.scale !== newScale && !mobile) {
         setIsTransitioning(true)
         setTimeout(() => setIsTransitioning(false), 500)
       }
@@ -94,6 +124,8 @@ export const useZoomDetection = () => {
         cardSize: getCardSizeFromZoom(zoom),
         fontSize: getFontSizeFromZoom(zoom),
         spacing: getSpacingFromZoom(zoom),
+        isMobile: mobile,
+        isTouch: touch,
       }
     })
   }, [])
@@ -102,24 +134,37 @@ export const useZoomDetection = () => {
     // Initial detection
     updateZoomInfo()
 
+    const mobile = isMobileDevice()
+    isMobileRef.current = mobile
+
     // Listen for resize events (zoom changes trigger resize)
     const handleResize = () => {
-      updateZoomInfo()
+      // Use requestAnimationFrame for smooth updates
+      requestAnimationFrame(updateZoomInfo)
     }
 
-    // Use ResizeObserver for more accurate detection
+    // On mobile, only listen to resize - skip expensive observers and intervals
+    if (mobile) {
+      window.addEventListener('resize', handleResize, { passive: true })
+      
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+
+    // Desktop: Use ResizeObserver for more accurate detection
     const resizeObserver = new ResizeObserver(() => {
-      updateZoomInfo()
+      requestAnimationFrame(updateZoomInfo)
     })
 
     if (document.body) {
       resizeObserver.observe(document.body)
     }
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize, { passive: true })
 
-    // Also check periodically for zoom changes that don't trigger resize
-    const intervalId = setInterval(updateZoomInfo, 1000)
+    // Only check periodically on desktop (not mobile - saves battery/CPU)
+    const intervalId = setInterval(updateZoomInfo, 2000)
 
     return () => {
       window.removeEventListener('resize', handleResize)
