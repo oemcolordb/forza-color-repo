@@ -100,6 +100,7 @@ export default function TuneForge() {
     if (saved) setIsDarkMode(saved === 'dark')
     loadSampleCars()
     loadSavedTunes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const loadSampleCars = async () => {
