@@ -11,7 +11,6 @@ interface HSBPopupProps {
 }
 
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
-  console.log('HSBPopup render - isOpen:', isOpen, 'color:', color?.colorName)
   if (!isOpen || !color) return null
 
   const formatHSB = (hsb: { h: number; s: number; b: number }) => ({
@@ -38,9 +37,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
     >
       <div
         className={`p-4 rounded-lg max-w-sm w-full mx-4 shadow-2xl border-2 ${
-          isDarkMode
-            ? 'bg-slate-800 text-white border-white'
-            : 'bg-white text-gray-900 border-black'
+          isDarkMode ? 'bamboo-surface-dark text-white' : 'bamboo-surface text-gray-900'
         }`}
         onClick={e => e.stopPropagation()}
         onTouchStart={e => e.stopPropagation()}
@@ -54,7 +51,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
               e.stopPropagation()
               onClose()
             }}
-            className={`text-xl min-w-[44px] min-h-[44px] flex items-center justify-center ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'}`}
+            className="text-xl min-w-[44px] min-h-[44px] flex items-center justify-center bamboo-button-ghost"
             style={{ touchAction: 'manipulation' }}
           >
             ×

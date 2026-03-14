@@ -86,8 +86,8 @@ export default function DevAnalyticsPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
-        <div className="bg-gray-900 p-8 rounded-xl border border-gray-800 max-w-md w-full">
+      <div className="min-h-screen text-white flex items-center justify-center">
+        <div className="p-8 rounded-xl max-w-md w-full bamboo-surface-dark">
           <h1 className="text-2xl font-bold mb-6 text-center">🔐 Dev Analytics</h1>
           <p className="text-gray-400 text-sm mb-4 text-center">
             Enter your dev analytics key to access the dashboard
@@ -97,14 +97,14 @@ export default function DevAnalyticsPage() {
             value={devKey}
             onChange={(e) => setDevKey(e.target.value)}
             placeholder="Enter dev key..."
-            className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg mb-4 text-white"
+            className="w-full mb-4 bamboo-input"
             onKeyDown={(e) => e.key === 'Enter' && fetchAnalytics()}
           />
           {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
           <button
             onClick={fetchAnalytics}
             disabled={loading || !devKey}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold transition-colors disabled:opacity-50"
+            className="w-full py-3 bamboo-button rounded-lg font-bold transition-colors disabled:opacity-50"
           >
             {loading ? 'Authenticating...' : 'Access Dashboard'}
           </button>
@@ -114,7 +114,7 @@ export default function DevAnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-6">
+    <div className="min-h-screen text-white p-6">
       <div className="max-w-7xl mx-auto">
         <header className="flex items-center justify-between mb-8">
           <div>
@@ -127,7 +127,7 @@ export default function DevAnalyticsPage() {
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value)}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2"
+              className="bamboo-input px-4 py-2"
               aria-label="Time range filter"
             >
               <option value="7d">Last 7 days</option>
@@ -137,7 +137,7 @@ export default function DevAnalyticsPage() {
             <button
               onClick={fetchAnalytics}
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
+              className="px-4 py-2 bamboo-button rounded-lg transition-colors disabled:opacity-50"
             >
               {loading ? '⟳' : '↻'} Refresh
             </button>
@@ -147,7 +147,7 @@ export default function DevAnalyticsPage() {
                 setDevKey('')
                 setData(null)
               }}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+              className="px-4 py-2 bamboo-button-ghost rounded-lg transition-colors"
             >
               Logout
             </button>
@@ -155,7 +155,7 @@ export default function DevAnalyticsPage() {
         </header>
 
         {error && (
-          <div className="bg-red-900/50 border border-red-700 rounded-lg p-4 mb-6">
+          <div className="rounded-lg p-4 mb-6 bamboo-surface-dark">
             <p className="text-red-300">{error}</p>
           </div>
         )}
@@ -173,7 +173,7 @@ export default function DevAnalyticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* Top Colors Chart */}
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+              <div className="rounded-xl p-6 bamboo-surface-dark">
                 <h2 className="text-xl font-bold mb-4">🏆 Top Favorited Colors</h2>
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {data.topColors.slice(0, 20).map((color, index) => (
@@ -182,16 +182,17 @@ export default function DevAnalyticsPage() {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <span className="font-medium">{color.colorName}</span>
-                          <span className="text-blue-400 font-bold">{color.currentFavorites}</span>
+                          <span className="text-[color:var(--bamboo-stalk)] font-bold">{color.currentFavorites}</span>
                         </div>
                         <div className="text-xs text-gray-500">
                           {color.make} {color.model && `• ${color.model}`} {color.colorType && `• ${color.colorType}`}
                         </div>
                         <div className="mt-1 h-2 bg-gray-800 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                            className="h-full"
                             style={{
-                              width: `${Math.min(100, (color.currentFavorites / (data.topColors[0]?.currentFavorites || 1)) * 100)}%`
+                              width: `${Math.min(100, (color.currentFavorites / (data.topColors[0]?.currentFavorites || 1)) * 100)}%`,
+                              background: 'linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%)',
                             }}
                           />
                         </div>
@@ -205,7 +206,7 @@ export default function DevAnalyticsPage() {
               </div>
 
               {/* Trend Chart */}
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+              <div className="rounded-xl p-6 bamboo-surface-dark">
                 <h2 className="text-xl font-bold mb-4">📈 Daily Trend (Last 30 Days)</h2>
                 <div className="h-64 flex items-end gap-1">
                   {data.trendData.length > 0 ? (
@@ -218,10 +219,13 @@ export default function DevAnalyticsPage() {
                           className="flex-1 flex flex-col items-center group relative"
                         >
                           <div
-                            className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t transition-all hover:from-blue-500 hover:to-blue-300"
-                            style={{ height: `${Math.max(height, 2)}%` }}
+                            className="w-full rounded-t transition-all"
+                            style={{
+                              height: `${Math.max(height, 2)}%`,
+                              background: 'linear-gradient(180deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%)',
+                            }}
                           />
-                          <div className="absolute bottom-full mb-2 hidden group-hover:block bg-gray-800 text-xs p-2 rounded shadow-lg whitespace-nowrap z-10">
+                          <div className="absolute bottom-full mb-2 hidden group-hover:block text-xs p-2 rounded shadow-lg whitespace-nowrap z-10 bamboo-surface-dark">
                             <div className="font-bold">{day.date}</div>
                             <div className="text-green-400">+{day.adds} adds</div>
                             <div className="text-red-400">-{day.removes} removes</div>
@@ -238,17 +242,17 @@ export default function DevAnalyticsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Top Makes */}
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+              <div className="rounded-xl p-6 bamboo-surface-dark">
                 <h2 className="text-xl font-bold mb-4">🚗 Top Makes</h2>
                 <div className="space-y-2">
                   {data.topMakes.map((make, index) => (
-                    <div key={make.make} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
+                    <div key={make.make} className="flex items-center justify-between p-2 rounded bamboo-surface-dark">
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">{index + 1}.</span>
                         <span className="font-medium">{make.make}</span>
                         <span className="text-xs text-gray-500">({make.colorCount} colors)</span>
                       </div>
-                      <span className="text-blue-400 font-bold">{make.totalFavorites}</span>
+                      <span className="text-[color:var(--bamboo-stalk)] font-bold">{make.totalFavorites}</span>
                     </div>
                   ))}
                   {data.topMakes.length === 0 && (
@@ -258,17 +262,17 @@ export default function DevAnalyticsPage() {
               </div>
 
               {/* Top Color Types */}
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+              <div className="rounded-xl p-6 bamboo-surface-dark">
                 <h2 className="text-xl font-bold mb-4">🎨 Top Color Types</h2>
                 <div className="space-y-2">
                   {data.topColorTypes.map((type, index) => (
-                    <div key={type.colorType} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
+                    <div key={type.colorType} className="flex items-center justify-between p-2 rounded bamboo-surface-dark">
                       <div className="flex items-center gap-2">
                         <span className="text-gray-500">{index + 1}.</span>
                         <span className="font-medium">{type.colorType || 'Unknown'}</span>
                         <span className="text-xs text-gray-500">({type.colorCount} colors)</span>
                       </div>
-                      <span className="text-purple-400 font-bold">{type.totalFavorites}</span>
+                      <span className="text-[color:var(--bamboo-stalk)] font-bold">{type.totalFavorites}</span>
                     </div>
                   ))}
                   {data.topColorTypes.length === 0 && (
@@ -279,7 +283,7 @@ export default function DevAnalyticsPage() {
             </div>
 
             {/* Full Rankings Table */}
-            <div className="mt-8 bg-gray-900 rounded-xl border border-gray-800 p-6">
+            <div className="mt-8 rounded-xl p-6 bamboo-surface-dark">
               <h2 className="text-xl font-bold mb-4">📋 Full Rankings</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -297,13 +301,13 @@ export default function DevAnalyticsPage() {
                   </thead>
                   <tbody>
                     {data.topColors.map((color, index) => (
-                      <tr key={color.colorId} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                      <tr key={color.colorId} className="border-b border-gray-800/50 hover:opacity-95">
                         <td className="p-2 text-gray-500">{index + 1}</td>
                         <td className="p-2 font-medium">{color.colorName}</td>
                         <td className="p-2">{color.make}</td>
                         <td className="p-2 text-gray-400">{color.model || '-'}</td>
                         <td className="p-2 text-gray-400">{color.colorType || '-'}</td>
-                        <td className="p-2 text-right text-blue-400 font-bold">{color.currentFavorites}</td>
+                        <td className="p-2 text-right text-[color:var(--bamboo-stalk)] font-bold">{color.currentFavorites}</td>
                         <td className="p-2 text-right text-gray-400">{color.totalFavorites}</td>
                         <td className="p-2 text-right text-gray-500 text-xs">
                           {new Date(color.lastUpdated).toLocaleDateString()}
@@ -326,13 +330,13 @@ export default function DevAnalyticsPage() {
 
 function StatCard({ title, value, color = 'blue' }: { title: string; value: number; color?: string }) {
   const colorClasses = {
-    blue: 'text-blue-400',
+    blue: 'text-[color:var(--bamboo-stalk)]',
     green: 'text-green-400',
     red: 'text-red-400',
   }
   
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-4">
+    <div className="rounded-xl p-4 bamboo-surface-dark">
       <p className="text-gray-400 text-sm">{title}</p>
       <p className={`text-2xl font-bold ${colorClasses[color as keyof typeof colorClasses]}`}>
         {value.toLocaleString()}

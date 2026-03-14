@@ -64,13 +64,13 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
   }
 
   return (
-    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg h-full`}>
+    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg h-full hover-lift`}>
       <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         🎨 Color Harmony
       </h3>
 
       {/* Harmony mode info */}
-      <div className={`mb-4 p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
+      <div className={`mb-4 p-3 rounded glass-effect ${isDarkMode ? 'bg-slate-700/60' : 'bg-gray-50/80'}`}>
         <h4 className={`font-medium text-sm mb-1 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
           {harmonyMode}
         </h4>
@@ -85,7 +85,7 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
           <button
             key={index}
             onClick={() => onColorSelect?.(color)}
-            className={`w-full p-3 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-lg ${
+            className={`w-full p-3 rounded-lg border-2 transition-all duration-200 hover:scale-105 hover:shadow-lg hover-lift ${
               index === 0 ? 'border-white' : isDarkMode ? 'border-slate-600' : 'border-gray-300'
             }`}
             style={{
@@ -104,7 +104,7 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
               </div>
               <div
                 className={`px-2 py-1 rounded text-xs font-bold ${
-                  index === 0 ? 'bg-white text-gray-900' : 'bg-black bg-opacity-30'
+                  index === 0 ? 'bg-white text-gray-900 animate-glow-pulse' : 'bg-black bg-opacity-30'
                 }`}
               >
                 {index === 0 ? 'BASE' : index + 1}

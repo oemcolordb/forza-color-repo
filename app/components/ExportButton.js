@@ -4,7 +4,7 @@ const ExportButton = ({ favorites, isDarkMode }) => {
   const exportFavorites = async format => {
     try {
       const params = new URLSearchParams({ format, favorites: favorites.join(',') })
-      const response = await fetch(`/.netlify/functions/export-colors?${params}`)
+      const response = await fetch(`/api/export-colors?${params}`)
       const blob = await response.blob()
 
       const url = window.URL.createObjectURL(blob)

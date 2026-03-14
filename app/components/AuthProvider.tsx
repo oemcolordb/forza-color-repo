@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } else {
           sessionStorage.removeItem('forza-auth-token')
         }
-      } catch (error) {
+      } catch {
         sessionStorage.removeItem('forza-auth-token')
       }
     }
@@ -57,7 +57,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [])
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('/.netlify/functions/auth-login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const signup = async (email: string, password: string, name: string) => {
-    const response = await fetch('/.netlify/functions/auth-signup', {
+    const response = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

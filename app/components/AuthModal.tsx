@@ -47,7 +47,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
       <div
         className={`w-full max-w-md rounded-lg shadow-xl ${
-          isDarkMode ? 'bg-slate-800' : 'bg-white'
+          isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
       >
         <div className="p-6">
@@ -77,11 +77,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                    isDarkMode
-                      ? 'bg-slate-700 border-slate-600 text-white focus:ring-blue-500'
-                      : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500'
-                  }`}
+                  className="bamboo-input"
                   placeholder="Your name"
                 />
               </div>
@@ -100,11 +96,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                  isDarkMode
-                    ? 'bg-slate-700 border-slate-600 text-white focus:ring-blue-500'
-                    : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500'
-                }`}
+                className="bamboo-input"
                 placeholder="your@email.com"
               />
             </div>
@@ -123,11 +115,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
                 onChange={e => setPassword(e.target.value)}
                 required
                 minLength={8}
-                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                  isDarkMode
-                    ? 'bg-slate-700 border-slate-600 text-white focus:ring-blue-500'
-                    : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500'
-                }`}
+                className="bamboo-input"
                 placeholder="Min 8 characters"
               />
             </div>
@@ -141,7 +129,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full bamboo-button py-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
             </button>
@@ -150,7 +138,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
           <div className="mt-4 text-center">
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className={`text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'} hover:underline`}
+              className="text-sm bamboo-button-ghost px-3 py-2"
             >
               {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
             </button>

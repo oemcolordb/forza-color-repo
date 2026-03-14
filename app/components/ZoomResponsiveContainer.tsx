@@ -11,7 +11,7 @@ interface ZoomResponsiveContainerProps {
 
 const ZoomResponsiveContainer: React.FC<ZoomResponsiveContainerProps> = ({
   children,
-  isDarkMode = true,
+  isDarkMode: _isDarkMode = true,
   className = '',
 }) => {
   const zoomInfo = useZoomDetection()
@@ -191,6 +191,9 @@ const ZoomResponsiveContainer: React.FC<ZoomResponsiveContainerProps> = ({
       {/* Pass zoom context to children */}
       {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
+          if (typeof child.type === 'string') {
+            return child
+          }
           return React.cloneElement(child as React.ReactElement<any>, {
             zoomInfo,
           })

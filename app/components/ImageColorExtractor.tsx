@@ -19,8 +19,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   onColorsFound,
   onColorSelect,
   isDarkMode,
-  showTutorial = false,
-  onTutorialClose,
+  showTutorial: _showTutorial = false,
+  onTutorialClose: _onTutorialClose,
   onImageUpload,
 }) => {
   const [isProcessing, setIsProcessing] = useState(false)
@@ -456,9 +456,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   return (
     <ErrorBoundary>
       <div
-        className={`p-4 rounded-lg border ${
-          isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-gray-300'
-        }`}
+        className={`p-4 rounded-lg ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
       >
         <div className="mb-4">
           <label
@@ -473,11 +471,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             <select
               value={extractionMode}
               onChange={e => setExtractionMode(e.target.value as 'advanced' | 'basic')}
-              className={`text-xs p-2 rounded border ${
-                isDarkMode
-                  ? 'bg-slate-700 text-white border-slate-600'
-                  : 'bg-white text-gray-900 border-gray-300'
-              }`}
+              aria-label="Extraction mode"
+              className="text-xs p-2 bamboo-input"
             >
               <option value="advanced">🧠 AI Clustering</option>
               <option value="basic">⚡ Fast Extract</option>
@@ -520,15 +515,15 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             aria-label="Upload image to extract colors"
             className={`block w-full text-sm ${
               isDarkMode
-                ? 'text-slate-300 file:bg-slate-700 file:text-slate-200'
-                : 'text-gray-900 file:bg-gray-50 file:text-gray-700'
+                ? 'text-slate-200 file:bg-[rgba(205,187,151,0.18)] file:text-slate-100'
+                : 'text-gray-900 file:bg-[rgba(205,187,151,0.18)] file:text-gray-900'
             } file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold hover:file:bg-opacity-80`}
           />
         </div>
 
         {isProcessing && (
-          <div className="flex items-center space-x-2 text-blue-600">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+          <div className="flex items-center space-x-2 text-[color:var(--bamboo-stalk)]">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[color:var(--bamboo-stalk)]"></div>
             <span className="text-sm">
               {extractionMode === 'advanced'
                 ? '🧠 AI clustering colors...'
@@ -550,7 +545,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         {showRegionSelect && uploadedImage && (
           <div className="mt-4">
             <div
-              className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
+              className="text-sm font-medium mb-2 text-[color:var(--bamboo-stalk)]"
             >
               📍 Tap/Click anywhere on the image to extract colors:
             </div>
@@ -558,7 +553,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               <img
                 src={uploadedImage}
                 alt="Uploaded for color extraction"
-                className="border-2 border-blue-400 rounded cursor-pointer max-w-full h-auto hover:border-blue-600 transition-colors"
+                className="border-2 border-[color:var(--bamboo-stalk)] rounded cursor-pointer max-w-full h-auto hover:border-[color:var(--bamboo-moss)] transition-colors"
                 style={{ maxWidth: '300px', maxHeight: '300px' }}
                 onClick={e => {
                   const img = e.target as HTMLImageElement
@@ -623,8 +618,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               {matchedForzaColors.slice(0, 3).map((match, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-3 p-2 rounded border ${
-                    isDarkMode ? 'border-slate-600 bg-slate-700/50' : 'border-gray-300 bg-gray-50'
+                  className={`flex items-center gap-3 p-2 rounded ${
+                    isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
                   }`}
                 >
                   <div className="flex gap-1">
@@ -660,9 +655,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
                       }
                       onColorSelect?.(extractedAsCarColor)
                     }}
-                    className={`px-2 py-1 text-xs rounded transition-colors ${
-                      isDarkMode ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'
-                    } text-white`}
+                    className="px-2 py-1 text-xs rounded bamboo-button"
                   >
                     Select
                   </button>

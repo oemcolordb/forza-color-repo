@@ -57,7 +57,9 @@ export default function ColorAnalyticsDashboard({
   }, [colors])
 
   return (
-    <div className={`p-6 rounded-xl ${isDarkMode ? 'bg-slate-800/90 backdrop-blur-sm' : 'bg-white'} shadow-xl border ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}>
+    <div
+      className={`p-6 rounded-xl ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
+    >
       <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         <span className="text-3xl">📊</span>
         <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -215,14 +217,14 @@ export default function ColorAnalyticsDashboard({
           <span className="text-xl">⭐</span>
           Most Popular Color Names
         </h3>
-        <div className={`rounded-xl overflow-hidden ${isDarkMode ? 'bg-slate-700/30' : 'bg-gray-50'}`}>
+        <div className={`rounded-xl overflow-hidden ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
           {analytics.mostCommon.map(([name, count], index) => (
             <div
               key={name}
               className={`flex items-center justify-between p-3 transition-colors ${
                 isDarkMode 
-                  ? 'hover:bg-slate-700/50 border-b border-slate-700/50 last:border-0' 
-                  : 'hover:bg-white border-b border-gray-100 last:border-0'
+                  ? 'hover:opacity-95 border-b border-slate-700/50 last:border-0' 
+                  : 'hover:opacity-95 border-b border-gray-100 last:border-0'
               }`}
             >
               <div className="flex items-center gap-3">

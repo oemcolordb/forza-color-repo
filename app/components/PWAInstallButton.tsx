@@ -2,18 +2,23 @@
 
 import React, { useState, useEffect } from 'react'
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+}
+
 interface PWAInstallButtonProps {
   isDarkMode: boolean
 }
 
-const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ isDarkMode }) => {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ isDarkMode: _isDarkMode }) => {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [showInstall, setShowInstall] = useState(false)
 
   useEffect(() => {
     const handler = (e: Event) => {
       e.preventDefault()
-      setDeferredPrompt(e)
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
       setShowInstall(true)
     }
 
@@ -40,17 +45,12 @@ const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ isDarkMode }) => {
     setDeferredPrompt(null)
   }
 
-  // Temporarily always show for testing
-  // if (!showInstall) return null
+  if (!showInstall) return null
 
   return (
     <button
       onClick={handleInstall}
-      className={`px-3 py-2 text-sm font-medium rounded-lg border-2 transition-colors ${
-        isDarkMode
-          ? 'bg-green-600 text-white border-green-500 hover:bg-green-700'
-          : 'bg-green-600 text-white border-green-500 hover:bg-green-700'
-      }`}
+      className="bamboo-button px-3 py-2 text-sm"
       title="Install app"
     >
       📱 Install

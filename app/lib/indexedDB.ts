@@ -110,7 +110,7 @@ class IndexedDBManager {
     })
   }
 
-  async setCache(key: string, data: any, ttl: number = 600000): Promise<void> {
+  async setCache(key: string, data: unknown, ttl: number = 600000): Promise<void> {
     if (!this.db) await this.init()
 
     const transaction = this.db!.transaction(['cache'], 'readwrite')

@@ -1,6 +1,8 @@
-const PYTHON_API_BASE = 'http://localhost:8000/api'
+import { CarColor } from '../types'
 
-export async function processImageWithML(imageData: string, colors: any[]) {
+const PYTHON_API_BASE = process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000/api'
+
+export async function processImageWithML(imageData: string, colors: CarColor[]) {
   const response = await fetch(`${PYTHON_API_BASE}/process-image`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -9,7 +11,7 @@ export async function processImageWithML(imageData: string, colors: any[]) {
   return response.json()
 }
 
-export async function analyzeColors(colors: any[]) {
+export async function analyzeColors(colors: CarColor[]) {
   const response = await fetch(`${PYTHON_API_BASE}/analyze-colors`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -18,7 +20,7 @@ export async function analyzeColors(colors: any[]) {
   return response.json()
 }
 
-export async function getColorRecommendations(userPreferences: any[], colors: any[]) {
+export async function getColorRecommendations(userPreferences: Record<string, unknown>[], colors: CarColor[]) {
   const response = await fetch(`${PYTHON_API_BASE}/recommendations`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

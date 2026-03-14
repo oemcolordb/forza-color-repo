@@ -9,11 +9,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
       <header className="py-8 text-center bg-transparent relative">
         <button
           onClick={onToggleTheme}
-          className={`fixed top-4 left-4 z-50 p-3 rounded-full shadow-lg border-2 transition-all ${
-            isDarkMode
-              ? 'bg-yellow-400 border-yellow-300 text-yellow-900 hover:bg-yellow-300'
-              : 'bg-slate-800 border-slate-700 text-yellow-400 hover:bg-slate-700'
-          }`}
+          className="fixed top-4 left-4 z-50 p-3 rounded-full shadow-lg border-2 transition-all bamboo-button-ghost"
           aria-label="Toggle theme"
           style={{ minHeight: '48px', minWidth: '48px' }}
         >
@@ -46,17 +42,13 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
           ) : (
             <button
               onClick={onShowAuth}
-              className={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-colors ${
-                isDarkMode
-                  ? 'bg-blue-600 text-white border-blue-500 hover:bg-blue-700'
-                  : 'bg-blue-600 text-white border-blue-500 hover:bg-blue-700'
-              }`}
+              className="px-4 py-2 text-sm bamboo-button hover-lift"
             >
               Sign In
             </button>
           )}
         </div>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up bg-black/50 backdrop-blur-sm px-6 py-4 rounded-lg inline-block">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up bg-black/50 backdrop-blur-sm px-6 py-4 rounded-lg inline-block glass-effect">
           <span
             className="neon-text animate-color-shift text-purple-400"
             style={{
@@ -72,25 +64,25 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
         <div className="mt-6 flex flex-wrap justify-center gap-4">
           <a
             href="/tuneforge"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift"
           >
             🔧 TuneForge Lab
           </a>
           <a
             href="/location-finder"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift"
           >
             📍 Location Finder
           </a>
           <a
             href="/how-to-use"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift"
           >
             📖 How to Use
           </a>
           <a
             href="/blog"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift hover-rainbow"
           >
             📝 Color Blog
           </a>

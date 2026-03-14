@@ -15,20 +15,16 @@ export default function Help() {
 
   return (
     <div
-      className={`min-h-screen ${
-        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-800'
-      }`}
+      className={`min-h-screen ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}
     >
       <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
         {/* Engine Bay - Header */}
         <div
-          className={`relative mb-8 rounded-xl overflow-hidden ${
-            isDarkMode
-              ? 'bg-gradient-to-r from-gray-800 to-gray-900'
-              : 'bg-gradient-to-r from-gray-100 to-gray-200'
-          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}
+          className={`relative mb-8 rounded-xl overflow-hidden p-6 ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
@@ -50,11 +46,9 @@ export default function Help() {
         <div className="space-y-8">
           {/* Dashboard - Getting Started */}
           <div
-            className={`relative rounded-xl overflow-hidden ${
-              isDarkMode
-                ? 'bg-gradient-to-r from-slate-800 to-slate-900'
-                : 'bg-gradient-to-r from-slate-100 to-slate-200'
-            } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}
+            className={`relative rounded-xl overflow-hidden p-6 ${
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+            }`}
           >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
@@ -98,11 +92,9 @@ export default function Help() {
 
           {/* Paint Booth - FAQ */}
           <div
-            className={`relative rounded-xl overflow-hidden ${
-              isDarkMode
-                ? 'bg-gradient-to-r from-purple-800 to-purple-900'
-                : 'bg-gradient-to-r from-purple-100 to-purple-200'
-            } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'} p-6`}
+            className={`relative rounded-xl overflow-hidden p-6 ${
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+            }`}
           >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
@@ -164,11 +156,9 @@ export default function Help() {
 
           {/* Control Panel - Technical Support */}
           <div
-            className={`relative rounded-xl overflow-hidden ${
-              isDarkMode
-                ? 'bg-gradient-to-r from-green-800 to-green-900'
-                : 'bg-gradient-to-r from-green-100 to-green-200'
-            } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}
+            className={`relative rounded-xl overflow-hidden p-6 ${
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+            }`}
           >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
@@ -212,11 +202,9 @@ export default function Help() {
 
           {/* Showroom - Contact */}
           <div
-            className={`relative rounded-xl overflow-hidden ${
-              isDarkMode
-                ? 'bg-gradient-to-r from-yellow-800 to-yellow-900'
-                : 'bg-gradient-to-r from-yellow-100 to-yellow-200'
-            } border-2 ${isDarkMode ? 'border-yellow-500/30' : 'border-yellow-400/40'} p-6`}
+            className={`relative rounded-xl overflow-hidden p-6 ${
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+            }`}
           >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">

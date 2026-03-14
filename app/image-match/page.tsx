@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react'
 import ImageColorExtractor from '../components/ImageColorExtractor'
 import colorData from '../../services/colorData'
-import { ForzaColorMatch, CarColor } from '../types'
+import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
 
 interface SavedScan {
   id: string
   imageName: string
-  extractedColors: any[]
+  extractedColors: ExtractedColor[]
   matches: ForzaColorMatch[]
   imageData: string
   createdAt: string
@@ -25,7 +25,7 @@ export default function ImageMatchPage() {
 
 function ImageMatchPageInner() {
   const [matches, setMatches] = useState<ForzaColorMatch[]>([])
-  const [extracted, setExtracted] = useState<any[]>([])
+  const [extracted, setExtracted] = useState<ExtractedColor[]>([])
   const [selected, setSelected] = useState<CarColor | null>(null)
   const [savedScans, setSavedScans] = useState<SavedScan[]>([])
   const [currentImageName, setCurrentImageName] = useState('')
@@ -47,7 +47,7 @@ function ImageMatchPageInner() {
       const response = await fetch(`/api/scans?userId=${user.id}`)
       const data = await response.json()
       setSavedScans(
-        data.map((scan: any) => ({
+        data.map((scan: Record<string, string>) => ({
           ...scan,
           extractedColors: JSON.parse(scan.extractedColors),
           matches: JSON.parse(scan.matches),
@@ -118,7 +118,7 @@ function ImageMatchPageInner() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white p-6">
+    <div className="min-h-screen text-white p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -133,7 +133,7 @@ function ImageMatchPageInner() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="px-4 py-2 bg-purple-600 rounded-lg hover:bg-purple-700 font-semibold"
+                className="px-4 py-2 bamboo-button rounded-lg font-semibold"
               >
                 📚 History ({savedScans.length})
               </button>
@@ -141,7 +141,7 @@ function ImageMatchPageInner() {
                 <button
                   onClick={saveScan}
                   disabled={saving}
-                  className="px-4 py-2 bg-green-600 rounded-lg hover:bg-green-700 font-semibold disabled:opacity-50"
+                  className="px-4 py-2 bamboo-button rounded-lg font-semibold disabled:opacity-50"
                 >
                   {saving ? '💾 Saving...' : '💾 Save Scan'}
                 </button>
@@ -154,7 +154,7 @@ function ImageMatchPageInner() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Uploader */}
           <div className="lg:col-span-2">
-            <div className="bg-slate-800 rounded-xl p-6 shadow-2xl">
+            <div className="rounded-xl p-6 shadow-2xl bamboo-surface-dark">
               <ImageColorExtractor
                 colors={colorData}
                 onColorsExtracted={setExtracted}
@@ -168,13 +168,13 @@ function ImageMatchPageInner() {
 
             {/* Matches */}
             {matches.length > 0 && (
-              <div className="mt-6 bg-slate-800 rounded-xl p-6 shadow-2xl">
+              <div className="mt-6 rounded-xl p-6 shadow-2xl bamboo-surface-dark">
                 <h2 className="text-2xl font-bold mb-4">🎯 Suggested Paints</h2>
                 <div className="space-y-3">
                   {matches.slice(0, 10).map((m, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center gap-4 p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors cursor-pointer"
+                      className="flex items-center gap-4 p-3 rounded-lg transition-colors cursor-pointer bamboo-surface-dark hover:opacity-95"
                       onClick={() => setSelected(m.forza)}
                     >
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center font-bold">
@@ -218,7 +218,7 @@ function ImageMatchPageInner() {
           <div className="space-y-6">
             {/* Selected Color */}
             {selected && (
-              <div className="bg-slate-800 rounded-xl p-6 shadow-2xl">
+              <div className="rounded-xl p-6 shadow-2xl bamboo-surface-dark">
                 <h3 className="text-xl font-bold mb-4">Selected Color</h3>
                 <div
                   className="w-full h-32 rounded-lg mb-4"
@@ -275,7 +275,7 @@ function ImageMatchPageInner() {
                           </button>
                         </div>
                         <div className="flex gap-1 mb-2">
-                          {scan.extractedColors.slice(0, 5).map((c: any, i: number) => (
+                          {scan.extractedColors.slice(0, 5).map((c: ExtractedColor, i: number) => (
                             <div
                               key={i}
                               className="w-6 h-6 rounded"

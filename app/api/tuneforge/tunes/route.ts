@@ -22,7 +22,7 @@ export const POST = async (request: Request) => {
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Save failed' }, { status: 500 })
   }
 }
@@ -33,7 +33,7 @@ export const GET = async () => {
   try {
     const result = await client.execute('SELECT * FROM tunes ORDER BY created_at DESC LIMIT 50')
     return NextResponse.json(result.rows)
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Fetch failed' }, { status: 500 })
   }
 }

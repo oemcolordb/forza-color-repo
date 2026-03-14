@@ -143,10 +143,8 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     return (
       <div
-        className={`group rounded-lg shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-          isDarkMode
-            ? 'bg-slate-800 border border-slate-700 hover:border-slate-500'
-            : 'bg-white border border-gray-200 hover:border-gray-400'
+        className={`group rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl hover-lift ${
+          isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
         style={{
           WebkitTapHighlightColor: 'transparent',
@@ -156,7 +154,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
         <div
           className={`w-full h-20 sm:h-24 relative overflow-hidden ${
             finish === 'matte' ? '' : 'shadow-inner'
-          }`}
+          } ${finish === 'chrome' || finish === 'pearlescent' ? 'glow-effect' : ''}`}
           style={{ background: gradient }}
           role="img"
           aria-label={`Color preview for ${color.colorName}`}
@@ -272,9 +270,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
           <div
             className={`absolute left-2 right-2 top-2 z-10 rounded-md border backdrop-blur-sm transition-opacity duration-150 opacity-0 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100 group-hover:pointer-events-auto group-focus-within:pointer-events-auto ${
-              isDarkMode
-                ? 'bg-slate-900/80 border-slate-700'
-                : 'bg-white/85 border-gray-200'
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
             }`}
             onClick={e => {
               e.preventDefault()
@@ -385,11 +381,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                       <span className="font-mono truncate">rgb({primaryRgb.r}, {primaryRgb.g}, {primaryRgb.b})</span>
                       <button
                         type="button"
-                        className={`px-2 py-0.5 rounded border text-[10px] ${
-                          isDarkMode
-                            ? 'border-slate-600 hover:border-slate-400 text-slate-200'
-                            : 'border-gray-300 hover:border-gray-500 text-gray-900'
-                        }`}
+                        className="px-2 py-0.5 rounded text-[10px] bamboo-button-ghost"
                         onClick={e => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -404,11 +396,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                       <span className="font-mono truncate">hsl({primaryHsl.h}, {primaryHsl.s}%, {primaryHsl.l}%)</span>
                       <button
                         type="button"
-                        className={`px-2 py-0.5 rounded border text-[10px] ${
-                          isDarkMode
-                            ? 'border-slate-600 hover:border-slate-400 text-slate-200'
-                            : 'border-gray-300 hover:border-gray-500 text-gray-900'
-                        }`}
+                        className="px-2 py-0.5 rounded text-[10px] bamboo-button-ghost"
                         onClick={e => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -423,11 +411,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                       <span className="font-mono truncate">{primaryHex.toUpperCase()}</span>
                       <button
                         type="button"
-                        className={`px-2 py-0.5 rounded border text-[10px] ${
-                          isDarkMode
-                            ? 'border-slate-600 hover:border-slate-400 text-slate-200'
-                            : 'border-gray-300 hover:border-gray-500 text-gray-900'
-                        }`}
+                        className="px-2 py-0.5 rounded text-[10px] bamboo-button-ghost"
                         onClick={e => {
                           e.preventDefault()
                           e.stopPropagation()
@@ -464,7 +448,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
             </p>
             {color.colorType && (
               <div
-                className={`text-xs font-semibold mt-1 ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}
+                className="text-xs font-semibold mt-1 text-[color:var(--bamboo-stalk)]"
               >
                 {color.colorType}
               </div>
@@ -478,12 +462,8 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                   e.stopPropagation()
                   onToggleFavorite()
                 }}
-                className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
-                  isFavorite
-                    ? 'text-red-500 hover:text-red-600'
-                    : isDarkMode
-                      ? 'text-slate-300 hover:text-red-400 hover:bg-slate-700'
-                      : 'text-gray-400 hover:text-red-500 hover:bg-gray-100'
+                className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center bamboo-button-ghost ${
+                  isFavorite ? 'text-red-500' : ''
                 }`}
                 aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               >
@@ -499,11 +479,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                   onSelect(color)
                 }
               }}
-              className={`transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center ${
-                isDarkMode
-                  ? 'text-slate-300 hover:text-blue-400 hover:bg-slate-700'
-                  : 'text-gray-600 hover:text-blue-600 hover:bg-gray-100'
-              }`}
+              className="transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center bamboo-button-ghost"
               aria-label={`Learn more about ${color.colorName}`}
             >
               ℹ️

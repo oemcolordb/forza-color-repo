@@ -15,20 +15,16 @@ export default function Contact() {
 
   return (
     <div
-      className={`min-h-screen ${
-        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-800'
-      }`}
+      className={`min-h-screen ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}
     >
       <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
         {/* Engine Bay - Header */}
         <div
-          className={`relative mb-8 rounded-xl overflow-hidden ${
-            isDarkMode
-              ? 'bg-gradient-to-r from-gray-800 to-gray-900'
-              : 'bg-gradient-to-r from-gray-100 to-gray-200'
-          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}
+          className={`relative mb-8 rounded-xl overflow-hidden p-6 ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
@@ -53,11 +49,9 @@ export default function Contact() {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Dashboard - Contact Info */}
           <div
-            className={`relative rounded-xl overflow-hidden ${
-              isDarkMode
-                ? 'bg-gradient-to-r from-slate-800 to-slate-900'
-                : 'bg-gradient-to-r from-slate-100 to-slate-200'
-            } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}
+            className={`relative rounded-xl overflow-hidden p-6 ${
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+            }`}
           >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
@@ -77,7 +71,7 @@ export default function Contact() {
                 </h3>
                 <a
                   href="mailto:julian.penning1@gmail.com"
-                  className="text-blue-600 dark:text-blue-400 hover:underline text-lg"
+                  className="text-[color:var(--bamboo-stalk)] hover:underline text-lg"
                 >
                   julian.penning1@gmail.com
                 </a>
@@ -92,7 +86,7 @@ export default function Contact() {
                 </h3>
                 <a
                   href="https://www.paypal.com/paypalme/julianpenning1"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bamboo-button text-white rounded-lg transition-colors"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -110,7 +104,7 @@ export default function Contact() {
                 <div className="flex flex-wrap gap-3">
                   <a
                     href="https://twitter.com"
-                    className="flex items-center gap-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bamboo-button text-white rounded-lg transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -118,7 +112,7 @@ export default function Contact() {
                   </a>
                   <a
                     href="https://github.com"
-                    className="flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bamboo-button-ghost text-white rounded-lg transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -126,7 +120,7 @@ export default function Contact() {
                   </a>
                   <a
                     href="https://discord.com"
-                    className="flex items-center gap-2 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bamboo-button text-white rounded-lg transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -134,7 +128,7 @@ export default function Contact() {
                   </a>
                   <a
                     href="https://youtube.com"
-                    className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 bamboo-button text-white rounded-lg transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -147,11 +141,9 @@ export default function Contact() {
 
           {/* Control Panel - Support Info */}
           <div
-            className={`relative rounded-xl overflow-hidden ${
-              isDarkMode
-                ? 'bg-gradient-to-r from-green-800 to-green-900'
-                : 'bg-gradient-to-r from-green-100 to-green-200'
-            } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}
+            className={`relative rounded-xl overflow-hidden p-6 ${
+              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+            }`}
           >
             <div className="absolute top-2 left-4">
               <div className="flex items-center gap-2">
@@ -202,7 +194,7 @@ export default function Contact() {
               </div>
 
               <div
-                className={`mt-6 p-4 rounded-lg ${isDarkMode ? 'bg-green-900/40' : 'bg-green-50'}`}
+                className={`mt-6 p-4 rounded-lg ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
               >
                 <h3 className="text-lg font-medium mb-2">⏱️ Response Times</h3>
                 <ul className="space-y-1 text-sm">

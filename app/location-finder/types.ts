@@ -1,54 +1,54 @@
 export enum LocationCategory {
-  Locations = 'Locations',
-  Collectibles = 'Collectibles',
-  RaceEvents = 'Race Events',
-  HorizonStories = 'Horizon Stories',
-  PRStunts = 'PR Stunts',
-  Other = 'Other'
+  Locations = 'LOCATIONS',
+  Collectibles = 'COLLECTIBLES',
+  RaceEvents = 'RACE EVENTS',
+  HorizonStories = 'HORIZON STORIES',
+  PRStunts = 'PR STUNTS',
+  Other = 'OTHER'
 }
 
 export enum LocationType {
-  // Locations
-  Expedition = 'Expedition',
-  FestivalSite = 'Festival Site',
-  Landmark = 'Landmark',
-  PlayerHouse = 'Player House',
-  PlaygroundGame = 'Playground Game',
-  Showcase = 'Showcase',
+  // LOCATIONS (Total: 75)
+  Expedition = 'Expedition',                    // 5
+  FestivalSite = 'Festival Site',              // 6
+  Landmark = 'Landmark',                        // 56
+  PlayerHouse = 'Player House',                 // 7
+  PlaygroundGame = 'Playground Game',           // 3
+  Showcase = 'Showcase',                        // 4
   
-  // Collectibles
-  BarnFind = 'Barn Find',
-  FastTravelBoard = 'Fast Travel Board',
-  Treasure = 'Treasure',
-  XPBoard = 'XP Board',
+  // COLLECTIBLES (Total: 228)
+  BarnFind = 'Barn Find',                       // 14
+  FastTravelBoard = 'Fast Travel Board',        // 50
+  Treasure = 'Treasure',                        // 4
+  XPBoard = 'XP Board',                         // 200
   
-  // Race Events
-  CrossCountryEvent = 'Cross Country Event',
-  DirtRacingEvent = 'Dirt Racing Event',
-  DragRacingEvent = 'Drag Racing Event',
-  RoadRacingEvent = 'Road Racing Event',
-  StreetRacingEvent = 'Street Racing Event',
+  // RACE EVENTS (Total: 69)
+  CrossCountryEvent = 'Cross Country Event',    // 20
+  DirtRacingEvent = 'Dirt Racing Event',       // 20
+  DragRacingEvent = 'Drag Racing Event',       // 3
+  RoadRacingEvent = 'Road Racing Event',       // 25
+  StreetRacingEvent = 'Street Racing Event',   // 21
   
-  // Horizon Stories
-  BornFast = 'Born Fast',
-  ElCamino = 'El Camino',
-  LuchaDeCarreteras = 'Lucha de Carreteras',
-  TestDriver = 'Test Driver',
-  V10 = 'V10',
-  Vocho = 'Vocho',
+  // HORIZON STORIES (Total: 57)
+  BornFast = 'Born Fast',                       // 8
+  ElCamino = 'El Camino',                      // 9
+  LuchaDeCarreteras = 'Lucha de Carreteras',   // 8
+  TestDriver = 'Test Driver',                   // 15
+  V10 = 'V10',                                  // 12
+  Vocho = 'Vocho',                             // 13
   
-  // PR Stunts
-  DangerSign = 'Danger Sign',
-  DriftZone = 'Drift Zone',
-  SpeedTrap = 'Speed Trap',
-  SpeedZone = 'Speed Zone',
-  Trailblazer = 'Trailblazer',
-  TrailblazerFinish = 'Trailblazer Finish',
+  // PR STUNTS (Total: 75)
+  DangerSign = 'Danger Sign',                   // 20
+  DriftZone = 'Drift Zone',                     // 20
+  SpeedTrap = 'Speed Trap',                     // 31
+  SpeedZone = 'Speed Zone',                     // 22
+  Trailblazer = 'Trailblazer',                 // 13
   
-  // Other
-  ExpeditionAccolade = 'Expedition Accolade',
-  Miscellaneous = 'Miscellaneous',
-  Vehicle = 'Vehicle'
+  // OTHER (Total: 32)
+  ExpeditionAccolade = 'Expedition Accolade',   // 14
+  Miscellaneous = 'Miscellaneous',              // 5
+  TrailblazerFinish = 'Trailblazer Finish',    // 13
+  Vehicle = 'Vehicle'                           // 5
 }
 
 export interface Location {

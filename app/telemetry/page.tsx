@@ -16,20 +16,16 @@ export default function TelemetryPage() {
 
   return (
     <div
-      className={`min-h-screen ${
-        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-100 text-gray-800'
-      }`}
+      className={`min-h-screen ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}
     >
       <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
 
       <div className="relative z-10 max-w-6xl mx-auto p-4">
         {/* Engine Bay - Header */}
         <div
-          className={`relative mb-6 rounded-xl overflow-hidden ${
-            isDarkMode
-              ? 'bg-gradient-to-r from-gray-800 to-gray-900'
-              : 'bg-gradient-to-r from-gray-100 to-gray-200'
-          } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'} p-6`}
+          className={`relative mb-6 rounded-xl overflow-hidden p-6 ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
@@ -50,11 +46,9 @@ export default function TelemetryPage() {
 
         {/* Dashboard - Setup Instructions */}
         <div
-          className={`relative mb-6 rounded-xl overflow-hidden ${
-            isDarkMode
-              ? 'bg-gradient-to-r from-slate-800 to-slate-900'
-              : 'bg-gradient-to-r from-slate-100 to-slate-200'
-          } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'} p-6`}
+          className={`relative mb-6 rounded-xl overflow-hidden p-6 ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">
@@ -82,11 +76,9 @@ export default function TelemetryPage() {
 
         {/* Control Panel - Telemetry Dashboard */}
         <div
-          className={`relative rounded-xl overflow-hidden ${
-            isDarkMode
-              ? 'bg-gradient-to-r from-green-800 to-green-900'
-              : 'bg-gradient-to-r from-green-100 to-green-200'
-          } border-2 ${isDarkMode ? 'border-green-500/30' : 'border-green-400/40'} p-6`}
+          className={`relative rounded-xl overflow-hidden p-6 ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           <div className="absolute top-2 left-4">
             <div className="flex items-center gap-2">

@@ -3,12 +3,12 @@
 import React from 'react'
 
 interface TelemetryPanelProps {
-  tuneData: any
-  carData: any
+  tuneData: Record<string, number>
+  carData: { manufacturer: string; model: string; year: string; drivetrain?: string; weight?: number }
   isDarkMode: boolean
 }
 
-export function TelemetryPanel({ tuneData, carData, isDarkMode }: TelemetryPanelProps) {
+export function TelemetryPanel({ tuneData, carData: _carData, isDarkMode }: TelemetryPanelProps) {
   return (
     <div className="space-y-4">
       {/* How to Access Telemetry */}

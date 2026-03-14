@@ -67,7 +67,7 @@ describe('ImageColorExtractor', () => {
       />
     )
 
-    expect(container.firstChild).toHaveClass('border-slate-600')
+    expect(container.firstChild).toHaveClass('bamboo-surface-dark')
 
     rerender(
       <ImageColorExtractor
@@ -77,6 +77,6 @@ describe('ImageColorExtractor', () => {
       />
     )
 
-    expect(container.firstChild).toHaveClass('border-gray-300')
+    expect(container.firstChild).toHaveClass('bamboo-surface')
   })
 })

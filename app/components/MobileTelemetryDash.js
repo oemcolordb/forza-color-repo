@@ -34,7 +34,7 @@ const MobileTelemetryDash = () => {
 
   if (!serverIP || !connected) {
     return (
-      <div className="min-h-screen bg-black text-white p-4 flex flex-col justify-center">
+      <div className="min-h-screen text-white p-4 flex flex-col justify-center">
         <div className="max-w-sm mx-auto">
           <h1 className="text-2xl font-bold mb-6 text-center">Forza Telemetry</h1>
           <div className="space-y-4">
@@ -43,9 +43,9 @@ const MobileTelemetryDash = () => {
               placeholder="PC IP Address (e.g., 192.168.1.100)"
               value={serverIP}
               onChange={e => setServerIP(e.target.value)}
-              className="w-full p-3 bg-gray-800 rounded text-white"
+              className="w-full p-3 bamboo-input"
             />
-            <button onClick={handleConnect} className="w-full p-3 bg-blue-600 rounded font-bold">
+            <button onClick={handleConnect} className="w-full p-3 bamboo-button rounded font-bold">
               Connect
             </button>
           </div>
@@ -61,7 +61,7 @@ const MobileTelemetryDash = () => {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-pulse text-green-500 text-xl mb-2">●</div>
           <p>Waiting for telemetry data...</p>
@@ -71,15 +71,15 @@ const MobileTelemetryDash = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-2">
+    <div className="min-h-screen text-white p-2">
       {/* Speed & RPM */}
       <div className="grid grid-cols-2 gap-2 mb-4">
-        <div className="bg-gray-900 p-4 rounded text-center">
-          <div className="text-3xl font-bold text-blue-400">{data.speed.toFixed(0)}</div>
+        <div className="p-4 rounded text-center bamboo-surface-dark">
+          <div className="text-3xl font-bold text-[color:var(--bamboo-stalk)]">{data.speed.toFixed(0)}</div>
           <div className="text-sm text-gray-400">m/s</div>
           <div className="text-xs text-gray-500">{(data.speed * 3.6).toFixed(0)} km/h</div>
         </div>
-        <div className="bg-gray-900 p-4 rounded text-center">
+        <div className="p-4 rounded text-center bamboo-surface-dark">
           <div className="text-3xl font-bold text-red-400">{data.currentEngineRpm.toFixed(0)}</div>
           <div className="text-sm text-gray-400">RPM</div>
           <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
@@ -93,26 +93,26 @@ const MobileTelemetryDash = () => {
 
       {/* Gear & Inputs */}
       <div className="grid grid-cols-4 gap-2 mb-4">
-        <div className="bg-gray-900 p-3 rounded text-center">
+        <div className="p-3 rounded text-center bamboo-surface-dark">
           <div className="text-2xl font-bold">{data.gear === 0 ? 'R' : data.gear}</div>
           <div className="text-xs text-gray-400">GEAR</div>
         </div>
-        <div className="bg-gray-900 p-3 rounded text-center">
+        <div className="p-3 rounded text-center bamboo-surface-dark">
           <div className="text-lg font-bold">{((data.throttle / 255) * 100).toFixed(0)}%</div>
           <div className="text-xs text-gray-400">THR</div>
         </div>
-        <div className="bg-gray-900 p-3 rounded text-center">
+        <div className="p-3 rounded text-center bamboo-surface-dark">
           <div className="text-lg font-bold">{((data.brake / 255) * 100).toFixed(0)}%</div>
           <div className="text-xs text-gray-400">BRK</div>
         </div>
-        <div className="bg-gray-900 p-3 rounded text-center">
+        <div className="p-3 rounded text-center bamboo-surface-dark">
           <div className="text-lg font-bold">{data.power.toFixed(0)}</div>
           <div className="text-xs text-gray-400">HP</div>
         </div>
       </div>
 
       {/* Tire Temps */}
-      <div className="bg-gray-900 p-3 rounded mb-4">
+      <div className="p-3 rounded mb-4 bamboo-surface-dark">
         <div className="text-sm text-gray-400 mb-2">Tire Temperatures</div>
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="flex justify-between">

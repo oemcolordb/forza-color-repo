@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
 
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
-})
+const client =
+  process.env.TURSO_DATABASE_URL &&
+  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
+    ? createClient({
+        url: process.env.TURSO_DATABASE_URL,
+        authToken: process.env.TURSO_AUTH_TOKEN || '',
+      })
+    : null
 
 // GET - Retrieve user favorites from cloud
 export async function GET(request: Request) {
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
@@ -39,6 +45,8 @@ export async function GET(request: Request) {
 
 // POST - Sync favorites to cloud and track analytics
 export async function POST(request: Request) {
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+
   try {
     const body = await request.json()
     const { sessionId, userId, favorites, colorDetails } = body
@@ -108,6 +116,8 @@ export async function POST(request: Request) {
 
 // DELETE - Remove a favorite and track analytics
 export async function DELETE(request: Request) {
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')

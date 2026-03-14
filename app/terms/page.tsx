@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 
 export default function Terms() {
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100">
-      <div className="max-w-4xl mx-auto px-4 py-16">
+    <div className="min-h-screen text-gray-900 dark:text-slate-100">
+      <div className="max-w-4xl mx-auto px-4 py-16 rounded-xl bamboo-surface">
         <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-8">
           Last updated: {new Date().toLocaleDateString()}

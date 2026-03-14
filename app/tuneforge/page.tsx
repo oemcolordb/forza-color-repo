@@ -6,7 +6,8 @@ import React, { useState, useEffect } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
 import { getCountryFlag, formatPrice } from '../lib/countryFlags'
 
-import { TuningCalculator, TRACKS, TRACK_TYPES } from '../lib/tuning-calculator'
+import { TuningCalculator, TRACKS } from '../lib/tuning-calculator'
+import { Car as BaseCar } from '../types/car'
 
 interface Car {
   year: string
@@ -25,7 +26,7 @@ interface Car {
     offroad: number
   }
   pi: {
-    class: 'D' | 'C' | 'B' | 'A' | 'S1' | 'S2'
+    class: 'D' | 'C' | 'B' | 'A' | 'S1' | 'S2' | 'X'
     value: number
   }
   fullName?: string
@@ -44,6 +45,16 @@ interface TuneData {
   [key: string]: number
 }
 
+interface SavedTune {
+  id: string
+  name: string
+  carFullName: string
+  carData: Car
+  tune: TuneData
+  timestamp: number
+  version: string
+}
+
 export default function TuneForge() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
@@ -51,21 +62,18 @@ export default function TuneForge() {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('quick')
   const [tuneData, setTuneData] = useState<TuneData>({})
-  const [savedTunes, setSavedTunes] = useState<any[]>([])
+  const [savedTunes, setSavedTunes] = useState<SavedTune[]>([])
   const [sortBy, setSortBy] = useState('manufacturer-az')
   const [aiQuery, setAiQuery] = useState('')
   const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
 
-  const [selectedTrack, setSelectedTrack] = useState('')
-  const [drivingStyle, setDrivingStyle] = useState('balanced')
-  const [telemetryData, setTelemetryData] = useState(null)
-  const [tuneComparison, setTuneComparison] = useState([])
+  const [selectedTrack] = useState('')
+  const [drivingStyle] = useState('balanced')
   const [weatherCondition, setWeatherCondition] = useState('dry')
-  const [trackSurface, setTrackSurface] = useState('tarmac')
+  const [trackSurface] = useState('tarmac')
   const [lapTimeTarget, setLapTimeTarget] = useState('')
-  const [tuneHistory, setTuneHistory] = useState([])
-  const [activePreset, setActivePreset] = useState('')
+  const [, setActivePreset] = useState('')
   const [isCalculating, setIsCalculating] = useState(false)
   const [calculationProgress, setCalculationProgress] = useState(0)
   const [loadingStatus, setLoadingStatus] = useState('Initializing...')
@@ -118,7 +126,7 @@ export default function TuneForge() {
       }
 
       setLoadingStatus('Processing car data...')
-      const processedCars = allCars.map((car: any) => ({
+      const processedCars = allCars.map((car: BaseCar) => ({
         year: car.year,
         manufacturer: car.manufacturer,
         model: car.model,
@@ -137,72 +145,20 @@ export default function TuneForge() {
 
       setCars(processedCars)
       setSelectedCar(processedCars[0])
-      setLoadingStatus(`✅ ${processedCars.length} cars loaded successfully`)
-      console.log(`✅ TuneForge: Loaded ${processedCars.length} cars from car database`)
-
-      // Log detailed statistics
-      const manufacturers = new Set(processedCars.map(c => c.manufacturer)).size
-      const countries = new Set(processedCars.map(c => c.country)).size
-      console.log(`📊 Database Stats: ${manufacturers} manufacturers, ${countries} countries`)
+      setLoadingStatus(`${processedCars.length} cars loaded successfully`)
     } catch (error) {
-      console.error('❌ TuneForge: Failed to load car database:', error)
-      setLoadingStatus('⚠️ Loading fallback cars...')
+      console.error('TuneForge: Failed to load car database:', error)
+      setLoadingStatus('Loading fallback cars...')
       loadFallbackCars()
     }
   }
 
-  const getCountryFromMake = (make: string) => {
-    const countries: { [key: string]: string } = {
-      Ferrari: 'Italy',
-      Lamborghini: 'Italy',
-      Maserati: 'Italy',
-      'Alfa Romeo': 'Italy',
-      Porsche: 'Germany',
-      BMW: 'Germany',
-      'Mercedes-Benz': 'Germany',
-      Audi: 'Germany',
-      Ford: 'United States',
-      Chevrolet: 'United States',
-      Dodge: 'United States',
-      Toyota: 'Japan',
-      Honda: 'Japan',
-      Nissan: 'Japan',
-      Mazda: 'Japan',
-      McLaren: 'United Kingdom',
-      'Aston Martin': 'United Kingdom',
-      Lotus: 'United Kingdom',
-    }
-    return countries[make] || 'United States'
-  }
-
-  const generateCarStats = (make: string, model: string) => {
-    const base = Math.random() * 3 + 6
-    return {
-      speed: Math.round((base + Math.random() * 2) * 10) / 10,
-      handling: Math.round((base + Math.random() * 2) * 10) / 10,
-      acceleration: Math.round((base + Math.random() * 2) * 10) / 10,
-      launch: Math.round((base + Math.random() * 2) * 10) / 10,
-      braking: Math.round((base + Math.random() * 2) * 10) / 10,
-      offroad: Math.round((Math.random() * 6 + 2) * 10) / 10,
-    }
-  }
-
-  const generatePIClass = (make: string, model: string) => {
-    const classes = ['D', 'C', 'B', 'A', 'S1', 'S2']
-    const classIndex = Math.floor(Math.random() * classes.length)
-    const baseValues = [400, 500, 600, 700, 800, 900]
-    return {
-      class: classes[classIndex] as 'D' | 'C' | 'B' | 'A' | 'S1' | 'S2',
-      value: baseValues[classIndex] + Math.floor(Math.random() * 99),
-    }
-  }
-
-  const getDrivetrain = (make: string, model: string) => {
+  const getDrivetrain = (_make: string, _model: string) => {
     const drivetrains = ['RWD', 'FWD', 'AWD']
     return drivetrains[Math.floor(Math.random() * drivetrains.length)]
   }
 
-  const generateEngine = (make: string, model: string) => {
+  const generateEngine = (_make: string, _model: string) => {
     return {
       displacement: Math.round((2.0 + Math.random() * 4.0) * 10) / 10,
       cylinders: [4, 6, 8, 10, 12][Math.floor(Math.random() * 5)],
@@ -215,7 +171,6 @@ export default function TuneForge() {
     if (!selectedCar) return upgrades
 
     const weight = selectedCar.weight || carWeight
-    const drivetrain = selectedCar.drivetrain || 'RWD'
     const piValue = selectedCar.pi.value
     const power = selectedCar.engine?.horsepower || 400
 
@@ -288,7 +243,6 @@ export default function TuneForge() {
   }
 
   const loadFallbackCars = () => {
-    console.log('⚠️ TuneForge: Using fallback car data (limited selection)')
     const carData: Car[] = [
       {
         year: '2020',
@@ -316,7 +270,7 @@ export default function TuneForge() {
     ]
     setCars(carData)
     setSelectedCar(carData[0])
-    setLoadingStatus('⚠️ Using limited fallback data (1 car)')
+    setLoadingStatus('Using limited fallback data (1 car)')
   }
 
   const loadSavedTunes = () => {
@@ -324,7 +278,7 @@ export default function TuneForge() {
     if (saved) {
       try {
         setSavedTunes(JSON.parse(saved))
-      } catch (error) {
+      } catch {
         setSavedTunes([])
       }
     }
@@ -503,81 +457,6 @@ export default function TuneForge() {
     return adjustments
   }
 
-  const applyTemplate = (template: string) => {
-    if (!selectedCar) return
-
-    let templateTune: TuneData = {}
-
-    switch (template) {
-      case 'Speed':
-        templateTune = {
-          'tire-pressure-front': 32,
-          'tire-pressure-rear': 30,
-          'camber-front': -0.8,
-          'camber-rear': -0.6,
-          'final-drive': 2.8,
-          'gear-1': 4.2,
-          'gear-2': 2.8,
-          'gear-3': 2.0,
-          'gear-4': 1.5,
-          'gear-5': 1.2,
-          'gear-6': 1.0,
-          'aero-front': 80,
-          'aero-rear': 120,
-          'ride-height-front': 5.0,
-          'ride-height-rear': 5.5,
-          'tire-compound-front': 6,
-          'tire-compound-rear': 6,
-        }
-        break
-      case 'Grip':
-        templateTune = {
-          'tire-pressure-front': 28,
-          'tire-pressure-rear': 26,
-          'camber-front': -2.5,
-          'camber-rear': -2.0,
-          'final-drive': 3.8,
-          'gear-1': 3.8,
-          'gear-2': 2.4,
-          'gear-3': 1.7,
-          'gear-4': 1.3,
-          'gear-5': 1.0,
-          'gear-6': 0.8,
-          'aero-front': 200,
-          'aero-rear': 280,
-          'stabilizer-front': 35,
-          'stabilizer-rear': 40,
-          'tire-compound-front': 7,
-          'tire-compound-rear': 7,
-        }
-        break
-      case 'Drift':
-        templateTune = {
-          'tire-pressure-front': 30,
-          'tire-pressure-rear': 22,
-          'camber-front': -3.5,
-          'camber-rear': -1.2,
-          'toe-front': -2.0,
-          'toe-rear': -1.0,
-          'differential-rear-accel': 5,
-          'stabilizer-rear': 15,
-          'ride-height-front': 4.5,
-          'ride-height-rear': 4.5,
-          'gear-1': 4.5,
-          'gear-2': 3.2,
-          'gear-3': 2.3,
-          'gear-4': 1.7,
-          'tire-compound-front': 4,
-          'tire-compound-rear': 3,
-          'traction-control': 0,
-        }
-        break
-    }
-
-    setTuneData({ ...tuneData, ...templateTune })
-    setActiveTab('advanced')
-  }
-
   const saveTune = async () => {
     if (!selectedCar) return
 
@@ -656,7 +535,7 @@ export default function TuneForge() {
           setActiveTab('advanced')
           alert(`Tune "${importedData.tuneName}" imported successfully!`)
         }
-      } catch (error) {
+      } catch {
         alert('Invalid tune file format')
       }
     }
@@ -697,7 +576,7 @@ export default function TuneForge() {
     }
   }
 
-  const loadTune = (tune: any) => {
+  const loadTune = (tune: SavedTune) => {
     setTuneData(tune.tune)
     setActiveTab('advanced')
     alert(`Loaded tune "${tune.name}"`)
@@ -718,8 +597,6 @@ export default function TuneForge() {
     setAiLoading(true)
     try {
       const carInfo = `${selectedCar.year} ${selectedCar.manufacturer} ${selectedCar.model}`
-      const carStats = `PI: ${selectedCar.pi.class} ${selectedCar.pi.value}, Stats: Speed ${selectedCar.stats.speed}, Handling ${selectedCar.stats.handling}, Acceleration ${selectedCar.stats.acceleration}`
-      const contextInfo = `Track: ${selectedTrack || 'General'}, Weather: ${weatherCondition}, Surface: ${trackSurface}, Style: ${drivingStyle}`
 
       // Enhanced AI responses with context awareness
       const responses = {
@@ -762,8 +639,8 @@ export default function TuneForge() {
         responseKey = 'wet'
 
       setAiResponse(responses[responseKey as keyof typeof responses])
-    } catch (error) {
-      setAiResponse('🚫 AI tuning advice temporarily unavailable. Please try again.')
+    } catch {
+      setAiResponse('AI tuning advice temporarily unavailable. Please try again.')
     } finally {
       setAiLoading(false)
     }
@@ -781,37 +658,41 @@ export default function TuneForge() {
     >
       <div className="absolute inset-0 bg-black/60"></div>
       <header
-        className={`relative z-10 flex justify-between items-center p-4 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm border-b`}
+        className={`relative z-10 flex justify-between items-center p-4 backdrop-blur-sm border-b ${
+          isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+        }`}
       >
         <div>
-          <h1 className="text-2xl font-bold text-blue-500">🏎️ Forza TuneForge AI</h1>
+          <h1 className="text-2xl font-bold">🏎️ Forza TuneForge AI</h1>
           <p className="text-xs opacity-75">Professional Tuning Platform</p>
         </div>
         <div className="flex gap-4">
-          <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-2xl p-2 rounded">
+          <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-2xl p-2 rounded bamboo-button-ghost">
             {isDarkMode ? '☀️' : '🌙'}
           </button>
-          <a href="/" className="px-4 py-2 bg-blue-500 text-white rounded">
+          <a href="/" className="px-4 py-2 bamboo-button rounded">
             ← Back to Colors
           </a>
         </div>
       </header>
 
       <div
-        className={`relative z-10 flex p-4 gap-4 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm`}
+        className={`relative z-10 flex p-4 gap-4 backdrop-blur-sm ${
+          isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+        }`}
       >
         <input
           type="text"
           placeholder="Search cars..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className={`flex-1 p-2 rounded border ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+          className="flex-1 bamboo-input"
         />
         <select
           value={sortBy}
           onChange={e => setSortBy(e.target.value)}
           aria-label="Sort cars by"
-          className={`p-2 rounded border ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+          className="p-2 bamboo-input"
         >
           <option value="manufacturer-az">Manufacturer A-Z</option>
           <option value="manufacturer-za">Manufacturer Z-A</option>
@@ -824,7 +705,9 @@ export default function TuneForge() {
 
       <div className="relative z-10 grid lg:grid-cols-2 gap-0 h-[calc(100vh-140px)]">
         <div
-          className={`border-r overflow-y-auto ${isDarkMode ? 'border-gray-600 bg-black/60' : 'border-gray-300 bg-white/60'} backdrop-blur-sm`}
+          className={`border-r overflow-y-auto backdrop-blur-sm ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           <ul className="list-none">
             {filteredCars.map((car, index) => (
@@ -832,7 +715,7 @@ export default function TuneForge() {
                 key={index}
                 onClick={() => setSelectedCar(car)}
                 className={`p-4 border-b cursor-pointer transition-colors ${
-                  selectedCar === car ? 'bg-blue-500 text-white' : 'hover:opacity-80'
+                  selectedCar === car ? 'bamboo-button text-white' : 'hover:opacity-90'
                 } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
               >
                 <div className="font-bold mb-2 flex items-center gap-2">
@@ -866,7 +749,9 @@ export default function TuneForge() {
         </div>
 
         <div
-          className={`p-4 overflow-y-auto ${isDarkMode ? 'bg-black/60' : 'bg-white/60'} backdrop-blur-sm`}
+          className={`p-4 overflow-y-auto backdrop-blur-sm ${
+            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+          }`}
         >
           {selectedCar ? (
             <div className="space-y-4">
@@ -953,7 +838,7 @@ export default function TuneForge() {
                 </div>
               </div>
 
-              <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
+              <div className={`p-4 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
                 <h4 className="font-bold mb-2">🎯 TuneForge Smart Calculator:</h4>
                 <div className="text-sm space-y-1 text-left">
                   <div>
@@ -961,7 +846,7 @@ export default function TuneForge() {
                     car parameters
                   </div>
                   <div>
-                    • 🏁 <span className="text-blue-400">Track-specific optimization</span> -{' '}
+                    • 🏁 <span className="text-[color:var(--bamboo-stalk)]">Track-specific optimization</span> -{' '}
                     {Object.keys(TRACKS).length} track types
                   </div>
                   <div>
@@ -983,11 +868,11 @@ export default function TuneForge() {
                 </div>
 
                 {isCalculating && (
-                  <div className="mt-3 p-2 bg-blue-500/20 rounded border border-blue-500/30">
-                    <div className="text-xs text-blue-300 font-medium">
+                  <div className="mt-3 p-2 rounded border bamboo-surface-dark">
+                    <div className="text-xs font-medium text-[color:var(--bamboo-stalk)]">
                       🔄 Smart Calculator Active
                     </div>
-                    <div className="text-xs text-blue-200 mt-1">{loadingStatus}</div>
+                    <div className="text-xs text-white/80 mt-1">{loadingStatus}</div>
                   </div>
                 )}
               </div>
@@ -997,7 +882,9 @@ export default function TuneForge() {
       </div>
 
       <div
-        className={`relative z-10 p-4 ${isDarkMode ? 'bg-black/80' : 'bg-white/80'} backdrop-blur-sm`}
+        className={`relative z-10 p-4 backdrop-blur-sm ${
+          isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+        }`}
       >
         <div className={`flex border-b mb-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
           {[
@@ -1010,7 +897,7 @@ export default function TuneForge() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-2 py-3 flex-1 text-center ${
-                activeTab === tab.id ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'
+                activeTab === tab.id ? 'bamboo-button' : 'bamboo-button-ghost'
               }`}
             >
               <div className="font-medium text-sm">{tab.label}</div>
@@ -1027,7 +914,7 @@ export default function TuneForge() {
                   value={unitSystem}
                   onChange={e => setUnitSystem(e.target.value)}
                   aria-label="Unit system"
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 >
                   <option value="Imperial">Imperial (lbs)</option>
                   <option value="Metric">Metric (kg)</option>
@@ -1037,7 +924,7 @@ export default function TuneForge() {
                   placeholder={`Weight (${unitSystem === 'Imperial' ? 'lbs' : 'kg'})`}
                   value={carWeight}
                   onChange={e => setCarWeight(Number(e.target.value))}
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 />
               </div>
 
@@ -1047,12 +934,12 @@ export default function TuneForge() {
                   placeholder="Front Dist. (%)"
                   value={frontDistribution}
                   onChange={e => setFrontDistribution(Number(e.target.value))}
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 />
                 <select
                   value={selectedCar?.drivetrain || 'RWD'}
                   aria-label="Drivetrain type"
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 >
                   <option value="RWD">RWD</option>
                   <option value="FWD">FWD</option>
@@ -1063,11 +950,11 @@ export default function TuneForge() {
                   placeholder="Gears"
                   value={gearCount}
                   onChange={e => setGearCount(Number(e.target.value))}
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 />
               </div>
 
-              <div className={`p-3 rounded ${isDarkMode ? 'bg-[#2a2a2a]' : 'bg-gray-100'}`}>
+              <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
                 <h5 className="font-bold mb-2">✨ Installed Upgrades</h5>
                 <div className="grid grid-cols-2 gap-1 text-xs">
                   {Object.entries(upgrades).map(([key, value]) => (
@@ -1079,7 +966,7 @@ export default function TuneForge() {
                         value={value}
                         onChange={e => setUpgrades({ ...upgrades, [key]: e.target.value })}
                         aria-label={`${key.replace(/([A-Z])/g, ' $1').trim()} upgrade level`}
-                        className={`flex-1 p-1 rounded text-xs ${isDarkMode ? 'bg-[#1a1a1a] text-white' : 'bg-white text-black'}`}
+                        className="flex-1 p-1 rounded text-xs bamboo-input"
                       >
                         <option value="Stock">Stock</option>
                         <option value="Sport">Sport</option>
@@ -1095,7 +982,7 @@ export default function TuneForge() {
                   value={tuneType}
                   onChange={e => setTuneType(e.target.value)}
                   aria-label="Tune type"
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 >
                   <option value="Basic (General)">Basic (General)</option>
                   <option value="Track">Track</option>
@@ -1106,7 +993,7 @@ export default function TuneForge() {
                   value={weatherCondition}
                   onChange={e => setWeatherCondition(e.target.value)}
                   aria-label="Weather condition"
-                  className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                  className="p-2 bamboo-input text-sm"
                 >
                   <option value="dry">☀️ Dry</option>
                   <option value="wet">🌧️ Wet</option>
@@ -1150,11 +1037,9 @@ export default function TuneForge() {
               <button
                 onClick={calculateBaseTune}
                 disabled={!selectedCar || isCalculating}
-                className={`w-full py-3 px-4 rounded font-bold transition-all duration-300 ${
-                  isCalculating
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse'
-                    : 'bg-blue-500 hover:bg-blue-600'
-                } text-white disabled:opacity-50`}
+                className={`w-full py-3 px-4 rounded font-bold transition-all duration-300 bamboo-button disabled:opacity-50 ${
+                  isCalculating ? 'animate-pulse' : ''
+                }`}
               >
                 {isCalculating ? (
                   <div className="flex items-center justify-center gap-2">
@@ -1172,10 +1057,13 @@ export default function TuneForge() {
                     <span>Progress</span>
                     <span>{calculationProgress}%</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full rounded-full h-2" style={{ background: 'rgba(205, 187, 151, 0.25)' }}>
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${calculationProgress}%` }}
+                      className="h-2 rounded-full transition-all duration-300"
+                      style={{
+                        width: `${calculationProgress}%`,
+                        background: 'linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%)',
+                      }}
                     ></div>
                   </div>
                 </div>
@@ -1188,7 +1076,7 @@ export default function TuneForge() {
                 placeholder="🎯 Target lap time (e.g., 1:45.2)"
                 value={lapTimeTarget}
                 onChange={e => setLapTimeTarget(e.target.value)}
-                className={`p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                className="p-2 bamboo-input text-sm"
               />
               <button
                 onClick={() => {
@@ -1197,19 +1085,19 @@ export default function TuneForge() {
                   calculateBaseTune()
                 }}
                 disabled={!selectedCar}
-                className="py-2 px-3 bg-purple-500 text-white rounded font-bold disabled:opacity-50 text-sm"
+                className="py-2 px-3 bamboo-button rounded font-bold disabled:opacity-50 text-sm"
               >
                 💾 Save as Preset
               </button>
             </div>
 
             {selectedCar && (
-              <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
+              <div className={`p-4 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
                 <h4 className="font-bold mb-2">🎯 Smart Recommendations:</h4>
                 <div className="text-sm space-y-1">
                   {selectedTrack && (
                     <div className="mb-2">
-                      <div className="font-semibold text-blue-400">
+                      <div className="font-semibold text-[color:var(--bamboo-stalk)]">
                         🏁 {(TRACKS as any)[selectedTrack].name}
                       </div>
                       <div className="text-xs opacity-75 mb-1">
@@ -1756,7 +1644,7 @@ export default function TuneForge() {
                     aria-label={config.label}
                     className="flex-1"
                   />
-                  <span className="font-bold text-blue-500 min-w-[60px] text-right">
+                  <span className="font-bold text-[color:var(--bamboo-stalk)] min-w-[60px] text-right">
                     {key.includes('tire-compound')
                       ? getTireCompoundName(tuneData[key] || config.min)
                       : `${(tuneData[key] || config.min).toFixed(config.step < 0.1 ? 2 : config.step === 0.01 ? 2 : 1)}${config.unit}`}
@@ -1769,14 +1657,14 @@ export default function TuneForge() {
               <button
                 onClick={saveTune}
                 disabled={!selectedCar || Object.keys(tuneData).length === 0}
-                className="py-3 px-4 bg-blue-500 text-white rounded font-bold disabled:opacity-50"
+                className="py-3 px-4 bamboo-button rounded font-bold disabled:opacity-50"
               >
                 Save Tune
               </button>
               <button
                 onClick={exportTune}
                 disabled={!selectedCar || Object.keys(tuneData).length === 0}
-                className="py-3 px-4 bg-green-500 text-white rounded font-bold disabled:opacity-50"
+                className="py-3 px-4 bamboo-button rounded font-bold disabled:opacity-50"
               >
                 Export
               </button>
@@ -1786,11 +1674,11 @@ export default function TuneForge() {
               <button
                 onClick={shareTune}
                 disabled={!selectedCar || Object.keys(tuneData).length === 0}
-                className="py-3 px-4 bg-purple-500 text-white rounded font-bold disabled:opacity-50"
+                className="py-3 px-4 bamboo-button rounded font-bold disabled:opacity-50"
               >
                 Share
               </button>
-              <label className="py-3 px-4 bg-orange-500 text-white rounded font-bold cursor-pointer text-center">
+              <label className="py-3 px-4 bamboo-button rounded font-bold cursor-pointer text-center">
                 Import
                 <input type="file" accept=".json" onChange={importTune} className="hidden" />
               </label>
@@ -1803,7 +1691,9 @@ export default function TuneForge() {
                   {savedTunes.map(tune => (
                     <div
                       key={tune.id}
-                      className={`p-2 rounded border flex justify-between items-center ${isDarkMode ? 'border-gray-600 bg-[#2a2a2a]' : 'border-gray-300 bg-gray-50'}`}
+                      className={`p-2 rounded border flex justify-between items-center ${
+                        isDarkMode ? 'bamboo-surface-dark border-gray-600' : 'bamboo-surface border-gray-300'
+                      }`}
                     >
                       <div className="flex-1">
                         <div className="font-medium text-sm">{tune.name}</div>
@@ -1812,7 +1702,7 @@ export default function TuneForge() {
                       <div className="flex gap-1">
                         <button
                           onClick={() => loadTune(tune)}
-                          className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
+                          className="px-2 py-1 bamboo-button rounded text-xs"
                         >
                           Load
                         </button>
@@ -1845,7 +1735,7 @@ export default function TuneForge() {
                 <button
                   key={preset.key}
                   onClick={() => setAiQuery(`How do I optimize for ${preset.key}?`)}
-                  className="py-2 px-2 bg-gray-500 text-white rounded text-xs font-medium"
+                  className="py-2 px-2 bamboo-button-ghost rounded text-xs font-medium"
                 >
                   {preset.icon} {preset.label}
                 </button>
@@ -1855,16 +1745,16 @@ export default function TuneForge() {
               placeholder="Ask AI for professional tuning advice... (e.g., 'How do I reduce understeer?', 'Best drift setup?', 'Optimize for Nürburgring?')"
               value={aiQuery}
               onChange={e => setAiQuery(e.target.value)}
-              className={`w-full h-24 p-3 rounded border resize-none ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+              className="w-full h-24 p-3 resize-none bamboo-input"
             />
             <button
               onClick={getAITuningAdvice}
               disabled={!aiQuery.trim() || !selectedCar || aiLoading}
-              className="w-full py-3 px-4 bg-blue-500 text-white rounded font-bold disabled:opacity-50"
+              className="w-full py-3 px-4 bamboo-button rounded font-bold disabled:opacity-50"
             >
               {aiLoading ? 'Analyzing...' : 'Get AI Tuning Advice'}
             </button>
-            <div className={`p-4 rounded min-h-24 ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
+            <div className={`p-4 rounded min-h-24 ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
               {aiResponse ? (
                 <div className="text-sm whitespace-pre-line">{aiResponse}</div>
               ) : (
@@ -1876,7 +1766,7 @@ export default function TuneForge() {
 
         {activeTab === 'telemetry' && (
           <div className="space-y-4">
-            <div className={`p-4 rounded ${isDarkMode ? 'bg-[#333333]' : 'bg-gray-100'}`}>
+            <div className={`p-4 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
               <h4 className="font-bold mb-3">📊 Telemetry Analysis</h4>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
@@ -1897,7 +1787,7 @@ export default function TuneForge() {
                       const adjustment = tireType === 'Race' ? 20 : tireType === 'Sport' ? 10 : 0
                       return `${baseTemp + adjustment}-${baseTemp + adjustment + 20}`
                     })()} optimal`}
-                    className={`w-full p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                    className="w-full p-2 bamboo-input text-sm"
                   />
                 </div>
                 <div>
@@ -1917,7 +1807,7 @@ export default function TuneForge() {
                       const adjustment = tireType === 'Race' ? 20 : tireType === 'Sport' ? 10 : 0
                       return `${baseTemp + adjustment}-${baseTemp + adjustment + 20}`
                     })()} optimal`}
-                    className={`w-full p-2 rounded border text-sm ${isDarkMode ? 'bg-[#1a1a1a] text-white border-gray-600' : 'bg-white text-black border-gray-300'}`}
+                    className="w-full p-2 bamboo-input text-sm"
                   />
                 </div>
               </div>
@@ -1925,7 +1815,7 @@ export default function TuneForge() {
               <div className="grid grid-cols-3 gap-2 mb-4">
                 <div className="text-center">
                   <div className="text-xs opacity-75">Lap Time</div>
-                  <div className="font-bold text-lg text-blue-400">1:42.156</div>
+                  <div className="font-bold text-lg text-[color:var(--bamboo-stalk)]">1:42.156</div>
                 </div>
                 <div className="text-center">
                   <div className="text-xs opacity-75">Sector 1</div>
@@ -1937,7 +1827,7 @@ export default function TuneForge() {
                 </div>
               </div>
 
-              <button className="w-full mt-4 py-2 bg-green-500 text-white rounded font-bold">
+              <button className="w-full mt-4 py-2 bamboo-button rounded font-bold">
                 📊 Analyze Telemetry Data
               </button>
             </div>

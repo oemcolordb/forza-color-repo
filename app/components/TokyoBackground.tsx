@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react'
 
 interface TokyoBackgroundProps {
   isDarkMode: boolean
-  getSecureAssetUrl: (url: string) => string
+  getSecureAssetUrl: (_url: string) => string
 }
 
 const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl }) => {
@@ -12,7 +12,6 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image')
   const [mediaLoaded, setMediaLoaded] = useState(false)
   const [mediaError, setMediaError] = useState(false)
-  const [isInitialized, setIsInitialized] = useState(false)
 
   const checkMobile = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -52,11 +51,17 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
     const now = new Date()
     const thirtyMinuteSlots = Math.floor(now.getTime() / (30 * 60 * 1000))
     const mediaIndex = thirtyMinuteSlots % mediaFiles.length
-    return mediaFiles[mediaIndex]
-  }, [])
+    const chosen = mediaFiles[mediaIndex]
+
+    if (isMobile && chosen.type === 'video') {
+      return mediaFiles[0]
+    }
+
+    return chosen
+  }, [isMobile])
 
   useEffect(() => {
-    const mediaSrc = `/${selectedMedia.file}`
+    const mediaSrc = getSecureAssetUrl(`/${selectedMedia.file}`)
 
     if (selectedMedia.type === 'image') {
       const img = new Image()
@@ -65,13 +70,11 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
         setMediaType('image')
         setMediaLoaded(true)
         setMediaError(false)
-        setIsInitialized(true)
       }
       img.onerror = () => {
         console.warn('Background image failed to load:', mediaSrc)
         setMediaError(true)
         setMediaLoaded(true)
-        setIsInitialized(true)
       }
       img.src = mediaSrc
     } else {
@@ -80,7 +83,6 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
       setMediaType('video')
       setMediaLoaded(true)
       setMediaError(false)
-      setIsInitialized(true)
     }
 
     // Set up 30-minute rotation timer
@@ -96,7 +98,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
     }
 
     checkRotation()
-  }, [selectedMedia])
+  }, [getSecureAssetUrl, selectedMedia])
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -135,6 +137,37 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
             <source src={backgroundMedia} type="video/mp4" />
           </video>
         ))}
+
+      <div className="absolute inset-0 opacity-[0.18] animate-city-pulse" />
+
+      {isDarkMode && (
+        <>
+          <div className="absolute inset-0 opacity-[0.12] animate-building-glow" />
+          <div className="absolute inset-0 opacity-[0.08] animate-hologram-flicker" />
+          <div className="absolute inset-y-0 left-0 right-0 overflow-hidden opacity-[0.10]">
+            <div className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent animate-neon-scan" />
+          </div>
+
+          <div className="absolute inset-0 opacity-[0.10]">
+            <div className="absolute top-[18%] left-[18%] w-2 h-2 bg-yellow-200/60 rounded-sm animate-window-twinkle" />
+            <div className="absolute top-[22%] left-[26%] w-1.5 h-1.5 bg-blue-200/60 rounded-sm animate-window-flicker" />
+            <div className="absolute top-[30%] left-[22%] w-2 h-1.5 bg-pink-200/60 rounded-sm animate-window-shimmer" />
+            <div className="absolute top-[40%] left-[30%] w-1.5 h-2 bg-cyan-200/60 rounded-sm animate-window-pulse" />
+
+            <div className="absolute top-[16%] right-[20%] w-2 h-2 bg-yellow-200/60 rounded-sm animate-window-flicker" style={{ animationDelay: '0.6s' }} />
+            <div className="absolute top-[26%] right-[28%] w-1.5 h-1.5 bg-blue-200/60 rounded-sm animate-window-twinkle" style={{ animationDelay: '1.1s' }} />
+            <div className="absolute top-[36%] right-[22%] w-2 h-1.5 bg-pink-200/60 rounded-sm animate-window-shimmer" style={{ animationDelay: '1.9s' }} />
+            <div className="absolute top-[44%] right-[30%] w-1.5 h-2 bg-cyan-200/60 rounded-sm animate-window-pulse" style={{ animationDelay: '2.4s' }} />
+          </div>
+
+          <div className="absolute inset-0 opacity-[0.12]">
+            <div className="absolute top-[12%] left-[8%] w-1 h-1 rounded-full bg-cyan-300 wind-particle animate-atmospheric-flow" />
+            <div className="absolute top-[55%] left-[15%] w-1 h-1 rounded-full bg-fuchsia-300 wind-particle animate-atmospheric-flow" style={{ animationDelay: '1.7s' }} />
+            <div className="absolute top-[78%] left-[5%] w-1 h-1 rounded-full bg-blue-300 wind-particle animate-atmospheric-flow" style={{ animationDelay: '3.1s' }} />
+          </div>
+        </>
+      )}
+
       <div
         className={`absolute inset-0 transition-all duration-300 ${
           isDarkMode

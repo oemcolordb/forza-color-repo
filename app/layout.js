@@ -4,9 +4,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
-import { DevToolsSuppress } from './components/DevToolsSuppress'
 import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
-import { SecurityEnforcer } from './components/SecurityEnforcer'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -162,8 +160,10 @@ export default function RootLayout({ children }) {
   }
 
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={inter.className} suppressHydrationWarning>
       <head>
+        <meta name="theme-color" content="#0f172a" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta
           name="google-site-verification"
           content="vG2Z9j6nstH8oDSGfxfICIrbefBCUu0cIttuSxMIiOk"
@@ -184,8 +184,7 @@ export default function RootLayout({ children }) {
                   // Only register service worker in production
                   if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
                     navigator.serviceWorker.register('/sw.js')
-                      .then(() => console.log('SW registered'))
-                      .catch(error => console.warn('SW registration failed', error))
+                      .catch(() => {})
                   } else {
                     // Unregister any existing service workers in development
                     navigator.serviceWorker.getRegistrations().then(registrations => {
@@ -199,8 +198,6 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
-        <SecurityEnforcer />
-        <DevToolsSuppress />
         <ThirdPartyErrorBoundary />
         <ErrorBoundary>{children}</ErrorBoundary>
         <Analytics />

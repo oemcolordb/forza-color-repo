@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 export default function Blog() {
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen text-gray-100">
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-transparent bg-clip-text">
@@ -17,14 +17,14 @@ export default function Blog() {
         </div>
 
         <div className="grid gap-8">
-          <article className="rounded-xl p-6 bg-gradient-to-br from-slate-800 to-slate-900 shadow-lg border border-blue-500/20">
+          <article className="rounded-xl p-6 shadow-lg bamboo-surface-dark">
             <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 text-xs rounded-full bg-blue-600 text-white font-medium">
+              <span className="px-3 py-1 text-xs rounded-full bamboo-button text-white font-medium">
                 Data Analysis
               </span>
               <span className="text-sm text-gray-400">January 2024</span>
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-blue-400">
+            <h2 className="text-2xl font-bold mb-4 text-[color:var(--bamboo-stalk)]">
               The Most Popular Forza Colors: What 10,000+ Colors Tell Us
             </h2>
             <div className="space-y-4 text-gray-300">
@@ -56,14 +56,14 @@ export default function Blog() {
             </div>
           </article>
 
-          <article className="rounded-xl p-6 bg-gradient-to-br from-slate-800 to-slate-900 shadow-lg border border-green-500/20">
+          <article className="rounded-xl p-6 shadow-lg bamboo-surface-dark">
             <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 text-xs rounded-full bg-green-600 text-white font-medium">
+              <span className="px-3 py-1 text-xs rounded-full bamboo-button text-white font-medium">
                 Technical Guide
               </span>
               <span className="text-sm text-gray-400">January 2024</span>
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-green-400">
+            <h2 className="text-2xl font-bold mb-4 text-[color:var(--bamboo-stalk)]">
               Understanding HSB Color Values in Automotive Paint
             </h2>
             <div className="space-y-4 text-gray-300">
@@ -71,7 +71,7 @@ export default function Blog() {
                 Our app uses <strong>HSB (Hue, Saturation, Brightness)</strong> color space because
                 it's more intuitive for automotive applications than RGB or HEX values.
               </p>
-              <div className="bg-slate-700/50 p-4 rounded-lg">
+              <div className="p-4 rounded-lg bamboo-surface-dark">
                 <h3 className="font-semibold text-white mb-2">HSB Breakdown:</h3>
                 <ul className="space-y-2">
                   <li>
@@ -95,37 +95,37 @@ export default function Blog() {
             </div>
           </article>
 
-          <article className="rounded-xl p-6 bg-gradient-to-br from-slate-800 to-slate-900 shadow-lg border border-purple-500/20">
+          <article className="rounded-xl p-6 shadow-lg bamboo-surface-dark">
             <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 text-xs rounded-full bg-purple-600 text-white font-medium">
+              <span className="px-3 py-1 text-xs rounded-full bamboo-button text-white font-medium">
                 App Features
               </span>
               <span className="text-sm text-gray-400">January 2024</span>
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-purple-400">
+            <h2 className="text-2xl font-bold mb-4 text-[color:var(--bamboo-stalk)]">
               Hidden Features: Power User Tips for Forza Color Universe
             </h2>
             <div className="space-y-4 text-gray-300">
               <p>Our app includes several advanced features that many users haven't discovered:</p>
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-slate-700/50 p-4 rounded-lg">
+                <div className="p-4 rounded-lg bamboo-surface-dark">
                   <h3 className="font-semibold text-white mb-2">⌨️ Keyboard Shortcuts</h3>
                   <ul className="text-sm space-y-1">
                     <li>
-                      <kbd className="bg-gray-600 px-2 py-1 rounded text-xs">Ctrl+D</kbd> Toggle
+                      <kbd className="px-2 py-1 rounded text-xs bamboo-button-ghost">Ctrl+D</kbd> Toggle
                       theme
                     </li>
                     <li>
-                      <kbd className="bg-gray-600 px-2 py-1 rounded text-xs">Ctrl+K</kbd> Advanced
+                      <kbd className="px-2 py-1 rounded text-xs bamboo-button-ghost">Ctrl+K</kbd> Advanced
                       search
                     </li>
                     <li>
-                      <kbd className="bg-gray-600 px-2 py-1 rounded text-xs">Ctrl+C</kbd> Color
+                      <kbd className="px-2 py-1 rounded text-xs bamboo-button-ghost">Ctrl+C</kbd> Color
                       comparison
                     </li>
                   </ul>
                 </div>
-                <div className="bg-slate-700/50 p-4 rounded-lg">
+                <div className="p-4 rounded-lg bamboo-surface-dark">
                   <h3 className="font-semibold text-white mb-2">🎨 Color Tools</h3>
                   <ul className="text-sm space-y-1">
                     <li>Image color extraction with AI clustering</li>
@@ -142,14 +142,14 @@ export default function Blog() {
             </div>
           </article>
 
-          <article className="rounded-xl p-6 bg-gradient-to-br from-slate-800 to-slate-900 shadow-lg border border-orange-500/20">
+          <article className="rounded-xl p-6 shadow-lg bamboo-surface-dark">
             <div className="flex items-center gap-2 mb-3">
-              <span className="px-3 py-1 text-xs rounded-full bg-orange-600 text-white font-medium">
+              <span className="px-3 py-1 text-xs rounded-full bamboo-button text-white font-medium">
                 Community
               </span>
               <span className="text-sm text-gray-400">January 2024</span>
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-orange-400">
+            <h2 className="text-2xl font-bold mb-4 text-[color:var(--bamboo-stalk)]">
               Behind the Scenes: How We Built the Ultimate Color Database
             </h2>
             <div className="space-y-4 text-gray-300">
@@ -184,7 +184,7 @@ export default function Blog() {
         </div>
 
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-white font-medium">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bamboo-button rounded-lg text-white font-medium">
             <span>🚀</span>
             <span>More insights coming soon - bookmark this page!</span>
           </div>

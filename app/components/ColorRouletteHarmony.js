@@ -40,7 +40,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
   const [harmonySize, setHarmonySize] = useState(5)
   const [isSpinning, setIsSpinning] = useState(false)
   const [currentHarmony, setCurrentHarmony] = useState([])
-  const [spinHistory, setSpinHistory] = useState([])
+  const [animateResultKey, setAnimateResultKey] = useState(0)
 
   const filteredColors = useMemo(() => {
     const config = CATEGORIES[category]
@@ -280,53 +280,10 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
 
     const finalHarmony = generateHarmony()
     setCurrentHarmony(finalHarmony)
-    setSpinHistory(prev => [finalHarmony, ...prev.slice(0, 4)])
+    setAnimateResultKey(prev => prev + 1)
     onHarmonyGenerated(finalHarmony, harmonyMode)
     setIsSpinning(false)
   }, [generateHarmony, onHarmonyGenerated, harmonyMode])
-
-  const hsbToHex = (h, s, b) => {
-    const c = b * s
-    const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
-    const m = b - c
-    let r = 0,
-      g = 0,
-      bl = 0
-
-    if (h >= 0 && h < 60) {
-      r = c
-      g = x
-      bl = 0
-    } else if (h >= 60 && h < 120) {
-      r = x
-      g = c
-      bl = 0
-    } else if (h >= 120 && h < 180) {
-      r = 0
-      g = c
-      bl = x
-    } else if (h >= 180 && h < 240) {
-      r = 0
-      g = x
-      bl = c
-    } else if (h >= 240 && h < 300) {
-      r = x
-      g = 0
-      bl = c
-    } else if (h >= 300 && h < 360) {
-      r = c
-      g = 0
-      bl = x
-    }
-
-    return `#${Math.round((r + m) * 255)
-      .toString(16)
-      .padStart(2, '0')}${Math.round((g + m) * 255)
-      .toString(16)
-      .padStart(2, '0')}${Math.round((bl + m) * 255)
-      .toString(16)
-      .padStart(2, '0')}`
-  }
 
   return (
     <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg`}>
@@ -403,17 +360,17 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
         <button
           onClick={spinRoulette}
           disabled={isSpinning || filteredColors.length === 0}
-          className={`w-full py-3 px-4 rounded font-medium transition-all ${
+          className={`w-full py-3 px-4 rounded-lg font-bold transition-all duration-300 hover-lift hover-rainbow ${
             isSpinning
-              ? 'bg-gray-400 cursor-not-allowed animate-pulse'
-              : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white transform hover:scale-105'
-          }`}
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse'
+              : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700'
+          } text-white disabled:opacity-50`}
         >
           {isSpinning ? '🎰 Spinning...' : '🎰 Spin Roulette'}
         </button>
 
         {currentHarmony.length > 0 && (
-          <div>
+          <div key={animateResultKey} className="mt-6 animate-bounce-in">
             <h4
               className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}
             >

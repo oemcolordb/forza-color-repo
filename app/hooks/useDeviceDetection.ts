@@ -9,6 +9,7 @@ export const useDeviceDetection = () => {
     isLandscape: true,
     screenWidth: 1024,
     screenHeight: 768,
+    screenSize: 'lg' as string,
     pixelRatio: 1,
   })
 
@@ -33,6 +34,7 @@ export const useDeviceDetection = () => {
         isLandscape: width > height,
         screenWidth: width,
         screenHeight: height,
+        screenSize: width < 640 ? 'sm' : width < 768 ? 'md' : width < 1024 ? 'lg' : 'xl',
         pixelRatio: window.devicePixelRatio || 1,
       })
     }

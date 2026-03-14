@@ -28,9 +28,7 @@ import ColorRouletteHarmony from './components/ColorRouletteHarmony'
 import HarmonyVisualizer from './components/HarmonyVisualizer'
 import ColorGenerator from './components/ColorGenerator'
 import PerformanceMonitor from './components/PerformanceMonitor'
-import { SecurityHeaders } from './components/SecurityHeaders'
-import { ConsoleCleanup } from './components/ConsoleCleanup'
-import CriticalCSS from './components/CriticalCSS'
+import GamingErrorBoundary from './components/GamingErrorBoundary'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import HSBPopup from './components/HSBPopup'
@@ -41,8 +39,6 @@ import ColorComparison from './components/ColorComparison'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ColorAnalyticsDashboard from './components/ColorAnalyticsDashboard'
 import ZoomResponsiveContainer from './components/ZoomResponsiveContainer'
-
-const GamingErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -220,7 +216,7 @@ export default function HomePage() {
           }
         }
       } catch (err) {
-        const error = handleError(err)
+        handleError(err)
         setFavorites([])
       }
     }
@@ -237,7 +233,7 @@ export default function HomePage() {
         // Keep localStorage as backup
         localStorage.setItem('forza-favorites', JSON.stringify(favorites))
       } catch (err) {
-        const error = handleError(err)
+        handleError(err)
         setError('Failed to save favorites')
       }
     }
@@ -459,10 +455,10 @@ export default function HomePage() {
           <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text animate-pulse">
             🔧 TuneForge Loading...
           </h1>
-          <p className="text-lg text-slate-300 mb-4">Forging your automotive experience...</p>
+          <p className="text-lg mb-4" style={{color: "var(--bamboo-paper)"}}>Forging your automotive experience...</p>
 
           {/* Loading Bar */}
-          <div className="w-64 h-3 bg-gray-700 rounded-full mx-auto mb-4 overflow-hidden">
+          <div className="w-64 h-3 rounded-full mx-auto mb-4 overflow-hidden bamboo-surface-dark">
             <div
               className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-pulse"
               style={{ width: `${loadingProgress}%`, transition: 'width 0.3s ease' }}
@@ -493,8 +489,6 @@ export default function HomePage() {
 
   return (
     <AuthProvider>
-      <ConsoleCleanup />
-      <CriticalCSS />
       <GamingErrorBoundary>
         <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
         <ForzaColorSheetSEO
@@ -506,10 +500,9 @@ export default function HomePage() {
       </GamingErrorBoundary>
       <div
         className={`font-sans min-h-screen ${
-          isDarkMode ? 'bg-slate-900 text-white' : 'bg-white text-gray-900'
+          isDarkMode ? 'text-white' : 'text-gray-900'
         }`}
       >
-        <SecurityHeaders />
         <Header
           isDarkMode={isDarkMode}
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
@@ -568,18 +561,16 @@ export default function HomePage() {
             {/* Garage Stats */}
             <div
               className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-                isDarkMode
-                  ? 'bg-gradient-to-r from-slate-800 to-slate-900'
-                  : 'bg-gradient-to-r from-gray-100 to-gray-200'
-              } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+                isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+              }`}
             >
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-2xl">🏁</span>
-                <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                <span className="font-bold" style={{color: "var(--bamboo-stalk)"}}>
                   FORZA GARAGE
                 </span>
               </div>
-              <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+              <div className="text-sm opacity-90">
                 {allColors.length} colors • {makes.length} manufacturers • {favorites.length}{' '}
                 favorites
               </div>
@@ -588,14 +579,12 @@ export default function HomePage() {
             {/* Tuning Tools */}
             <div
               className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-                isDarkMode
-                  ? 'bg-gradient-to-r from-purple-900/50 to-blue-900/50'
-                  : 'bg-gradient-to-r from-purple-100 to-blue-100'
-              } border-2 ${isDarkMode ? 'border-purple-500/30' : 'border-purple-400/40'}`}
+                isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+              }`}
             >
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-2xl">🔧</span>
-                <span className={`font-bold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>
+                <span className="font-bold" style={{color: "var(--bamboo-stalk)"}}>
                   TUNING TOOLS
                 </span>
               </div>
@@ -610,12 +599,13 @@ export default function HomePage() {
                   }`}
                 >
                   <div
-                    className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}
+                    className={`p-3 rounded-lg border ${isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-300'}`}
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-lg">📸</span>
                       <span
-                        className={`text-sm font-semibold ${isDarkMode ? 'text-cyan-400' : 'text-cyan-600'}`}
+                        className="text-sm font-semibold"
+                        style={{color: "var(--bamboo-stalk)"}}
                       >
                         PAINT SCANNER
                       </span>
@@ -628,19 +618,20 @@ export default function HomePage() {
                       isDarkMode={isDarkMode}
                     />
                     <div className="mt-2 text-xs text-center">
-                      <a href="/image-match" className="text-blue-500 hover:underline">
+                      <a href="/image-match" className="hover:underline" style={{color: "var(--bamboo-stalk)"}}>
                         Try standalone image‑to‑paint tool
                       </a>
                     </div>
                   </div>
 
                   <div
-                    className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}
+                    className={`p-3 rounded-lg border ${isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-300'}`}
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-lg">🎰</span>
                       <span
-                        className={`text-sm font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}
+                        className="text-sm font-semibold"
+                        style={{color: "var(--bamboo-stalk)"}}
                       >
                         COLOR ROULETTE
                       </span>
@@ -657,12 +648,13 @@ export default function HomePage() {
                   </div>
 
                   <div
-                    className={`p-3 rounded-lg border ${isDarkMode ? 'bg-gray-800/50 border-gray-700' : 'bg-white/50 border-gray-300'}`}
+                    className={`p-3 rounded-lg border ${isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-300'}`}
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-lg">🎨</span>
                       <span
-                        className={`text-sm font-semibold ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}
+                        className="text-sm font-semibold"
+                        style={{color: "var(--bamboo-stalk)"}}
                       >
                         HARMONY DISPLAY
                       </span>
@@ -706,15 +698,14 @@ export default function HomePage() {
             {allColors.length > 0 && (
               <div
                 className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
-                  isDarkMode
-                    ? 'bg-gradient-to-r from-orange-900/50 to-red-900/50'
-                    : 'bg-gradient-to-r from-orange-100 to-red-100'
-                } border-2 ${isDarkMode ? 'border-orange-500/30' : 'border-orange-400/40'}`}
+                  isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+                }`}
               >
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-2xl">🛠️</span>
                   <span
-                    className={`font-bold ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}
+                    className="font-bold"
+                    style={{color: "var(--bamboo-stalk)"}}
                   >
                     ADVANCED TOOLS
                   </span>
@@ -741,7 +732,7 @@ export default function HomePage() {
             {(extractedColors.length > 0 || harmonyColors.length > 0) && (
               <div
                 className={`mb-4 rounded-lg backdrop-blur-sm shadow-lg animate-slide-up ${
-                  isDarkMode ? 'bg-slate-800/90' : 'bg-gray-50/95'
+                  isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
                 } ${deviceInfo.isMobile ? 'p-2' : 'p-3'}`}
               >
                 {extractedColors.length > 0 && (
@@ -869,10 +860,8 @@ export default function HomePage() {
             <ZoomResponsiveContainer isDarkMode={isDarkMode}>
               <div
                 className={`relative rounded-xl overflow-hidden p-4 ${
-                  isDarkMode
-                    ? 'bg-gradient-to-br from-slate-800 to-slate-900'
-                    : 'bg-gradient-to-br from-gray-100 to-gray-200'
-                } border-2 ${isDarkMode ? 'border-blue-500/30' : 'border-blue-400/40'}`}
+                  isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+                }`}
               >
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-2xl">🏆</span>

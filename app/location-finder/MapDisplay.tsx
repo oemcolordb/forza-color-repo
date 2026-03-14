@@ -311,6 +311,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
           </span>
         </div>
       </div>
+
     </div>
   )
 }

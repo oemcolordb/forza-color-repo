@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { FixedSizeGrid as Grid } from 'react-window'
 import ColorCard from './ColorCard'
 import { CarColor } from '../types'
@@ -22,7 +22,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   onShowInfo,
   onToggleFavorite,
   isDarkMode,
-  expandedColorId,
+  expandedColorId: _expandedColorId,
 }) => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,7 +53,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
 
   // Memoized cell renderer for performance
   const Cell = useCallback(
-    ({ columnIndex, rowIndex, style }: any) => {
+    ({ columnIndex, rowIndex, style }: { columnIndex: number; rowIndex: number; style: React.CSSProperties }) => {
       const index = rowIndex * columnsCount + columnIndex
       const color = colors[index]
 

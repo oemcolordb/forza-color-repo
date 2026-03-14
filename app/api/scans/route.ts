@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
 
-const client = createClient({
-  url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
-})
+const client =
+  process.env.TURSO_DATABASE_URL &&
+  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
+    ? createClient({
+        url: process.env.TURSO_DATABASE_URL,
+        authToken: process.env.TURSO_AUTH_TOKEN || '',
+      })
+    : null
 
 export async function GET(request: Request) {
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+
   try {
     const { searchParams } = new URL(request.url)
     const userId = searchParams.get('userId')
@@ -27,6 +33,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+
   try {
     const body = await request.json()
     const { userId, imageName, extractedColors, matches, imageData } = body
@@ -58,6 +66,8 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+
   try {
     const { searchParams } = new URL(request.url)
     const scanId = searchParams.get('scanId')

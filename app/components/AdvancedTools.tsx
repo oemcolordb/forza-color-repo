@@ -7,7 +7,7 @@ interface AdvancedToolsProps {
   colors: CarColor[]
   isDarkMode: boolean
   isMobile: boolean
-  onColorSelect: (color: CarColor) => void
+  onColorSelect: (_color: CarColor) => void
 }
 
 const AdvancedTools: React.FC<AdvancedToolsProps> = ({
@@ -102,7 +102,6 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
     }
 
     const s = max === 0 ? 0 : diff / max
-    const brightness = max
 
     return { h, s, b }
   }, [])
@@ -189,11 +188,15 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
 
   return (
     <div
-      className={`${isMobile ? 'p-3' : 'p-4'} rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg`}
+      className={`${isMobile ? 'p-3' : 'p-4'} rounded-lg ${
+        isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+      }`}
     >
       {/* Tab Navigation */}
       <div
-        className={`flex ${isMobile ? 'flex-wrap gap-1' : 'gap-2'} mb-4 border-b ${isDarkMode ? 'border-slate-600' : 'border-gray-300'}`}
+        className={`flex ${isMobile ? 'flex-wrap gap-1' : 'gap-2'} mb-4 border-b ${
+          isDarkMode ? 'border-gray-600' : 'border-gray-300'
+        }`}
       >
         {tabs.map(tab => (
           <button
@@ -201,12 +204,8 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
             onClick={() => setActiveTab(tab.id)}
             className={`${isMobile ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'} rounded-t transition-colors ${
               activeTab === tab.id
-                ? isDarkMode
-                  ? 'bg-slate-700 text-white border-b-2 border-orange-400'
-                  : 'bg-gray-100 text-gray-900 border-b-2 border-orange-500'
-                : isDarkMode
-                  ? 'text-slate-400 hover:text-white'
-                  : 'text-gray-600 hover:text-gray-900'
+                ? 'bamboo-button'
+                : 'bamboo-button-ghost'
             }`}
           >
             {isMobile ? tab.icon : tab.name}
@@ -218,20 +217,20 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
       {activeTab === 'analytics' && (
         <div className="space-y-4">
           <h3
-            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold`}
           >
             📊 Color Database Analytics
           </h3>
 
           <div className={`grid ${isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-2 gap-4'}`}>
-            <div className={`p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-              <h4 className={`font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+              <h4 className="font-medium mb-2">
                 Top Manufacturers
               </h4>
               {analytics.topMakes.map(([make, count]) => (
                 <div
                   key={make}
-                  className={`flex justify-between text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}
+                  className="flex justify-between text-sm opacity-90"
                 >
                   <span>{make}</span>
                   <span>{count} colors</span>
@@ -239,14 +238,14 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
               ))}
             </div>
 
-            <div className={`p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-              <h4 className={`font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+              <h4 className="font-medium mb-2">
                 Color Types
               </h4>
               {analytics.topTypes.map(([type, count]) => (
                 <div
                   key={type}
-                  className={`flex justify-between text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}
+                  className="flex justify-between text-sm opacity-90"
                 >
                   <span>{type}</span>
                   <span>{count} colors</span>
@@ -255,15 +254,15 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
             </div>
           </div>
 
-          <div className={`p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-            <h4 className={`font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+            <h4 className="font-medium mb-2">
               Hue Distribution
             </h4>
             <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-4'} gap-2 text-sm`}>
               {analytics.hueDistribution.slice(0, 8).map(([hue, count]) => (
                 <div
                   key={hue}
-                  className={`flex justify-between ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}
+                  className="flex justify-between opacity-90"
                 >
                   <span>{hue}</span>
                   <span>{count}</span>
@@ -277,7 +276,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
       {activeTab === 'search' && (
         <div className="space-y-4">
           <h3
-            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold`}
           >
             🔍 HEX Color Search
           </h3>
@@ -288,11 +287,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
               placeholder="#FF0000"
               value={searchHex}
               onChange={e => setSearchHex(e.target.value.toUpperCase())}
-              className={`flex-1 px-3 py-2 rounded border ${
-                isDarkMode
-                  ? 'bg-slate-700 border-slate-600 text-white'
-                  : 'bg-white border-gray-300 text-gray-900'
-              }`}
+              className="flex-1 px-3 py-2 rounded bamboo-input"
             />
             <div
               className="w-12 h-10 rounded border"
@@ -302,7 +297,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
 
           {/^#[0-9A-F]{6}$/i.test(searchHex) && (
             <div className="space-y-2">
-              <h4 className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <h4 className="font-medium">
                 Closest Matches:
               </h4>
               <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-5'} gap-2`}>
@@ -310,7 +305,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
                   <button
                     key={index}
                     onClick={() => onColorSelect(color)}
-                    className={`p-2 rounded border text-xs ${isDarkMode ? 'border-slate-600 hover:border-slate-400' : 'border-gray-300 hover:border-gray-500'}`}
+                    className={`p-2 rounded border text-xs bamboo-surface-dark hover:opacity-80 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
                   >
                     <div
                       className="w-full h-8 rounded mb-1"
@@ -318,7 +313,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
                         backgroundColor: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
                       }}
                     />
-                    <div className={`truncate ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                    <div className="truncate opacity-90">
                       {color.colorName}
                     </div>
                   </button>
@@ -332,13 +327,13 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
       {activeTab === 'compare' && (
         <div className="space-y-4">
           <h3
-            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold`}
           >
             ⚖️ Color Comparison
           </h3>
 
-          <div className={`p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-            <p className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} mb-2`}>
+          <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+            <p className="text-sm opacity-90 mb-2">
               Click colors in the gallery to add them for comparison (max 4)
             </p>
 
@@ -347,7 +342,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
                 {comparisonColors.map((color, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded border ${isDarkMode ? 'border-slate-600' : 'border-gray-300'}`}
+                    className={`p-2 rounded border ${isDarkMode ? 'bamboo-surface-dark border-gray-600' : 'bamboo-surface border-gray-300'}`}
                   >
                     <div
                       className="w-full h-12 rounded mb-2"
@@ -355,7 +350,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
                         backgroundColor: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
                       }}
                     />
-                    <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                    <div className="text-xs opacity-90">
                       <div className="font-medium truncate">{color.colorName}</div>
                       <div>{color.make}</div>
                       <div>
@@ -368,7 +363,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
               </div>
             ) : (
               <div
-                className={`text-center py-8 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}
+                className="text-center py-8 opacity-75"
               >
                 No colors selected for comparison
               </div>
@@ -377,9 +372,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
             {comparisonColors.length > 0 && (
               <button
                 onClick={() => setComparisonColors([])}
-                className={`mt-3 px-3 py-1 text-sm rounded ${
-                  isDarkMode ? 'bg-red-600 hover:bg-red-700' : 'bg-red-500 hover:bg-red-600'
-                } text-white`}
+                className="mt-3 px-3 py-1 text-sm rounded text-white bg-red-600 hover:bg-red-700 transition-colors"
               >
                 Clear All
               </button>
@@ -391,7 +384,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
       {activeTab === 'export' && (
         <div className="space-y-4">
           <h3
-            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold`}
           >
             💾 Export Color Data
           </h3>
@@ -399,18 +392,15 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
           <div className="space-y-3">
             <div>
               <label
-                className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
+                className="block text-sm font-medium mb-2"
               >
                 Export Format:
               </label>
               <select
                 value={exportFormat}
                 onChange={e => setExportFormat(e.target.value)}
-                className={`w-full px-3 py-2 rounded border ${
-                  isDarkMode
-                    ? 'bg-slate-700 border-slate-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-900'
-                }`}
+                aria-label="Export format"
+                className="w-full px-3 py-2 bamboo-input"
               >
                 <option value="json">JSON (Complete Data)</option>
                 <option value="csv">CSV (Spreadsheet)</option>
@@ -418,11 +408,11 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
               </select>
             </div>
 
-            <div className={`p-3 rounded ${isDarkMode ? 'bg-slate-700' : 'bg-gray-50'}`}>
-              <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'} mb-2`}>
+            <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+              <div className="text-sm opacity-90 mb-2">
                 Export includes {colors.length.toLocaleString()} colors
               </div>
-              <div className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+              <div className="text-xs opacity-75">
                 {exportFormat === 'json' &&
                   'Complete color data with HSB values, manufacturer info, and metadata'}
                 {exportFormat === 'csv' &&
@@ -434,11 +424,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
 
             <button
               onClick={() => exportColors(exportFormat)}
-              className={`w-full py-3 px-4 rounded font-medium transition-colors ${
-                isDarkMode
-                  ? 'bg-orange-600 hover:bg-orange-700 text-white'
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
-              }`}
+              className="w-full py-3 px-4 rounded font-medium transition-colors bamboo-button"
             >
               💾 Export {exportFormat.toUpperCase()}
             </button>

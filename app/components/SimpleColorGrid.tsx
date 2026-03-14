@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import ColorCard from './ColorCard'
 import { CarColor } from '../types'
-import { useZoomDetection } from '../hooks/useZoomDetection'
+import { useZoomDetection, ZoomLevel } from '../hooks/useZoomDetection'
 
 interface SimpleColorGridProps {
   colors: CarColor[]
@@ -13,7 +13,7 @@ interface SimpleColorGridProps {
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
   expandedColorId?: string | null
-  zoomInfo?: any
+  zoomInfo?: ZoomLevel & { isTransitioning: boolean }
 }
 
 const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
@@ -97,7 +97,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
   if (colors.length === 0) {
     return (
-      <div className={`text-center py-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+      <div className="text-center py-8 opacity-75">
         No colors to display
       </div>
     )
@@ -126,7 +126,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
               />
               {isExpanded && (
                 <div
-                  className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bg-slate-800 border-blue-500' : 'bg-gray-50 border-blue-400'}`}
+                  className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
+                  style={{borderColor: 'var(--bamboo-stalk)'}}
                 >
                   <div className="grid grid-cols-3 gap-2 mb-4">
                     <div className="text-center">
@@ -136,11 +137,12 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                           background: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 240) * Math.PI) / 180)))})`,
                         }}
                       />
-                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                      <div className="text-xs opacity-75">
                         Color 1
                       </div>
                       <div
-                        className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}
+                        className="text-xs font-mono"
+                        style={{color: 'var(--bamboo-stalk)'}}
                       >
                         {color.color1.h.toFixed(2)} {color.color1.s.toFixed(2)}{' '}
                         {color.color1.b.toFixed(2)}
@@ -153,11 +155,12 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                           background: `rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 240) * Math.PI) / 180)))})`,
                         }}
                       />
-                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                      <div className="text-xs opacity-75">
                         Color 2
                       </div>
                       <div
-                        className={`text-xs font-mono ${isDarkMode ? 'text-cyan-400' : 'text-blue-600'}`}
+                        className="text-xs font-mono"
+                        style={{color: 'var(--bamboo-stalk)'}}
                       >
                         {color.color2.h.toFixed(2)} {color.color2.s.toFixed(2)}{' '}
                         {color.color2.b.toFixed(2)}
@@ -170,53 +173,51 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
                           background: `linear-gradient(45deg, rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 240) * Math.PI) / 180)))}), rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 240) * Math.PI) / 180)))}))`,
                         }}
                       />
-                      <div className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                      <div className="text-xs opacity-75">
                         Blend
                       </div>
                     </div>
                   </div>
                   <div className="space-y-1 text-sm mb-4">
                     <div className="flex justify-between">
-                      <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Make:</span>
-                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                      <span className="opacity-75">Make:</span>
+                      <span className="font-medium">
                         {color.make}
                       </span>
                     </div>
                     {color.model && (
                       <div className="flex justify-between">
-                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>
+                        <span className="opacity-75">
                           Model:
                         </span>
-                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                        <span className="font-medium">
                           {color.model}
                         </span>
                       </div>
                     )}
                     {color.year && (
                       <div className="flex justify-between">
-                        <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>
+                        <span className="opacity-75">
                           Year:
                         </span>
-                        <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                        <span className="font-medium">
                           {color.year}
                         </span>
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className={isDarkMode ? 'text-slate-300' : 'text-gray-600'}>Type:</span>
-                      <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>
+                      <span className="opacity-75">Type:</span>
+                      <span className="font-medium">
                         {color.colorType}
                       </span>
                     </div>
                   </div>
                   <button
                     onClick={() => onToggleFavorite(colorId)}
-                    className={`w-full rounded-lg font-medium transition-colors py-2 px-4 text-sm ${
+                    className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
                       favorites.includes(colorId)
                         ? 'bg-red-500 hover:bg-red-600 text-white'
-                        : isDarkMode
-                          ? 'bg-slate-700 hover:bg-slate-600 text-white'
-                          : 'bg-gray-200 hover:bg-gray-300 text-gray-900'
+                        : 'bamboo-button-ghost'
                     }`}
                   >
                     {favorites.includes(colorId) ? '❤️ Favorited' : '🤍 Add to Favorites'}
@@ -231,21 +232,17 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
       {displayCount < colors.length && (
         <div className="text-center py-8 mt-4">
           {isLoading ? (
-            <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <div className="text-sm opacity-75">
               Loading more colors...
             </div>
           ) : (
             <>
-              <div className={`text-sm mb-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              <div className="text-sm mb-3 opacity-75">
                 Showing {displayCount} of {colors.length} colors
               </div>
               <button
                 onClick={loadMore}
-                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                  isDarkMode
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                    : 'bg-blue-500 hover:bg-blue-600 text-white'
-                }`}
+                className="px-6 py-2 rounded-lg font-medium transition-colors bamboo-button"
               >
                 Load More Colors
               </button>
