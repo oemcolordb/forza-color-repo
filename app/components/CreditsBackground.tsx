@@ -1,12 +1,18 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 
 interface CreditsBackgroundProps {
   isDarkMode: boolean
 }
 
 const CreditsBackground: React.FC<CreditsBackgroundProps> = ({ isDarkMode }) => {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const credits = [
     'Terronium-12',
     'Frizbe (revival)',
@@ -35,8 +41,10 @@ const CreditsBackground: React.FC<CreditsBackgroundProps> = ({ isDarkMode }) => 
     })
   }, [])
 
+  if (!isClient) return null
+
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0" suppressHydrationWarning>
       <style>{`
         @keyframes credit-drift {
           0%, 100% {
