@@ -15,6 +15,7 @@ import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ImageColorExtractor from './components/ImageColorExtractor'
 import ResponsiveLayout from './components/ResponsiveLayout'
 import TokyoBackground from './components/TokyoBackground'
+import CreditsBackground from './components/CreditsBackground'
 import { useAnalytics } from './hooks/useAnalytics'
 import { usePerformance } from './hooks/usePerformance'
 import { useOfflineStorage } from './hooks/useOfflineStorage'
@@ -531,6 +532,7 @@ export default function HomePage() {
         )}
 
         <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+        <CreditsBackground isDarkMode={isDarkMode} />
         <ProgressiveLoader
           progress={loadingProgress}
           isDarkMode={isDarkMode}
