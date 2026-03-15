@@ -49,6 +49,7 @@ export default function HomePage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [, setColorHistory] = useState<string[]>([])
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
   const [harmonyMode, setHarmonyMode] = useState('')

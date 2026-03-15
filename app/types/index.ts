@@ -53,7 +53,6 @@ export interface User {
 export interface HeaderProps {
   isDarkMode: boolean
   onToggleTheme: () => void
-  onShowAuth: () => void
 }
 
 export interface ImageColorExtractorProps {
