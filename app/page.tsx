@@ -15,8 +15,6 @@ import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ImageColorExtractor from './components/ImageColorExtractor'
 import ResponsiveLayout from './components/ResponsiveLayout'
 import TokyoBackground from './components/TokyoBackground'
-import { AuthProvider } from './components/AuthProvider'
-import AuthModal from './components/AuthModal'
 import { useAnalytics } from './hooks/useAnalytics'
 import { usePerformance } from './hooks/usePerformance'
 import { useOfflineStorage } from './hooks/useOfflineStorage'
@@ -48,11 +46,6 @@ export default function HomePage() {
   const [selectedMake, setSelectedMake] = useState('')
   const [selectedColorType, setSelectedColorType] = useState('')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
-  const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
-  const [favorites, setFavorites] = useState<string[]>([])
-  const [, setColorHistory] = useState<string[]>([])
-  const [isDarkMode, setIsDarkMode] = useState(true)
-  const [showAuthModal, setShowAuthModal] = useState(false)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
   const [harmonyMode, setHarmonyMode] = useState('')
@@ -488,7 +481,7 @@ export default function HomePage() {
   }
 
   return (
-    <AuthProvider>
+    <>
       <GamingErrorBoundary>
         <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
         <ForzaColorSheetSEO
@@ -506,7 +499,6 @@ export default function HomePage() {
         <Header
           isDarkMode={isDarkMode}
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
-          onShowAuth={() => setShowAuthModal(true)}
         />
 
         {/* Error Display */}
@@ -922,12 +914,6 @@ export default function HomePage() {
 
         <Footer isDarkMode={isDarkMode} />
 
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          isDarkMode={isDarkMode}
-        />
-
         <PerformanceMonitor isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
 
         <HSBPopup
@@ -953,6 +939,6 @@ export default function HomePage() {
           isDarkMode={isDarkMode}
         />
       </div>
-    </AuthProvider>
+    </>
   )
 }

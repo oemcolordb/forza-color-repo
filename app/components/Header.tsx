@@ -1,9 +1,8 @@
 import React from 'react'
 import { HeaderProps } from '../types'
 import { ErrorBoundary } from '../lib/errorBoundary'
-import PWAInstallButton from './PWAInstallButton'
 
-const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }) => {
+const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
   return (
     <ErrorBoundary>
       <header className="py-8 text-center bg-transparent relative">
@@ -15,39 +14,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme, onShowAuth }
         >
           <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
         </button>
-        <div className="absolute top-4 right-4 flex items-center gap-3">
-          <PWAInstallButton isDarkMode={isDarkMode} />
-          {false ? (
-            <div className="flex items-center gap-2">
-              <span
-                className={`text-sm font-medium ${
-                  isDarkMode
-                    ? 'text-white bg-slate-800/80 px-2 py-1 rounded'
-                    : 'text-gray-900 bg-white/80 px-2 py-1 rounded'
-                }`}
-              >
-                Guest
-              </span>
-              <button
-                onClick={() => {}}
-                className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                  isDarkMode
-                    ? 'bg-slate-800 text-white border-slate-600 hover:bg-slate-700'
-                    : 'bg-white text-gray-900 border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                Sign Out
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={onShowAuth}
-              className="px-4 py-2 text-sm bamboo-button hover-lift"
-            >
-              Sign In
-            </button>
-          )}
-        </div>
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up bg-black/50 backdrop-blur-sm px-6 py-4 rounded-lg inline-block glass-effect">
           <span
             className="neon-text animate-color-shift text-purple-400"
