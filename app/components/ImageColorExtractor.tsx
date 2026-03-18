@@ -12,6 +12,9 @@ import { validateImageFile, handleError } from '../lib/validation'
 import { cache } from '../lib/cache'
 import { ErrorBoundary } from '../lib/errorBoundary'
 import { processImageWithML, fileToBase64, isPythonApiAvailable } from '../lib/pythonApi'
+import { getColorTree, initializeColorTree } from '../lib/colorTree'
+import { rgbToHsb } from '../lib/colorConversion'
+import { compressImage, needsCompression } from '../lib/imageCompression'
 
 const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   colors = [],
@@ -33,6 +36,55 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   const [usePythonService, setUsePythonService] = useState(false)
   const [pythonAvailable, setPythonAvailable] = useState(false)
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      // Clear canvas contexts
+      if (canvasRef.current) {
+        const ctx = canvasRef.current.getContext('2d')
+        if (ctx) {
+          ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+        }
+      }
+      if (displayCanvasRef.current) {
+        const ctx = displayCanvasRef.current.getContext('2d')
+        if (ctx) {
+          ctx.clearRect(0, 0, displayCanvasRef.current.width, displayCanvasRef.current.height)
+        }
+      }
+      
+      // Revoke object URLs
+      if (uploadedImage && uploadedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(uploadedImage)
+      }
+      
+      // Clean up image object
+      if (imageObjectRef.current) {
+        imageObjectRef.current.onload = null
+        imageObjectRef.current.onerror = null
+        imageObjectRef.current.src = ''
+        imageObjectRef.current = null
+      }
+    }
+  }, [uploadedImage])
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const displayCanvasRef = useRef<HTMLCanvasElement>(null)
+  const imageObjectRef = useRef<HTMLImageElement | null>(null)
+
+  useEffect(() => {
+    // Initialize KD-Tree when colors are loaded
+    if (colors && colors.length > 0) {
+      try {
+        initializeColorTree(colors)
+        console.log('Color tree initialized with', colors.length, 'colors')
+      } catch (error) {
+        console.error('Failed to initialize color tree:', error)
+      }
+    }
+  }, [colors])
+
   useEffect(() => {
     // check whether a Python backend is up so the checkbox can be toggled
     const checkPythonAvailability = async () => {
@@ -42,37 +94,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
     checkPythonAvailability()
   }, [])
 
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const displayCanvasRef = useRef<HTMLCanvasElement>(null)
-
-  const rgbToHsb = useCallback((r: number, g: number, b: number): HSBColor => {
-    r /= 255
-    g /= 255
-    b /= 255
-
-    const max = Math.max(r, g, b)
-    const min = Math.min(r, g, b)
-    const diff = max - min
-
-    let h = 0
-    if (diff !== 0) {
-      if (max === r) h = ((g - b) / diff) % 6
-      else if (max === g) h = (b - r) / diff + 2
-      else h = (r - g) / diff + 4
-    }
-    h = Math.round(h * 60)
-    if (h < 0) h += 360
-
-    const s = max === 0 ? 0 : diff / max
-    const brightness = max
-
-    return {
-      h: h / 360,
-      s: Math.round(s * 100) / 100,
-      b: Math.round(brightness * 100) / 100,
-    }
-  }, [])
+  // Remove old rgbToHsb function - now using memoized version from colorConversion
 
   const kMeansCluster = useCallback(
     (pixels: Array<{ rgb: [number, number, number] }>, k = 8): ExtractedColor[] => {
@@ -154,6 +176,45 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
       const cached = cache.get<ForzaColorMatch[]>(cacheKey)
       if (cached) return cached
 
+      try {
+        // Use KD-Tree for O(log n) performance
+        const colorTree = getColorTree()
+        
+        const matches = extractedColors
+          .map(extracted => {
+            // Find 3 closest colors using KD-Tree
+            const nearest = colorTree.findNearest(extracted.hsb, 3)
+            
+            if (nearest.length === 0) return null
+            
+            // Use the closest match
+            const closest = nearest[0]
+            
+            return {
+              extracted,
+              forza: closest.color,
+              similarity: closest.similarity
+            }
+          })
+          .filter((match): match is ForzaColorMatch => match !== null && match.similarity > 40)
+
+        cache.set(cacheKey, matches, 5 * 60 * 1000)
+        return matches
+      } catch (error) {
+        console.error('KD-Tree matching failed, falling back to linear search:', error)
+        
+        // Fallback to original linear search if KD-Tree fails
+        return fallbackLinearSearch(extractedColors)
+      }
+    },
+    [colors]
+  )
+
+  // Fallback linear search (original implementation)
+  const fallbackLinearSearch = useCallback(
+    (extractedColors: ExtractedColor[]): ForzaColorMatch[] => {
+      if (!colors || colors.length === 0) return []
+
       const matches = extractedColors
         .map(extracted => {
           let closestColor: CarColor | null = null
@@ -206,7 +267,6 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         })
         .filter(match => match.similarity > 40)
 
-      cache.set(cacheKey, matches, 5 * 60 * 1000)
       return matches
     },
     [colors]
@@ -343,15 +403,27 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         // Validate file
         validateImageFile(file)
 
+        // Compress image if needed
+        let processedFile = file
+        if (needsCompression(file, 2)) { // Compress if > 2MB
+          console.log('Compressing image...')
+          processedFile = await compressImage(file, {
+            maxSizeMB: 2,
+            maxWidthOrHeight: 1920,
+            quality: 0.85
+          })
+          console.log('Compression complete')
+        }
+
         // if python service is enabled, send the entire image rather than
         // doing canvas extraction locally
         if (usePythonService && pythonAvailable) {
-          const base64 = await fileToBase64(file)
+          const base64 = await fileToBase64(processedFile)
           const result = await processImageWithML(base64 as string, colors)
           if (result.success) {
             const { extracted_colors, matches } = result
             setUploadedImage(base64 as string)
-            onImageUpload?.(file, base64 as string)
+            onImageUpload?.(processedFile, base64 as string)
             setMatchedForzaColors(matches || [])
             onColorsExtracted?.(extracted_colors || [])
             onColorsFound?.(matches || [])
@@ -365,6 +437,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         }
 
         const img = new Image()
+        imageObjectRef.current = img
         const canvas = canvasRef.current
         if (!canvas) {
           throw new Error('Canvas not available. Please refresh the page and try again.')
@@ -415,20 +488,33 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               setMatchedForzaColors(forzaMatches)
               {
                 const dataUrl = canvas.toDataURL()
+                // Revoke previous uploaded image if it was a blob URL
+                if (uploadedImage && uploadedImage.startsWith('blob:')) {
+                  URL.revokeObjectURL(uploadedImage)
+                }
                 setUploadedImage(dataUrl)
                 onImageUpload?.(file, dataUrl)
               }
               setShowRegionSelect(true)
               URL.revokeObjectURL(imageUrl)
+              
+              // Clean up image object
+              img.onload = null
+              img.onerror = null
+              
               resolve()
             } catch (error) {
               URL.revokeObjectURL(imageUrl)
+              img.onload = null
+              img.onerror = null
               reject(error)
             }
           }
 
           img.onerror = () => {
             URL.revokeObjectURL(imageUrl)
+            img.onload = null
+            img.onerror = null
             reject(new Error('Failed to load image. Please check the file format and try again.'))
           }
 

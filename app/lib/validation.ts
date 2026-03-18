@@ -1,75 +1,95 @@
-import { AppError } from '../types'
+import { z } from 'zod';
 
-export class ValidationError extends Error {
-  constructor(
-    message: string,
-    public field?: string
-  ) {
-    super(message)
-    this.name = 'ValidationError'
-  }
-}
+// HSB Color Schema
+export const hsbColorSchema = z.object({
+  h: z.number().min(0).max(1, 'Hue must be between 0 and 1'),
+  s: z.number().min(0).max(1, 'Saturation must be between 0 and 1'),
+  b: z.number().min(0).max(1, 'Brightness must be between 0 and 1')
+});
 
-export const validateImageFile = (file: File): void => {
-  if (!file.type.startsWith('image/')) {
-    throw new ValidationError('Please select a valid image file', 'file')
-  }
+// Car Color Schema
+export const carColorSchema = z.object({
+  make: z.string().min(1).max(100, 'Make must be 1-100 characters'),
+  model: z.string().min(1).max(100, 'Model must be 1-100 characters'),
+  year: z.number().int().min(1900).max(2100).nullable(),
+  colorName: z.string().min(1).max(255, 'Color name must be 1-255 characters'),
+  colorType: z.string().min(1).max(50, 'Color type must be 1-50 characters'),
+  color1: hsbColorSchema,
+  color2: hsbColorSchema
+});
 
-  if (file.size > 10 * 1024 * 1024) {
-    throw new ValidationError('Image file is too large. Please select a file under 10MB.', 'file')
-  }
+// Extracted Color Schema (for image extraction)
+export const extractedColorSchema = z.object({
+  rgb: z.tuple([
+    z.number().int().min(0).max(255),
+    z.number().int().min(0).max(255),
+    z.number().int().min(0).max(255)
+  ]),
+  hsb: hsbColorSchema,
+  percentage: z.number().min(0).max(100),
+  pixelCount: z.number().int().min(0).optional(),
+  name: z.string().max(100).optional()
+});
 
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-  if (!allowedTypes.includes(file.type)) {
-    throw new ValidationError(
-      'Unsupported image format. Please use JPEG, PNG, WebP, or GIF.',
-      'file'
-    )
-  }
-}
+// Scan Input Schema (for saving scans)
+export const scanInputSchema = z.object({
+  userId: z.string().min(1).max(100, 'User ID must be 1-100 characters'),
+  imageName: z.string().min(1).max(255, 'Image name must be 1-255 characters'),
+  extractedColors: z.array(extractedColorSchema).min(1).max(50, 'Must have 1-50 extracted colors'),
+  matches: z.array(carColorSchema).max(100, 'Maximum 100 matches allowed'),
+  imageData: z.string().max(10485760, 'Image data must be less than 10MB') // 10MB base64 limit
+});
 
-export const sanitizeSearchQuery = (query: string): string => {
-  return query
-    .trim()
-    .replace(/[<>]/g, '') // Remove potential XSS characters
-    .substring(0, 100) // Limit length
-}
+// Scan ID Schema (for GET/DELETE operations)
+export const scanIdSchema = z.object({
+  id: z.string().uuid('Invalid scan ID format')
+});
 
-export const validateColorData = (color: unknown): color is Record<string, unknown> => {
-  if (!color || typeof color !== 'object') return false
+// User ID Schema
+export const userIdSchema = z.object({
+  userId: z.string().min(1).max(100, 'User ID must be 1-100 characters')
+});
 
-  const c = color as Record<string, unknown>
-  return Boolean(
-    typeof c.make === 'string' &&
-    typeof c.colorName === 'string' &&
-    typeof c.colorType === 'string' &&
-    c.color1 &&
-    typeof c.color1 === 'object' &&
-    c.color2 &&
-    typeof c.color2 === 'object'
-  )
-}
+// Export types
+export type HSBColor = z.infer<typeof hsbColorSchema>;
+export type CarColor = z.infer<typeof carColorSchema>;
+export type ExtractedColor = z.infer<typeof extractedColorSchema>;
+export type ScanInput = z.infer<typeof scanInputSchema>;
+export type ScanId = z.infer<typeof scanIdSchema>;
+export type UserId = z.infer<typeof userIdSchema>;
 
-export const handleError = (error: unknown): AppError => {
-  if (error instanceof ValidationError) {
-    return {
-      message: error.message,
-      code: 'VALIDATION_ERROR',
-      details: { field: error.field },
+// Validation helper function
+export function validateInput<T>(schema: z.ZodSchema<T>, data: unknown): { success: true; data: T } | { success: false; error: string } {
+  try {
+    const validated = schema.parse(data);
+    return { success: true, data: validated };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      return { success: false, error: errorMessage };
     }
+    return { success: false, error: 'Validation failed' };
   }
+}
 
-  if (error instanceof Error) {
-    return {
-      message: error.message,
-      code: 'GENERIC_ERROR',
-      details: error.stack,
-    }
-  }
+// Sanitization helpers
+export function sanitizeString(input: string): string {
+  return input
+    .replace(/[<>]/g, '') // Remove potential HTML tags
+    .replace(/[^\x20-\x7E\u00A0-\uFFFF]/g, '') // Remove non-printable characters
+    .trim();
+}
 
-  return {
-    message: 'An unexpected error occurred',
-    code: 'UNKNOWN_ERROR',
-    details: error,
-  }
+export function sanitizeFileName(fileName: string): string {
+  return fileName
+    .replace(/[^a-zA-Z0-9._-]/g, '_') // Replace unsafe characters
+    .replace(/\.{2,}/g, '.') // Prevent path traversal
+    .replace(/^\.+/, '') // Remove leading dots
+    .substring(0, 255); // Limit length
+}
+
+export function sanitizeUserId(userId: string): string {
+  return userId
+    .replace(/[^a-zA-Z0-9_-]/g, '') // Only allow alphanumeric, underscore, hyphen
+    .substring(0, 100);
 }

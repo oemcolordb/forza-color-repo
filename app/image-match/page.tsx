@@ -5,6 +5,8 @@ import ImageColorExtractor from '../components/ImageColorExtractor'
 import colorData from '../../services/colorData'
 import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
+import { deduplicatedFetch } from '../lib/requestDeduplication'
+import { useCsrfToken, withCsrfToken } from '../hooks/useCsrfToken'
 
 interface SavedScan {
   id: string
@@ -33,6 +35,7 @@ function ImageMatchPageInner() {
   const [saving, setSaving] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const { user } = useAuth()
+  const { token: csrfToken } = useCsrfToken()
 
   useEffect(() => {
     if (user) {
@@ -44,8 +47,8 @@ function ImageMatchPageInner() {
     if (!user) return
 
     try {
-      const response = await fetch(`/api/scans?userId=${user.id}`)
-      const data = await response.json()
+      // Use deduplicated fetch to prevent duplicate requests
+      const data = await deduplicatedFetch<any[]>(`/api/scans?userId=${user.id}`)
       setSavedScans(
         data.map((scan: Record<string, string>) => ({
           ...scan,
@@ -64,9 +67,14 @@ function ImageMatchPageInner() {
       return
     }
 
+    if (!csrfToken) {
+      alert('Security token not ready. Please try again.')
+      return
+    }
+
     setSaving(true)
     try {
-      const response = await fetch('/api/scans', {
+      const response = await fetch('/api/scans', withCsrfToken(csrfToken, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -76,12 +84,14 @@ function ImageMatchPageInner() {
           matches,
           imageData: currentImageData,
         }),
-      })
+      }))
 
       const result = await response.json()
       if (result.success) {
         alert('Scan saved successfully!')
         loadSavedScans()
+      } else {
+        alert(result.error || 'Failed to save scan')
       }
     } catch (error) {
       console.error('Failed to save scan:', error)
@@ -102,10 +112,15 @@ function ImageMatchPageInner() {
   const deleteScan = async (scanId: string) => {
     if (!user || !confirm('Delete this scan?')) return
 
+    if (!csrfToken) {
+      alert('Security token not ready. Please try again.')
+      return
+    }
+
     try {
-      await fetch(`/api/scans?scanId=${scanId}&userId=${user.id}`, {
+      await fetch(`/api/scans?scanId=${scanId}&userId=${user.id}`, withCsrfToken(csrfToken, {
         method: 'DELETE',
-      })
+      }))
       loadSavedScans()
     } catch (error) {
       console.error('Failed to delete scan:', error)
