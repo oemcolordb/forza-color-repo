@@ -25,6 +25,23 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
           {/* Navigation Links */}
           <nav className="flex flex-wrap justify-center gap-4 text-sm">
             <a
+              href="/"
+              className={`hover:underline transition-colors font-semibold ${
+                isDarkMode ? 'text-cyan-400 hover:text-cyan-300' : 'text-blue-600 hover:text-blue-700'
+              }`}
+            >
+              🎨 Colors
+            </a>
+            <a
+              href="/vinyl-creator"
+              className={`hover:underline transition-colors font-semibold ${
+                isDarkMode ? 'text-purple-400 hover:text-purple-300' : 'text-purple-600 hover:text-purple-700'
+              }`}
+            >
+              🎬 Vinyl Creator
+            </a>
+            <span className={isDarkMode ? 'text-slate-600' : 'text-gray-400'}>•</span>
+            <a
               href="/about"
               className={`hover:underline transition-colors ${
                 isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'

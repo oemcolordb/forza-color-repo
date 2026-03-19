@@ -4,6 +4,7 @@ import Canvas from './Canvas'
 import ContextMenu from './ContextMenu'
 import ReconstructionPanel from './ReconstructionPanel'
 import DesignPresets from './DesignPresets'
+import AIVinylBuilder from './AIVinylBuilder'
 import { SAMPLE_STAR } from '../data/presets'
 
 export default function VinylDesigner() {
@@ -64,6 +65,17 @@ export default function VinylDesigner() {
         <DesignPresets
           currentDesign={currentDesign}
           onLoadPreset={handleLoadPreset}
+        />
+
+        {/* AI Vinyl Builder */}
+        <AIVinylBuilder
+          onDesignGenerated={design => {
+            setCurrentDesign(design)
+            setSelectedShapeId(null)
+            setReconstructionActive(false)
+            setCurrentStep(0)
+          }}
+          isDarkMode={true}
         />
 
         {/* Group mode selector */}
