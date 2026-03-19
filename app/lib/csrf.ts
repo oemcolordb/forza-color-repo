@@ -1,4 +1,4 @@
-import { Tokens } from 'csrf';
+import Tokens from 'csrf';
 
 // Initialize CSRF tokens generator
 const tokens = new Tokens();

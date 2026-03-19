@@ -8,10 +8,10 @@ interface HSBColor {
 
 interface CarColor {
   make: string;
-  model: string;
-  year: number | null;
+  model?: string;
+  year?: number | null;
   colorName: string;
-  colorType: string;
+  colorType?: string;
   color1: HSBColor;
   color2: HSBColor;
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { safeLocalStorage } from '../lib/safeLocalStorage'
 
 interface User {
   id: string
@@ -40,7 +41,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     // Check for existing session
-    const savedUser = localStorage.getItem('forza-user')
+    const savedUser = safeLocalStorage.getItem('forza-user')
     if (savedUser) {
       setUser(JSON.parse(savedUser))
     }
@@ -59,7 +60,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       const userData = await response.json()
       setUser(userData)
-      localStorage.setItem('forza-user', JSON.stringify(userData))
+      safeLocalStorage.setItem('forza-user', JSON.stringify(userData))
 
       // Sync data from cloud
       await syncFromCloud(userData.id)
@@ -81,7 +82,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       const userData = await response.json()
       setUser(userData)
-      localStorage.setItem('forza-user', JSON.stringify(userData))
+      safeLocalStorage.setItem('forza-user', JSON.stringify(userData))
     } catch (error) {
       console.error('Sign up error:', error)
       throw error
@@ -121,7 +122,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
   const signOut = async () => {
     setUser(null)
-    localStorage.removeItem('forza-user')
+    safeLocalStorage.removeItem('forza-user')
   }
 
   const syncFavorites = async (favorites: string[]) => {
@@ -178,13 +179,13 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       const data = await response.json()
 
       if (data.favorites) {
-        localStorage.setItem('forza-favorites', JSON.stringify(data.favorites))
+        safeLocalStorage.setItem('forza-favorites', JSON.stringify(data.favorites))
       }
       if (data.presets) {
-        localStorage.setItem('forza-presets', JSON.stringify(data.presets))
+        safeLocalStorage.setItem('forza-presets', JSON.stringify(data.presets))
       }
       if (data.colorSets) {
-        localStorage.setItem('forza-colorsets', JSON.stringify(data.colorSets))
+        safeLocalStorage.setItem('forza-colorsets', JSON.stringify(data.colorSets))
       }
     } catch (error) {
       console.error('Sync from cloud error:', error)

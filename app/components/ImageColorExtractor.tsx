@@ -10,7 +10,7 @@ import {
 } from '../types'
 import { validateImageFile, handleError } from '../lib/validation'
 import { cache } from '../lib/cache'
-import ErrorBoundary from '../components/ErrorBoundary'
+import { ErrorBoundary } from '../components/ErrorBoundary'
 import { processImageWithML, fileToBase64, isPythonApiAvailable } from '../lib/pythonApi'
 import { getColorTree, initializeColorTree } from '../lib/colorTree'
 import { rgbToHsb } from '../lib/colorConversion'

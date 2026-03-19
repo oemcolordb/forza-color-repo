@@ -25,7 +25,10 @@ class AnalyticsManager {
 
   constructor() {
     this.sessionId = this.generateSessionId();
-    this.loadUserId();
+    // Delay loadUserId until client-side
+    if (typeof window !== 'undefined') {
+      this.loadUserId();
+    }
   }
 
   /**

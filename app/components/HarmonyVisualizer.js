@@ -101,6 +101,9 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
                 <div className="text-xs opacity-90 drop-shadow">
                   {color.make} • {Math.round(color.color1.h * 360)}°
                 </div>
+                <div className="text-xs opacity-90 drop-shadow">
+                  {(color.colorType || 'Unknown').toString()}
+                </div>
               </div>
               <div
                 className={`px-2 py-1 rounded text-xs font-bold ${
@@ -130,7 +133,7 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
                 background: hsbToHex(color.color1.h * 360, color.color1.s, color.color1.b),
               }}
               onClick={() => onColorSelect?.(color)}
-              title={`${color.colorName} - ${color.make}`}
+              title={`${color.colorName} - ${color.make} (${color.colorType || 'Unknown'})`}
             />
           ))}
         </div>

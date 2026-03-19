@@ -65,7 +65,7 @@ function ImageMatchPageInner() {
         }
       )
       setSavedScans(
-        data.map((scan: Record<string, string>) => ({
+        data.map((scan: any) => ({
           ...scan,
           extractedColors: JSON.parse(scan.extractedColors),
           matches: JSON.parse(scan.matches),

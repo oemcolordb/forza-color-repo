@@ -818,15 +818,19 @@ export default function HomePage() {
                             e.stopPropagation()
                             showColorHSB(color)
                           }}
-                          className={`rounded border border-gray-300 hover:border-blue-500 transition-colors gpu-accelerated focus-visible ${
+                          className={`relative rounded border border-gray-300 hover:border-blue-500 transition-colors gpu-accelerated focus-visible overflow-hidden ${
                             deviceInfo.isMobile ? 'w-6 h-6' : 'w-8 h-8'
                           }`}
                           style={{
                             background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
                           }}
-                          title={`${color.colorName} - ${color.make}`}
-                          aria-label={`Select ${color.colorName} from ${color.make}`}
-                        />
+                          title={`${color.colorName} - ${color.make} (${color.colorType || 'Unknown'})`}
+                          aria-label={`Select ${color.colorName} (${color.colorType || 'Unknown'}) from ${color.make}`}
+                        >
+                          <span className="absolute bottom-0 left-0 right-0 text-[9px] font-semibold text-white px-0.5 bg-black bg-opacity-45 backdrop-blur-sm text-center truncate">
+                            {color.colorType || 'Unknown'}
+                          </span>
+                        </button>
                       ))}
                     </div>
                   </div>

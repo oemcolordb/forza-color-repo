@@ -50,13 +50,13 @@ export class TouchGestureHandler {
     this.attachListeners();
   }
 
-  private attachListeners(): void {
+  private attachListeners() {
     this.element.addEventListener('touchstart', this.handleTouchStart, { passive: false });
     this.element.addEventListener('touchmove', this.handleTouchMove, { passive: false });
     this.element.addEventListener('touchend', this.handleTouchEnd, { passive: false });
   }
 
-  private handleTouchStart = (e: TouchEvent): void => {
+  private handleTouchStart = (e: TouchEvent) => {
     if (e.touches.length === 1) {
       // Single touch
       this.touchStartX = e.touches[0].clientX;
@@ -74,7 +74,7 @@ export class TouchGestureHandler {
     }
   };
 
-  private handleTouchMove = (e: TouchEvent): void {
+  private handleTouchMove = (e: TouchEvent) => {
     this.clearLongPressTimer();
 
     if (e.touches.length === 2) {
@@ -93,7 +93,7 @@ export class TouchGestureHandler {
     }
   };
 
-  private handleTouchEnd = (e: TouchEvent): void {
+  private handleTouchEnd = (e: TouchEvent) => {
     this.clearLongPressTimer();
 
     if (e.changedTouches.length === 1) {
@@ -138,20 +138,20 @@ export class TouchGestureHandler {
     }
   };
 
-  private getDistance(touch1: Touch, touch2: Touch): number {
+  private getDistance(touch1: Touch, touch2: Touch) {
     const dx = touch1.clientX - touch2.clientX;
     const dy = touch1.clientY - touch2.clientY;
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-  private clearLongPressTimer(): void {
+  private clearLongPressTimer() {
     if (this.longPressTimer) {
       clearTimeout(this.longPressTimer);
       this.longPressTimer = null;
     }
   }
 
-  public destroy(): void {
+  public destroy() {
     this.element.removeEventListener('touchstart', this.handleTouchStart);
     this.element.removeEventListener('touchmove', this.handleTouchMove);
     this.element.removeEventListener('touchend', this.handleTouchEnd);
@@ -166,6 +166,6 @@ export function createTouchGestureHandler(
   element: HTMLElement,
   handlers: TouchGestureHandlers,
   options?: TouchGestureOptions
-): TouchGestureHandler {
+) {
   return new TouchGestureHandler(element, handlers, options);
 }
