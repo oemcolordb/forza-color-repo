@@ -11,6 +11,7 @@ import { fetchJsonWithRetry } from '../lib/retryLogic'
 import { useCommonShortcuts } from '../hooks/useKeyboardShortcuts'
 import ExportButton from '../components/ExportButton'
 import { trackEvent } from '../lib/analytics'
+import { useSwipeGestures } from '../hooks/useTouchGestures'
 
 interface SavedScan {
   id: string
@@ -170,6 +171,36 @@ function ImageMatchPageInner() {
     },
     onFind: () => {
       setShowHistory(true)
+    }
+  })
+
+  // Touch gestures for mobile
+  const swipeRef = useSwipeGestures({
+    onSwipeLeft: () => {
+      // Navigate to next match
+      if (matches.length > 0 && selected) {
+        const currentIndex = matches.findIndex(m => m.forza === selected)
+        if (currentIndex < matches.length - 1) {
+          setSelected(matches[currentIndex + 1].forza)
+        }
+      }
+    },
+    onSwipeRight: () => {
+      // Navigate to previous match
+      if (matches.length > 0 && selected) {
+        const currentIndex = matches.findIndex(m => m.forza === selected)
+        if (currentIndex > 0) {
+          setSelected(matches[currentIndex - 1].forza)
+        }
+      }
+    },
+    onSwipeDown: () => {
+      // Close selected color or history
+      if (selected) {
+        setSelected(null)
+      } else if (showHistory) {
+        setShowHistory(false)
+      }
     }
   })
 

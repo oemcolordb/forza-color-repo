@@ -20,15 +20,15 @@ export const carColorSchema = z.object({
 
 // Extracted Color Schema (for image extraction)
 export const extractedColorSchema = z.object({
+  h: z.number().min(0).max(1),
+  s: z.number().min(0).max(1),
+  b: z.number().min(0).max(1),
   rgb: z.tuple([
     z.number().int().min(0).max(255),
     z.number().int().min(0).max(255),
     z.number().int().min(0).max(255)
   ]),
-  hsb: hsbColorSchema,
-  percentage: z.number().min(0).max(100),
-  pixelCount: z.number().int().min(0).optional(),
-  name: z.string().max(100).optional()
+  percentage: z.number().min(0).max(100)
 });
 
 // Scan Input Schema (for saving scans)
@@ -65,7 +65,7 @@ export function validateInput<T>(schema: z.ZodSchema<T>, data: unknown): { succe
     return { success: true, data: validated };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessage = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      const errorMessage = error.errors?.map(e => `${e.path.join('.')}: ${e.message}`).join(', ') || 'Validation failed';
       return { success: false, error: errorMessage };
     }
     return { success: false, error: 'Validation failed' };

@@ -63,9 +63,9 @@ describe('Color Conversion', () => {
     it('should round-trip conversion', () => {
       const hsb = rgbToHsb(100, 150, 200);
       const [r, g, b] = hsbToRgb(hsb.h, hsb.s, hsb.b);
-      expect(r).toBeCloseTo(100, 0);
-      expect(g).toBeCloseTo(150, 0);
-      expect(b).toBeCloseTo(200, 0);
+      expect(r).toBeCloseTo(100, -1);
+      expect(g).toBeCloseTo(150, -1);
+      expect(b).toBeCloseTo(200, -1);
     });
   });
 

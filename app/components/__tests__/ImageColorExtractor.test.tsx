@@ -53,9 +53,7 @@ describe('ImageColorExtractor', () => {
       />
     )
 
-    // The processing state would be tested with actual file upload
-    // For now, just verify the component renders without errors
-    expect(screen.getByLabelText('Choose Image')).toBeInTheDocument()
+    expect(screen.getByLabelText('Upload image to extract colors')).toBeInTheDocument()
   })
 
   it('applies correct theme classes', () => {

@@ -1,0 +1,2 @@
+This is a test text file, not an image.
+It should trigger validation errors when uploaded as an image.

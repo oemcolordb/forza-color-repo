@@ -125,7 +125,7 @@ describe('ColorCard', () => {
       />
     )
 
-    expect(container.firstChild).toHaveClass('bg-slate-800/80')
+    expect(container.firstChild).toHaveClass('bamboo-surface-dark')
 
     rerender(
       <ColorCard
@@ -136,6 +136,6 @@ describe('ColorCard', () => {
       />
     )
 
-    expect(container.firstChild).toHaveClass('bg-white')
+    expect(container.firstChild).toHaveClass('bamboo-surface')
   })
 })
