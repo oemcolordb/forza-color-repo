@@ -60,7 +60,11 @@ export default function Canvas({
       {design.shapes.map((shape, _idx) => {
         const isVisible = displayShapeIds.has(shape.id)
         const isSelected = selectedShapeId === shape.id
-        const isReconstructionHighlight = reconstructionMode && shapesUpToStep && shapesUpToStep.length === shapesUpToStep.indexOf(shape.id) + 1
+        const isReconstructionHighlight =
+          reconstructionMode &&
+          shapesUpToStep &&
+          shapesUpToStep.length > 0 &&
+          shapesUpToStep[shapesUpToStep.length - 1] === shape.id
 
         if (!isVisible) return null
 

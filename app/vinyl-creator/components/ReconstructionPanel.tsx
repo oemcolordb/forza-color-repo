@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { VinylDesign } from '../types/vinyl'
+import { ReconstructionEngine, PlaybackSpeed } from '../lib/ReconstructionEngine'
 
 interface ReconstructionPanelProps {
   design: VinylDesign
@@ -15,34 +16,121 @@ export default function ReconstructionPanel({
   onClose,
 }: ReconstructionPanelProps) {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [speed, setSpeed] = useState(1)
+  const [speed, setSpeed] = useState<PlaybackSpeed>(1)
+  const [loopEnabled, setLoopEnabled] = useState(false)
+  const engineRef = useRef<ReconstructionEngine | null>(null)
+
+  // Initialize engine
+  useEffect(() => {
+    engineRef.current = new ReconstructionEngine(design)
+    return () => {
+      engineRef.current?.destroy()
+    }
+  }, [design])
+
+  // Sync engine state with props
+  useEffect(() => {
+    if (engineRef.current) {
+      engineRef.current.goToStep(currentStep)
+    }
+  }, [currentStep])
 
   // Auto-play logic
   useEffect(() => {
-    if (!isPlaying) return
+    if (!engineRef.current) return
 
-    const interval = setInterval(() => {
-      onStepChange(currentStep + 1)
-    }, 1000 / speed)
+    if (isPlaying) {
+      engineRef.current.play()
+    } else {
+      engineRef.current.pause()
+    }
+  }, [isPlaying])
 
-    return () => clearInterval(interval)
-  }, [isPlaying, currentStep, onStepChange, speed])
-
-  // Stop autoplay at end
+  // Speed control
   useEffect(() => {
-    if (currentStep >= design.buildOrder.length - 1 && isPlaying) {
+    engineRef.current?.setSpeed(speed)
+  }, [speed])
+
+  // Loop control
+  useEffect(() => {
+    if (engineRef.current) {
+      if (loopEnabled) {
+        engineRef.current.enableLoop()
+      } else {
+        engineRef.current.disableLoop()
+      }
+    }
+  }, [loopEnabled])
+
+  // Listen to engine events
+  useEffect(() => {
+    if (!engineRef.current) return
+
+    const handleStepChange = (data: any) => {
+      onStepChange(data.step - 1)
+    }
+
+    const handleComplete = () => {
       setIsPlaying(false)
     }
-  }, [currentStep, design.buildOrder.length, isPlaying])
 
-  const currentShapeId = design.buildOrder[currentStep]
-  const currentShape = design.shapes.find(s => s.id === currentShapeId)
+    engineRef.current.on('step-change', handleStepChange)
+    engineRef.current.on('complete', handleComplete)
+
+    return () => {
+      engineRef.current?.off('step-change', handleStepChange)
+      engineRef.current?.off('complete', handleComplete)
+    }
+  }, [onStepChange])
+
+  const currentShapeId = design.buildOrder[currentStep] || null
+  const currentShape = currentShapeId ? design.shapes.find(s => s.id === currentShapeId) : null
+
+  if (!currentShapeId || design.buildOrder.length === 0) {
+    return (
+      <div className="bg-slate-800/60 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30 h-full flex flex-col items-center justify-center">
+        <div className="text-center">
+          <p className="text-sm text-slate-400 mb-2">📭 No reconstruction data</p>
+          <button
+            onClick={onClose}
+            className="text-xs px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded transition-colors"
+          >
+            ✖ Close
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const handlePlayPause = () => {
     if (currentStep >= design.buildOrder.length - 1) {
-      onStepChange(0)
+      engineRef.current?.reset()
     }
     setIsPlaying(!isPlaying)
+  }
+
+  const handlePrevious = () => {
+    engineRef.current?.previousStep()
+  }
+
+  const handleNext = () => {
+    engineRef.current?.nextStep()
+  }
+
+  const handleReset = () => {
+    engineRef.current?.reset()
+    setIsPlaying(false)
+  }
+
+  const handleSpeedChange = (newSpeed: PlaybackSpeed) => {
+    setSpeed(newSpeed)
+  }
+
+  const cycleSpeed = () => {
+    const speeds: PlaybackSpeed[] = [0.5, 1, 2, 4]
+    const currentIndex = speeds.indexOf(speed)
+    const nextSpeed = speeds[(currentIndex + 1) % speeds.length]
+    setSpeed(nextSpeed)
   }
 
   return (
@@ -59,7 +147,22 @@ export default function ReconstructionPanel({
 
       {/* Play controls */}
       <div className="space-y-3 mb-4">
+        {/* Main playback controls */}
         <div className="flex gap-2">
+          <button
+            onClick={() => engineRef.current?.goToStep(0)}
+            className="px-2 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium rounded transition-colors"
+            title="First step"
+          >
+            ⏮
+          </button>
+          <button
+            onClick={handlePrevious}
+            className="px-2 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium rounded transition-colors"
+            title="Previous step"
+          >
+            ◀
+          </button>
           <button
             onClick={handlePlayPause}
             className="flex-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium rounded transition-colors"
@@ -67,43 +170,85 @@ export default function ReconstructionPanel({
             {isPlaying ? '⏸ Pause' : '▶ Play'}
           </button>
           <button
-            onClick={() => onStepChange(0)}
-            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium rounded transition-colors"
+            onClick={handleNext}
+            className="px-2 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium rounded transition-colors"
+            title="Next step"
           >
-            ⏮ Reset
+            ▶
+          </button>
+          <button
+            onClick={() => engineRef.current?.goToLast()}
+            className="px-2 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium rounded transition-colors"
+            title="Last step"
+          >
+            ⏭
+          </button>
+        </div>
+
+        {/* Secondary controls */}
+        <div className="flex gap-2">
+          <button
+            onClick={handleReset}
+            className="flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs font-medium rounded transition-colors"
+          >
+            🔄 Reset
+          </button>
+          <button
+            onClick={() => setLoopEnabled(!loopEnabled)}
+            className={`flex-1 px-3 py-2 text-xs font-medium rounded transition-colors ${
+              loopEnabled
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+            }`}
+          >
+            🔁 Loop
           </button>
         </div>
 
         {/* Speed control */}
         <div>
-          <label className="text-xs text-slate-400 block mb-1">Speed: {speed.toFixed(1)}x</label>
-          <input
-            type="range"
-            min="0.5"
-            max="3"
-            step="0.5"
-            value={speed}
-            onChange={e => setSpeed(parseFloat(e.target.value))}
-            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-          />
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-xs text-slate-400">Speed</label>
+            <button
+              onClick={cycleSpeed}
+              className="text-xs px-2 py-0.5 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded transition-colors"
+            >
+              {speed}x
+            </button>
+          </div>
+          <div className="flex gap-1">
+            {([0.5, 1, 2, 4] as PlaybackSpeed[]).map(s => (
+              <button
+                key={s}
+                onClick={() => handleSpeedChange(s)}
+                className={`flex-1 px-2 py-1 text-xs rounded transition-colors ${
+                  speed === s
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
+                }`}
+              >
+                {s}x
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Step navigation */}
+        {/* Progress bar */}
         <div>
-          <label className="text-xs text-slate-400 block mb-1">
-            Step {currentStep + 1}/{design.buildOrder.length}
-          </label>
-          <input
-            type="range"
-            min="0"
-            max={design.buildOrder.length - 1}
-            value={currentStep}
-            onChange={e => {
-              setIsPlaying(false)
-              onStepChange(parseInt(e.target.value))
-            }}
-            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-          />
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-xs text-slate-400">
+              Step {currentStep + 1}/{design.buildOrder.length}
+            </label>
+            <span className="text-xs text-purple-400">
+              {Math.round(((currentStep + 1) / design.buildOrder.length) * 100)}%
+            </span>
+          </div>
+          <div className="relative h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-300"
+              style={{ width: `${((currentStep + 1) / design.buildOrder.length) * 100}%` }}
+            />
+          </div>
         </div>
       </div>
 

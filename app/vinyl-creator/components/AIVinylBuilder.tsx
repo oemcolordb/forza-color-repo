@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { VinylDesign } from '../types/vinyl'
 
 interface AIVinylBuilderProps {
-  onDesignGenerated: (design: VinylDesign) => void
+  onDesignGenerated: (_design: VinylDesign) => void
   isDarkMode?: boolean
 }
 

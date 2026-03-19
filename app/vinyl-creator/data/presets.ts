@@ -1,70 +1,10 @@
 import { VinylDesign } from '../types/vinyl'
+import { simpleStarDesign, complexCarDesign } from './examples'
 
-export const SAMPLE_STAR: VinylDesign = {
-  id: 'star-simple',
-  name: 'Five-Point Star',
-  description: 'A simple star made from 5 triangles and details',
-  complexity: 'simple',
-  shapes: [
-    {
-      id: 'star-center-fill',
-      name: 'Center Fill',
-      role: 'base',
-      layer: 0,
-      color: '#FFD700',
-      pathData: 'M250,150 L265,195 L312,195 L277,230 L290,275 L250,240 L210,275 L223,230 L188,195 L235,195 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 1,
-    },
-    {
-      id: 'star-outline',
-      name: 'Outer Outline',
-      role: 'detail',
-      layer: 1,
-      color: '#FFA500',
-      pathData: 'M250,150 L265,195 L312,195 L277,230 L290,275 L250,240 L210,275 L223,230 L188,195 L235,195 Z',
-      transform: { x: 0, y: 0, scaleX: 1.05, scaleY: 1.05, rotation: 0 },
-      opacity: 0.8,
-    },
-    {
-      id: 'star-highlight-top',
-      name: 'Top Highlight',
-      role: 'highlight',
-      layer: 2,
-      color: '#FFFF00',
-      pathData: 'M250,150 L265,170 L242,170 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.6,
-    },
-    {
-      id: 'star-shadow-bottom',
-      name: 'Bottom Shadow',
-      role: 'shadow',
-      layer: 2,
-      color: '#8B6914',
-      pathData: 'M250,240 L223,262 L277,262 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.5,
-    },
-    {
-      id: 'star-accent-edge',
-      name: 'Accent Edge',
-      role: 'accent',
-      layer: 3,
-      color: '#FF6B6B',
-      pathData: 'M250,150 L265,195 L312,195 L277,230 L290,275 L250,240 L210,275 L223,230 L188,195 L235,195 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.3,
-    },
-  ],
-  buildOrder: [
-    'star-center-fill',
-    'star-outline',
-    'star-highlight-top',
-    'star-shadow-bottom',
-    'star-accent-edge',
-  ],
-}
+// Export the example designs as presets
+export const SAMPLE_STAR: VinylDesign = simpleStarDesign
+
+export const SAMPLE_CAR: VinylDesign = complexCarDesign
 
 export const SAMPLE_ANIMAL: VinylDesign = {
   id: 'fox-complex',
@@ -72,7 +12,6 @@ export const SAMPLE_ANIMAL: VinylDesign = {
   description: 'Complex fox design with 40+ layered shapes',
   complexity: 'complex',
   shapes: [
-    // Silhouette base shapes
     {
       id: 'fox-body',
       name: 'Body Base',
@@ -123,7 +62,6 @@ export const SAMPLE_ANIMAL: VinylDesign = {
       transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
       opacity: 1,
     },
-    // Eye shapes
     {
       id: 'fox-eye-left',
       name: 'Left Eye',
@@ -145,27 +83,6 @@ export const SAMPLE_ANIMAL: VinylDesign = {
       opacity: 1,
     },
     {
-      id: 'fox-eye-shine-left',
-      name: 'Left Eye Shine',
-      role: 'highlight',
-      layer: 3,
-      color: '#FFFFFF',
-      pathData: 'M272,142 Q270,141 273,144 Q275,145 273,142 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.8,
-    },
-    {
-      id: 'fox-eye-shine-right',
-      name: 'Right Eye Shine',
-      role: 'highlight',
-      layer: 3,
-      color: '#FFFFFF',
-      pathData: 'M327,142 Q325,141 328,144 Q330,145 328,142 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.8,
-    },
-    // Tail
-    {
       id: 'fox-tail-main',
       name: 'Tail Main',
       role: 'accent',
@@ -175,48 +92,6 @@ export const SAMPLE_ANIMAL: VinylDesign = {
       transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
       opacity: 1,
     },
-    {
-      id: 'fox-tail-white-tip',
-      name: 'Tail White Tip',
-      role: 'detail',
-      layer: 1,
-      color: '#FFFFFF',
-      pathData: 'M480,80 Q490,60 485,40 Q475,35 470,50 Q475,65 480,80 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 1,
-    },
-    // Shadow shapes
-    {
-      id: 'fox-shadow-chin',
-      name: 'Chin Shadow',
-      role: 'shadow',
-      layer: 3,
-      color: '#CC5528',
-      pathData: 'M270,190 Q300,195 330,190 L325,200 Q300,205 275,200 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.4,
-    },
-    {
-      id: 'fox-shadow-belly',
-      name: 'Belly Shadow',
-      role: 'shadow',
-      layer: 2,
-      color: '#CC5528',
-      pathData: 'M220,280 Q300,300 380,280 L375,300 Q300,320 225,300 Z',
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.3,
-    },
-    // Additional detail curves (examples for complexity)
-    ...Array.from({ length: 20 }, (_, i) => ({
-      id: `fox-detail-${i}`,
-      name: `Detail Curve ${i + 1}`,
-      role: ('detail' as const),
-      layer: 2,
-      color: i % 2 === 0 ? '#FFE5CC' : '#CC5528',
-      pathData: `M${200 + i * 8},${250 + (i % 3) * 20} Q${210 + i * 8},${260 + (i % 3) * 20} ${220 + i * 8},${250 + (i % 3) * 20}`,
-      transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0 },
-      opacity: 0.5,
-    })),
   ],
   buildOrder: [
     'fox-body',
@@ -227,11 +102,8 @@ export const SAMPLE_ANIMAL: VinylDesign = {
     'fox-snout',
     'fox-eye-left',
     'fox-eye-right',
-    'fox-eye-shine-left',
-    'fox-eye-shine-right',
-    'fox-tail-white-tip',
-    'fox-shadow-chin',
-    'fox-shadow-belly',
-    ...Array.from({ length: 20 }, (_, i) => `fox-detail-${i}`),
   ],
 }
+
+// Export all presets as array
+export const ALL_PRESETS = [SAMPLE_STAR, SAMPLE_CAR, SAMPLE_ANIMAL]

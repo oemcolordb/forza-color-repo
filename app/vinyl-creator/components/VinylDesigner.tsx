@@ -108,11 +108,18 @@ export default function VinylDesigner() {
               <span className="text-slate-400">Shapes:</span> {currentDesign.shapes.length}
             </div>
             <div>
-              <span className="text-slate-400">Layers:</span> {Math.max(...currentDesign.shapes.map(s => s.layer)) + 1}
+              <span className="text-slate-400">Layers:</span>{' '}
+              {currentDesign.shapes.length > 0
+                ? Math.max(...currentDesign.shapes.map(s => s.layer)) + 1
+                : 0}
             </div>
             <div>
               <span className="text-slate-400">Complexity:</span>{' '}
-              {currentDesign.shapes.length > 30 ? '🔴 High' : currentDesign.shapes.length > 10 ? '🟡 Medium' : '🟢 Simple'}
+              {currentDesign.shapes.length > 30
+                ? '🔴 High'
+                : currentDesign.shapes.length > 10
+                  ? '🟡 Medium'
+                  : '🟢 Simple'}
             </div>
           </div>
         </div>

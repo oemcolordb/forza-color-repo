@@ -21,6 +21,38 @@ export default function ContextMenu({
   onClose,
 }: ContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
+  const [adjustedPosition, setAdjustedPosition] = React.useState(position)
+
+  // Adjust position to prevent off-screen rendering
+  React.useLayoutEffect(() => {
+    if (!menuRef.current) return
+
+    // Small delay to allow DOM to render first
+    const timer = requestAnimationFrame(() => {
+      const menuRect = menuRef.current?.getBoundingClientRect()
+      if (!menuRect) return
+
+      const viewportWidth = window.innerWidth
+      const viewportHeight = window.innerHeight
+
+      let x = position.x
+      let y = position.y
+
+      // Adjust for right edge
+      if (x + menuRect.width > viewportWidth) {
+        x = Math.max(10, viewportWidth - menuRect.width - 10)
+      }
+
+      // Adjust for bottom edge
+      if (y + menuRect.height > viewportHeight) {
+        y = Math.max(10, viewportHeight - menuRect.height - 10)
+      }
+
+      setAdjustedPosition({ x, y })
+    })
+
+    return () => cancelAnimationFrame(timer)
+  }, [position])
 
   // Group shapes based on mode
   const groupedShapes = useMemo(() => {
@@ -59,8 +91,8 @@ export default function ContextMenu({
       ref={menuRef}
       className="fixed bg-slate-900 border border-purple-500 rounded-lg shadow-2xl z-50 max-w-sm"
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: `${adjustedPosition.x}px`,
+        top: `${adjustedPosition.y}px`,
       }}
     >
       <div className="max-h-96 overflow-y-auto">
