@@ -93,3 +93,59 @@ export function sanitizeUserId(userId: string): string {
     .replace(/[^a-zA-Z0-9_-]/g, '') // Only allow alphanumeric, underscore, hyphen
     .substring(0, 100);
 }
+
+/**
+ * Sanitize search query
+ * @param query - Search query string
+ * @returns Sanitized query
+ */
+export function sanitizeSearchQuery(query: string): string {
+  return query
+    .replace(/[<>"']/g, '') // Remove potential XSS characters
+    .trim()
+    .substring(0, 200); // Limit length
+}
+
+/**
+ * Validate image file
+ * @param file - File to validate
+ * @throws Error if file is invalid
+ */
+export function validateImageFile(file: File): void {
+  // Check file type
+  if (!file.type.startsWith('image/')) {
+    throw new Error('File must be an image');
+  }
+
+  // Check file size (max 50MB)
+  const maxSize = 50 * 1024 * 1024;
+  if (file.size > maxSize) {
+    throw new Error('Image file is too large (max 50MB)');
+  }
+
+  // Check file extension
+  const validExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'];
+  const fileName = file.name.toLowerCase();
+  const hasValidExtension = validExtensions.some(ext => fileName.endsWith(ext));
+  
+  if (!hasValidExtension) {
+    throw new Error('Invalid image format. Supported: JPG, PNG, GIF, WebP, BMP');
+  }
+}
+
+/**
+ * Handle error and return user-friendly message
+ * @param error - Error object
+ * @returns Error with user-friendly message
+ */
+export function handleError(error: unknown): Error {
+  if (error instanceof Error) {
+    return error;
+  }
+  
+  if (typeof error === 'string') {
+    return new Error(error);
+  }
+  
+  return new Error('An unexpected error occurred');
+}

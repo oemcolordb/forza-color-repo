@@ -10,11 +10,13 @@ import {
 } from '../types'
 import { validateImageFile, handleError } from '../lib/validation'
 import { cache } from '../lib/cache'
-import { ErrorBoundary } from '../lib/errorBoundary'
+import ErrorBoundary from '../components/ErrorBoundary'
 import { processImageWithML, fileToBase64, isPythonApiAvailable } from '../lib/pythonApi'
 import { getColorTree, initializeColorTree } from '../lib/colorTree'
 import { rgbToHsb } from '../lib/colorConversion'
 import { compressImage, needsCompression } from '../lib/imageCompression'
+import { generateBlurPlaceholder } from '../lib/progressiveImageLoading'
+import { trackColorInteraction } from '../lib/analytics'
 
 const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   colors = [],
@@ -35,6 +37,8 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   const [matchedForzaColors, setMatchedForzaColors] = useState<ForzaColorMatch[]>([])
   const [usePythonService, setUsePythonService] = useState(false)
   const [pythonAvailable, setPythonAvailable] = useState(false)
+  const [imageLoadProgress, setImageLoadProgress] = useState(0)
+  const [blurPlaceholder, setBlurPlaceholder] = useState<string | null>(null)
 
   // Cleanup on unmount
   useEffect(() => {
@@ -403,16 +407,27 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         // Validate file
         validateImageFile(file)
 
+        // Generate blur placeholder for better UX
+        try {
+          const blur = await generateBlurPlaceholder(file)
+          setBlurPlaceholder(blur)
+          setImageLoadProgress(20)
+        } catch (err) {
+          console.warn('Failed to generate blur placeholder:', err)
+        }
+
         // Compress image if needed
         let processedFile = file
         if (needsCompression(file, 2)) { // Compress if > 2MB
           console.log('Compressing image...')
+          setImageLoadProgress(40)
           processedFile = await compressImage(file, {
             maxSizeMB: 2,
             maxWidthOrHeight: 1920,
             quality: 0.85
           })
           console.log('Compression complete')
+          setImageLoadProgress(60)
         }
 
         // if python service is enabled, send the entire image rather than
@@ -608,13 +623,26 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         </div>
 
         {isProcessing && (
-          <div className="flex items-center space-x-2 text-[color:var(--bamboo-stalk)]">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[color:var(--bamboo-stalk)]"></div>
-            <span className="text-sm">
-              {extractionMode === 'advanced'
-                ? '🧠 AI clustering colors...'
-                : '⚡ Fast extracting...'}
-            </span>
+          <div className="flex flex-col items-center space-y-2 text-[color:var(--bamboo-stalk)]">
+            <div className="flex items-center space-x-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[color:var(--bamboo-stalk)]"></div>
+              <span className="text-sm">
+                {extractionMode === 'advanced'
+                  ? '🧠 AI clustering colors...'
+                  : '⚡ Fast extracting...'}
+              </span>
+            </div>
+            {imageLoadProgress > 0 && imageLoadProgress < 100 && (
+              <div className="w-full max-w-xs">
+                <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[color:var(--bamboo-stalk)] transition-all duration-300"
+                    style={{ width: `${imageLoadProgress}%` }}
+                  />
+                </div>
+                <div className="text-xs text-center mt-1">{imageLoadProgress}%</div>
+              </div>
+            )}
           </div>
         )}
 
@@ -636,11 +664,30 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
               📍 Tap/Click anywhere on the image to extract colors:
             </div>
             <div className="relative inline-block">
+              {/* Show blur placeholder while loading */}
+              {blurPlaceholder && imageLoadProgress < 100 && (
+                <img
+                  src={blurPlaceholder}
+                  alt="Loading..."
+                  className="absolute inset-0 w-full h-full object-cover blur-md"
+                  style={{ maxWidth: '300px', maxHeight: '300px' }}
+                />
+              )}
               <img
                 src={uploadedImage}
                 alt="Uploaded for color extraction"
-                className="border-2 border-[color:var(--bamboo-stalk)] rounded cursor-pointer max-w-full h-auto hover:border-[color:var(--bamboo-moss)] transition-colors"
-                style={{ maxWidth: '300px', maxHeight: '300px' }}
+                className={`border-2 border-[color:var(--bamboo-stalk)] rounded cursor-pointer max-w-full h-auto hover:border-[color:var(--bamboo-moss)] transition-all ${
+                  imageLoadProgress < 100 ? 'opacity-0' : 'opacity-100'
+                }`}
+                style={{ 
+                  maxWidth: '300px', 
+                  maxHeight: '300px',
+                  transition: 'opacity 300ms ease-in-out'
+                }}
+                onLoad={() => {
+                  setImageLoadProgress(100)
+                  setBlurPlaceholder(null)
+                }}
                 onClick={e => {
                   const img = e.target as HTMLImageElement
                   const rect = img.getBoundingClientRect()

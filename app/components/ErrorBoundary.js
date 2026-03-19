@@ -127,3 +127,4 @@ const DefaultErrorFallback = ({ error, errorInfo, reset }) => {
 }
 
 export default ErrorBoundary
+export { ErrorBoundary }

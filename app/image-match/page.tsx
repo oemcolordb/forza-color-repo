@@ -7,6 +7,10 @@ import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
 import { deduplicatedFetch } from '../lib/requestDeduplication'
 import { useCsrfToken, withCsrfToken } from '../hooks/useCsrfToken'
+import { fetchJsonWithRetry } from '../lib/retryLogic'
+import { useCommonShortcuts } from '../hooks/useKeyboardShortcuts'
+import ExportButton from '../components/ExportButton'
+import { trackEvent } from '../lib/analytics'
 
 interface SavedScan {
   id: string
@@ -47,8 +51,18 @@ function ImageMatchPageInner() {
     if (!user) return
 
     try {
-      // Use deduplicated fetch to prevent duplicate requests
-      const data = await deduplicatedFetch<any[]>(`/api/scans?userId=${user.id}`)
+      // Use deduplicated fetch with retry logic
+      const data = await fetchJsonWithRetry<any[]>(
+        `/api/scans?userId=${user.id}`,
+        {},
+        {
+          maxRetries: 3,
+          baseDelay: 1000,
+          onRetry: (attempt) => {
+            console.log(`Retrying scan load (attempt ${attempt})...`)
+          }
+        }
+      )
       setSavedScans(
         data.map((scan: Record<string, string>) => ({
           ...scan,
@@ -57,7 +71,7 @@ function ImageMatchPageInner() {
         }))
       )
     } catch (error) {
-      console.error('Failed to load scans:', error)
+      console.error('Failed to load scans after retries:', error)
     }
   }
 
@@ -90,6 +104,14 @@ function ImageMatchPageInner() {
       if (result.success) {
         alert('Scan saved successfully!')
         loadSavedScans()
+        
+        // Track save event
+        trackEvent({
+          category: 'Scan',
+          action: 'save_scan',
+          label: currentImageName,
+          value: matches.length
+        })
       } else {
         alert(result.error || 'Failed to save scan')
       }
@@ -132,6 +154,25 @@ function ImageMatchPageInner() {
     setCurrentImageData(dataUrl)
   }
 
+  // Keyboard shortcuts
+  useCommonShortcuts({
+    onSave: () => {
+      if (user && matches.length > 0) {
+        saveScan()
+      }
+    },
+    onClose: () => {
+      if (showHistory) {
+        setShowHistory(false)
+      } else if (selected) {
+        setSelected(null)
+      }
+    },
+    onFind: () => {
+      setShowHistory(true)
+    }
+  })
+
   return (
     <div className="min-h-screen text-white p-6">
       <div className="max-w-6xl mx-auto">
@@ -146,6 +187,14 @@ function ImageMatchPageInner() {
 
           {user && (
             <div className="flex gap-3">
+              {matches.length > 0 && (
+                <ExportButton
+                  colors={matches.map(m => m.forza)}
+                  filename={`forza-matches-${currentImageName.replace(/\.[^/.]+$/, '')}`}
+                  buttonText="📥 Export Matches"
+                  isDarkMode={true}
+                />
+              )}
               <button
                 onClick={() => setShowHistory(!showHistory)}
                 className="px-4 py-2 bamboo-button rounded-lg font-semibold"
