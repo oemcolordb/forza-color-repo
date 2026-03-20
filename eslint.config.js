@@ -1,5 +1,6 @@
 const tsParser = require('@typescript-eslint/parser')
 const tsPlugin = require('@typescript-eslint/eslint-plugin')
+const reactHooksPlugin = require('eslint-plugin-react-hooks')
 
 module.exports = [
   {
@@ -17,6 +18,7 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
+      'react-hooks': reactHooksPlugin,
     },
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -25,6 +27,8 @@ module.exports = [
       eqeqeq: ['error', 'always'],
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
     },
   },
 ]
