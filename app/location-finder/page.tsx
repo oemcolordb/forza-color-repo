@@ -3,18 +3,22 @@
 export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect, useMemo } from 'react'
+import nextDynamic from 'next/dynamic'
 import { Location, LocationType } from './types'
 import LocationCard from './LocationCard'
-import ProfessionalMap from './ProfessionalMap'
 import NFSThemeWrapper from '../components/NFSThemeWrapper'
 import { useMapPersistence } from '../hooks/useMapPersistence'
 
-// Try to load MapGenie data first, fallback to enhanced data
-const loadLocationData = async () => {
+// Leaflet uses `window` — must be client-only, no SSR
+const ProfessionalMap = nextDynamic(() => import('./ProfessionalMap'), { ssr: false })
+
+// Use fetch for mapgenie so webpack never tries to bundle the optional file
+const loadLocationData = async (): Promise<Location[]> => {
   try {
-    // @ts-expect-error — file may not exist at build time, caught at runtime
-    const mapgenieData = await import('@/public/data/fh5-locations-mapgenie.json')
-    return mapgenieData.default.locations as Location[]
+    const res = await fetch('/data/fh5-locations-mapgenie.json')
+    if (!res.ok) throw new Error('not found')
+    const json = await res.json()
+    return json.locations as Location[]
   } catch {
     try {
       const enhancedData = await import('@/public/data/fh5-locations-enhanced.json')
@@ -254,7 +258,6 @@ export default function LocationFinderPage() {
             <ProfessionalMap
               locations={filteredLocations}
               selectedLocation={selectedLocation}
-              // @ts-expect-error [autofix] Type '(location: import("c:/Users/GAMING/Documents/GitHub/forza-color-repo/app/l
               onLocationSelect={handleSelect}
               activeFilters={activeType === 'all' ? [] : [activeType]}
               isDarkMode={true}

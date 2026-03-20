@@ -59,4 +59,6 @@ export interface Location {
   coordinates: { x: number; y: number }
   description?: string
   image?: string
+  reward?: string
+  cost?: string
 }

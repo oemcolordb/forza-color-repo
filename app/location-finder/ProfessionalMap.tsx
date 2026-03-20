@@ -3,17 +3,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-
-interface Location {
-  id: string
-  name: string
-  type: string
-  category: string
-  coordinates: { x: number; y: number }
-  description?: string
-  reward?: string
-  cost?: string
-}
+import { Location } from './types'
 
 interface ProfessionalMapProps {
   locations: Location[]
@@ -48,6 +38,13 @@ const MARKER_COLORS: Record<string, string> = {
   'Trailblazer Finish': '#65a30d',
 }
 
+type OverlayKey = 'road-piece' | 'waldo'
+
+const OVERLAYS: Record<OverlayKey, { label: string; src: string; emoji: string }> = {
+  'road-piece': { label: 'Road Pieces', src: '/maps/road-piece-ref.webp', emoji: '🛣️' },
+  'waldo':      { label: 'Waldo Ref',   src: '/maps/waldo-ref.webp',      emoji: '🔍' },
+}
+
 const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
   locations,
   selectedLocation,
@@ -58,7 +55,10 @@ const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
   const mapRef = useRef<L.Map | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const markersRef = useRef<Map<string, L.Marker>>(new Map())
+  const overlayLayersRef = useRef<Partial<Record<OverlayKey, L.ImageOverlay>>>({})
   const [mapReady, setMapReady] = useState(false)
+  const [activeOverlays, setActiveOverlays] = useState<Set<OverlayKey>>(new Set())
+  const [overlayOpacity, setOverlayOpacity] = useState(0.55)
 
   // Filter locations
   const filteredLocations = useMemo(() => {
@@ -103,12 +103,23 @@ const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
       imperial: false,
     }).addTo(map)
 
+    // Pre-create overlay layers (hidden by default)
+    ;(Object.keys(OVERLAYS) as OverlayKey[]).forEach(key => {
+      const layer = L.imageOverlay(OVERLAYS[key].src, bounds, {
+        opacity: 0,
+        interactive: false,
+        className: 'reference-overlay',
+      }).addTo(map)
+      overlayLayersRef.current[key] = layer
+    })
+
     mapRef.current = map
     setMapReady(true)
 
     return () => {
       map.remove()
       mapRef.current = null
+      overlayLayersRef.current = {}
     }
   }, [])
 
@@ -227,6 +238,24 @@ const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
     })
   }, [mapReady, filteredLocations, selectedLocation, onLocationSelect, isDarkMode])
 
+  // Sync overlay visibility + opacity
+  useEffect(() => {
+    if (!mapReady) return
+    ;(Object.keys(OVERLAYS) as OverlayKey[]).forEach(key => {
+      const layer = overlayLayersRef.current[key]
+      if (!layer) return
+      layer.setOpacity(activeOverlays.has(key) ? overlayOpacity : 0)
+    })
+  }, [mapReady, activeOverlays, overlayOpacity])
+
+  const toggleOverlay = (key: OverlayKey) => {
+    setActiveOverlays(prev => {
+      const next = new Set(prev)
+      next.has(key) ? next.delete(key) : next.add(key)
+      return next
+    })
+  }
+
   // Pan to selected location
   useEffect(() => {
     if (!mapReady || !mapRef.current || !selectedLocation) return
@@ -305,6 +334,45 @@ const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
           </div>
           <div className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
             {filteredLocations.length} of {locations.length} locations
+          </div>
+        </div>
+      )}
+
+      {/* Reference overlay controls */}
+      {mapReady && (
+        <div className={`absolute top-4 right-14 flex flex-col gap-2 z-[1000]`}>
+          <div className={`${isDarkMode ? 'bg-gray-900/95 border-gray-700' : 'bg-white/95 border-gray-200'} backdrop-blur-sm rounded-lg px-3 py-2 shadow-xl border`}>
+            <div className={`text-xs font-semibold mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>📎 Reference Overlays</div>
+            <div className="flex flex-col gap-1.5">
+              {(Object.keys(OVERLAYS) as OverlayKey[]).map(key => (
+                <button
+                  key={key}
+                  onClick={() => toggleOverlay(key)}
+                  className={`flex items-center gap-2 px-2 py-1 rounded text-xs font-medium transition-colors ${
+                    activeOverlays.has(key)
+                      ? 'bg-blue-600 text-white'
+                      : isDarkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <span>{OVERLAYS[key].emoji}</span>
+                  <span>{OVERLAYS[key].label}</span>
+                  {activeOverlays.has(key) && <span className="ml-auto">✓</span>}
+                </button>
+              ))}
+            </div>
+            {activeOverlays.size > 0 && (
+              <div className="mt-2">
+                <div className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Opacity: {Math.round(overlayOpacity * 100)}%
+                </div>
+                <input
+                  type="range" min="10" max="100" step="5"
+                  value={Math.round(overlayOpacity * 100)}
+                  onChange={e => setOverlayOpacity(Number(e.target.value) / 100)}
+                  className="w-full h-1.5 accent-blue-500"
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
