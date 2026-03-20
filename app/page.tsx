@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { CarColor, DeviceInfo, ExtractedColor } from './types'
+import { CarColor, DeviceInfo, ExtractedColor, AppTheme } from './types'
 import { ErrorBoundary } from './lib/errorBoundary'
 import { cache } from './lib/cache'
 import { sanitizeSearchQuery, handleError } from './lib/validation'
@@ -16,6 +16,8 @@ import ImageColorExtractor from './components/ImageColorExtractor'
 import ResponsiveLayout from './components/ResponsiveLayout'
 import TokyoBackground from './components/TokyoBackground'
 import CreditsBackground from './components/CreditsBackground'
+import NFSBackground from './components/NFSBackground'
+import NFSThemeWrapper from './components/NFSThemeWrapper'
 import { useAnalytics } from './hooks/useAnalytics'
 import { usePerformance } from './hooks/usePerformance'
 import { useOfflineStorage } from './hooks/useOfflineStorage'
@@ -49,7 +51,14 @@ export default function HomePage() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [favorites, setFavorites] = useState<string[]>([])
   const [, setColorHistory] = useState<string[]>([])
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [theme, setTheme] = useState<AppTheme>(() => {
+    if (typeof window === 'undefined') return 'dark'
+    const saved = localStorage.getItem('forza-theme') as AppTheme | null
+    if (saved === 'light' || saved === 'dark' || saved === 'nfs') return saved
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
+  const isDarkMode = theme === 'dark' || theme === 'nfs'
+  const isNFS = theme === 'nfs'
   const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
@@ -68,6 +77,18 @@ export default function HomePage() {
   useAnalytics()
   usePerformance()
   useOfflineStorage()
+
+  // Sync dark/nfs class on <html> and persist preference
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.remove('light', 'dark', 'nfs')
+    root.classList.add(theme)
+    localStorage.setItem('forza-theme', theme)
+  }, [theme])
+
+  const cycleTheme = useCallback(() => {
+    setTheme(prev => prev === 'light' ? 'dark' : prev === 'dark' ? 'nfs' : 'light')
+  }, [])
 
   // Create favorites set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
@@ -486,9 +507,9 @@ export default function HomePage() {
   }
 
   return (
+    <NFSThemeWrapper enabled={isNFS}>
     <>
       <GamingErrorBoundary>
-        <GamingSEO isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
         <ForzaColorSheetSEO
           colorCount={allColors.length}
           manufacturerCount={makes.length}
@@ -503,7 +524,8 @@ export default function HomePage() {
       >
         <Header
           isDarkMode={isDarkMode}
-          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+          theme={theme}
+          onToggleTheme={cycleTheme}
         />
 
         {/* Error Display */}
@@ -531,16 +553,28 @@ export default function HomePage() {
           </div>
         )}
 
-        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
-        <CreditsBackground isDarkMode={isDarkMode} />
+        {isNFS
+          ? <NFSBackground isDarkMode={true} />
+          : <>
+              <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+              <CreditsBackground isDarkMode={isDarkMode} />
+            </>
+        }
         <ProgressiveLoader
           progress={loadingProgress}
           isDarkMode={isDarkMode}
           deviceInfo={deviceInfo}
         />
 
-        {/* TuneForge Quick Access */}
-        <div className="fixed bottom-6 right-6 z-40">
+        {/* Quick Access Buttons */}
+        <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+          <a
+            href="/vinyl-creator"
+            className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
+            title="Open Vinyl Creator"
+          >
+            🎨 Vinyl Creator
+          </a>
           <a
             href="/tuneforge"
             className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
@@ -943,12 +977,13 @@ export default function HomePage() {
         />
 
         <KeyboardShortcuts
-          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+          onToggleTheme={cycleTheme}
           onToggleSearch={() => setShowAdvancedSearch(!showAdvancedSearch)}
           onToggleComparison={() => setShowComparison(!showComparison)}
           isDarkMode={isDarkMode}
         />
       </div>
+    </NFSThemeWrapper>
     </>
   )
 }

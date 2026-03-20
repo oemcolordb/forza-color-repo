@@ -10,159 +10,71 @@ interface LocationCardProps {
   onToggleFavorite: () => void
 }
 
-const LocationTypeIcon: React.FC<{ type: LocationType }> = ({ type }) => {
-  let colorClass = 'text-gray-400'
-
-  switch (type) {
-    case LocationType.BarnFind:
-    case LocationType.DangerSign:
-      colorClass = 'text-red-400'
-      break
-    case LocationType.FastTravelBoard:
-    case LocationType.SpeedTrap:
-    case LocationType.RoadRacingEvent:
-      colorClass = 'text-blue-400'
-      break
-    case LocationType.XPBoard:
-    case LocationType.SpeedZone:
-      colorClass = 'text-yellow-400'
-      break
-    case LocationType.Treasure:
-    case LocationType.StreetRacingEvent:
-      colorClass = 'text-purple-400'
-      break
-    case LocationType.Landmark:
-    case LocationType.CrossCountryEvent:
-      colorClass = 'text-green-400'
-      break
-    case LocationType.DirtRacingEvent:
-    case LocationType.DriftZone:
-      colorClass = 'text-orange-400'
-      break
-    case LocationType.FestivalSite:
-    case LocationType.PlayerHouse:
-    case LocationType.Expedition:
-    case LocationType.Showcase:
-      colorClass = 'text-cyan-400'
-      break
-    default:
-      colorClass = 'text-gray-400'
-  }
-
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={`h-5 w-5 ${colorClass}`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-      />
-    </svg>
-  )
+const typeColor: Partial<Record<LocationType, string>> = {
+  [LocationType.BarnFind]: 'bg-red-500',
+  [LocationType.FastTravelBoard]: 'bg-blue-500',
+  [LocationType.XPBoard]: 'bg-yellow-500',
+  [LocationType.Treasure]: 'bg-purple-500',
+  [LocationType.Landmark]: 'bg-green-500',
+  [LocationType.FestivalSite]: 'bg-pink-500',
+  [LocationType.PlayerHouse]: 'bg-cyan-500',
+  [LocationType.RoadRacingEvent]: 'bg-blue-600',
+  [LocationType.DirtRacingEvent]: 'bg-amber-600',
+  [LocationType.CrossCountryEvent]: 'bg-emerald-600',
+  [LocationType.StreetRacingEvent]: 'bg-violet-600',
+  [LocationType.DragRacingEvent]: 'bg-rose-600',
+  [LocationType.DangerSign]: 'bg-red-600',
+  [LocationType.SpeedTrap]: 'bg-sky-600',
+  [LocationType.SpeedZone]: 'bg-teal-600',
+  [LocationType.DriftZone]: 'bg-fuchsia-600',
 }
 
-const LocationCard: React.FC<LocationCardProps> = ({ 
-  location, 
-  isSelected, 
+const LocationCard: React.FC<LocationCardProps> = ({
+  location,
+  isSelected,
   isFavorite,
   isVisited,
   onSelect,
-  onToggleFavorite 
+  onToggleFavorite,
 }) => {
-  const [showCopied, setShowCopied] = React.useState(false)
-  const [heartAnimating, setHeartAnimating] = React.useState(false)
-
-  const handleFavoriteClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setHeartAnimating(true)
-    onToggleFavorite()
-    setTimeout(() => setHeartAnimating(false), 300)
-  }
-
-  const handleCopy = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    navigator.clipboard.writeText(location.name)
-    setShowCopied(true)
-    setTimeout(() => setShowCopied(false), 2000)
-  }
-
-  const cardClasses = `
-    p-4 rounded-lg cursor-pointer transition-all duration-300 ease-in-out border relative
-    ${isVisited ? 'opacity-75' : ''}
-    ${
-      isSelected
-        ? 'bg-blue-600/30 border-blue-500 shadow-lg scale-105'
-        : 'bg-gray-700/50 border-gray-700/50 hover:bg-gray-700 hover:border-gray-600'
-    }
-  `
+  const dot = typeColor[location.type] ?? 'bg-gray-500'
 
   return (
-    <div className={cardClasses} onClick={onSelect}>
-      {showCopied && (
-        <div className="absolute -top-2 right-2 bg-green-500 text-white text-xs px-3 py-1.5 rounded-full animate-bounce z-20 shadow-lg">
-          ✓ Copied!
-        </div>
-      )}
-      <div className="flex items-start gap-3">
-        <button
-          onClick={handleFavoriteClick}
-          className={`mt-1 flex-shrink-0 transition-all duration-200 hover:scale-125 ${heartAnimating ? 'scale-150' : ''}`}
-          title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+    <button
+      onClick={onSelect}
+      className={`w-full text-left px-3 py-2.5 flex items-center gap-2.5 border-b border-gray-800 transition-colors ${
+        isSelected ? 'bg-blue-600/25 border-l-2 border-l-blue-500' : 'hover:bg-gray-800/60'
+      }`}
+    >
+      {/* Type dot */}
+      <span className={`flex-shrink-0 w-2 h-2 rounded-full ${dot}`} />
+
+      {/* Text */}
+      <span className="flex-1 min-w-0">
+        <span className={`block text-sm font-medium truncate ${isVisited ? 'text-gray-400 line-through' : 'text-white'}`}>
+          {location.name}
+        </span>
+        <span className="block text-xs text-gray-500 truncate">{location.type}</span>
+      </span>
+
+      {/* Favorite */}
+      <button
+        onClick={e => { e.stopPropagation(); onToggleFavorite() }}
+        className="flex-shrink-0 p-1 rounded hover:bg-gray-700 transition-colors"
+        aria-label={isFavorite ? 'Remove favorite' : 'Add favorite'}
+      >
+        <svg
+          className={`w-4 h-4 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-600'}`}
+          fill={isFavorite ? 'currentColor' : 'none'}
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={`h-6 w-6 transition-colors ${isFavorite ? 'text-red-500 fill-red-500' : 'text-gray-400 hover:text-red-400'}`}
-            fill={isFavorite ? 'currentColor' : 'none'}
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
-        <div className="mt-1 flex-shrink-0">
-          <LocationTypeIcon type={location.type} />
-        </div>
-        <div className="flex-grow min-w-0">
-          <div className="flex items-center gap-2 flex-wrap">
-            {isVisited && (
-              <span className="text-green-400 text-xs" title="Visited">✓</span>
-            )}
-            <h3 className="font-bold text-white">{location.name}</h3>
-            <span
-              className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isSelected ? 'bg-blue-200 text-blue-800' : 'bg-gray-600 text-gray-200'}`}
-            >
-              {location.type}
-            </span>
-          </div>
-          <p className="text-sm text-gray-300 mt-1">{location.description}</p>
-        </div>
-        <button
-          onClick={handleCopy}
-          className="flex-shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-all hover:scale-105 shadow-md z-10"
-          title="Copy location name"
-        >
-          📋
-        </button>
-      </div>
-    </div>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+          />
+        </svg>
+      </button>
+    </button>
   )
 }
 

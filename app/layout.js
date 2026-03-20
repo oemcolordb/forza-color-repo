@@ -117,6 +117,7 @@ export const viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: '#0f172a',
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({ children }) {
@@ -163,7 +164,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#0f172a" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
         <meta
           name="google-site-verification"
           content="vG2Z9j6nstH8oDSGfxfICIrbefBCUu0cIttuSxMIiOk"
@@ -175,6 +176,22 @@ export default function RootLayout({ children }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('forza-theme');
+                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var isDark = saved !== null ? saved === 'dark' : prefersDark;
+                  document.documentElement.classList.add(isDark ? 'dark' : 'light');
+                } catch(e) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
         />
         <script
           dangerouslySetInnerHTML={{
@@ -200,8 +217,12 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         <ThirdPartyErrorBoundary />
         <ErrorBoundary>{children}</ErrorBoundary>
-        <Analytics />
-        <SpeedInsights />
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </body>
     </html>
   )

@@ -49,9 +49,13 @@ export interface User {
   email: string
 }
 
+// Theme
+export type AppTheme = 'light' | 'dark' | 'nfs'
+
 // Component Props
 export interface HeaderProps {
   isDarkMode: boolean
+  theme: AppTheme
   onToggleTheme: () => void
 }
 

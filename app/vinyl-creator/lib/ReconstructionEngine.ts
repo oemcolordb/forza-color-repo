@@ -79,12 +79,14 @@ export class ReconstructionEngine {
         this.play();
       } else {
         this.pause();
+        this.emit('complete');
       }
       return;
     }
     this.state.currentStep++;
     this.state.completedSteps.add(this.state.currentStep);
     this.state.highlightedShapeId = this.design.buildOrder[this.state.currentStep];
+    this.emit('step-change', { step: this.state.currentStep + 1 });
   }
 
   previousStep(): void {
@@ -92,6 +94,7 @@ export class ReconstructionEngine {
     this.state.completedSteps.delete(this.state.currentStep);
     this.state.currentStep--;
     this.state.highlightedShapeId = this.design.buildOrder[this.state.currentStep];
+    this.emit('step-change', { step: this.state.currentStep + 1 });
   }
 
   goToStep(step: number): void {
@@ -102,6 +105,7 @@ export class ReconstructionEngine {
       this.state.completedSteps.add(i);
     }
     this.state.highlightedShapeId = this.design.buildOrder[step];
+    this.emit('step-change', { step: this.state.currentStep + 1 });
   }
 
   reset(): void {
@@ -117,6 +121,33 @@ export class ReconstructionEngine {
 
   toggleLoop(): void {
     this.state.loopEnabled = !this.state.loopEnabled;
+  }
+
+  enableLoop(): void {
+    this.state.loopEnabled = true;
+  }
+
+  disableLoop(): void {
+    this.state.loopEnabled = false;
+  }
+
+  goToLast(): void {
+    this.goToStep(this.design.buildOrder.length - 1);
+  }
+
+  on(event: string, callback: (_data: any) => void): void {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, new Set());
+    }
+    this.listeners.get(event)!.add(callback);
+  }
+
+  off(event: string, callback: (_data: any) => void): void {
+    this.listeners.get(event)?.delete(callback);
+  }
+
+  private emit(event: string, data?: any): void {
+    this.listeners.get(event)?.forEach(callback => callback(data));
   }
 
   getVisibleShapeIds(): string[] {

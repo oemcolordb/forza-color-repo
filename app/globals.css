@@ -1,5 +1,7 @@
 @import './critical.css';
 @import './animations.css';
+@import './nfs-theme.css';
+@import 'leaflet/dist/leaflet.css';
 
 @tailwind base;
 @tailwind components;
@@ -426,6 +428,23 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+/* Theme toggle button - safe area aware positioning */
+.theme-toggle-btn {
+  top: calc(1rem + env(safe-area-inset-top, 0px));
+  left: calc(1rem + env(safe-area-inset-left, 0px));
+}
+
+/* Safe area padding for fixed bottom elements */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Quick access buttons - safe area aware */
+.fixed.bottom-6.right-6 {
+  bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1.5rem + env(safe-area-inset-right, 0px));
 }
 
 /* Active states for mobile */
