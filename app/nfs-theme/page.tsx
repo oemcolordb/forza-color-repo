@@ -9,7 +9,6 @@ import NFSBackground, {
   NFSButton,
   NFSDriftIndicator 
 } from '../components/NFSBackground'
-import NFSHeader from '../components/NFSHeader'
 import NFSColorCard from '../components/NFSColorCard'
 import { CarColor } from '../types'
 
@@ -81,12 +80,6 @@ export default function NFSThemePage() {
         isDarkMode={isDarkMode}
         showPoliceScanner={showPoliceScanner}
         showNitrous={showNitrous}
-      />
-
-      <NFSHeader 
-        isDarkMode={isDarkMode}
-        onToggleTheme={() => setIsDarkMode(!isDarkMode)}
-        showHeatLevel={true}
       />
 
       <main className="relative z-10 pt-24 pb-12 px-4 sm:px-6 lg:px-8">

@@ -68,6 +68,9 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, theme, onToggleTheme }) => 
           <a href="/blog" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift hover-rainbow">
             📝 Color Blog
           </a>
+          <a href="/tools" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift">
+            🛠️ Tools
+          </a>
           <a
             href="/nfs-theme"
             className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift"

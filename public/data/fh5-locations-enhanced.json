@@ -1,0 +1,359 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "source": "Community-compiled FH5 location data",
+    "attribution": "Forza Horizon 5 © Microsoft Corporation. Location data compiled from community guides.",
+    "totalLocations": 536,
+    "lastUpdated": "2024-03-20",
+    "mapBounds": {
+      "width": 2048,
+      "height": 2048,
+      "coordinateSystem": "percentage"
+    }
+  },
+  "categories": {
+    "collectibles": {
+      "barnFinds": 14,
+      "fastTravelBoards": 50,
+      "xpBoards": 200,
+      "treasureChests": 4
+    },
+    "locations": {
+      "landmarks": 56,
+      "festivalSites": 6,
+      "playerHouses": 7,
+      "expeditions": 5,
+      "showcases": 4,
+      "playgroundGames": 3
+    },
+    "races": {
+      "roadRacing": 25,
+      "dirtRacing": 20,
+      "crossCountry": 20,
+      "streetRacing": 21,
+      "dragRacing": 3
+    },
+    "prStunts": {
+      "dangerSigns": 20,
+      "speedTraps": 31,
+      "speedZones": 22,
+      "driftZones": 20,
+      "trailblazers": 13
+    }
+  },
+  "locations": [
+    {
+      "id": "barn-find-1",
+      "name": "Barn Find #1 - 1991 Jaguar Sport XJR-15",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 52.3, "y": 38.7 },
+      "description": "Located near Guanajuato, hidden in a barn off the main road",
+      "reward": "1991 Jaguar Sport XJR-15"
+    },
+    {
+      "id": "barn-find-2",
+      "name": "Barn Find #2 - 1962 Ferrari 250 GTO",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 65.2, "y": 55.8 },
+      "description": "East of Guanajuato in the jungle region",
+      "reward": "1962 Ferrari 250 GTO"
+    },
+    {
+      "id": "barn-find-3",
+      "name": "Barn Find #3 - 1993 Porsche 968 Turbo S",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 48.1, "y": 36.4 },
+      "description": "West of Guanajuato near the highway",
+      "reward": "1993 Porsche 968 Turbo S"
+    },
+    {
+      "id": "barn-find-4",
+      "name": "Barn Find #4 - 1970 Porsche 914/6",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 25.7, "y": 30.2 },
+      "description": "Northwest desert region near Dunas Blancas",
+      "reward": "1970 Porsche 914/6"
+    },
+    {
+      "id": "barn-find-5",
+      "name": "Barn Find #5 - 1968 Dodge Dart HEMI Super Stock",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 85.3, "y": 60.1 },
+      "description": "Near Tulum ruins in the eastern jungle",
+      "reward": "1968 Dodge Dart HEMI Super Stock"
+    },
+    {
+      "id": "barn-find-6",
+      "name": "Barn Find #6 - 1970 GMC Jimmy",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 30.4, "y": 20.8 },
+      "description": "Far northwest near the Baja outpost",
+      "reward": "1970 GMC Jimmy"
+    },
+    {
+      "id": "barn-find-7",
+      "name": "Barn Find #7 - 1969 Chevrolet Camaro Super Sport Coupe",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 75.6, "y": 25.3 },
+      "description": "Northeast near La Gran Caldera volcano",
+      "reward": "1969 Chevrolet Camaro Super Sport Coupe"
+    },
+    {
+      "id": "barn-find-8",
+      "name": "Barn Find #8 - 1973 BMW 2002 Turbo",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 90.2, "y": 65.7 },
+      "description": "Far east near the coast",
+      "reward": "1973 BMW 2002 Turbo"
+    },
+    {
+      "id": "barn-find-9",
+      "name": "Barn Find #9 - 1969 Dodge Charger Daytona HEMI",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 18.5, "y": 72.4 },
+      "description": "Southwest coastal region near Playa Azul",
+      "reward": "1969 Dodge Charger Daytona HEMI"
+    },
+    {
+      "id": "barn-find-10",
+      "name": "Barn Find #10 - 1970 Mercury Cougar Eliminator",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 70.8, "y": 20.5 },
+      "description": "North central region near the highway",
+      "reward": "1970 Mercury Cougar Eliminator"
+    },
+    {
+      "id": "barn-find-11",
+      "name": "Barn Find #11 - 1967 Volkswagen Karmann Ghia",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 60.3, "y": 45.2 },
+      "description": "Central region east of Guanajuato",
+      "reward": "1967 Volkswagen Karmann Ghia"
+    },
+    {
+      "id": "barn-find-12",
+      "name": "Barn Find #12 - 1962 Peel P50",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 45.7, "y": 50.1 },
+      "description": "South of Guanajuato in the farmlands",
+      "reward": "1962 Peel P50"
+    },
+    {
+      "id": "barn-find-13",
+      "name": "Barn Find #13 - 1968 Renault 4L Export",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 35.2, "y": 28.6 },
+      "description": "West of the main festival site",
+      "reward": "1968 Renault 4L Export"
+    },
+    {
+      "id": "barn-find-14",
+      "name": "Barn Find #14 - 1965 Peel Trident",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 68.4, "y": 62.3 },
+      "description": "Southeast jungle region",
+      "reward": "1965 Peel Trident"
+    },
+    {
+      "id": "festival-main",
+      "name": "Horizon Festival - Main Site",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 40.5, "y": 25.8 },
+      "description": "Main Horizon Festival headquarters with all race types"
+    },
+    {
+      "id": "festival-apex",
+      "name": "Horizon Apex",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 60.2, "y": 45.3 },
+      "description": "Road racing festival outpost"
+    },
+    {
+      "id": "festival-baja",
+      "name": "Horizon Baja",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 25.1, "y": 15.7 },
+      "description": "Cross country festival outpost in the desert"
+    },
+    {
+      "id": "festival-wilds",
+      "name": "Horizon Wilds",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 72.8, "y": 58.4 },
+      "description": "Dirt racing festival outpost in the jungle"
+    },
+    {
+      "id": "festival-rush",
+      "name": "Horizon Rush",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 32.6, "y": 22.9 },
+      "description": "PR stunts festival outpost"
+    },
+    {
+      "id": "festival-street",
+      "name": "Horizon Street Scene",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 51.3, "y": 37.2 },
+      "description": "Street racing festival outpost in Guanajuato"
+    },
+    {
+      "id": "house-hotel-castillo",
+      "name": "Hotel Castillo",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 52.1, "y": 38.5 },
+      "description": "Luxury hotel in Guanajuato - Starting house",
+      "cost": "Free"
+    },
+    {
+      "id": "house-casa-bella",
+      "name": "Casa Bella",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 53.2, "y": 42.1 },
+      "description": "Beautiful hillside house with city views",
+      "cost": "500,000 CR"
+    },
+    {
+      "id": "house-buenas-vistas",
+      "name": "Buenas Vistas",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 48.7, "y": 35.3 },
+      "description": "Modern house with panoramic views",
+      "cost": "700,000 CR"
+    },
+    {
+      "id": "house-la-cabana",
+      "name": "La Cabaña",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 28.4, "y": 68.2 },
+      "description": "Beachfront property near Playa Azul",
+      "cost": "1,500,000 CR"
+    },
+    {
+      "id": "house-casa-solar",
+      "name": "Casa Solar",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 76.3, "y": 54.7 },
+      "description": "Jungle retreat with solar panels",
+      "cost": "2,000,000 CR"
+    },
+    {
+      "id": "house-la-grande",
+      "name": "La Grande",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 44.8, "y": 29.6 },
+      "description": "Massive estate with multiple garages",
+      "cost": "5,000,000 CR"
+    },
+    {
+      "id": "house-hotel-mirador",
+      "name": "Hotel Mirador Balderrama",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 50.9, "y": 36.8 },
+      "description": "Historic hotel in downtown Guanajuato",
+      "cost": "2,000,000 CR"
+    },
+    {
+      "id": "landmark-guanajuato",
+      "name": "Guanajuato",
+      "type": "Landmark",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 50.5, "y": 37.2 },
+      "description": "Historic colonial city - main urban area"
+    },
+    {
+      "id": "landmark-playa-azul",
+      "name": "Playa Azul",
+      "type": "Landmark",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 20.3, "y": 70.5 },
+      "description": "Beautiful coastal beach on the west coast"
+    },
+    {
+      "id": "landmark-caldera",
+      "name": "La Gran Caldera",
+      "type": "Landmark",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 75.2, "y": 25.8 },
+      "description": "Massive volcanic crater in the northeast"
+    },
+    {
+      "id": "landmark-tulum",
+      "name": "Tulum",
+      "type": "Landmark",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 85.7, "y": 60.3 },
+      "description": "Ancient Mayan ruins on the eastern coast"
+    },
+    {
+      "id": "landmark-dunas-blancas",
+      "name": "Dunas Blancas",
+      "type": "Landmark",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 30.1, "y": 20.4 },
+      "description": "White sand dunes in the northwest desert"
+    },
+    {
+      "id": "treasure-beach",
+      "name": "Treasure Chest - Playa Azul",
+      "type": "Treasure",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 17.2, "y": 78.6 },
+      "description": "Hidden treasure on the beach",
+      "reward": "Super Wheelspin"
+    },
+    {
+      "id": "treasure-ruins",
+      "name": "Treasure Chest - Tulum Ruins",
+      "type": "Treasure",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 86.1, "y": 61.2 },
+      "description": "Hidden treasure near ancient ruins",
+      "reward": "Super Wheelspin"
+    },
+    {
+      "id": "treasure-volcano",
+      "name": "Treasure Chest - Caldera",
+      "type": "Treasure",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 74.8, "y": 26.3 },
+      "description": "Hidden treasure in the volcanic crater",
+      "reward": "Super Wheelspin"
+    },
+    {
+      "id": "treasure-jungle",
+      "name": "Treasure Chest - Jungle Temple",
+      "type": "Treasure",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 78.4, "y": 52.7 },
+      "description": "Hidden treasure in jungle temple ruins",
+      "reward": "Super Wheelspin"
+    }
+  ]
+}

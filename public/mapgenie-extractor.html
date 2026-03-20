@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MapGenie FH5 Extractor - Bookmarklet</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    .subtitle {
+      font-size: 1.2em;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+    .bookmarklet {
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      text-align: center;
+    }
+    .bookmarklet a {
+      display: inline-block;
+      background: linear-gradient(135deg, #00d9ff 0%, #ff006e 100%);
+      color: white;
+      text-decoration: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.2em;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .bookmarklet a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+    .instructions {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .instructions ol {
+      padding-left: 20px;
+    }
+    .instructions li {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+    .code {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    .warning {
+      background: rgba(255, 193, 7, 0.2);
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    .success {
+      background: rgba(76, 175, 80, 0.2);
+      border-left: 4px solid #4caf50;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗺️ MapGenie FH5 Extractor</h1>
+    <p class="subtitle">One-click location data extraction for Forza Horizon 5</p>
+
+    <div class="bookmarklet">
+      <p style="margin-bottom: 15px;">Drag this button to your bookmarks bar:</p>
+      <a href="javascript:(function(){const s=document.createElement('script');s.src='https://raw.githubusercontent.com/YOUR_USERNAME/forza-color-repo/main/scripts/extract-mapgenie.js';document.body.appendChild(s);})()">
+        📍 Extract FH5 Locations
+      </a>
+      <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">
+        Or copy the code below and paste into browser console
+      </p>
+    </div>
+
+    <div class="instructions">
+      <h2>📋 How to Use</h2>
+      <ol>
+        <li>
+          <strong>Open MapGenie:</strong><br>
+          Go to <a href="https://mapgenie.io/forza-horizon-5/maps/mexico" target="_blank" style="color: #00d9ff;">mapgenie.io/forza-horizon-5/maps/mexico</a>
+        </li>
+        <li>
+          <strong>Enable All Filters:</strong><br>
+          Click the filter icon and check ALL location types
+        </li>
+        <li>
+          <strong>Wait for Markers:</strong><br>
+          Let all 536 markers load on the map
+        </li>
+        <li>
+          <strong>Run Extractor:</strong><br>
+          Click the bookmarklet OR paste the code below into console (F12)
+        </li>
+        <li>
+          <strong>Save Data:</strong><br>
+          Data will be copied to clipboard automatically
+        </li>
+        <li>
+          <strong>Paste into File:</strong><br>
+          Create <code>/public/data/fh5-locations-mapgenie.json</code> and paste
+        </li>
+      </ol>
+    </div>
+
+    <div class="warning">
+      <strong>⚠️ Important:</strong> Make sure ALL location filters are enabled in MapGenie before running the extractor, or you'll only get partial data!
+    </div>
+
+    <div class="code">
+      <strong>Console Script (Copy & Paste):</strong><br><br>
+      <textarea id="consoleScript" readonly style="width: 100%; height: 150px; background: transparent; border: none; color: white; font-family: 'Courier New', monospace; resize: none;">
+// Paste this into browser console (F12)
+(async function() {
+  const response = await fetch('https://raw.githubusercontent.com/YOUR_USERNAME/forza-color-repo/main/scripts/extract-mapgenie.js');
+  const script = await response.text();
+  eval(script);
+})();
+      </textarea>
+      <button onclick="copyScript()" style="background: #00d9ff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px;">
+        📋 Copy Script
+      </button>
+    </div>
+
+    <div class="success">
+      <strong>✅ Expected Output:</strong><br>
+      • Total locations: 536<br>
+      • XP Boards: 200<br>
+      • Fast Travel Boards: 50<br>
+      • Landmarks: 56<br>
+      • And more...<br><br>
+      Data will be automatically copied to your clipboard!
+    </div>
+
+    <div class="instructions">
+      <h2>🔧 Troubleshooting</h2>
+      <ul style="list-style: none; padding: 0;">
+        <li>❌ <strong>Script not working?</strong> Make sure you're on the MapGenie page</li>
+        <li>❌ <strong>Missing locations?</strong> Enable ALL filters before running</li>
+        <li>❌ <strong>Wrong coordinates?</strong> Ensure map is at 100% zoom</li>
+        <li>❌ <strong>Console errors?</strong> Try refreshing the page and running again</li>
+      </ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+      <p>Made with ❤️ for the Forza community</p>
+      <p style="font-size: 0.9em;">
+        <a href="https://github.com/YOUR_USERNAME/forza-color-repo" style="color: #00d9ff;">View on GitHub</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function copyScript() {
+      const textarea = document.getElementById('consoleScript');
+      textarea.select();
+      document.execCommand('copy');
+      alert('✅ Script copied to clipboard!');
+    }
+  </script>
+</body>
+</html>

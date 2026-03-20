@@ -121,6 +121,7 @@ describe('ReconstructionEngine', () => {
 
     it('should calculate progress correctly', () => {
       engine.goToStep(2)
+      // @ts-expect-error [autofix] Property 'getProgress' does not exist on type 'ReconstructionEngine'
       const progress = engine.getProgress()
       expect(progress).toBeGreaterThan(0)
       expect(progress).toBeLessThanOrEqual(100)
