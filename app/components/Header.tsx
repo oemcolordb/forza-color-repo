@@ -53,28 +53,28 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, theme, onToggleTheme }) => 
         </h1>
 
         <div className="mt-6 flex flex-wrap justify-center gap-4">
-          <a href="/vinyl-creator" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift">
+          <a href="/vinyl-creator" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift bg-black/30 backdrop-blur-sm">
             🎨 Vinyl Creator
           </a>
-          <a href="/tuneforge" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift">
+          <a href="/tuneforge" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift bg-black/30 backdrop-blur-sm">
             🔧 TuneForge Lab
           </a>
-          <a href="/location-finder" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift">
+          <a href="/location-finder" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift bg-black/30 backdrop-blur-sm">
             📍 Location Finder
           </a>
-          <a href="/how-to-use" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift">
+          <a href="/how-to-use" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift bg-black/30 backdrop-blur-sm">
             📖 How to Use
           </a>
-          <a href="/blog" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift hover-rainbow">
+          <a href="/blog" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift hover-rainbow bg-black/30 backdrop-blur-sm">
             📝 Color Blog
           </a>
-          <a href="/tools" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift">
+          <a href="/tools" className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift bg-black/30 backdrop-blur-sm">
             🛠️ Tools
           </a>
           <a
             href="/nfs-theme"
             className="inline-flex items-center gap-2 px-6 py-3 bamboo-button hover-lift"
-            style={{ background: 'linear-gradient(135deg, #00d9ff22, #b300ff22)', border: '1px solid #00d9ff55' }}
+            style={{ background: 'linear-gradient(135deg, #00d9ff4d, #b300ff4d)', border: '1px solid #00d9ff55' }}
           >
             🏁 NFS Theme
           </a>

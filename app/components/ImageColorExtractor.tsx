@@ -568,45 +568,6 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             Extract Colors from Image
           </label>
 
-          <div className="grid grid-cols-2 gap-2 mb-3">
-            <select
-              value={extractionMode}
-              onChange={e => setExtractionMode(e.target.value as 'advanced' | 'basic')}
-              aria-label="Extraction mode"
-              className="text-xs p-2 bamboo-input"
-            >
-              <option value="advanced">🧠 AI Clustering</option>
-              <option value="basic">⚡ Fast Extract</option>
-            </select>
-
-            <label className="flex items-center text-xs">
-              <input
-                type="checkbox"
-                checked={excludeGrays}
-                onChange={e => setExcludeGrays(e.target.checked)}
-                className="mr-1"
-              />
-              Skip Grays
-            </label>
-          </div>
-          <div className="flex items-center text-xs mb-3">
-            <input
-              type="checkbox"
-              checked={usePythonService}
-              onChange={e => setUsePythonService(e.target.checked)}
-              className="mr-1"
-              id="python-ml-checkbox"
-            />
-            <label htmlFor="python-ml-checkbox" className="cursor-pointer">
-              Use Python ML service
-              {!pythonAvailable && (
-                <span className="ml-1 text-yellow-400" title="Python backend is offline - will use fallback processing">
-                  (offline - fallback enabled)
-                </span>
-              )}
-            </label>
-          </div>
-
           <input
             ref={fileInputRef}
             type="file"
@@ -756,10 +717,6 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
                   }`}
                 >
                   <div className="flex gap-1">
-                    <div
-                      className="w-6 h-6 rounded border"
-                      style={{ backgroundColor: `rgb(${match.extracted.rgb.join(',')})` }}
-                    />
                     <div
                       className="w-6 h-6 rounded border"
                       style={{
