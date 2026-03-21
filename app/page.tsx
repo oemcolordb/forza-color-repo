@@ -32,6 +32,7 @@ import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import ColorComparison from './components/ColorComparison'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ZoomResponsiveContainer from './components/ZoomResponsiveContainer'
+import NFSColorCard from './components/NFSColorCard'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])

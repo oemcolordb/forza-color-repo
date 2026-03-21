@@ -9,5 +9,9 @@
       "timeout": 30000
     }
   },
-  "npm.enableRunFromFolder": true
+  "npm.enableRunFromFolder": true,
+  "codium.codeCompletion.enable": true,
+  "claudeBuddy.managedProjects": [
+    "c:\\Users\\GAMING\\Documents\\GitHub\\forza-color-repo"
+  ]
 }

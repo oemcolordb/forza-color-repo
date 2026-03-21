@@ -1,3 +1,4 @@
+import 'server-only'
 import { CarColor } from '../types'
 
 export const bmw2020Colors: CarColor[] = [

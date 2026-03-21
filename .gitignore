@@ -44,3 +44,6 @@ Thumbs.db
 
 # autofix
 autofix.log
+.claude/CLAUDE.local.md
+.claude/settings.local.json
+.claude/agent-memory/

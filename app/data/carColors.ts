@@ -1,3 +1,4 @@
+import 'server-only'
 import { CarColor } from '../types'
 import { allBmwColors } from './bmw_colors'
 import rawCarColors from '../../carColors.json'

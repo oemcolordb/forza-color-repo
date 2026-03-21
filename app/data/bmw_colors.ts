@@ -1,3 +1,4 @@
+import 'server-only'
 import { CarColor } from '../types'
 import { bmw2020Colors } from './bmw_2020_colors'
 import { bmw2021Colors } from './bmw_2021_colors'
