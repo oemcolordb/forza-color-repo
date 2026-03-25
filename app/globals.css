@@ -17,6 +17,27 @@
   --bamboo-shadow: rgba(11, 26, 16, 0.22);
 }
 
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 12px;
+  z-index: 1000;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--bamboo-stalk);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  top: 12px;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
 .dark {
   --bamboo-ink: #e7f3ea;
   --bamboo-paper: rgba(12, 22, 15, 0.88);
@@ -25,7 +46,7 @@
   --bamboo-stalk-2: #6fc342;
   --bamboo-moss: #47a35a;
   --bamboo-bark: rgba(205, 187, 151, 0.28);
-  --bamboo-border: rgba(143, 211, 91, 0.35);
+  --bamboo-border: rgba(143, 211, 91, 0.55);
   --bamboo-shadow: rgba(0, 0, 0, 0.35);
 }
 
@@ -60,6 +81,12 @@
     filter: brightness(1.03);
   }
 
+  .bamboo-button:focus-visible {
+    outline: 2px solid var(--bamboo-stalk);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(122, 162, 75, 0.28);
+  }
+
   .bamboo-button:active {
     transform: translateY(0);
   }
@@ -71,6 +98,12 @@
     border: 1px solid rgba(205, 187, 151, 0.35);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+  }
+
+  .bamboo-button-ghost:focus-visible {
+    outline: 2px solid var(--bamboo-stalk);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(122, 162, 75, 0.22);
   }
 
   .bamboo-input {
@@ -88,6 +121,11 @@
 
   .bamboo-input:focus {
     box-shadow: 0 0 0 3px rgba(122, 162, 75, 0.22);
+    border-color: rgba(122, 162, 75, 0.72);
+  }
+
+  .dark .bamboo-input:focus {
+    border-color: rgba(143, 211, 91, 0.72);
   }
 
   .color-card-gradient {

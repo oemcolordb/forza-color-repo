@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import DialogShell from './ui/DialogShell'
+import Button from './ui/Button'
 
 interface KeyboardShortcutsProps {
   onToggleTheme: () => void
@@ -16,6 +18,8 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   isDarkMode,
 }) => {
   const [showHelp, setShowHelp] = useState(false)
+  const closeButtonRef = React.useRef<HTMLButtonElement | null>(null)
+  const triggerButtonRef = React.useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -52,12 +56,22 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [onToggleTheme, onToggleSearch, onToggleComparison, showHelp])
 
+  useEffect(() => {
+    if (!showHelp) return
+    return () => {
+      triggerButtonRef.current?.focus()
+    }
+  }, [showHelp])
+
   if (!showHelp) {
     return (
       <div className="fixed bottom-4 left-4 z-50">
-        <button
+        <Button
+          ref={triggerButtonRef}
           onClick={() => setShowHelp(true)}
-          className={`px-3 py-2 rounded-full text-sm ${
+          variant="ghost"
+          size="md"
+          className={`rounded-full ${
             isDarkMode
               ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -65,27 +79,29 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
           title="Keyboard shortcuts (Ctrl+/)"
         >
           ⌨️
-        </button>
+        </Button>
       </div>
     )
   }
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      onClick={() => setShowHelp(false)}
+    <DialogShell
+      isOpen={showHelp}
+      onClose={() => setShowHelp(false)}
+      titleId="keyboard-shortcuts-title"
+      initialFocusRef={closeButtonRef}
+      panelClassName={`p-6 rounded-lg max-w-md w-full mx-4 ${
+        isDarkMode ? 'bg-slate-800 text-white' : 'bg-white text-gray-900'
+      }`}
     >
-      <div
-        className={`p-6 rounded-lg max-w-md w-full mx-4 ${
-          isDarkMode ? 'bg-slate-800 text-white' : 'bg-white text-gray-900'
-        }`}
-        onClick={e => e.stopPropagation()}
-      >
+      <div>
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">⌨️ Keyboard Shortcuts</h3>
-          <button onClick={() => setShowHelp(false)} className="text-xl">
+          <h3 id="keyboard-shortcuts-title" className="text-lg font-semibold">
+            ⌨️ Keyboard Shortcuts
+          </h3>
+          <Button ref={closeButtonRef} onClick={() => setShowHelp(false)} variant="ghost" size="sm" className="text-xl min-w-[32px] min-h-[32px]">
             ×
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-2 text-sm">
@@ -111,7 +127,7 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </DialogShell>
   )
 }
 

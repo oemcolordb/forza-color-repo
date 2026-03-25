@@ -3,6 +3,8 @@
 import React, { Dispatch, SetStateAction, useMemo, useState } from 'react'
 import { CarColor } from '../types'
 import ColorCard from './ColorCard'
+import DialogShell from './ui/DialogShell'
+import Button from './ui/Button'
 
 interface ColorComparisonProps {
   colors: CarColor[]
@@ -22,6 +24,7 @@ const ColorComparison: React.FC<ColorComparisonProps> = ({
   setSelectedColors,
 }) => {
   const [searchQuery, setSearchQuery] = useState('')
+  const closeButtonRef = React.useRef<HTMLButtonElement | null>(null)
 
   const filteredColors = useMemo(() => {
     const q = searchQuery.trim().toLowerCase()
@@ -51,38 +54,46 @@ const ColorComparison: React.FC<ColorComparisonProps> = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={onClose}>
-      <div
-        className={`w-full max-w-6xl mx-4 rounded-xl shadow-2xl border ${
-          isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-gray-200 text-gray-900'
-        }`}
-        onClick={e => e.stopPropagation()}
-      >
+    <DialogShell
+      isOpen={isOpen}
+      onClose={onClose}
+      titleId="color-comparison-title"
+      initialFocusRef={closeButtonRef}
+      panelClassName={`w-full max-w-6xl mx-4 rounded-xl shadow-2xl border ${
+        isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-gray-200 text-gray-900'
+      }`}
+    >
+      <div>
         <div className="p-4 sm:p-5 border-b border-white/10 flex items-center gap-3">
-          <div className="text-lg font-semibold">🔍 Color Comparison</div>
+          <div id="color-comparison-title" className="text-lg font-semibold">
+            🔍 Color Comparison
+          </div>
           <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
             Select up to 4 swatches
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <button
+            <Button
               type="button"
               onClick={() => setSelectedColors([])}
-              className={`px-3 py-2 rounded-lg text-sm ${
-                isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-200' : 'bg-gray-100 hover:bg-gray-200'
-              }`}
+              variant="ghost"
+              size="md"
+              className={isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-200' : 'bg-gray-100 hover:bg-gray-200'}
             >
               Clear
-            </button>
-            <button
+            </Button>
+            <Button
+              ref={closeButtonRef}
               type="button"
               onClick={onClose}
-              className={`px-3 py-2 rounded-lg text-sm ${
+              variant="ghost"
+              size="md"
+              className={`text-sm ${
                 isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-200' : 'bg-gray-100 hover:bg-gray-200'
               }`}
               aria-label="Close comparison"
             >
               ×
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -110,8 +121,8 @@ const ColorComparison: React.FC<ColorComparisonProps> = ({
                     onClick={() => addColor(color)}
                     className={`text-left rounded-lg border px-3 py-2 transition-colors ${
                       isDarkMode
-                        ? 'bg-slate-800/70 border-slate-700 hover:border-blue-500'
-                        : 'bg-white border-gray-200 hover:border-blue-500'
+                        ? 'bg-slate-800/70 border-slate-700 hover:border-[color:var(--bamboo-stalk)]'
+                        : 'bg-white border-gray-200 hover:border-[color:var(--bamboo-stalk-2)]'
                     }`}
                     title={`${color.colorName} - ${color.make}`}
                   >
@@ -132,7 +143,11 @@ const ColorComparison: React.FC<ColorComparisonProps> = ({
                 <div
                   key={index}
                   className={`rounded-xl border-2 border-dashed p-2 ${
-                    color ? 'border-blue-500' : isDarkMode ? 'border-slate-700' : 'border-gray-300'
+                    color
+                      ? 'border-[color:var(--bamboo-stalk)]'
+                      : isDarkMode
+                        ? 'border-slate-700'
+                        : 'border-gray-300'
                   }`}
                 >
                   {color ? (
@@ -170,7 +185,7 @@ const ColorComparison: React.FC<ColorComparisonProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </DialogShell>
   )
 }
 

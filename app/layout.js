@@ -198,6 +198,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <ThirdPartyErrorBoundary />
         <ErrorBoundary>{children}</ErrorBoundary>
         <Analytics />

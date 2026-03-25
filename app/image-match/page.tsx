@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import ImageColorExtractor from '../components/ImageColorExtractor'
+import Breadcrumbs from '../components/Breadcrumbs'
 import colorData from '../../services/colorData'
 import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
@@ -120,6 +121,8 @@ function ImageMatchPageInner() {
   return (
     <div className="min-h-screen text-white p-6">
       <div className="max-w-6xl mx-auto">
+        <Breadcrumbs isDarkMode={true} />
+
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>

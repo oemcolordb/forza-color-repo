@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Button from './ui/Button'
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -34,24 +35,18 @@ class ErrorBoundary extends React.Component {
 const DefaultErrorFallback = ({ error, reset }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white p-4">
-      <div className="text-center max-w-md">
-        <h1 className="text-2xl font-bold mb-4 text-red-400">Something went wrong</h1>
-        <p className="text-slate-300 mb-6">
+      <div className="text-center max-w-md rounded-xl p-6 bamboo-surface-dark border border-red-700/50">
+        <h1 className="text-2xl font-bold mb-4 text-red-300">Something went wrong</h1>
+        <p className="text-slate-200 mb-6">
           {error?.message || 'An unexpected error occurred while loading the color data.'}
         </p>
         <div className="space-y-3">
-          <button
-            onClick={reset}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
+          <Button onClick={reset} variant="primary" size="md" className="w-full">
             Try Again
-          </button>
-          <button
-            onClick={() => window.location.reload()}
-            className="w-full px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition-colors"
-          >
+          </Button>
+          <Button onClick={() => window.location.reload()} variant="ghost" size="md" className="w-full">
             Reload Page
-          </button>
+          </Button>
         </div>
         {process.env.NODE_ENV === 'development' && error && (
           <details className="mt-6 text-left">

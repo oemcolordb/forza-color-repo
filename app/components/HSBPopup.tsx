@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { CarColor } from '../types'
+import DialogShell from './ui/DialogShell'
+import Button from './ui/Button'
 
 interface HSBPopupProps {
   color: CarColor | null
@@ -11,6 +13,8 @@ interface HSBPopupProps {
 }
 
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
+  const closeButtonRef = React.useRef<HTMLButtonElement | null>(null)
+
   if (!isOpen || !color) return null
 
   const formatHSB = (hsb: { h: number; s: number; b: number }) => ({
@@ -23,39 +27,35 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
   const hsb2 = formatHSB(color.color2)
 
   return (
-    <div
-      className="fixed bg-black bg-opacity-50 flex justify-center items-center"
-      onClick={onClose}
-      style={{
-        touchAction: 'none',
-        zIndex: 999999,
-        top: '0px',
-        left: '0px',
-        width: '100vw',
-        height: '100vh',
-      }}
+    <DialogShell
+      isOpen={isOpen}
+      onClose={onClose}
+      titleId="hsb-popup-title"
+      initialFocusRef={closeButtonRef}
+      overlayClassName="fixed inset-0 z-[999999] flex items-center justify-center bg-black/50"
+      panelClassName={`p-4 rounded-lg max-w-sm w-full mx-4 shadow-2xl border-2 ${
+        isDarkMode ? 'bamboo-surface-dark text-white' : 'bamboo-surface text-gray-900'
+      }`}
     >
-      <div
-        className={`p-4 rounded-lg max-w-sm w-full mx-4 shadow-2xl border-2 ${
-          isDarkMode ? 'bamboo-surface-dark text-white' : 'bamboo-surface text-gray-900'
-        }`}
-        onClick={e => e.stopPropagation()}
-        onTouchStart={e => e.stopPropagation()}
-        style={{ zIndex: 1000000 }}
-      >
+      <div onTouchStart={e => e.stopPropagation()} style={{ zIndex: 1000000 }}>
         <div className="flex justify-between items-center mb-3">
-          <h3 className="font-semibold">HSB Color Data</h3>
-          <button
+          <h3 id="hsb-popup-title" className="font-semibold">
+            HSB Color Data
+          </h3>
+          <Button
+            ref={closeButtonRef}
             onClick={onClose}
             onTouchStart={e => {
               e.stopPropagation()
               onClose()
             }}
-            className="text-xl min-w-[44px] min-h-[44px] flex items-center justify-center bamboo-button-ghost"
+            variant="ghost"
+            size="md"
+            className="text-xl min-w-[44px] min-h-[44px]"
             style={{ touchAction: 'manipulation' }}
           >
             ×
-          </button>
+          </Button>
         </div>
 
         <div className="space-y-3">
@@ -93,7 +93,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
           </div>
         </div>
       </div>
-    </div>
+    </DialogShell>
   )
 }
 

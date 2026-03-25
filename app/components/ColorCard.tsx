@@ -269,7 +269,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
           )}
 
           <div
-            className={`absolute left-2 right-2 top-2 z-10 rounded-md border backdrop-blur-sm transition-opacity duration-150 opacity-0 pointer-events-none group-hover:opacity-100 group-focus-within:opacity-100 group-hover:pointer-events-auto group-focus-within:pointer-events-auto ${
+            className={`absolute left-2 right-2 top-2 z-10 rounded-md border backdrop-blur-sm transition-opacity duration-150 opacity-100 pointer-events-auto sm:opacity-0 sm:pointer-events-none sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 sm:group-hover:pointer-events-auto sm:group-focus-within:pointer-events-auto ${
               isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
             }`}
             onClick={e => {
@@ -455,6 +455,17 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
             )}
           </div>
           <div className="flex justify-center items-center gap-3 mt-3 relative z-10">
+            <button
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                copyToClipboard('hex-quick', primaryHex.toUpperCase())
+              }}
+              className="transition-colors px-2 py-1 rounded-md text-xs min-h-[32px] flex items-center justify-center bamboo-button-ghost"
+              aria-label={`Copy HEX for ${color.colorName}`}
+            >
+              {copiedKey === 'hex-quick' ? 'Copied HEX' : 'Copy HEX'}
+            </button>
             {onToggleFavorite && (
               <button
                 onClick={e => {

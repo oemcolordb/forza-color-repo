@@ -6,6 +6,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Location, LocationType } from './types'
 import LocationCard from './LocationCard'
 import MapDisplay from './MapDisplay'
+import Breadcrumbs from '../components/Breadcrumbs'
 import locationData from '@/public/data/fh5-locations.json'
 import { useMapPersistence } from '../hooks/useMapPersistence'
 
@@ -129,6 +130,10 @@ export default function LocationFinderPage() {
           </div>
         </div>
       </header>
+
+      <div className="max-w-screen-2xl mx-auto w-full">
+        <Breadcrumbs isDarkMode={true} />
+      </div>
 
       <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 max-w-screen-2xl mx-auto w-full">
         <aside

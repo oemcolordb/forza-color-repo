@@ -27,22 +27,29 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ isDarkMode }) => {
   if (breadcrumbs.length <= 1) return null
 
   return (
-    <nav className={`px-4 py-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-      <ol className="flex items-center space-x-2">
+    <nav
+      className={`px-4 py-2 text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}
+      aria-label="Breadcrumb"
+    >
+      <ol className="flex flex-wrap items-center gap-1">
         {breadcrumbs.map((crumb, index) => (
           <li key={crumb.href} className="flex items-center">
-            {index > 0 && <span className="mx-2 text-gray-400">/</span>}
+            {index > 0 && (
+              <span className={`mx-2 ${isDarkMode ? 'text-[color:var(--bamboo-bark)]' : 'text-gray-400'}`}>
+                /
+              </span>
+            )}
             {index === breadcrumbs.length - 1 ? (
-              <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              <span className={`font-semibold ${isDarkMode ? 'text-[color:var(--bamboo-paper)]' : 'text-gray-900'}`}>
                 {crumb.name}
               </span>
             ) : (
               <Link
                 href={crumb.href}
-                className={`hover:underline ${
+                className={`rounded px-1 py-0.5 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--bamboo-stalk)] ${
                   isDarkMode
-                    ? 'text-blue-400 hover:text-blue-300'
-                    : 'text-blue-600 hover:text-blue-800'
+                    ? 'text-[color:var(--bamboo-stalk)] hover:text-[color:var(--bamboo-stalk-2)]'
+                    : 'text-[color:var(--bamboo-moss)] hover:text-[color:var(--bamboo-stalk-2)]'
                 }`}
               >
                 {crumb.name}

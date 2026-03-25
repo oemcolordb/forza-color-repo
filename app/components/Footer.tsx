@@ -8,13 +8,13 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
   return (
     <footer
       className={`py-8 mt-16 border-t ${
-        isDarkMode ? 'border-slate-700 bg-slate-900/50' : 'border-gray-200 bg-gray-50'
+        isDarkMode ? 'bamboo-surface-dark border-[color:var(--bamboo-border)]' : 'bamboo-surface border-[color:var(--bamboo-border)]'
       }`}
     >
       <div className="container mx-auto px-4 text-center">
         <div className={`mb-6 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
           <h3 className="text-lg font-bold mb-2">
-            <span className="bg-gradient-to-r from-fuchsia-500 to-cyan-400 text-transparent bg-clip-text">
+            <span className="text-[color:var(--bamboo-stalk)]">
               Forza Color Universe
             </span>
           </h3>
@@ -75,7 +75,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
           </nav>
         </div>
 
-        <div className={`border-t pt-4 ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}>
+        <div className={`border-t pt-4 ${isDarkMode ? 'border-[color:var(--bamboo-border)]' : 'border-[color:var(--bamboo-border)]'}`}>
           <p className={`text-sm font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
             Credits: To the GTPlanet community, with special thanks to Terronium-12 (original
             creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and

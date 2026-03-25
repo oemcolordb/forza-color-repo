@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
+import Breadcrumbs from '../components/Breadcrumbs'
 import { getCountryFlag, formatPrice } from '../lib/countryFlags'
 
 import { TuningCalculator, TRACKS } from '../lib/tuning-calculator'
@@ -658,7 +659,7 @@ export default function TuneForge() {
     >
       <div className="absolute inset-0 bg-black/60"></div>
       <header
-        className={`relative z-10 flex justify-between items-center p-4 backdrop-blur-sm border-b ${
+        className={`relative z-10 flex flex-col gap-3 p-4 backdrop-blur-sm border-b sm:flex-row sm:items-center sm:justify-between ${
           isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
       >
@@ -666,18 +667,22 @@ export default function TuneForge() {
           <h1 className="text-2xl font-bold">🏎️ Forza TuneForge AI</h1>
           <p className="text-xs opacity-75">Professional Tuning Platform</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex w-full gap-3 sm:w-auto sm:gap-4 sm:justify-end">
           <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-2xl p-2 rounded bamboo-button-ghost">
             {isDarkMode ? '☀️' : '🌙'}
           </button>
-          <a href="/" className="px-4 py-2 bamboo-button rounded">
+          <a href="/" className="px-4 py-2 bamboo-button rounded text-center">
             ← Back to Colors
           </a>
         </div>
       </header>
 
+      <div className="relative z-10">
+        <Breadcrumbs isDarkMode={isDarkMode} />
+      </div>
+
       <div
-        className={`relative z-10 flex p-4 gap-4 backdrop-blur-sm ${
+        className={`relative z-10 flex flex-col p-4 gap-4 backdrop-blur-sm sm:flex-row ${
           isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
       >
@@ -686,13 +691,13 @@ export default function TuneForge() {
           placeholder="Search cars..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className="flex-1 bamboo-input"
+          className="w-full flex-1 bamboo-input"
         />
         <select
           value={sortBy}
           onChange={e => setSortBy(e.target.value)}
           aria-label="Sort cars by"
-          className="p-2 bamboo-input"
+          className="w-full p-2 bamboo-input sm:w-auto"
         >
           <option value="manufacturer-az">Manufacturer A-Z</option>
           <option value="manufacturer-za">Manufacturer Z-A</option>
@@ -703,9 +708,9 @@ export default function TuneForge() {
         </select>
       </div>
 
-      <div className="relative z-10 grid lg:grid-cols-2 gap-0 h-[calc(100vh-140px)]">
+      <div className="relative z-10 grid gap-0 lg:grid-cols-2 min-h-[calc(100vh-220px)] lg:h-[calc(100vh-220px)]">
         <div
-          className={`border-r overflow-y-auto backdrop-blur-sm ${
+          className={`overflow-y-auto backdrop-blur-sm lg:border-r ${
             isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
           }`}
         >

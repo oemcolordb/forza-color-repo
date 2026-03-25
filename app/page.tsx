@@ -34,6 +34,7 @@ import HSBPopup from './components/HSBPopup'
 import AdvancedTools from './components/AdvancedTools'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import ColorComparison from './components/ColorComparison'
+import StatusAlert from './components/StatusAlert'
 
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ColorAnalyticsDashboard from './components/ColorAnalyticsDashboard'
@@ -455,6 +456,10 @@ export default function HomePage() {
           </h1>
           <p className="text-lg mb-4" style={{color: "var(--bamboo-paper)"}}>Forging your automotive experience...</p>
 
+          <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+            Loading colors. Progress {Math.round(loadingProgress)} percent.
+          </div>
+
           {/* Loading Bar */}
           <div className="w-64 h-3 rounded-full mx-auto mb-4 overflow-hidden bamboo-surface-dark">
             <div
@@ -474,7 +479,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <p className="text-sm text-orange-300 mt-2 opacity-75">
+          <p className="text-sm text-orange-300 mt-2 opacity-75" aria-hidden="true">
             {loadingProgress < 30 && 'Heating the forge...'}
             {loadingProgress >= 30 && loadingProgress < 60 && 'Shaping the gears...'}
             {loadingProgress >= 60 && loadingProgress < 90 && 'Tempering the steel...'}
@@ -508,27 +513,14 @@ export default function HomePage() {
 
         {/* Error Display */}
         {error && (
-          <div
-            className={`mx-4 mb-4 p-3 rounded-lg border ${
-              isDarkMode
-                ? 'bg-red-900/30 border-red-700 text-red-200'
-                : 'bg-red-50 border-red-200 text-red-700'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-lg">⚠️</span>
-              <span className="font-medium">Error:</span>
-              <span>{error}</span>
-              <button
-                onClick={() => setError(null)}
-                className={`ml-auto px-2 py-1 text-xs rounded ${
-                  isDarkMode ? 'bg-red-800 hover:bg-red-700' : 'bg-red-200 hover:bg-red-300'
-                }`}
-              >
-                ✕
-              </button>
-            </div>
-          </div>
+          <StatusAlert
+            title="Unable to load colors"
+            message={error}
+            variant="error"
+            isDarkMode={isDarkMode}
+            onDismiss={() => setError(null)}
+            onRetry={() => window.location.reload()}
+          />
         )}
 
         <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
@@ -543,7 +535,7 @@ export default function HomePage() {
         <div className="fixed bottom-6 right-6 z-40">
           <a
             href="/tuneforge"
-            className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
+            className="flex items-center gap-2 px-4 py-3 bamboo-button font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
             title="Open TuneForge Lab"
           >
             🔧 TuneForge

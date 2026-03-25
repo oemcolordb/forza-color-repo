@@ -30,7 +30,11 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className
     return classes + className
   }, [deviceInfo, className])
 
-  return <main className={layoutClasses}>{children}</main>
+  return (
+    <main id="main-content" className={layoutClasses} tabIndex={-1}>
+      {children}
+    </main>
+  )
 }
 
 export default ResponsiveLayout

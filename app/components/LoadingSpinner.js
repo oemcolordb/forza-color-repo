@@ -8,8 +8,8 @@ const LoadingSpinner = ({ size = 'md', color = 'primary', text, fullScreen = fal
   }
 
   const colorClasses = {
-    primary: 'border-blue-600',
-    secondary: 'border-purple-600',
+    primary: 'border-[color:var(--bamboo-stalk)]',
+    secondary: 'border-[color:var(--bamboo-moss)]',
     white: 'border-white',
   }
 
@@ -22,7 +22,7 @@ const LoadingSpinner = ({ size = 'md', color = 'primary', text, fullScreen = fal
       />
       {text && (
         <p
-          className={`text-sm ${color === 'white' ? 'text-white' : 'text-slate-600 dark:text-slate-300'}`}
+          className={`text-sm ${color === 'white' ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}
         >
           {text}
         </p>
@@ -33,7 +33,7 @@ const LoadingSpinner = ({ size = 'md', color = 'primary', text, fullScreen = fal
   if (fullScreen) {
     return (
       <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="bg-white dark:bg-slate-800 rounded-lg p-6 shadow-xl">{spinner}</div>
+        <div className="bamboo-surface dark:bamboo-surface-dark rounded-lg p-6 shadow-xl">{spinner}</div>
       </div>
     )
   }
