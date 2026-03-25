@@ -28,6 +28,20 @@
 - 🚀 **PWA Ready**: Progressive Web App capabilities for offline usage
 - 🔗 **Share Colors**: Easy sharing of individual colors and collections
 
+## 🏁 Design Upgrade Summary (March 2026)
+
+Latest redesign work delivered a premium automotive UI pass across the homepage experience:
+
+- **Visual Foundation**: New premium color tokens, gradients, glassmorphism surfaces, and typography hierarchy
+- **Header + Hero**: Sticky glass navigation, polished hero messaging, and live database counters
+- **Search & Filtering**: Advanced filter panel with clearer controls and improved visual grouping
+- **Comparison Studio**: Side-by-side comparison workflow with hue/saturation/lightness delta analysis
+- **Collections Workflow**: Favorites collection actions for share, JSON/CSS export, and JSON import
+- **Virtual Paint Preview**: Stylized vehicle preview with selectable lighting modes
+- **Polish & Accessibility**: Better touch targets, status toasts, Escape-to-close dialog behavior, and reduced-motion handling
+
+See [CHANGELOG.md](CHANGELOG.md) for full implementation notes.
+
 ## 🚀 Quick Start
 
 ### Prerequisites

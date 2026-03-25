@@ -57,6 +57,9 @@ export interface HeaderProps {
   isDarkMode: boolean
   theme: AppTheme
   onToggleTheme: () => void
+  colorCount?: number
+  manufacturerCount?: number
+  gameLabel?: string
 }
 
 export interface ImageColorExtractorProps {

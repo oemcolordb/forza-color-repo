@@ -143,9 +143,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     return (
       <div
-        className={`group rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl hover-lift ${
-          isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
-        }`}
+        className="group color-card-premium flex flex-col"
         style={{
           WebkitTapHighlightColor: 'transparent',
           touchAction: 'manipulation',

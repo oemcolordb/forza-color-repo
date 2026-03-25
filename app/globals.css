@@ -8,27 +8,72 @@
 @tailwind utilities;
 
 :root {
-  --bamboo-ink: #0b1a10;
-  --bamboo-paper: #f5f1e6;
-  --bamboo-paper-2: #efe7d5;
-  --bamboo-stalk: #7aa24b;
-  --bamboo-stalk-2: #5f8d3a;
-  --bamboo-moss: #2f6b3a;
-  --bamboo-bark: #cdbb97;
-  --bamboo-border: rgba(122, 162, 75, 0.45);
-  --bamboo-shadow: rgba(11, 26, 16, 0.22);
+  --primary-dark: #0a0e1a;
+  --primary-accent: #00d9ff;
+  --secondary-accent: #ff4655;
+  --gold-accent: #ffb800;
+  --surface-dark: #141824;
+  --surface-light: #1e2433;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --gradient-hero: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 50%, #0f1523 100%);
+  --gradient-card: linear-gradient(
+    135deg,
+    rgba(0, 217, 255, 0.05) 0%,
+    rgba(255, 70, 85, 0.05) 100%
+  );
+  --gradient-premium: linear-gradient(135deg, #ffb800 0%, #ff8a00 100%);
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.25);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+  --transition-bounce: 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  --bamboo-ink: var(--text-primary);
+  --bamboo-paper: rgba(20, 24, 36, 0.92);
+  --bamboo-paper-2: rgba(30, 36, 51, 0.92);
+  --bamboo-stalk: var(--primary-accent);
+  --bamboo-stalk-2: #00bfe0;
+  --bamboo-moss: var(--secondary-accent);
+  --bamboo-bark: rgba(255, 255, 255, 0.24);
+  --bamboo-border: var(--border-subtle);
+  --bamboo-shadow: rgba(0, 0, 0, 0.35);
 }
 
 .dark {
-  --bamboo-ink: #e7f3ea;
-  --bamboo-paper: rgba(12, 22, 15, 0.88);
-  --bamboo-paper-2: rgba(12, 22, 15, 0.70);
-  --bamboo-stalk: #8fd35b;
-  --bamboo-stalk-2: #6fc342;
-  --bamboo-moss: #47a35a;
-  --bamboo-bark: rgba(205, 187, 151, 0.28);
-  --bamboo-border: rgba(143, 211, 91, 0.35);
-  --bamboo-shadow: rgba(0, 0, 0, 0.35);
+  --bamboo-ink: var(--text-primary);
+  --bamboo-paper: rgba(20, 24, 36, 0.88);
+  --bamboo-paper-2: rgba(20, 24, 36, 0.72);
+  --bamboo-stalk: var(--primary-accent);
+  --bamboo-stalk-2: #00bfe0;
+  --bamboo-moss: var(--secondary-accent);
+  --bamboo-bark: rgba(255, 255, 255, 0.2);
+  --bamboo-border: var(--border-subtle);
+  --bamboo-shadow: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  color: var(--text-primary);
+  background: var(--gradient-hero);
 }
 
 /* Component-specific styles */
@@ -38,21 +83,29 @@
   }
 
   .bamboo-surface {
-    background: linear-gradient(135deg, var(--bamboo-paper) 0%, var(--bamboo-paper-2) 100%);
-    border: 1px solid var(--bamboo-border);
-    box-shadow: 0 12px 30px var(--bamboo-shadow);
+    background:
+      var(--gradient-card),
+      linear-gradient(135deg, var(--surface-dark) 0%, var(--surface-light) 100%);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 16px 36px var(--bamboo-shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .bamboo-surface-dark {
-    background: linear-gradient(135deg, rgba(10, 18, 12, 0.92) 0%, rgba(10, 18, 12, 0.78) 100%);
-    border: 1px solid var(--bamboo-border);
+    background:
+      var(--gradient-card),
+      linear-gradient(135deg, rgba(20, 24, 36, 0.92) 0%, rgba(30, 36, 51, 0.9) 100%);
+    border: 1px solid var(--border-subtle);
     box-shadow: 0 18px 42px var(--bamboo-shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .bamboo-button {
     @apply inline-flex items-center justify-center font-semibold rounded-lg transition-all;
-    background: linear-gradient(135deg, var(--bamboo-stalk) 0%, var(--bamboo-stalk-2) 100%);
-    color: #fff;
+    background: linear-gradient(135deg, var(--primary-accent) 0%, #00a9d9 100%);
+    color: #031720;
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
   }
@@ -68,28 +121,74 @@
 
   .bamboo-button-ghost {
     @apply inline-flex items-center justify-center font-semibold rounded-lg transition-all;
-    background: rgba(205, 187, 151, 0.18);
-    color: var(--bamboo-ink);
-    border: 1px solid rgba(205, 187, 151, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
 
   .bamboo-input {
     @apply w-full px-3 py-2 rounded-lg transition-colors focus:outline-none;
-    background: rgba(245, 241, 230, 0.78);
-    border: 1px solid rgba(122, 162, 75, 0.35);
-    color: var(--bamboo-ink);
+    background: rgba(20, 24, 36, 0.9);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
   }
 
   .dark .bamboo-input {
-    background: rgba(12, 22, 15, 0.72);
-    border: 1px solid rgba(143, 211, 91, 0.25);
+    background: rgba(20, 24, 36, 0.72);
+    border: 1px solid var(--border-subtle);
     color: var(--bamboo-ink);
   }
 
   .bamboo-input:focus {
-    box-shadow: 0 0 0 3px rgba(122, 162, 75, 0.22);
+    border-color: rgba(0, 217, 255, 0.45);
+    box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.2);
+  }
+
+  .premium-glass-header {
+    background: rgba(10, 14, 26, 0.7);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .premium-title {
+    font-family: var(--font-rajdhani), var(--font-inter), sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .mono-value {
+    font-family: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .color-card-premium {
+    background:
+      var(--gradient-card),
+      linear-gradient(135deg, var(--surface-dark) 0%, var(--surface-light) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition-slow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .color-card-premium:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 217, 255, 0.55);
+    box-shadow:
+      0 20px 60px rgba(0, 217, 255, 0.15),
+      0 0 0 1px rgba(0, 217, 255, 0.5);
+  }
+
+  .status-toast {
+    animation: toast-in var(--transition-base) ease-out;
+  }
+
+  .tap-target {
+    min-height: 44px;
   }
 
   .color-card-gradient {
@@ -182,6 +281,15 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+
+    .color-card-premium:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .status-toast {
+      animation: none;
+    }
   }
 
   /* High contrast mode support */
@@ -221,6 +329,17 @@
 }
 
 /* Tokyo Neon Animations */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes neon-glow {
   0%,
   100% {

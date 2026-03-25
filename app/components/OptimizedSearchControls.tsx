@@ -42,6 +42,12 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
       onToggleShowFavoritesOnly()
     }, [onToggleShowFavoritesOnly])
 
+    const clearFilters = useCallback(() => {
+      onSearchChange('')
+      onMakeChange('')
+      onColorTypeChange('')
+    }, [onColorTypeChange, onMakeChange, onSearchChange])
+
     const inputClasses = React.useMemo(() => {
       return `flex-1 bamboo-input backdrop-blur-sm text-sm ${
         isDarkMode ? 'placeholder-slate-400' : 'placeholder-gray-600'
@@ -50,21 +56,35 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
 
     const selectClasses = React.useMemo(() => {
       return `bamboo-input backdrop-blur-sm text-sm`
-    }, [isDarkMode])
+    }, [])
 
     const buttonClasses = React.useMemo(() => {
       return `rounded-lg font-medium transition-colors focus:outline-none px-3 py-2 text-sm ${
-        showFavoritesOnly ? 'bg-red-600 text-white' : 'bamboo-button-ghost'
+        showFavoritesOnly ? 'bg-rose-500 text-white border border-rose-300/40' : 'bamboo-button-ghost'
       }`
     }, [showFavoritesOnly])
 
     return (
-      <div className="mb-4 animate-fade-in">
-        <div className="space-y-2">
+      <div id="color-search" className="mb-5 animate-fade-in">
+        <div className="bamboo-surface rounded-2xl p-4 md:p-5 space-y-3">
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="premium-title text-lg font-bold text-white">Advanced Search</h2>
+              <p className="text-xs text-white/60">Find colors by name, make, model, or paint type</p>
+            </div>
+            <button
+              onClick={clearFilters}
+              className="self-start rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-xs font-semibold text-white/80 transition hover:bg-white/10"
+              aria-label="Clear all filters"
+            >
+              Clear All Filters
+            </button>
+          </div>
+
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Search colors, makes, models..."
+              placeholder="Search by color name, hex, or car..."
               value={searchQuery}
               onChange={e => onSearchChange(e.target.value)}
               className={inputClasses}
@@ -104,7 +124,8 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
               </span>
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <select
               value={selectedMake}
               onChange={e => onMakeChange(e.target.value)}
@@ -131,6 +152,10 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="text-xs text-white/55">
+            Filters: Manufacturer • Color Type • Favorites
           </div>
         </div>
       </div>

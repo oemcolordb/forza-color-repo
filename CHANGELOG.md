@@ -2,6 +2,39 @@
 
 All notable changes to the Forza Color Universe project.
 
+## [2.1.0] - 2026-03-26
+
+### 🎨 Premium Design Refresh
+
+- Added a premium automotive design system with updated tokens for color, gradients, spacing, shadows, and transitions
+- Introduced Rajdhani + JetBrains Mono typography integration for display hierarchy and data readability
+- Redesigned homepage header and hero into a sticky glassmorphism experience with live stats and polished CTAs
+
+### 🔍 Search & Browsing Upgrades
+
+- Reworked search/filter controls into an advanced panel with clear-all behavior and stronger visual organization
+- Updated color card shell styling to align with the premium surface and hover system
+
+### ⚖️ Phase 3 Feature Expansion
+
+- Enhanced comparison modal into a "Paint Comparison Studio" with side-by-side slot workflow
+- Added computed difference analysis between first two compared colors (Hue/Sat/Light deltas)
+- Added collection actions for favorites: share link, export as JSON, export as CSS palette, and JSON import
+- Added shared favorites link ingestion from URL query params for quick collection handoff
+- Added virtual paint preview module with selectable lighting modes (Showroom / Sunset / Night)
+
+### ✨ Phase 4 Polish & Accessibility
+
+- Added toast-style status feedback for share/import/export workflows
+- Improved touch ergonomics with minimum tap-target sizing on key mobile controls
+- Added Escape key support and dialog semantics to comparison modal
+- Added reduced-motion fallbacks for premium hover and toast animation behaviors
+- Standardized product copy tone across updated homepage modules
+
+### ✅ Validation
+
+- Ran diagnostics on all changed redesign files with no new reported errors
+
 ## [2.0.0] - 2024-12-19
 
 ### 🚀 Major Updates
