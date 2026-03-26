@@ -222,6 +222,17 @@ body {
     text-wrap: balance;
   }
 
+  @supports not (text-wrap: balance) {
+    .text-balance {
+      text-wrap: pretty;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .container-responsive {
+    padding: 1rem;
+  }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;

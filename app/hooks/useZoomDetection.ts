@@ -152,23 +152,25 @@ export const useZoomDetection = () => {
       }
     }
 
-    // Desktop: Use ResizeObserver for more accurate detection
-    const resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(updateZoomInfo)
-    })
-
-    if (document.body) {
-      resizeObserver.observe(document.body)
-    }
-
     window.addEventListener('resize', handleResize, { passive: true })
+    let resizeObserver: ResizeObserver | null = null
+
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(updateZoomInfo)
+      })
+
+      if (document.body) {
+        resizeObserver.observe(document.body)
+      }
+    }
 
     // Only check periodically on desktop (not mobile - saves battery/CPU)
     const intervalId = setInterval(updateZoomInfo, 2000)
 
     return () => {
       window.removeEventListener('resize', handleResize)
-      resizeObserver.disconnect()
+      resizeObserver?.disconnect()
       clearInterval(intervalId)
     }
   }, [updateZoomInfo])

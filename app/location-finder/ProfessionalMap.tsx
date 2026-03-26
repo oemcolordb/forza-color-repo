@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Location } from './types'
+import { MAP_IMAGE_HEIGHT, MAP_IMAGE_WIDTH, percentToLeafletLatLng } from './coordinates'
 
 interface ProfessionalMapProps {
   locations: Location[]
@@ -80,8 +81,8 @@ const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
       preferCanvas: true,
     })
 
-    // Set bounds for 2048x2048 coordinate system
-    const bounds = L.latLngBounds([0, 0], [2048, 2048])
+    // Set bounds for actual map image dimensions
+    const bounds = L.latLngBounds([0, 0], [MAP_IMAGE_HEIGHT, MAP_IMAGE_WIDTH])
     
     // Add map image
     L.imageOverlay('/maps/fh5-mexico.jpg', bounds, {
@@ -161,14 +162,13 @@ const ProfessionalMap: React.FC<ProfessionalMapProps> = ({
 
     // Add filtered markers
     filteredLocations.forEach(location => {
-      // Convert percentage coordinates to map coordinates
-      const lat = (100 - location.coordinates.y) * 20.48
-      const lng = location.coordinates.x * 20.48
+      const [lat, lng] = percentToLeafletLatLng(location.coordinates)
 
       const isSelected = selectedLocation?.id === location.id
       const marker = L.marker([lat, lng], {
         icon: createMarkerIcon(location.type, isSelected),
         title: location.name,
+        riseOnHover: true,
       })
 
       // Create popup content

@@ -71,15 +71,26 @@ export function useLazyImage(src: string, threshold: number = 0.01) {
   useEffect(() => {
     const img = new Image();
 
+    const loadImage = () => {
+      img.onload = () => {
+        setImageSrc(src);
+        setIsLoaded(true);
+      };
+      img.src = src;
+    };
+
+    if (typeof IntersectionObserver === 'undefined') {
+      loadImage();
+      return () => {
+        img.onload = null;
+      };
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            img.onload = () => {
-              setImageSrc(src);
-              setIsLoaded(true);
-            };
-            img.src = src;
+            loadImage();
             observer.disconnect();
           }
         });

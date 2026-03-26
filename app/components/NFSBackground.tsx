@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import '../nfs-theme.css'
 
 interface NFSBackgroundProps {
@@ -10,73 +10,40 @@ interface NFSBackgroundProps {
 }
 
 export default function NFSBackground({ 
-  isDarkMode, 
+  isDarkMode: _isDarkMode,
   showPoliceScanner = false,
   showNitrous = false 
 }: NFSBackgroundProps) {
-  const [speed, setSpeed] = useState(0)
-  const [heatLevel, setHeatLevel] = useState(0)
-
-  useEffect(() => {
-    // Simulate speed changes
-    const speedInterval = setInterval(() => {
-      setSpeed(prev => {
-        const newSpeed = prev + (Math.random() * 20 - 10)
-        return Math.max(0, Math.min(200, newSpeed))
-      })
-    }, 1000)
-
-    return () => clearInterval(speedInterval)
-  }, [])
-
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Carbon Fiber Base */}
-      <div className="absolute inset-0 nfs-carbon-bg opacity-30" />
-      
-      {/* Asphalt Texture Overlay */}
-      <div className="absolute inset-0 nfs-asphalt-bg opacity-50" />
+      <div className="absolute inset-0 nfs-garage-grid opacity-30" />
 
-      {/* Street Lights */}
-      <div className="absolute top-0 left-0 w-full h-full">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="nfs-street-light absolute"
-            style={{
-              top: `${i * 20}%`,
-              left: i % 2 === 0 ? '5%' : '95%',
-              width: '100px',
-              height: '100px',
-              animationDelay: `${i * 0.5}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Neon Grid Lines */}
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0 opacity-[0.08]">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern id="nfs-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <pattern id="nfs-garage-grid-lines" width="80" height="80" patternUnits="userSpaceOnUse">
               <path
-                d="M 50 0 L 0 0 0 50"
+                d="M 80 0 L 0 0 0 80"
                 fill="none"
-                stroke="rgba(0, 217, 255, 0.3)"
+                stroke="rgba(180, 210, 255, 0.18)"
                 strokeWidth="1"
               />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#nfs-grid)" />
+          <rect width="100%" height="100%" fill="url(#nfs-garage-grid-lines)" />
         </svg>
       </div>
 
-      {/* Police Scanner Effect */}
+      <div className="absolute inset-x-[12%] top-0 h-1.5 nfs-garage-light-bar opacity-90" />
+      <div className="absolute inset-x-[16%] top-8 h-1 nfs-garage-light-bar opacity-65" />
+      <div className="absolute inset-x-0 bottom-0 h-40 nfs-garage-floor-lines opacity-55" />
+      <div className="absolute inset-0 nfs-garage-haze opacity-75" />
+      <div className="absolute inset-0 nfs-garage-vignette" />
+
       {showPoliceScanner && (
-        <div className="nfs-police-scanner absolute inset-0 opacity-30" />
+        <div className="nfs-police-scanner absolute inset-0 opacity-15" />
       )}
 
-      {/* Nitrous Boost Effect */}
       {showNitrous && (
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
@@ -93,12 +60,6 @@ export default function NFSBackground({
           ))}
         </div>
       )}
-
-      {/* Underglow Effect */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 nfs-underglow opacity-40" />
-
-      {/* Tire Smoke */}
-      <div className="absolute bottom-0 left-1/4 w-1/2 h-32 nfs-tire-smoke opacity-30" />
     </div>
   )
 }

@@ -43,6 +43,7 @@ Edit `/public/data/fh5-locations-enhanced.json`:
 - `x`: 0 (west) to 100 (east)
 - `y`: 0 (north) to 100 (south)
 - Percentage-based for easy scaling
+- Rendered against the actual base map size: `4000 x 2394`
 
 ### Method 2: Extract from IGN/MapGenie
 

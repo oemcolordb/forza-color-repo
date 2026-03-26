@@ -63,8 +63,8 @@ export default function NFSColorCard({
     >
       {/* Main Card */}
       <div
-        className={`nfs-card relative overflow-hidden transition-all duration-300 ${
-          isHovered ? 'scale-105 nfs-neon-glow-blue' : ''
+        className={`nfs-garage-card relative overflow-hidden transition-all duration-300 ${
+          isHovered ? '-translate-y-0.5' : ''
         }`}
         style={{
           minHeight: '200px',
@@ -80,11 +80,10 @@ export default function NFSColorCard({
             }}
           />
           
-          {/* Chrome Reflection Effect */}
+          {/* Subtle grunge reflection */}
           <div
-            className={`absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300 ${
-              isHovered ? 'nfs-chrome' : ''
-            }`}
+            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
+            style={{ background: 'linear-gradient(145deg, rgba(255,255,255,0.2), rgba(0,0,0,0.28))' }}
           />
           
           {/* Underglow Effect */}
@@ -95,31 +94,13 @@ export default function NFSColorCard({
             }}
           />
 
-          {/* Speed Lines */}
-          {isHovered && (
-            <div className="absolute inset-0">
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute h-0.5 bg-white opacity-60"
-                  style={{
-                    top: `${20 + i * 15}%`,
-                    left: '0',
-                    width: '100%',
-                    animation: `nfs-speed-line ${0.3 + i * 0.1}s ease-out`,
-                  }}
-                />
-              ))}
-            </div>
-          )}
-
           {/* Favorite Badge */}
           <button
             onClick={(e) => {
               e.stopPropagation()
               onToggleFavorite?.(colorId)
             }}
-            className="absolute top-2 right-2 w-8 h-8 rounded-full nfs-card flex items-center justify-center hover:scale-110 transition-transform z-10"
+            className="absolute top-2 right-2 w-8 h-8 rounded-full nfs-garage-panel flex items-center justify-center hover:scale-105 transition-transform z-10"
           >
             {isFavorite ? (
               <span className="text-lg">⭐</span>
@@ -129,21 +110,21 @@ export default function NFSColorCard({
           </button>
 
           {/* Color Type Badge */}
-          <div className="absolute top-2 left-2 px-2 py-1 rounded nfs-card text-xs font-bold uppercase">
-            <span className="nfs-text-neon-blue">{color.colorType || 'Standard'}</span>
+          <div className="absolute top-2 left-2 px-2 py-1 rounded nfs-garage-panel text-[10px] font-bold uppercase">
+            <span className="nfs-era-label">{color.colorType || 'Standard'}</span>
           </div>
         </div>
 
         {/* Info Section */}
         <div className="p-3 space-y-2">
           {/* Color Name */}
-          <h3 className="font-bold text-sm truncate nfs-text-neon-blue">
+          <h3 className="nfs-era-heading font-bold text-sm truncate">
             {color.colorName}
           </h3>
 
           {/* Manufacturer */}
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded nfs-card flex items-center justify-center text-xs font-bold">
+            <div className="w-6 h-6 rounded nfs-garage-panel flex items-center justify-center text-xs font-bold">
               {color.make.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
@@ -156,7 +137,7 @@ export default function NFSColorCard({
 
           {/* Year Badge */}
           {color.year && (
-            <div className="inline-flex items-center gap-1 px-2 py-1 rounded nfs-card text-xs">
+            <div className="inline-flex items-center gap-1 px-2 py-1 rounded nfs-garage-panel text-xs">
               <span className="text-gray-400">📅</span>
               <span className="font-mono text-gray-300">{color.year}</span>
             </div>
@@ -169,7 +150,7 @@ export default function NFSColorCard({
                 e.stopPropagation()
                 onShowInfo?.(color)
               }}
-              className="flex-1 px-3 py-1.5 rounded nfs-button text-xs font-bold uppercase"
+              className="flex-1 px-3 py-1.5 rounded nfs-garage-audio-btn text-xs font-bold uppercase"
             >
               Details
             </button>
@@ -178,7 +159,7 @@ export default function NFSColorCard({
                 e.stopPropagation()
                 setShowDetails(!showDetails)
               }}
-              className="px-3 py-1.5 rounded nfs-card text-xs font-bold uppercase hover:nfs-neon-glow-blue transition-all"
+              className="px-3 py-1.5 rounded nfs-garage-audio-btn text-xs font-bold uppercase transition-all"
             >
               HSB
             </button>
@@ -186,22 +167,22 @@ export default function NFSColorCard({
 
           {/* HSB Values (Expandable) */}
           {showDetails && (
-            <div className="mt-2 p-2 rounded nfs-card space-y-1 animate-slide-up">
+            <div className="mt-2 p-2 rounded nfs-garage-panel space-y-1 animate-slide-up">
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Hue:</span>
-                <span className="font-mono nfs-text-neon-blue">
+                <span className="font-mono nfs-era-label">
                   {(color.color1.h * 360).toFixed(0)}°
                 </span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Saturation:</span>
-                <span className="font-mono nfs-text-neon-blue">
+                <span className="font-mono nfs-era-label">
                   {(color.color1.s * 100).toFixed(0)}%
                 </span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Brightness:</span>
-                <span className="font-mono nfs-text-neon-blue">
+                <span className="font-mono nfs-era-label">
                   {(color.color1.b * 100).toFixed(0)}%
                 </span>
               </div>

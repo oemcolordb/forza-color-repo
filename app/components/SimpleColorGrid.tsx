@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import ColorCard from './ColorCard'
+import NFSColorCard from './NFSColorCard'
 import { CarColor } from '../types'
 import { useZoomDetection, ZoomLevel } from '../hooks/useZoomDetection'
 
@@ -14,6 +15,7 @@ interface SimpleColorGridProps {
   isDarkMode: boolean
   expandedColorId?: string | null
   zoomInfo?: ZoomLevel & { isTransitioning: boolean }
+  useNFSCard?: boolean
 }
 
 const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
@@ -25,6 +27,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   isDarkMode,
   expandedColorId,
   zoomInfo: externalZoomInfo,
+  useNFSCard = false,
 }) => {
   const [displayCount, setDisplayCount] = useState(100)
   const [isLoading, setIsLoading] = useState(false)
@@ -116,14 +119,26 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
 
           return (
             <React.Fragment key={uniqueKey}>
-              <ColorCard
-                color={color}
-                onSelect={onColorSelect}
-                onShowInfo={onShowInfo}
-                isFavorite={isFavorite}
-                onToggleFavorite={() => onToggleFavorite(colorId)}
-                isDarkMode={isDarkMode}
-              />
+              {useNFSCard && (
+                <NFSColorCard
+                  color={color}
+                  onSelect={onColorSelect}
+                  onShowInfo={onShowInfo}
+                  isFavorite={isFavorite}
+                  onToggleFavorite={onToggleFavorite}
+                  isDarkMode={isDarkMode}
+                />
+              )}
+              {!useNFSCard && (
+                <ColorCard
+                  color={color}
+                  onSelect={onColorSelect}
+                  onShowInfo={onShowInfo}
+                  isFavorite={isFavorite}
+                  onToggleFavorite={() => onToggleFavorite(colorId)}
+                  isDarkMode={isDarkMode}
+                />
+              )}
               {isExpanded && (
                 <div
                   className={`col-span-full p-4 rounded-lg border-2 ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}

@@ -5,6 +5,7 @@ import L from 'leaflet'
 import { MapContainer, ImageOverlay, Marker, Popup, useMap, useMapEvents } from 'react-leaflet'
 import locationData from '@/public/data/fh5-locations-enhanced.json'
 import { Location, LocationType } from './types'
+import { MAP_IMAGE_HEIGHT, MAP_IMAGE_WIDTH, percentToLeafletLatLng } from './coordinates'
 
 // Fix Leaflet default marker icon issue in Next.js
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -73,10 +74,7 @@ const MapViewController: React.FC<{
 
   useEffect(() => {
     if (selectedLocation) {
-      const { x, y } = selectedLocation.coordinates
-      // Convert percentage to Leaflet coordinates
-      const lat = -y * 20.48 // Scale to match image bounds
-      const lng = x * 20.48
+      const [lat, lng] = percentToLeafletLatLng(selectedLocation.coordinates)
       map.flyTo([lat, lng], 4, { duration: 0.5 })
     }
   }, [selectedLocation, map])
@@ -107,10 +105,10 @@ const LeafletMapClient: React.FC<LeafletMapClientProps> = ({
     ? locations.filter(loc => activeFilters.includes(loc.type))
     : locations
 
-  // Map bounds (image is 2048x2048, we'll use a coordinate system that matches)
+  // Map bounds based on actual map image dimensions
   const bounds: L.LatLngBoundsExpression = [
-    [-2048, 0],
-    [0, 2048],
+    [0, 0],
+    [MAP_IMAGE_HEIGHT, MAP_IMAGE_WIDTH],
   ]
 
   const handleMapClick = () => {
@@ -157,9 +155,9 @@ const LeafletMapClient: React.FC<LeafletMapClientProps> = ({
       `}</style>
 
       <MapContainer
-        center={[-1024, 1024]}
+        center={[MAP_IMAGE_HEIGHT / 2, MAP_IMAGE_WIDTH / 2]}
         zoom={2}
-        minZoom={1}
+        minZoom={-2}
         maxZoom={5}
         style={{ height: '100%', width: '100%' }}
         zoomControl={true}
@@ -184,8 +182,7 @@ const LeafletMapClient: React.FC<LeafletMapClientProps> = ({
         {/* Location markers */}
         {filteredLocations.map(location => {
           const isSelected = selectedLocation?.id === location.id
-          const lat = -location.coordinates.y * 20.48
-          const lng = location.coordinates.x * 20.48
+          const [lat, lng] = percentToLeafletLatLng(location.coordinates)
 
           return (
             <Marker

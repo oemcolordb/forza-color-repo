@@ -37,6 +37,19 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
 
   // Resize observer for responsive grid
   useEffect(() => {
+    const updateSize = () => {
+      if (!containerRef.current) return
+      const rect = containerRef.current.getBoundingClientRect()
+      setContainerSize({ width: rect.width, height: rect.height })
+    }
+
+    updateSize()
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateSize, { passive: true })
+      return () => window.removeEventListener('resize', updateSize)
+    }
+
     const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect

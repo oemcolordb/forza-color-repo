@@ -10,6 +10,201 @@
   --nfs-asphalt: #1a1a1a;
   --nfs-street: #2a2a2a;
   --nfs-chrome: #c0c0c0;
+  --nfs-garage-bg: #0b0d11;
+  --nfs-garage-wall: #151922;
+  --nfs-garage-floor: #10141b;
+  --nfs-garage-steel: #2b313f;
+  --nfs-garage-neon: #6bc5ff;
+  --nfs-garage-warm: #f9b25f;
+}
+
+/* Underground Garage Atmosphere */
+.nfs-garage-shell {
+  background:
+    radial-gradient(circle at 50% -20%, rgba(107, 197, 255, 0.16), transparent 55%),
+    radial-gradient(circle at 85% 20%, rgba(249, 178, 95, 0.08), transparent 40%),
+    linear-gradient(180deg, var(--nfs-garage-wall) 0%, var(--nfs-garage-bg) 46%, var(--nfs-garage-floor) 100%);
+  --nfs-parallax-x: 0px;
+  --nfs-parallax-y: 0px;
+}
+
+.nfs-garage-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.nfs-garage-floor-lines {
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 12%, transparent 20%, transparent 80%, rgba(255, 255, 255, 0.06) 88%, transparent 100%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 2px,
+      transparent 2px,
+      transparent 120px
+    );
+}
+
+.nfs-garage-light-bar {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(107, 197, 255, 0.65) 48%, rgba(107, 197, 255, 0.18) 100%);
+  filter: blur(0.2px);
+  box-shadow:
+    0 0 16px rgba(107, 197, 255, 0.6),
+    0 0 40px rgba(107, 197, 255, 0.25);
+  animation: nfs-garage-flicker 5.5s ease-in-out infinite;
+}
+
+.nfs-garage-buzzpulse {
+  background: linear-gradient(90deg, transparent 0%, rgba(107, 197, 255, 0.16) 20%, rgba(255, 255, 255, 0.26) 50%, rgba(107, 197, 255, 0.16) 80%, transparent 100%);
+  animation: nfs-garage-buzz 6s linear infinite;
+}
+
+.nfs-garage-haze {
+  background: radial-gradient(circle at 50% 100%, rgba(190, 215, 255, 0.12) 0%, rgba(120, 165, 220, 0.06) 35%, transparent 70%);
+  animation: nfs-garage-haze-drift 11s ease-in-out infinite;
+}
+
+.nfs-garage-vignette {
+  box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.65);
+}
+
+.nfs-parallax-layer {
+  transform: translate3d(var(--nfs-parallax-x), var(--nfs-parallax-y), 0);
+  transition: transform 120ms linear;
+}
+
+.nfs-prop-lift,
+.nfs-prop-rack,
+.nfs-prop-fan {
+  opacity: 0.2;
+  filter: saturate(0.75);
+}
+
+.nfs-prop-lift {
+  background:
+    linear-gradient(180deg, rgba(30, 36, 48, 0.85) 0%, rgba(13, 16, 23, 0.85) 100%),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0px, rgba(255, 255, 255, 0.05) 8px, transparent 8px, transparent 20px);
+  border: 1px solid rgba(125, 167, 220, 0.22);
+}
+
+.nfs-prop-rack {
+  background:
+    linear-gradient(180deg, rgba(34, 40, 55, 0.85) 0%, rgba(12, 15, 20, 0.86) 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 12px);
+  border: 1px solid rgba(150, 175, 205, 0.2);
+}
+
+.nfs-prop-fan {
+  border: 1px solid rgba(140, 170, 204, 0.24);
+  background: radial-gradient(circle at center, rgba(104, 130, 166, 0.28) 0%, rgba(23, 29, 39, 0.85) 60%, rgba(9, 11, 16, 0.9) 100%);
+}
+
+.nfs-era-heading {
+  font-family: var(--font-rajdhani), 'Arial Narrow', 'Segoe UI', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(220, 235, 255, 0.95);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8), 0 0 12px rgba(107, 197, 255, 0.2);
+}
+
+.nfs-era-subheading {
+  font-family: var(--font-rajdhani), 'Arial Narrow', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: rgba(176, 200, 225, 0.84);
+}
+
+.nfs-era-label {
+  font-family: var(--font-jetbrains-mono), 'Consolas', monospace;
+  color: rgba(181, 205, 234, 0.88);
+  letter-spacing: 0.08em;
+}
+
+.nfs-garage-panel {
+  background: linear-gradient(145deg, rgba(15, 19, 27, 0.88) 0%, rgba(22, 27, 38, 0.84) 100%);
+  border: 1px solid rgba(107, 197, 255, 0.24);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.nfs-garage-label {
+  color: rgba(214, 232, 255, 0.88);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nfs-garage-audio-btn {
+  border: 1px solid rgba(107, 197, 255, 0.35);
+  background: rgba(13, 17, 24, 0.8);
+  color: rgba(225, 238, 255, 0.92);
+  transition: all 220ms ease;
+}
+
+.nfs-garage-audio-btn:hover {
+  border-color: rgba(107, 197, 255, 0.7);
+  box-shadow: 0 0 18px rgba(107, 197, 255, 0.22);
+}
+
+.nfs-garage-audio-btn.is-on {
+  border-color: rgba(249, 178, 95, 0.75);
+  box-shadow: 0 0 20px rgba(249, 178, 95, 0.24);
+}
+
+.nfs-garage-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(14, 18, 25, 0.94) 0%, rgba(11, 14, 20, 0.98) 100%);
+  border: 1px solid rgba(139, 171, 206, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.nfs-garage-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.6px, transparent 0.7px);
+  background-size: 3px 3px;
+  opacity: 0.11;
+  mix-blend-mode: soft-light;
+}
+
+.nfs-garage-card:hover {
+  border-color: rgba(177, 209, 245, 0.58);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.52);
+}
+
+@keyframes nfs-garage-flicker {
+  0%, 7%, 13%, 100% { opacity: 0.9; }
+  8% { opacity: 0.56; }
+  9% { opacity: 0.96; }
+  10% { opacity: 0.68; }
+  48% { opacity: 1; }
+  49% { opacity: 0.76; }
+  52% { opacity: 0.95; }
+  74% { opacity: 0.8; }
+}
+
+@keyframes nfs-garage-buzz {
+  0%, 86%, 100% { opacity: 0; transform: translateX(-14%); }
+  88% { opacity: 0.38; }
+  93% { opacity: 0.15; transform: translateX(14%); }
+}
+
+@keyframes nfs-garage-haze-drift {
+  0%, 100% { transform: translateX(-2%) translateY(0); opacity: 0.7; }
+  50% { transform: translateX(2%) translateY(-3%); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nfs-garage-light-bar,
+  .nfs-garage-haze {
+    animation: none;
+  }
 }
 
 /* NFS Carbon Fiber Background */

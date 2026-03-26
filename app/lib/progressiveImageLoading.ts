@@ -148,6 +148,13 @@ export function lazyLoadImage(
   src: string,
   options: IntersectionObserverInit = {}
 ): () => void {
+  if (typeof IntersectionObserver === 'undefined') {
+    element.src = src;
+    return () => {
+      // no-op cleanup for fallback mode
+    };
+  }
+
   const defaultOptions: IntersectionObserverInit = {
     root: null,
     rootMargin: '50px',

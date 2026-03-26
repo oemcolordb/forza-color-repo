@@ -22,6 +22,7 @@ import { usePerformance } from './hooks/usePerformance'
 import { useOfflineStorage } from './hooks/useOfflineStorage'
 import { useDeviceDetection } from './hooks/useDeviceDetection'
 import { getSecureAssetUrl } from './lib/assetProtection'
+import { copyTextToClipboard } from './lib/clipboard'
 
 import ProgressiveLoader from './components/ProgressiveLoader'
 import PerformanceMonitor from './components/PerformanceMonitor'
@@ -32,7 +33,9 @@ import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import ColorComparison from './components/ColorComparison'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ZoomResponsiveContainer from './components/ZoomResponsiveContainer'
-import NFSColorCard from './components/NFSColorCard'
+import CollectionsTools from './components/CollectionsTools'
+import VirtualPaintPreview from './components/VirtualPaintPreview'
+import NFSSwatchRail from './components/NFSSwatchRail'
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -41,6 +44,8 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedMake, setSelectedMake] = useState('')
   const [selectedColorType, setSelectedColorType] = useState('')
+  const [selectedYear, setSelectedYear] = useState('')
+  const [sortBy, setSortBy] = useState<'newest' | 'az' | 'random'>('newest')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [favorites, setFavorites] = useState<string[]>([])
   const [, setColorHistory] = useState<string[]>([])
@@ -62,6 +67,8 @@ export default function HomePage() {
   const [showComparison, setShowComparison] = useState(false)
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
+  const [previewColor, setPreviewColor] = useState<CarColor | null>(null)
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const deviceInfo: DeviceInfo = useDeviceDetection()
 
   useAnalytics()
@@ -82,13 +89,13 @@ export default function HomePage() {
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
 
   const filteredColors = useMemo(() => {
-    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}-${showFavoritesOnly ? 'fav' : 'all'}`
+    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${selectedYear}-${searchQuery}-${showFavoritesOnly ? 'fav' : 'all'}-${sortBy}`
     const cached = cache.get<CarColor[]>(cacheKey)
     if (cached && allColors.length > 0) return cached
 
     let result: CarColor[]
     if (!searchQuery && !selectedMake && !selectedColorType && !showFavoritesOnly) {
-      result = allColors
+      result = [...allColors]
     } else {
       const sanitizedQuery = sanitizeSearchQuery(searchQuery)
       const searchLower = sanitizedQuery.toLowerCase()
@@ -97,17 +104,28 @@ export default function HomePage() {
           !sanitizedQuery ||
           color.colorName.toLowerCase().includes(searchLower) ||
           color.make.toLowerCase().includes(searchLower) ||
-          (color.model && color.model.toLowerCase().includes(searchLower))
+          (color.model && color.model.toLowerCase().includes(searchLower)) ||
+          (searchLower.startsWith('#') && `${color.make}-${color.colorName}`.toLowerCase().includes(searchLower.replace('#', '')))
         const matchesMake = !selectedMake || color.make === selectedMake
         const matchesType = !selectedColorType || color.colorType === selectedColorType
+        const matchesYear = !selectedYear || String(color.year || '') === selectedYear
         const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
         const matchesFavorites = !showFavoritesOnly || favoritesSet.has(colorId)
-        return matchesSearch && matchesMake && matchesType && matchesFavorites
+        return matchesSearch && matchesMake && matchesType && matchesYear && matchesFavorites
       })
     }
+
+    if (sortBy === 'az') {
+      result.sort((a, b) => a.colorName.localeCompare(b.colorName))
+    } else if (sortBy === 'newest') {
+      result.sort((a, b) => (b.year || 0) - (a.year || 0))
+    } else if (sortBy === 'random') {
+      result.sort(() => Math.random() - 0.5)
+    }
+
     if (allColors.length > 0) cache.set(cacheKey, result, 2 * 60 * 1000)
     return result
-  }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet, showFavoritesOnly])
+  }, [allColors, searchQuery, selectedMake, selectedColorType, selectedYear, favoritesSet, showFavoritesOnly, sortBy])
 
   useEffect(() => {
     const loadColors = async () => {
@@ -160,6 +178,13 @@ export default function HomePage() {
     return Array.from(new Set(allColors.map(c => c.colorType).filter(type => type && type.trim()))).sort()
   }, [allColors])
 
+  const years = useMemo(() => {
+    if (!allColors || !Array.isArray(allColors)) return []
+    return Array.from(new Set(allColors.map(c => c.year).filter(y => typeof y === 'number')))
+      .sort((a, b) => Number(b) - Number(a))
+      .map(y => String(y))
+  }, [allColors])
+
   useEffect(() => {
     const loadFavorites = async () => {
       try {
@@ -202,11 +227,132 @@ export default function HomePage() {
   const handleColorSelect = useCallback((color: CarColor) => {
     const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
     setExpandedColorId(expandedColorId === colorId ? null : colorId)
+    setPreviewColor(color)
     setColorHistory(prev => {
       const filtered = prev.filter(id => id !== colorId)
       return [colorId, ...filtered.slice(0, 49)]
     })
   }, [expandedColorId])
+
+  const favoriteColorObjects = useMemo(() => {
+    if (favorites.length === 0 || allColors.length === 0) return []
+    const idSet = new Set(favorites)
+    return allColors.filter(color => idSet.has(`${color.make}-${color.colorName}-${color.year || 'unknown'}`))
+  }, [favorites, allColors])
+
+  const downloadTextFile = useCallback((filename: string, text: string, contentType: string) => {
+    const blob = new Blob([text], { type: contentType })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(url)
+  }, [])
+
+  const announceStatus = useCallback((message: string) => {
+    setStatusMessage(message)
+    window.setTimeout(() => setStatusMessage(null), 2400)
+  }, [])
+
+  const handleShareFavorites = useCallback(async () => {
+    if (favorites.length === 0) {
+      announceStatus('No favorites selected to share.')
+      return
+    }
+
+    const encoded = encodeURIComponent(JSON.stringify(favorites))
+    const url = `${window.location.origin}${window.location.pathname}?collection=${encoded}`
+
+    try {
+      const copied = await copyTextToClipboard(url)
+      if (copied) {
+        announceStatus('Collection link copied to clipboard.')
+        return
+      }
+      announceStatus('Unable to copy collection link.')
+    } catch {
+      announceStatus('Unable to copy collection link.')
+    }
+  }, [favorites, announceStatus])
+
+  const handleExportFavoritesJson = useCallback(() => {
+    if (favoriteColorObjects.length === 0) {
+      announceStatus('No favorites available to export.')
+      return
+    }
+    downloadTextFile(
+      'forza-favorite-collection.json',
+      JSON.stringify(favoriteColorObjects, null, 2),
+      'application/json'
+    )
+    announceStatus('Exported favorites as JSON.')
+  }, [favoriteColorObjects, downloadTextFile, announceStatus])
+
+  const handleExportFavoritesCss = useCallback(() => {
+    if (favoriteColorObjects.length === 0) {
+      announceStatus('No favorites available to export.')
+      return
+    }
+
+    const lines = favoriteColorObjects.slice(0, 24).map((color, index) => {
+      const hue = Math.round(color.color1.h * 360)
+      const sat = Math.round(color.color1.s * 100)
+      const light = Math.max(18, Math.round(color.color1.b * 65))
+      return `  --favorite-color-${index + 1}: hsl(${hue}, ${sat}%, ${light}%);`
+    })
+
+    downloadTextFile('forza-favorite-palette.css', [':root {', ...lines, '}'].join('\n'), 'text/css')
+    announceStatus('Exported favorites as CSS variables.')
+  }, [favoriteColorObjects, downloadTextFile, announceStatus])
+
+  const handleImportFavorites = useCallback(async (file: File) => {
+    try {
+      const text = await file.text()
+      const imported = JSON.parse(text)
+
+      if (Array.isArray(imported) && imported.length > 0 && typeof imported[0] === 'string') {
+        setFavorites(imported)
+        announceStatus('Imported favorite IDs from collection file.')
+        return
+      }
+
+      if (Array.isArray(imported)) {
+        const importedIds = imported
+          .map((color: CarColor) => `${color.make}-${color.colorName}-${color.year || 'unknown'}`)
+          .filter(Boolean)
+        setFavorites(importedIds)
+        announceStatus('Imported favorite colors from JSON.')
+        return
+      }
+
+      announceStatus('Unsupported JSON format for import.')
+    } catch {
+      announceStatus('Failed to import collection file.')
+    }
+  }, [announceStatus])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const encodedCollection = params.get('collection')
+    if (!encodedCollection) return
+
+    try {
+      const parsed = JSON.parse(decodeURIComponent(encodedCollection))
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        setFavorites(parsed.filter(item => typeof item === 'string'))
+        announceStatus('Imported shared collection from URL.')
+      }
+      params.delete('collection')
+      const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`
+      window.history.replaceState({}, '', nextUrl)
+    } catch {
+      announceStatus('Unable to parse shared collection link.')
+    }
+  }, [announceStatus])
 
   if (isInitialLoad) {
     const videoUrl = '/Mp%204%20H%20280%203%20Q%20Nlf%203%20J%20O%20Aem%208%20Kv%20Cu%20Uuya%20AN%20Cr%20O%20Du%20C%20Qs%2063%20S%20Vq%20Z%20Rad%206%20O%2011%20BZ.mp4'
@@ -247,7 +393,14 @@ export default function HomePage() {
         </GamingErrorBoundary>
 
         <div className={`font-sans min-h-screen ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-          <Header isDarkMode={isDarkMode} theme={theme} onToggleTheme={cycleTheme} />
+          <Header
+            isDarkMode={isDarkMode}
+            theme={theme}
+            onToggleTheme={cycleTheme}
+            colorCount={allColors.length}
+            manufacturerCount={makes.length}
+            gameLabel="FH5 + Motorsport"
+          />
 
           {error && (
             <div className={`mx-4 mb-4 p-3 rounded-lg border ${isDarkMode ? 'bg-red-900/30 border-red-700 text-red-200' : 'bg-red-50 border-red-200 text-red-700'}`}>
@@ -282,6 +435,21 @@ export default function HomePage() {
                 <a href="/tools" className={`ml-auto text-xs px-3 py-1 rounded-lg bamboo-button-ghost`}>🛠️ Tools</a>
               </div>
 
+              <CollectionsTools
+                isDarkMode={isDarkMode}
+                favoritesCount={favorites.length}
+                onOpenComparison={() => {
+                  setCompareSelectedColors(favoriteColorObjects.slice(0, 4))
+                  setShowComparison(true)
+                }}
+                onShareFavorites={handleShareFavorites}
+                onExportFavoritesJson={handleExportFavoritesJson}
+                onExportFavoritesCss={handleExportFavoritesCss}
+                onImportFavorites={handleImportFavorites}
+              />
+
+              <VirtualPaintPreview color={previewColor} isDarkMode={isDarkMode} />
+
               <OptimizedSearchControls
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
@@ -289,6 +457,11 @@ export default function HomePage() {
                 onMakeChange={setSelectedMake}
                 selectedColorType={selectedColorType}
                 onColorTypeChange={setSelectedColorType}
+                selectedYear={selectedYear}
+                onYearChange={setSelectedYear}
+                years={years}
+                sortBy={sortBy}
+                onSortChange={setSortBy}
                 makes={makes}
                 colorTypes={colorTypes.filter((t): t is string => typeof t === 'string')}
                 isDarkMode={isDarkMode}
@@ -299,8 +472,16 @@ export default function HomePage() {
                 onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
               />
 
+              {isNFS && (
+                <NFSSwatchRail
+                  colors={allColors}
+                  selectedColorId={expandedColorId}
+                  onSelectColor={handleColorSelect}
+                />
+              )}
+
               <ZoomResponsiveContainer isDarkMode={isDarkMode}>
-                <div className={`relative rounded-xl overflow-hidden p-4 ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+                <div id="color-gallery" className={`relative rounded-xl overflow-hidden p-4 ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-2xl">🏆</span>
                     <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>COLOR GALLERY</span>
@@ -309,7 +490,7 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  {filteredColors.length > 1000 ? (
+                  {!isNFS && filteredColors.length > 1000 ? (
                     <VirtualColorGrid
                       colors={filteredColors}
                       onColorSelect={handleColorSelect}
@@ -328,6 +509,7 @@ export default function HomePage() {
                       onToggleFavorite={toggleFavorite}
                       isDarkMode={isDarkMode}
                       expandedColorId={expandedColorId}
+                      useNFSCard={isNFS}
                     />
                   )}
                 </div>
@@ -360,6 +542,16 @@ export default function HomePage() {
             onToggleComparison={() => setShowComparison(!showComparison)}
             isDarkMode={isDarkMode}
           />
+
+          {statusMessage && (
+            <div
+              className="status-toast fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-white/15 bg-[#141824]/95 px-4 py-2 text-sm text-white shadow-xl"
+              role="status"
+              aria-live="polite"
+            >
+              {statusMessage}
+            </div>
+          )}
         </div>
       </>
     </NFSThemeWrapper>

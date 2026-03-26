@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { copyTextToClipboard } from '../lib/clipboard'
 
 interface MapGenieHelperProps {
   onClose: () => void
@@ -55,9 +56,9 @@ if (!mapContainer) {
 }
 `
 
-  const handleCopyScript = () => {
-    navigator.clipboard.writeText(extractionScript)
-    setCopied(true)
+  const handleCopyScript = async () => {
+    const copiedToClipboard = await copyTextToClipboard(extractionScript)
+    setCopied(copiedToClipboard)
     setTimeout(() => setCopied(false), 2000)
   }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { createForzaGradient } from '../lib/colorUtils'
 import { CarColor } from '../types'
+import { copyTextToClipboard } from '../lib/clipboard'
 
 interface ColorCardProps {
   color: CarColor
@@ -127,7 +128,11 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     const copyToClipboard = React.useCallback(async (key: string, value: string) => {
       try {
-        await navigator.clipboard.writeText(value)
+        const copied = await copyTextToClipboard(value)
+        if (!copied) {
+          setCopiedKey(null)
+          return
+        }
         setCopiedKey(key)
         window.setTimeout(() => setCopiedKey(prev => (prev === key ? null : prev)), 900)
       } catch {

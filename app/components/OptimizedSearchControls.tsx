@@ -10,6 +10,11 @@ interface OptimizedSearchControlsProps {
   onMakeChange: Dispatch<SetStateAction<string>>
   selectedColorType: string
   onColorTypeChange: Dispatch<SetStateAction<string>>
+  selectedYear: string
+  onYearChange: Dispatch<SetStateAction<string>>
+  years: string[]
+  sortBy: 'newest' | 'az' | 'random'
+  onSortChange: Dispatch<SetStateAction<'newest' | 'az' | 'random'>>
   makes: string[]
   colorTypes: string[]
   isDarkMode: boolean
@@ -28,6 +33,11 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
     onMakeChange,
     selectedColorType,
     onColorTypeChange,
+    selectedYear,
+    onYearChange,
+    years,
+    sortBy,
+    onSortChange,
     makes,
     colorTypes,
     isDarkMode,
@@ -46,7 +56,9 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
       onSearchChange('')
       onMakeChange('')
       onColorTypeChange('')
-    }, [onColorTypeChange, onMakeChange, onSearchChange])
+      onYearChange('')
+      onSortChange('newest')
+    }, [onColorTypeChange, onMakeChange, onSearchChange, onSortChange, onYearChange])
 
     const inputClasses = React.useMemo(() => {
       return `flex-1 bamboo-input backdrop-blur-sm text-sm ${
@@ -125,7 +137,7 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
             <select
               value={selectedMake}
               onChange={e => onMakeChange(e.target.value)}
@@ -152,10 +164,35 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
                 </option>
               ))}
             </select>
+
+            <select
+              value={selectedYear}
+              onChange={e => onYearChange(e.target.value)}
+              className={selectClasses}
+              aria-label="Filter by year"
+            >
+              <option value="">All Years</option>
+              {years.map(year => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={sortBy}
+              onChange={e => onSortChange(e.target.value as 'newest' | 'az' | 'random')}
+              className={selectClasses}
+              aria-label="Sort results"
+            >
+              <option value="newest">Sort: Newest</option>
+              <option value="az">Sort: A-Z</option>
+              <option value="random">Sort: Random</option>
+            </select>
           </div>
 
           <div className="text-xs text-white/55">
-            Filters: Manufacturer • Color Type • Favorites
+            Filters: Manufacturer • Year • Color Type • Favorites • Sort
           </div>
         </div>
       </div>
