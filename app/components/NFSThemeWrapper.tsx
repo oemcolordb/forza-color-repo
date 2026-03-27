@@ -45,7 +45,7 @@ const NFSThemeWrapper: React.FC<NFSThemeWrapperProps> = ({ children, enabled = f
       <div className="fixed right-8 bottom-24 h-40 w-28 rounded-sm pointer-events-none z-0 nfs-prop-rack nfs-parallax-layer" />
       <div className="fixed right-20 top-24 h-14 w-14 rounded-full pointer-events-none z-0 nfs-prop-fan nfs-parallax-layer" />
 
-      <div className="fixed right-4 top-4 z-40">
+      <div className="fixed right-4 bottom-6 z-40">
         <NFSGarageAudio />
       </div>
 

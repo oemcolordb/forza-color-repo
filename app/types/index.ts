@@ -60,17 +60,34 @@ export interface HeaderProps {
   colorCount?: number
   manufacturerCount?: number
   gameLabel?: string
+  searchQuery: string
+  onSearchChange: (_value: string) => void
+  selectedMake: string
+  onMakeChange: (_value: string) => void
+  selectedColorType: string
+  onColorTypeChange: (_value: string) => void
+  selectedYear: string
+  onYearChange: (_value: string) => void
+  years: string[]
+  sortBy: 'newest' | 'az' | 'random'
+  onSortChange: (_value: 'newest' | 'az' | 'random') => void
+  makes: string[]
+  colorTypes: string[]
+  favoritesCount?: number
+  showFavoritesOnly: boolean
+  onToggleShowFavoritesOnly: () => void
+  onClearFilters: () => void
 }
 
 export interface ImageColorExtractorProps {
   colors?: CarColor[]
-  onColorsExtracted?: (colors: ExtractedColor[]) => void
-  onColorsFound?: (matches: ForzaColorMatch[]) => void
-  onColorSelect?: (color: CarColor) => void
+  onColorsExtracted?: (_colors: ExtractedColor[]) => void
+  onColorsFound?: (_matches: ForzaColorMatch[]) => void
+  onColorSelect?: (_color: CarColor) => void
   isDarkMode: boolean
   showTutorial?: boolean
   onTutorialClose?: () => void
-  onImageUpload?: (file: File, dataUrl: string) => void
+  onImageUpload?: (_file: File, _dataUrl: string) => void
 }
 
 // Error Types
@@ -88,8 +105,8 @@ export interface CacheEntry<T> {
 }
 
 export interface CacheManager {
-  get<T>(key: string): T | null
-  set<T>(key: string, data: T, ttl?: number): void
-  clear(key?: string): void
-  has(key: string): boolean
+  get<T>(_key: string): T | null
+  set<T>(_key: string, _data: T, _ttl?: number): void
+  clear(_key?: string): void
+  has(_key: string): boolean
 }

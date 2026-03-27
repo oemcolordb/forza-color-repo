@@ -42,6 +42,23 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
       : 'transition-all duration-500 ease-out'
     
     const baseClasses = `grid ${transitionClass} p-2`
+
+    if (useNFSCard) {
+      if (zoomInfo.isMobile || zoomInfo.isTouch) {
+        return `${baseClasses} grid-cols-2 sm:grid-cols-3 gap-2`
+      }
+
+      const nfsColumnClasses = {
+        xs: 'grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12',
+        sm: 'grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10',
+        md: 'grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8',
+        lg: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7',
+        xl: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6',
+        xxl: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+      }
+
+      return `${baseClasses} ${nfsColumnClasses[zoomInfo.scale]} gap-2.5`
+    }
     
     // Mobile-optimized: use simpler grid on touch devices
     if (zoomInfo.isMobile || zoomInfo.isTouch) {

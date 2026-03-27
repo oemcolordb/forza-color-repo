@@ -63,15 +63,15 @@ export default function NFSColorCard({
     >
       {/* Main Card */}
       <div
-        className={`nfs-garage-card relative overflow-hidden transition-all duration-300 ${
+        className={`nfs-garage-card panel-sheen kinetic-hover relative overflow-hidden transition-all duration-300 ${
           isHovered ? '-translate-y-0.5' : ''
         }`}
         style={{
-          minHeight: '200px',
+          minHeight: '170px',
         }}
       >
         {/* Color Display with Underglow */}
-        <div className="relative h-32 overflow-hidden">
+        <div className="relative h-24 overflow-hidden">
           {/* Main Color */}
           <div
             className="absolute inset-0 transition-all duration-300"
@@ -100,57 +100,57 @@ export default function NFSColorCard({
               e.stopPropagation()
               onToggleFavorite?.(colorId)
             }}
-            className="absolute top-2 right-2 w-8 h-8 rounded-full nfs-garage-panel flex items-center justify-center hover:scale-105 transition-transform z-10"
+            className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full nfs-garage-panel flex items-center justify-center hover:scale-105 transition-transform z-10"
           >
             {isFavorite ? (
-              <span className="text-lg">⭐</span>
+              <span className="text-base">⭐</span>
             ) : (
-              <span className="text-lg opacity-50">☆</span>
+              <span className="text-base opacity-50">☆</span>
             )}
           </button>
 
           {/* Color Type Badge */}
-          <div className="absolute top-2 left-2 px-2 py-1 rounded nfs-garage-panel text-[10px] font-bold uppercase">
+          <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded nfs-garage-panel text-[9px] font-bold uppercase">
             <span className="nfs-era-label">{color.colorType || 'Standard'}</span>
           </div>
         </div>
 
         {/* Info Section */}
-        <div className="p-3 space-y-2">
+        <div className="p-2.5 space-y-1.5">
           {/* Color Name */}
-          <h3 className="nfs-era-heading font-bold text-sm truncate">
+          <h3 className="nfs-era-heading font-bold text-xs truncate">
             {color.colorName}
           </h3>
 
           {/* Manufacturer */}
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded nfs-garage-panel flex items-center justify-center text-xs font-bold">
+            <div className="w-5 h-5 rounded nfs-garage-panel flex items-center justify-center text-[10px] font-bold">
               {color.make.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-gray-300 truncate">{color.make}</p>
+              <p className="text-[11px] font-semibold text-gray-300 truncate">{color.make}</p>
               {color.model && (
-                <p className="text-xs text-gray-500 truncate">{color.model}</p>
+                <p className="text-[10px] text-gray-500 truncate">{color.model}</p>
               )}
             </div>
           </div>
 
           {/* Year Badge */}
           {color.year && (
-            <div className="inline-flex items-center gap-1 px-2 py-1 rounded nfs-garage-panel text-xs">
+            <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded nfs-garage-panel text-[10px]">
               <span className="text-gray-400">📅</span>
               <span className="font-mono text-gray-300">{color.year}</span>
             </div>
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-2 pt-2">
+          <div className="flex gap-1.5 pt-1.5">
             <button
               onClick={(e) => {
                 e.stopPropagation()
                 onShowInfo?.(color)
               }}
-              className="flex-1 px-3 py-1.5 rounded nfs-garage-audio-btn text-xs font-bold uppercase"
+              className="flex-1 px-2 py-1 rounded nfs-garage-audio-btn text-[10px] font-bold uppercase"
             >
               Details
             </button>
@@ -159,7 +159,7 @@ export default function NFSColorCard({
                 e.stopPropagation()
                 setShowDetails(!showDetails)
               }}
-              className="px-3 py-1.5 rounded nfs-garage-audio-btn text-xs font-bold uppercase transition-all"
+              className="px-2 py-1 rounded nfs-garage-audio-btn text-[10px] font-bold uppercase transition-all"
             >
               HSB
             </button>
@@ -167,7 +167,7 @@ export default function NFSColorCard({
 
           {/* HSB Values (Expandable) */}
           {showDetails && (
-            <div className="mt-2 p-2 rounded nfs-garage-panel space-y-1 animate-slide-up">
+            <div className="mt-1.5 p-1.5 rounded nfs-garage-panel space-y-1 animate-slide-up">
               <div className="flex justify-between text-xs">
                 <span className="text-gray-400">Hue:</span>
                 <span className="font-mono nfs-era-label">

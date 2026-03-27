@@ -468,75 +468,75 @@
 
 /* Utility classes for Tokyo animations */
 .animate-window-flicker {
-  animation: window-flicker 3s ease-in-out infinite;
+  animation: window-flicker 8.6s ease-in-out infinite;
 }
 
 .animate-window-pulse {
-  animation: window-pulse 4s ease-in-out infinite;
+  animation: window-pulse 11.4s ease-in-out infinite;
 }
 
 .animate-window-twinkle {
-  animation: window-twinkle 2.5s ease-in-out infinite;
+  animation: window-twinkle 7.1s ease-in-out infinite;
 }
 
 .animate-window-shimmer {
-  animation: window-shimmer 3.5s ease-in-out infinite;
+  animation: window-shimmer 10s ease-in-out infinite;
 }
 
 .animate-glow-pulse {
-  animation: glow-pulse 6s ease-in-out infinite;
+  animation: glow-pulse 17.1s ease-in-out infinite;
 }
 
 .animate-float {
-  animation: float 6s ease-in-out infinite;
+  animation: float 17.1s ease-in-out infinite;
 }
 
 .animate-rain {
-  animation: rain 2s linear infinite;
+  animation: rain 5.7s linear infinite;
 }
 
 .animate-wind-rain {
-  animation: windRain 2s linear infinite;
+  animation: windRain 5.7s linear infinite;
 }
 
 .animate-leaf-float {
-  animation: leafFloat 4s ease-in-out infinite;
+  animation: leafFloat 11.4s ease-in-out infinite;
 }
 
 .animate-petal-drift {
-  animation: petalDrift 3s ease-in-out infinite;
+  animation: petalDrift 8.6s ease-in-out infinite;
 }
 
 .animate-dust-swirl {
-  animation: dustSwirl 6s ease-in-out infinite;
+  animation: dustSwirl 17.1s ease-in-out infinite;
 }
 
 .animate-wind-gust {
-  animation: windGust 2s ease-in-out infinite;
+  animation: windGust 5.7s ease-in-out infinite;
 }
 
 .animate-atmospheric-flow {
-  animation: atmosphericFlow 8s linear infinite;
+  animation: atmosphericFlow 22.9s linear infinite;
 }
 
 .animate-building-glow {
-  animation: buildingGlow 4s ease-in-out infinite;
+  animation: buildingGlow 11.4s ease-in-out infinite;
 }
 
 .animate-hologram-flicker {
-  animation: hologramFlicker 3s ease-in-out infinite;
+  animation: hologramFlicker 8.6s ease-in-out infinite;
 }
 
 .animate-city-pulse {
-  animation: cityPulse 6s ease-in-out infinite;
+  animation: cityPulse 17.1s ease-in-out infinite;
 }
 
 .animate-neon-scan {
-  animation: neonScan 2s ease-in-out infinite;
+  animation: neonScan 5.7s ease-in-out infinite;
 }
 
 .animate-wind-leaf {
-  animation: windLeaf 4s ease-in-out infinite;
+  animation: windLeaf 11.4s ease-in-out infinite;
 }
 
 /* Wind effect utilities */

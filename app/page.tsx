@@ -9,9 +9,7 @@ import { sanitizeSearchQuery, handleError } from './lib/validation'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SimpleColorGrid from './components/SimpleColorGrid'
-import VirtualColorGrid from './components/VirtualColorGrid'
 import { indexedDBManager } from './lib/indexedDB'
-import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ResponsiveLayout from './components/ResponsiveLayout'
 import TokyoBackground from './components/TokyoBackground'
 import CreditsBackground from './components/CreditsBackground'
@@ -34,11 +32,11 @@ import ColorComparison from './components/ColorComparison'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import ZoomResponsiveContainer from './components/ZoomResponsiveContainer'
 import CollectionsTools from './components/CollectionsTools'
-import VirtualPaintPreview from './components/VirtualPaintPreview'
+import ColorRouletteHarmony from './components/ColorRouletteHarmony'
+import DynamicWeather from './components/DynamicWeather'
 import NFSSwatchRail from './components/NFSSwatchRail'
 
 export default function HomePage() {
-  const [colors, setColors] = useState<CarColor[]>([])
   const [loading, setLoading] = useState(true)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -60,14 +58,11 @@ export default function HomePage() {
   const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [allColors, setAllColors] = useState<CarColor[]>([])
   const [loadingProgress, setLoadingProgress] = useState<number>(0)
-  const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hsbPopupColor, setHsbPopupColor] = useState<CarColor | null>(null)
   const [showHsbPopup, setShowHsbPopup] = useState(false)
   const [showComparison, setShowComparison] = useState(false)
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
-  const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
-  const [previewColor, setPreviewColor] = useState<CarColor | null>(null)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const deviceInfo: DeviceInfo = useDeviceDetection()
 
@@ -94,7 +89,7 @@ export default function HomePage() {
     if (cached && allColors.length > 0) return cached
 
     let result: CarColor[]
-    if (!searchQuery && !selectedMake && !selectedColorType && !showFavoritesOnly) {
+    if (!searchQuery && !selectedMake && !selectedColorType && !selectedYear && !showFavoritesOnly) {
       result = [...allColors]
     } else {
       const sanitizedQuery = sanitizeSearchQuery(searchQuery)
@@ -132,7 +127,6 @@ export default function HomePage() {
       try {
         const cachedColors = cache.get<CarColor[]>('color-data')
         if (cachedColors) {
-          setColors(cachedColors)
           setAllColors(cachedColors)
           setLoadingProgress(100)
           setLoading(false)
@@ -142,7 +136,6 @@ export default function HomePage() {
         const { getColorData } = await import('../services/colorDataLazy')
         const originalColors = await getColorData()
         if (!Array.isArray(originalColors)) throw new Error('Invalid color data format')
-        setColors(originalColors)
         setAllColors(originalColors)
         cache.set('color-data', originalColors, 10 * 60 * 1000)
         setLoadingProgress(100)
@@ -151,7 +144,6 @@ export default function HomePage() {
       } catch (err) {
         const e = handleError(err)
         setError(e.message)
-        setColors([])
         setAllColors([])
         setLoading(false)
         setIsInitialLoad(false)
@@ -227,12 +219,27 @@ export default function HomePage() {
   const handleColorSelect = useCallback((color: CarColor) => {
     const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
     setExpandedColorId(expandedColorId === colorId ? null : colorId)
-    setPreviewColor(color)
     setColorHistory(prev => {
       const filtered = prev.filter(id => id !== colorId)
       return [colorId, ...filtered.slice(0, 49)]
     })
   }, [expandedColorId])
+
+  const clearFilters = useCallback(() => {
+    setSearchQuery('')
+    setSelectedMake('')
+    setSelectedColorType('')
+    setSelectedYear('')
+    setSortBy('newest')
+    setShowFavoritesOnly(false)
+  }, [])
+
+  const focusSearchControls = useCallback(() => {
+    document.getElementById('color-search')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    const searchInput = document.getElementById('global-color-search-input') as HTMLInputElement | null
+    searchInput?.focus()
+    searchInput?.select()
+  }, [])
 
   const favoriteColorObjects = useMemo(() => {
     if (favorites.length === 0 || allColors.length === 0) return []
@@ -354,6 +361,11 @@ export default function HomePage() {
     }
   }, [announceStatus])
 
+  const handleHarmonyGenerated = useCallback((generatedColors: CarColor[], mode: string) => {
+    if (generatedColors.length === 0) return
+    announceStatus(`${mode} generated ${generatedColors.length} colors.`)
+  }, [announceStatus])
+
   if (isInitialLoad) {
     const videoUrl = '/Mp%204%20H%20280%203%20Q%20Nlf%203%20J%20O%20Aem%208%20Kv%20Cu%20Uuya%20AN%20Cr%20O%20Du%20C%20Qs%2063%20S%20Vq%20Z%20Rad%206%20O%2011%20BZ.mp4'
     return (
@@ -366,7 +378,7 @@ export default function HomePage() {
           <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text animate-pulse">
             🔧 TuneForge Loading...
           </h1>
-          <p className="text-lg mb-4" style={{ color: 'var(--bamboo-paper)' }}>Forging your automotive experience...</p>
+          <p className="text-lg mb-4" style={{ color: 'var(--bamboo-paper)' }} suppressHydrationWarning>Forging your automotive experience...</p>
           <div className="w-64 h-3 rounded-full mx-auto mb-4 overflow-hidden bamboo-surface-dark">
             <div
               className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-pulse"
@@ -400,6 +412,23 @@ export default function HomePage() {
             colorCount={allColors.length}
             manufacturerCount={makes.length}
             gameLabel="FH5 + Motorsport"
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            selectedMake={selectedMake}
+            onMakeChange={setSelectedMake}
+            selectedColorType={selectedColorType}
+            onColorTypeChange={setSelectedColorType}
+            selectedYear={selectedYear}
+            onYearChange={setSelectedYear}
+            years={years}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            makes={makes}
+            colorTypes={colorTypes.filter((type): type is string => typeof type === 'string')}
+            favoritesCount={favorites.length}
+            showFavoritesOnly={showFavoritesOnly}
+            onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
+            onClearFilters={clearFilters}
           />
 
           {error && (
@@ -420,13 +449,14 @@ export default function HomePage() {
                 <CreditsBackground isDarkMode={isDarkMode} />
               </>
           }
+          <DynamicWeather isDarkMode={isDarkMode} />
 
           <ProgressiveLoader progress={loadingProgress} isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
 
           <ErrorBoundary onError={e => setError(e.message)}>
             <ResponsiveLayout>
               {/* Stats bar */}
-              <div className={`flex items-center gap-3 mb-4 px-1 text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+              <div className={`reveal-up stagger-1 panel-sheen kinetic-hover flex items-center gap-3 mb-4 px-3 py-2 rounded-xl modern-aurora glass-lift text-sm ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
                 <span>{allColors.length.toLocaleString()} colors</span>
                 <span>·</span>
                 <span>{makes.length} makes</span>
@@ -435,53 +465,40 @@ export default function HomePage() {
                 <a href="/tools" className={`ml-auto text-xs px-3 py-1 rounded-lg bamboo-button-ghost`}>🛠️ Tools</a>
               </div>
 
-              <CollectionsTools
-                isDarkMode={isDarkMode}
-                favoritesCount={favorites.length}
-                onOpenComparison={() => {
-                  setCompareSelectedColors(favoriteColorObjects.slice(0, 4))
-                  setShowComparison(true)
-                }}
-                onShareFavorites={handleShareFavorites}
-                onExportFavoritesJson={handleExportFavoritesJson}
-                onExportFavoritesCss={handleExportFavoritesCss}
-                onImportFavorites={handleImportFavorites}
-              />
+              <div className="reveal-up stagger-2 panel-sheen kinetic-hover">
+                <CollectionsTools
+                  isDarkMode={isDarkMode}
+                  favoritesCount={favorites.length}
+                  onOpenComparison={() => {
+                    setCompareSelectedColors(favoriteColorObjects.slice(0, 4))
+                    setShowComparison(true)
+                  }}
+                  onShareFavorites={handleShareFavorites}
+                  onExportFavoritesJson={handleExportFavoritesJson}
+                  onExportFavoritesCss={handleExportFavoritesCss}
+                  onImportFavorites={handleImportFavorites}
+                />
+              </div>
 
-              <VirtualPaintPreview color={previewColor} isDarkMode={isDarkMode} />
+              <div className="mb-5 animate-fade-in modern-aurora reveal-up stagger-3 panel-sheen kinetic-hover">
+                <ColorRouletteHarmony
+                  colors={filteredColors}
+                  isDarkMode={isDarkMode}
+                  onColorSelect={handleColorSelect}
+                  onHarmonyGenerated={handleHarmonyGenerated}
+                />
+              </div>
 
-              <OptimizedSearchControls
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                selectedMake={selectedMake}
-                onMakeChange={setSelectedMake}
-                selectedColorType={selectedColorType}
-                onColorTypeChange={setSelectedColorType}
-                selectedYear={selectedYear}
-                onYearChange={setSelectedYear}
-                years={years}
-                sortBy={sortBy}
-                onSortChange={setSortBy}
-                makes={makes}
-                colorTypes={colorTypes.filter((t): t is string => typeof t === 'string')}
-                isDarkMode={isDarkMode}
-                showManufacturerBorders={showManufacturerBorders}
-                onToggleManufacturerBorders={() => setShowManufacturerBorders(!showManufacturerBorders)}
-                favoritesCount={favorites.length}
-                showFavoritesOnly={showFavoritesOnly}
-                onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
-              />
-
-              {isNFS && (
+              <div className="reveal-up stagger-4">
                 <NFSSwatchRail
                   colors={allColors}
                   selectedColorId={expandedColorId}
                   onSelectColor={handleColorSelect}
                 />
-              )}
+              </div>
 
               <ZoomResponsiveContainer isDarkMode={isDarkMode}>
-                <div id="color-gallery" className={`relative rounded-xl overflow-hidden p-4 ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+                <div id="color-gallery" className={`reveal-up stagger-5 panel-sheen kinetic-hover relative rounded-xl overflow-hidden p-4 modern-aurora ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-2xl">🏆</span>
                     <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>COLOR GALLERY</span>
@@ -490,28 +507,16 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  {!isNFS && filteredColors.length > 1000 ? (
-                    <VirtualColorGrid
-                      colors={filteredColors}
-                      onColorSelect={handleColorSelect}
-                      onShowInfo={showColorHSB}
-                      favorites={favorites}
-                      onToggleFavorite={toggleFavorite}
-                      isDarkMode={isDarkMode}
-                      expandedColorId={expandedColorId}
-                    />
-                  ) : (
-                    <SimpleColorGrid
-                      colors={filteredColors}
-                      onColorSelect={handleColorSelect}
-                      onShowInfo={showColorHSB}
-                      favorites={favorites}
-                      onToggleFavorite={toggleFavorite}
-                      isDarkMode={isDarkMode}
-                      expandedColorId={expandedColorId}
-                      useNFSCard={isNFS}
-                    />
-                  )}
+                  <SimpleColorGrid
+                    colors={filteredColors}
+                    onColorSelect={handleColorSelect}
+                    onShowInfo={showColorHSB}
+                    favorites={favorites}
+                    onToggleFavorite={toggleFavorite}
+                    isDarkMode={isDarkMode}
+                    expandedColorId={expandedColorId}
+                    useNFSCard={true}
+                  />
                 </div>
               </ZoomResponsiveContainer>
             </ResponsiveLayout>
@@ -538,7 +543,7 @@ export default function HomePage() {
 
           <KeyboardShortcuts
             onToggleTheme={cycleTheme}
-            onToggleSearch={() => setShowAdvancedSearch(!showAdvancedSearch)}
+            onToggleSearch={focusSearchControls}
             onToggleComparison={() => setShowComparison(!showComparison)}
             isDarkMode={isDarkMode}
           />

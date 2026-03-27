@@ -1,4 +1,10 @@
-'use client'
+// Temp script — writes the full Lofi NFS Tokyo Drift synthesizer. Delete after use.
+const fs   = require('fs')
+const path = require('path')
+
+const dest = path.resolve(__dirname, '../app/components/NFSGarageAudio.tsx')
+
+const content = `'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -276,7 +282,7 @@ export default function NFSGarageAudio() {
       <button
         type="button"
         onClick={toggleAudio}
-        className={`nfs-garage-audio-btn tap-target rounded-lg px-3 py-2 text-xs font-semibold ${enabled ? 'is-on' : ''}`}
+        className={\`nfs-garage-audio-btn tap-target rounded-lg px-3 py-2 text-xs font-semibold \${enabled ? 'is-on' : ''}\`}
         aria-label={enabled ? 'Disable garage soundtrack' : 'Enable garage soundtrack'}
       >
         {enabled ? 'Soundtrack: On' : 'Soundtrack: Off'}
@@ -285,3 +291,7 @@ export default function NFSGarageAudio() {
     </div>
   )
 }
+`
+
+fs.writeFileSync(dest, content, 'utf8')
+console.log('NFSGarageAudio.tsx written successfully (' + content.length + ' bytes)')

@@ -19,19 +19,19 @@ const MobileOptimizedBackground = ({ isDarkMode }) => {
           className={`absolute top-20 left-10 w-32 h-32 rounded-full blur-xl animate-pulse ${
             isDarkMode ? 'bg-fuchsia-500/10' : 'bg-blue-400/20'
           }`}
-          style={{ animationDuration: '8s', transform: 'translateZ(0)' }}
+          style={{ animationDuration: '22.9s', transform: 'translateZ(0)' }}
         />
         <div
           className={`absolute bottom-32 right-8 w-24 h-24 rounded-full blur-lg animate-pulse ${
             isDarkMode ? 'bg-cyan-500/10' : 'bg-purple-400/20'
           }`}
-          style={{ animationDuration: '6s', animationDelay: '2s', transform: 'translateZ(0)' }}
+          style={{ animationDuration: '17.1s', animationDelay: '2s', transform: 'translateZ(0)' }}
         />
         <div
           className={`absolute top-1/2 left-1/2 w-20 h-20 rounded-full blur-lg animate-pulse ${
             isDarkMode ? 'bg-yellow-500/10' : 'bg-pink-400/20'
           }`}
-          style={{ animationDuration: '10s', animationDelay: '4s', transform: 'translateZ(0)' }}
+          style={{ animationDuration: '28.6s', animationDelay: '4s', transform: 'translateZ(0)' }}
         />
       </div>
     </div>

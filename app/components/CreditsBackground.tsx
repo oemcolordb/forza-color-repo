@@ -74,7 +74,7 @@ const CreditsBackground: React.FC<CreditsBackgroundProps> = ({ isDarkMode }) => 
             textShadow: isDarkMode
               ? '0 0 20px rgba(100, 116, 139, 0.15)'
               : '0 0 15px rgba(148, 163, 184, 0.1)',
-            animation: `credit-drift ${4 + index * 0.3}s ease-in-out infinite`,
+            animation: `credit-drift ${(4 + index * 0.3) * 2.857}s ease-in-out infinite`,
             animationDelay: `${position.delay}s`,
           }}
         >
