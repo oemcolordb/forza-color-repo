@@ -1,13 +1,11 @@
-'use client'
+"use client";
 
-export const dynamic = 'force-dynamic'
-
-import React, { useState, useEffect, useMemo } from 'react'
-import { Location, LocationType } from './types'
-
-import SpeedCameraList from './SpeedCameraList'
-
-import locationData from './data/fh5-locations.json'
+import React, { useState, useEffect, useMemo } from 'react';
+import { Location, LocationType } from './types';
+import SpeedCameraList from './SpeedCameraList';
+import Breadcrumbs from '../components/Breadcrumbs';
+import locationData from './data/fh5-locations.json';
+import { useMapPersistence } from '../hooks/useMapPersistence';
 
 export default function LocationFinderPage() {
   const [locations] = useState<Location[]>(locationData.locations as Location[])

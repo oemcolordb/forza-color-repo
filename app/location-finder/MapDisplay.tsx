@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Location, LocationType } from './types'
+import styles from './MapDisplay.module.css'
 
 interface MapDisplayProps {
   selectedLocation: Location | null
@@ -87,6 +88,37 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
   onFiltersChange,
 }) => {
   const [zoom, setZoom] = useState(1)
+  const [pan, setPan] = useState({ x: 0, y: 0 }) // percent of map width/height
+  const [dragging, setDragging] = useState(false)
+  const dragStart = useRef<{ x: number; y: number } | null>(null)
+  const panStart = useRef<{ x: number; y: number } | null>(null)
+    // Pan event handlers
+    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+      setDragging(true)
+      dragStart.current = { x: e.clientX, y: e.clientY }
+      panStart.current = { x: pan.x, y: pan.y }
+      (e.target as HTMLElement).setPointerCapture(e.pointerId)
+    }
+
+    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!dragging || !dragStart.current || !panStart.current) return
+      const dx = e.clientX - dragStart.current.x
+      const dy = e.clientY - dragStart.current.y
+      // Pan is in percent, so scale by zoom and container size
+      // We'll use 100vw/100vh as the base, but clamp pan to [-100, 100] for safety
+      let newX = panStart.current.x + (dx / window.innerWidth) * 100 / zoom
+      let newY = panStart.current.y + (dy / window.innerHeight) * 100 / zoom
+      newX = Math.max(-100, Math.min(100, newX))
+      newY = Math.max(-100, Math.min(100, newY))
+      setPan({ x: newX, y: newY })
+    }
+
+    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+      setDragging(false)
+      dragStart.current = null
+      panStart.current = null
+      (e.target as HTMLElement).releasePointerCapture(e.pointerId)
+    }
   const [mapImageError, setMapImageError] = useState(false)
   const [mapImageSrc, setMapImageSrc] = useState('/maps/fh5-mexico.jpg')
   const uploadedMapUrlRef = useRef<string | null>(null)
@@ -208,7 +240,18 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
 
       {/* Map Container */}
       <div className="flex-grow relative overflow-hidden">
-        <div className="absolute inset-0" style={{ transform: `scale(${zoom})`, transformOrigin: 'center' }}>
+        <div
+          className={`absolute inset-0 ${styles['fh5-map-pan']} ${!dragging ? styles['fh5-map-anim'] : ''}`}
+          style={{
+            transform: `scale(${zoom}) translate(${pan.x}%, ${pan.y}%)`,
+            transformOrigin: 'center',
+            transition: dragging ? 'none' : undefined,
+          }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
           {!mapImageError ? (
             <img
               src={mapImageSrc}
@@ -255,35 +298,53 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
           )}
 
           {/* All Pins Overlay */}
-          <div className="absolute inset-0">
-            {allLocations
-              .filter(l => filters.includes(l.type))
-              .map(l => {
-                const coords = l.coordinates
-                if (!coords) return null
-
-                const isSelected = selectedLocation?.id === l.id
-                return (
-                  <div
-                    key={l.id}
-                    className="absolute z-30"
-                    style={{ left: `${coords.x}%`, top: `${coords.y}%` }}
-                  >
-                    <div
-                      className={`-translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full border border-white/60 shadow ${
-                        isSelected ? 'ring-2 ring-white' : ''
-                      } ${getMarkerColor(l.type)}`}
-                    />
-                  </div>
-                )
-              })}
-          </div>
+          {/* Normalization constants: update if you change the map image! */}
+          {(() => {
+            const MAP_WIDTH = 4096; // px
+            const MAP_HEIGHT = 4096; // px
+            function normalizeCoords(coords: { x: number; y: number }) {
+              // If already in percent (0-100), skip normalization
+              if (coords.x <= 100 && coords.y <= 100) return coords;
+              return {
+                x: (coords.x / MAP_WIDTH) * 100,
+                y: (coords.y / MAP_HEIGHT) * 100,
+              };
+            }
+            return (
+              <div className="absolute inset-0">
+                {allLocations
+                  .filter(l => filters.includes(l.type))
+                  .map(l => {
+                    const coords = l.coordinates;
+                    if (!coords) return null;
+                    const norm = normalizeCoords(coords);
+                    const isSelected = selectedLocation?.id === l.id;
+                    return (
+                      <div
+                        key={l.id}
+                        className={styles['fh5-map-marker']}
+                        style={{ left: `${norm.x}%`, top: `${norm.y}%` }}
+                      >
+                        <div
+                          className={`-translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full border border-white/60 shadow ${
+                            isSelected ? 'ring-2 ring-white' : ''
+                          } ${getMarkerColor(l.type)}`}
+                        />
+                      </div>
+                    );
+                  })}
+              </div>
+            );
+          })()}
 
           {/* Selected Location Arrow Overlay */}
           {selectedLocation && selectedCoords && (
             <div
-              className="absolute pointer-events-none z-50 transition-all duration-500 ease-out"
-              style={{ left: `${markerPos.x}%`, top: `${markerPos.y}%` }}
+              className={styles['fh5-map-arrow']}
+              style={{
+                left: `${markerPos.x}%`,
+                top: `${markerPos.y}%`,
+              }}
             >
               <div className="relative -translate-x-1/2 -translate-y-full">
                 <div className="absolute left-1/2 -top-10 -translate-x-1/2 whitespace-nowrap bg-orange-600/95 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-xl border border-white/20">
