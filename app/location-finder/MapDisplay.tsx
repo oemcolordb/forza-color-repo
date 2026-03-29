@@ -121,7 +121,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
     const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
       setDragging(false)
       dragStart.current = null
-      panStart.current = null
+      (panStart as React.MutableRefObject<{ x: number; y: number } | null>).current = null
       (e.target as HTMLElement).releasePointerCapture(e.pointerId)
     }
   const [mapImageError, setMapImageError] = useState(false)
