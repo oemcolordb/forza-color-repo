@@ -92,38 +92,38 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
   const [dragging, setDragging] = useState(false)
   const dragStart = useRef<{ x: number; y: number } | null>(null)
   const panStart = useRef<{ x: number; y: number } | null>(null)
-    // Pan event handlers
-    const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-      setDragging(true)
-      dragStart.current = { x: e.clientX, y: e.clientY }
-      if (panStart.current) {
-        panStart.current.x = pan.x;
-        panStart.current.y = pan.y;
-      } else {
-        panStart.current = { x: pan.x, y: pan.y };
-      }
-      (e.target as HTMLElement).setPointerCapture(e.pointerId)
+  // Pan event handlers
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    setDragging(true)
+    dragStart.current = { x: e.clientX, y: e.clientY }
+    if (panStart.current) {
+      panStart.current.x = pan.x;
+      panStart.current.y = pan.y;
+    } else {
+      panStart.current = { x: pan.x, y: pan.y };
     }
+    (e.target as HTMLElement).setPointerCapture(e.pointerId)
+  }
 
-    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!dragging || !dragStart.current || !panStart.current) return
-      const dx = e.clientX - dragStart.current.x
-      const dy = e.clientY - dragStart.current.y
-      // Pan is in percent, so scale by zoom and container size
-      // We'll use 100vw/100vh as the base, but clamp pan to [-100, 100] for safety
-      let newX = panStart.current.x + (dx / window.innerWidth) * 100 / zoom
-      let newY = panStart.current.y + (dy / window.innerHeight) * 100 / zoom
-      newX = Math.max(-100, Math.min(100, newX))
-      newY = Math.max(-100, Math.min(100, newY))
-      setPan({ x: newX, y: newY })
-    }
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragging || !dragStart.current || !panStart.current) return
+    const dx = e.clientX - dragStart.current.x
+    const dy = e.clientY - dragStart.current.y
+    // Pan is in percent, so scale by zoom and container size
+    // We'll use 100vw/100vh as the base, but clamp pan to [-100, 100] for safety
+    let newX = panStart.current.x + (dx / window.innerWidth) * 100 / zoom
+    let newY = panStart.current.y + (dy / window.innerHeight) * 100 / zoom
+    newX = Math.max(-100, Math.min(100, newX))
+    newY = Math.max(-100, Math.min(100, newY))
+    setPan({ x: newX, y: newY })
+  }
 
-    const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-      setDragging(false)
-      dragStart.current = null
-      (panStart as React.MutableRefObject<{ x: number; y: number } | null>).current = null
-      (e.target as HTMLElement).releasePointerCapture(e.pointerId)
-    }
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    setDragging(false)
+    dragStart.current = null
+    (panStart as React.MutableRefObject<{ x: number; y: number } | null>).current = null
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId)
+  }
   const [mapImageError, setMapImageError] = useState(false)
   const [mapImageSrc, setMapImageSrc] = useState('/maps/fh5-mexico.jpg')
   const uploadedMapUrlRef = useRef<string | null>(null)
