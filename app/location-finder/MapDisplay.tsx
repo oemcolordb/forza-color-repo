@@ -96,7 +96,12 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
     const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
       setDragging(true)
       dragStart.current = { x: e.clientX, y: e.clientY }
-      panStart.current = { x: pan.x, y: pan.y }
+      if (panStart.current) {
+        panStart.current.x = pan.x;
+        panStart.current.y = pan.y;
+      } else {
+        panStart.current = { x: pan.x, y: pan.y };
+      }
       (e.target as HTMLElement).setPointerCapture(e.pointerId)
     }
 
