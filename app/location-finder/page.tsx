@@ -4,11 +4,8 @@ export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect, useMemo } from 'react'
 import { Location, LocationType } from './types'
-import LocationCard from './LocationCard'
-import MapDisplay from './MapDisplay'
-import Breadcrumbs from '../components/Breadcrumbs'
-import locationData from '@/public/data/fh5-locations.json'
-import { useMapPersistence } from '../hooks/useMapPersistence'
+
+import SpeedCameraList from './SpeedCameraList'
 
 export default function LocationFinderPage() {
   const [locations] = useState<Location[]>(locationData.locations as Location[])
@@ -174,6 +171,12 @@ export default function LocationFinderPage() {
             onFiltersChange={handleFiltersChange}
           />
         </section>
+
+        {/* Speed Cameras Table */}
+        <div className="mt-8 bg-gray-900/80 rounded-xl border border-blue-700/40 shadow-xl p-4">
+          <h2 className="text-lg font-bold mb-2 text-blue-300">All Speed Cameras (Live)</h2>
+          <SpeedCameraList />
+        </div>
       </main>
     </div>
   )

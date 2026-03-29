@@ -66,6 +66,7 @@ export default function HomePage() {
   const [showComparison, setShowComparison] = useState(false)
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
+  const [showInsightsPanel, setShowInsightsPanel] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
 
   useAnalytics()
@@ -717,37 +718,58 @@ export default function HomePage() {
               </GamingErrorBoundary>
             </div>
 
-            {/* Advanced Tools */}
+            {/* Advanced Tools + Analytics (collapsible) */}
             {allColors.length > 0 && (
               <div
                 className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
                   isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
                 }`}
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl">🛠️</span>
-                  <span
-                    className="font-bold"
-                    style={{color: "var(--bamboo-stalk)"}}
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🛠️</span>
+                    <span
+                      className="font-bold"
+                      style={{color: "var(--bamboo-stalk)"}}
+                    >
+                      ADVANCED TOOLS & ANALYTICS
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowInsightsPanel(prev => !prev)}
+                    className="bamboo-button-ghost px-3 py-2 rounded-lg text-sm font-semibold"
+                    aria-expanded={showInsightsPanel}
+                    aria-controls="insights-panel"
                   >
-                    ADVANCED TOOLS
-                  </span>
+                    {showInsightsPanel ? 'Hide' : 'Show'}
+                  </button>
                 </div>
-                <GamingErrorBoundary>
-                  <AdvancedTools
-                    colors={allColors}
-                    isDarkMode={isDarkMode}
-                    isMobile={deviceInfo.isMobile}
-                    onColorSelect={showColorHSB}
-                  />
-                </GamingErrorBoundary>
-              </div>
-            )}
 
-            {/* Color Analytics */}
-            {allColors.length > 0 && (
-              <div className="mb-6">
-                <ColorAnalyticsDashboard colors={allColors} isDarkMode={isDarkMode} />
+                {!showInsightsPanel && (
+                  <div className="text-sm opacity-80">
+                    Hidden by default to keep the homepage cleaner.
+                  </div>
+                )}
+
+                {showInsightsPanel && (
+                  <div id="insights-panel" className="mt-4">
+                    <div className="mb-6">
+                      <GamingErrorBoundary>
+                        <AdvancedTools
+                          colors={allColors}
+                          isDarkMode={isDarkMode}
+                          isMobile={deviceInfo.isMobile}
+                          onColorSelect={showColorHSB}
+                        />
+                      </GamingErrorBoundary>
+                    </div>
+
+                    <div>
+                      <ColorAnalyticsDashboard colors={allColors} isDarkMode={isDarkMode} />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
