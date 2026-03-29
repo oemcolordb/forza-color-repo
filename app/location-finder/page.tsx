@@ -7,6 +7,8 @@ import { Location, LocationType } from './types'
 
 import SpeedCameraList from './SpeedCameraList'
 
+import locationData from './data/fh5-locations.json'
+
 export default function LocationFinderPage() {
   const [locations] = useState<Location[]>(locationData.locations as Location[])
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
