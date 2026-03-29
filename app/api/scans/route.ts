@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     }
 
     const result = await client.execute({
-      sql: 'SELECT * FROM scans WHERE userId = ? ORDER BY createdAt DESC LIMIT 50',
+      sql: 'SELECT id, userId, imageName, extractedColors, matches, createdAt FROM scans WHERE userId = ? ORDER BY createdAt DESC LIMIT 50',
       args: [userId],
     })
 

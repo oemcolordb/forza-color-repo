@@ -116,11 +116,19 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
       return colors
         .map(color => ({
           color,
-          distance: Math.sqrt(
-            Math.pow(color.color1.h - targetHsb.h, 2) +
-              Math.pow(color.color1.s - targetHsb.s, 2) +
-              Math.pow(color.color1.b - targetHsb.b, 2)
-          ),
+          distance: (() => {
+            // Hue is circular: distance between 0.02 and 0.98 should be 0.04 not 0.96
+            const rawHDiff = Math.abs(color.color1.h - targetHsb.h)
+            const hDiff = Math.min(rawHDiff, 1 - rawHDiff)
+            // Weight H more heavily (most perceptually salient), then S, then B
+            // At low saturation, hue differences matter less
+            const satFactor = (color.color1.s + targetHsb.s) / 2
+            return Math.sqrt(
+              Math.pow(hDiff * 2 * satFactor, 2) +
+                Math.pow((color.color1.s - targetHsb.s) * 1.5, 2) +
+                Math.pow(color.color1.b - targetHsb.b, 2)
+            )
+          })(),
         }))
         .sort((a, b) => a.distance - b.distance)
         .slice(0, 10)

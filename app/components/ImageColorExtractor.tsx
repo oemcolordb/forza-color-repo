@@ -160,32 +160,30 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
           let minDistance = Infinity
 
           colors.forEach(forzaColor => {
-            // Convert Forza HSB to RGB for better comparison
-            const forzaR = Math.round(
-              255 *
-                forzaColor.color1.b *
-                (1 -
-                  forzaColor.color1.s * (1 - Math.cos((forzaColor.color1.h * 360 * Math.PI) / 180)))
-            )
-            const forzaG = Math.round(
-              255 *
-                forzaColor.color1.b *
-                (1 -
-                  forzaColor.color1.s *
-                    (1 - Math.cos(((forzaColor.color1.h * 360 - 120) * Math.PI) / 180)))
-            )
-            const forzaB = Math.round(
-              255 *
-                forzaColor.color1.b *
-                (1 -
-                  forzaColor.color1.s *
-                    (1 - Math.cos(((forzaColor.color1.h * 360 - 240) * Math.PI) / 180)))
-            )
+            // Convert Forza HSB to RGB using standard HSV algorithm
+            const h = forzaColor.color1.h * 6 // 0-6
+            const s = forzaColor.color1.s
+            const v = forzaColor.color1.b
+            const c = v * s // chroma
+            const x = c * (1 - Math.abs((h % 2) - 1))
+            const m = v - c
+            const sector = Math.floor(h) % 6
+            const rgb = [
+              [c, x, 0],
+              [x, c, 0],
+              [0, c, x],
+              [0, x, c],
+              [x, 0, c],
+              [c, 0, x],
+            ][sector] ?? [0, 0, 0]
+            const forzaR = Math.round((rgb[0] + m) * 255)
+            const forzaG = Math.round((rgb[1] + m) * 255)
+            const forzaB = Math.round((rgb[2] + m) * 255)
 
-            // Weighted RGB distance (human eye perception)
-            const rWeight = 0.3,
-              gWeight = 0.59,
-              bWeight = 0.11
+            // Weighted RGB distance (human eye perception - ITU-R BT.601 luma coefficients)
+            const rWeight = 0.299,
+              gWeight = 0.587,
+              bWeight = 0.114
             const distance = Math.sqrt(
               rWeight * Math.pow(extracted.rgb[0] - forzaR, 2) +
                 gWeight * Math.pow(extracted.rgb[1] - forzaG, 2) +
