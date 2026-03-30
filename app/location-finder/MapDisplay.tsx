@@ -94,15 +94,18 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
   const panStart = useRef<{ x: number; y: number } | null>(null)
   // Pan event handlers
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    setDragging(true)
-    dragStart.current = { x: e.clientX, y: e.clientY }
+    setDragging(true);
+    ;(dragStart as React.MutableRefObject<{ x: number; y: number } | null>).current = { x: e.clientX, y: e.clientY }
     if (panStart.current) {
       panStart.current.x = pan.x;
       panStart.current.y = pan.y;
     } else {
       panStart.current = { x: pan.x, y: pan.y };
     }
-    (e.target as HTMLElement).setPointerCapture(e.pointerId)
+    const target = e.target as HTMLElement | null
+    if (target && typeof target.setPointerCapture === 'function') {
+      target.setPointerCapture(e.pointerId)
+    }
   }
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -119,10 +122,13 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
   }
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
-    setDragging(false)
-    dragStart.current = null
-    (panStart as React.MutableRefObject<{ x: number; y: number } | null>).current = null
-    (e.target as HTMLElement).releasePointerCapture(e.pointerId)
+    setDragging(false);
+    ;(dragStart as React.MutableRefObject<{ x: number; y: number } | null>).current = null
+    ;(panStart as React.MutableRefObject<{ x: number; y: number } | null>).current = null
+    const upTarget = e.target as HTMLElement | null
+    if (upTarget && typeof upTarget.releasePointerCapture === 'function') {
+      upTarget.releasePointerCapture(e.pointerId)
+    }
   }
   const [mapImageError, setMapImageError] = useState(false)
   const [mapImageSrc, setMapImageSrc] = useState('/maps/fh5-mexico.jpg')

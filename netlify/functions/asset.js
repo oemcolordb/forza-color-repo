@@ -31,15 +31,43 @@ exports.handler = async event => {
   }
 
   try {
-    const filePath = path.join(process.cwd(), 'public', assetPath)
+    // Resolve and validate path against fixed public directory
+    const basePublic = path.resolve(process.cwd(), 'public')
 
-    // Security check - prevent path traversal
-    if (!filePath.startsWith(path.join(process.cwd(), 'public'))) {
+    let decodedPath
+    try {
+      decodedPath = decodeURIComponent(assetPath)
+    } catch {
+      return { statusCode: 400, body: 'Invalid asset path' }
+    }
+
+    // Reject obvious unsafe inputs
+    if (!decodedPath || path.isAbsolute(decodedPath) || decodedPath.includes('\0')) {
       return { statusCode: 403, body: 'Invalid path' }
     }
 
+    const resolved = path.resolve(basePublic, decodedPath)
+    const baseWithSep = basePublic.endsWith(path.sep) ? basePublic : basePublic + path.sep
+    if (resolved !== basePublic && !resolved.startsWith(baseWithSep)) {
+      return { statusCode: 403, body: 'Invalid path' }
+    }
+
+    // Only allow known safe extensions
+    const ext = path.extname(resolved).toLowerCase()
+    const allowedExts = new Set(['.jpg', '.jpeg', '.png', '.mp4', '.json', '.svg'])
+    if (!allowedExts.has(ext)) {
+      return { statusCode: 403, body: 'Forbidden file type' }
+    }
+
+    const filePath = resolved
+
+    // Ensure the target is a file before reading
+    const stat = fs.statSync(filePath)
+    if (!stat.isFile()) {
+      return { statusCode: 404, body: 'Asset not found' }
+    }
+
     const fileBuffer = fs.readFileSync(filePath)
-    const ext = path.extname(assetPath).toLowerCase()
 
     const mimeTypes = {
       '.jpg': 'image/jpeg',

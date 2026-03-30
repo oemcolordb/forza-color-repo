@@ -6,9 +6,11 @@ class TelemetryLogger {
     this.logDir = logDir
     this.currentSession = null
     this.logStream = null
+    // Resolve and lock the base directory to prevent path traversal
+    this.baseLogDir = path.resolve(process.cwd(), logDir)
 
-    if (!fs.existsSync(logDir)) {
-      fs.mkdirSync(logDir, { recursive: true })
+    if (!fs.existsSync(this.baseLogDir)) {
+      fs.mkdirSync(this.baseLogDir, { recursive: true })
     }
   }
 
@@ -16,8 +18,18 @@ class TelemetryLogger {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
     this.currentSession = sessionName || `session-${timestamp}`
 
-    const logFile = path.join(this.logDir, `${this.currentSession}.csv`)
-    this.logStream = fs.createWriteStream(logFile)
+    // Validate sessionName and resolve inside baseLogDir to avoid traversal
+    const isSafeName = name => /^[A-Za-z0-9._-]+$/.test(name)
+    const safeName = sessionName && isSafeName(sessionName) ? sessionName : this.currentSession
+
+    const logFilePath = path.resolve(this.baseLogDir, `${safeName}.csv`)
+    const baseWithSep = this.baseLogDir.endsWith(path.sep) ? this.baseLogDir : this.baseLogDir + path.sep
+    if (logFilePath !== this.baseLogDir && !logFilePath.startsWith(baseWithSep)) {
+      // Fallback to a safe filename inside the base directory
+      this.logStream = fs.createWriteStream(path.join(this.baseLogDir, `${this.currentSession}.csv`))
+    } else {
+      this.logStream = fs.createWriteStream(logFilePath)
+    }
 
     // CSV header
     this.logStream.write(
