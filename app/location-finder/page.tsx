@@ -4,6 +4,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Location, LocationType } from './types';
 import SpeedCameraList from './SpeedCameraList';
 import Breadcrumbs from '../components/Breadcrumbs';
+import LocationCard from './LocationCard';
+import MapDisplay from './MapDisplay';
 import locationData from './data/fh5-locations.json';
 import { useMapPersistence } from '../hooks/useMapPersistence';
 
