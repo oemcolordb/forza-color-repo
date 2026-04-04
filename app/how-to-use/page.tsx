@@ -7,8 +7,19 @@ import Link from 'next/link'
 
 export default function HowToUsePage() {
   return (
-    <div className="min-h-screen text-white">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="relative min-h-screen text-white overflow-hidden">
+      {/* EPIC video background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        src="/EPIC.mp4"
+      />
+      <div className="absolute inset-0 bg-black/75" />
+
+      <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
           <Link
             href="/"
@@ -208,6 +219,6 @@ export default function HowToUsePage() {
           </div>
         </div>
       </div>
-    </div>
+    </div>{/* end video wrapper */}
   )
 }

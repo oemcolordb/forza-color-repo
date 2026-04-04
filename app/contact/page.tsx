@@ -1,210 +1,28 @@
 'use client'
 
 export const dynamic = 'force-dynamic'
-import { useState, useEffect } from 'react'
-import TokyoBackground from '../components/TokyoBackground'
-import { getSecureAssetUrl } from '../lib/assetProtection'
 
 export default function Contact() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme')
-    setIsDarkMode(savedTheme !== 'light')
-  }, [])
-
   return (
-    <div
-      className={`min-h-screen ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}
-    >
-      <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden text-white">
+      {/* EPIC video background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        src="/EPIC.mp4"
+      />
+      <div className="absolute inset-0 bg-black/70" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-16">
-        {/* Engine Bay - Header */}
-        <div
-          className={`relative mb-8 rounded-xl overflow-hidden p-6 ${
-            isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
-          }`}
-        >
-          <div className="absolute top-2 left-4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-              <span
-                className={`text-xs font-mono ${isDarkMode ? 'text-orange-400' : 'text-orange-600'}`}
-              >
-                CONTACT SYSTEM
-              </span>
-            </div>
-          </div>
-          <div className="mt-4">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text">
-              🔧 Contact & Support
-            </h1>
-            <p className="leading-relaxed">
-              Get in touch for support, feedback, or collaboration opportunities.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Dashboard - Contact Info */}
-          <div
-            className={`relative rounded-xl overflow-hidden p-6 ${
-              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
-            }`}
-          >
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                <span
-                  className={`text-xs font-mono ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
-                >
-                  COMMUNICATION
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6 space-y-6">
-              <div>
-                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
-                  📧 <span>Direct Contact</span>
-                </h3>
-                <a
-                  href="mailto:julian.penning1@gmail.com"
-                  className="text-[color:var(--bamboo-stalk)] hover:underline text-lg"
-                >
-                  julian.penning1@gmail.com
-                </a>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Response usually within 24-48 hours
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
-                  💰 <span>Support Development</span>
-                </h3>
-                <a
-                  href="https://www.paypal.com/paypalme/julianpenning1"
-                  className="inline-flex items-center gap-2 px-4 py-2 bamboo-button text-white rounded-lg transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  💳 PayPal Donation
-                </a>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                  Help keep the project running and support new features
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
-                  🌐 <span>Social Media</span>
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href="https://twitter.com"
-                    className="flex items-center gap-2 px-3 py-2 bamboo-button text-white rounded-lg transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    🐦 Twitter placeholder
-                  </a>
-                  <a
-                    href="https://github.com"
-                    className="flex items-center gap-2 px-3 py-2 bamboo-button-ghost text-white rounded-lg transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    🐙 GitHub placeholder
-                  </a>
-                  <a
-                    href="https://discord.com"
-                    className="flex items-center gap-2 px-3 py-2 bamboo-button text-white rounded-lg transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    💬 Discord placeholder
-                  </a>
-                  <a
-                    href="https://youtube.com"
-                    className="flex items-center gap-2 px-3 py-2 bamboo-button text-white rounded-lg transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    📺 YouTube placeholder
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Control Panel - Support Info */}
-          <div
-            className={`relative rounded-xl overflow-hidden p-6 ${
-              isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
-            }`}
-          >
-            <div className="absolute top-2 left-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span
-                  className={`text-xs font-mono ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}
-                >
-                  SUPPORT MATRIX
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6 space-y-6">
-              <div>
-                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
-                  🔧 <span>Technical Support</span>
-                </h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• Website functionality issues</li>
-                  <li>• Performance problems</li>
-                  <li>• Browser compatibility</li>
-                  <li>• Telemetry setup assistance</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
-                  🎨 <span>Color Data</span>
-                </h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• Missing color information</li>
-                  <li>• Data export questions</li>
-                  <li>• Color matching assistance</li>
-                  <li>• API usage inquiries</li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2 flex items-center gap-2">
-                  💡 <span>General Inquiries</span>
-                </h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• Feature suggestions</li>
-                  <li>• Partnership opportunities</li>
-                  <li>• Collaboration requests</li>
-                  <li>• General feedback</li>
-                </ul>
-              </div>
-
-              <div
-                className={`mt-6 p-4 rounded-lg ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
-              >
-                <h3 className="text-lg font-medium mb-2">⏱️ Response Times</h3>
-                <ul className="space-y-1 text-sm">
-                  <li>• Email: 24-48 hours</li>
-                  <li>• Bug reports: 1-4 days</li>
-                  <li>• Feature requests: 1 week</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+      <div className="relative z-10 text-center px-6 max-w-lg">
+        <p className="text-6xl mb-4">🚧</p>
+        <h1 className="text-4xl font-bold mb-3">Contact coming soon</h1>
+        <p className="text-gray-300 mb-6">This page is taking a pit stop. Use the links below to reach out in the meantime.</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="mailto:julian.penning1@gmail.com" className="px-5 py-3 bamboo-button rounded-lg font-semibold">📧 Email us</a>
+          <a href="/" className="px-5 py-3 bamboo-button-ghost border border-white/30 rounded-lg font-semibold">← Back home</a>
         </div>
       </div>
     </div>

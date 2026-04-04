@@ -41,3 +41,6 @@ Thumbs.db
 !.ai-code-review/changes/
 !.ai-code-review/changes/*.json
 !.ai-code-review/results/
+
+pnpm-lock.yaml
+package-lock.json

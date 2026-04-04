@@ -93,7 +93,18 @@ export default function NotFound() {
   }, [gameActive, catchPaint])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col items-center justify-center p-4">
+    <div className="relative min-h-screen text-white flex flex-col items-center justify-center p-4 overflow-hidden">
+      {/* EPIC video background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        src="/EPIC.mp4"
+      />
+      <div className="absolute inset-0 bg-black/75" />
+      <div className="relative z-10 flex flex-col items-center w-full max-w-2xl px-4">
       <div className="text-center mb-8">
         <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-red-500 to-yellow-500 text-transparent bg-clip-text">
           404
@@ -208,6 +219,7 @@ export default function NotFound() {
           Use the arrow buttons to move your car and catch falling paint drops!
         </p>
       </div>
+      </div>{/* end z-10 wrapper */}
     </div>
   )
 }
