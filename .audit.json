@@ -1,0 +1,460 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@workflow/astro": {
+      "name": "@workflow/astro",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders",
+        "@workflow/rollup",
+        "@workflow/vite"
+      ],
+      "effects": [],
+      "range": "<=4.0.0-beta.37",
+      "nodes": [
+        "node_modules/@workflow/astro"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/builders": {
+      "name": "@workflow/builders",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/core"
+      ],
+      "effects": [
+        "@workflow/astro",
+        "@workflow/nest",
+        "@workflow/rollup",
+        "@workflow/sveltekit",
+        "@workflow/vite"
+      ],
+      "range": "<=4.0.1-beta.54",
+      "nodes": [
+        "node_modules/@workflow/builders"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/cli": {
+      "name": "@workflow/cli",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders",
+        "@workflow/core",
+        "@workflow/world-local",
+        "@workflow/world-vercel"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@workflow/cli"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/core": {
+      "name": "@workflow/core",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@workflow/world-local",
+        "@workflow/world-vercel",
+        {
+          "source": 1114140,
+          "name": "@workflow/core",
+          "dependency": "@workflow/core",
+          "title": "Vercel Workflow Allows Webhook Creation with Predictable User-Specified Tokens",
+          "url": "https://github.com/advisories/GHSA-9r75-g2cr-3h76",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-287"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": "<=4.1.0-beta.63"
+        },
+        "devalue"
+      ],
+      "effects": [
+        "@workflow/builders",
+        "@workflow/cli",
+        "@workflow/next",
+        "@workflow/nitro",
+        "workflow"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@workflow/core"
+      ],
+      "fixAvailable": {
+        "name": "workflow",
+        "version": "4.2.0-beta.76",
+        "isSemVerMajor": true
+      }
+    },
+    "@workflow/nest": {
+      "name": "@workflow/nest",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders"
+      ],
+      "effects": [],
+      "range": "<=0.0.0-beta.12",
+      "nodes": [
+        "node_modules/@workflow/nest"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/next": {
+      "name": "@workflow/next",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders",
+        "@workflow/core"
+      ],
+      "effects": [],
+      "range": "<=4.0.1-beta.59",
+      "nodes": [
+        "node_modules/@workflow/next"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/nitro": {
+      "name": "@workflow/nitro",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders",
+        "@workflow/core",
+        "@workflow/rollup",
+        "@workflow/vite"
+      ],
+      "effects": [
+        "@workflow/nuxt"
+      ],
+      "range": "<=4.0.1-beta.58",
+      "nodes": [
+        "node_modules/@workflow/nitro"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/nuxt": {
+      "name": "@workflow/nuxt",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/nitro"
+      ],
+      "effects": [],
+      "range": "<=4.0.1-beta.47",
+      "nodes": [
+        "node_modules/@workflow/nuxt"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/rollup": {
+      "name": "@workflow/rollup",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders"
+      ],
+      "effects": [],
+      "range": "<=4.0.0-beta.20",
+      "nodes": [
+        "node_modules/@workflow/rollup"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/sveltekit": {
+      "name": "@workflow/sveltekit",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders",
+        "@workflow/rollup",
+        "@workflow/vite"
+      ],
+      "effects": [],
+      "range": "<=4.0.0-beta.52",
+      "nodes": [
+        "node_modules/@workflow/sveltekit"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/vite": {
+      "name": "@workflow/vite",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "@workflow/builders"
+      ],
+      "effects": [],
+      "range": "<=4.0.0-beta.13",
+      "nodes": [
+        "node_modules/@workflow/vite"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/world-local": {
+      "name": "@workflow/world-local",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "undici"
+      ],
+      "effects": [
+        "@workflow/cli"
+      ],
+      "range": "<=4.1.0-beta.49",
+      "nodes": [
+        "node_modules/@workflow/world-local"
+      ],
+      "fixAvailable": true
+    },
+    "@workflow/world-vercel": {
+      "name": "@workflow/world-vercel",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "undici"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@workflow/world-vercel"
+      ],
+      "fixAvailable": true
+    },
+    "devalue": {
+      "name": "devalue",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1114438,
+          "name": "devalue",
+          "dependency": "devalue",
+          "title": "devalue has prototype pollution in devalue.parse and devalue.unflatten",
+          "url": "https://github.com/advisories/GHSA-cfw5-2vxh-hr84",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<5.6.4"
+        },
+        {
+          "source": 1114471,
+          "name": "devalue",
+          "dependency": "devalue",
+          "title": "Sveltejs devalue's `devalue.parse` and `devalue.unflatten` emit objects with `__proto__` own properties",
+          "url": "https://github.com/advisories/GHSA-mwv9-gp5h-frr4",
+          "severity": "low",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=5.6.3"
+        }
+      ],
+      "effects": [
+        "@workflow/core"
+      ],
+      "range": "<=5.6.3",
+      "nodes": [
+        "node_modules/devalue"
+      ],
+      "fixAvailable": {
+        "name": "workflow",
+        "version": "4.2.0-beta.76",
+        "isSemVerMajor": true
+      }
+    },
+    "undici": {
+      "name": "undici",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1114591,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici: Malicious WebSocket 64-bit length overflows parser and crashes the client",
+          "url": "https://github.com/advisories/GHSA-f269-vfmq-vjvj",
+          "severity": "high",
+          "cwe": [
+            "CWE-248",
+            "CWE-1284"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=7.0.0 <7.24.0"
+        },
+        {
+          "source": 1114593,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici has an HTTP Request/Response Smuggling issue",
+          "url": "https://github.com/advisories/GHSA-2mjp-6q6p-2qxm",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-444"
+          ],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+          },
+          "range": ">=7.0.0 <7.24.0"
+        },
+        {
+          "source": 1114637,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici has Unbounded Memory Consumption in WebSocket permessage-deflate Decompression",
+          "url": "https://github.com/advisories/GHSA-vrm6-8vpv-qv8q",
+          "severity": "high",
+          "cwe": [
+            "CWE-409"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=7.0.0 <7.24.0"
+        },
+        {
+          "source": 1114639,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici has Unhandled Exception in WebSocket Client Due to Invalid server_max_window_bits Validation",
+          "url": "https://github.com/advisories/GHSA-v9p9-hfj2-hcw8",
+          "severity": "high",
+          "cwe": [
+            "CWE-248"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=7.0.0 <7.24.0"
+        },
+        {
+          "source": 1114641,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici has CRLF Injection in undici via `upgrade` option",
+          "url": "https://github.com/advisories/GHSA-4992-7rv2-5pvq",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-93"
+          ],
+          "cvss": {
+            "score": 4.6,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:L/I:L/A:N"
+          },
+          "range": ">=7.0.0 <7.24.0"
+        },
+        {
+          "source": 1114643,
+          "name": "undici",
+          "dependency": "undici",
+          "title": "Undici has Unbounded Memory Consumption in its DeduplicationHandler via Response Buffering that leads to DoS",
+          "url": "https://github.com/advisories/GHSA-phc3-fgpg-7m6h",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 5.9,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=7.17.0 <7.24.0"
+        }
+      ],
+      "effects": [
+        "@workflow/world-local",
+        "@workflow/world-vercel"
+      ],
+      "range": "7.0.0 - 7.23.0",
+      "nodes": [
+        "node_modules/undici"
+      ],
+      "fixAvailable": true
+    },
+    "workflow": {
+      "name": "workflow",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@workflow/astro",
+        "@workflow/cli",
+        "@workflow/core",
+        "@workflow/nest",
+        "@workflow/next",
+        "@workflow/nitro",
+        "@workflow/nuxt",
+        "@workflow/rollup",
+        "@workflow/sveltekit",
+        {
+          "source": 1114141,
+          "name": "workflow",
+          "dependency": "workflow",
+          "title": "Vercel Workflow Allows Webhook Creation with Predictable User-Specified Tokens",
+          "url": "https://github.com/advisories/GHSA-9r75-g2cr-3h76",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-287"
+          ],
+          "cvss": {
+            "score": 5.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": "<=4.1.0-beta.63"
+        }
+      ],
+      "effects": [],
+      "range": "<=4.1.0-beta.63",
+      "nodes": [
+        "node_modules/workflow"
+      ],
+      "fixAvailable": {
+        "name": "workflow",
+        "version": "4.2.0-beta.76",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 11,
+      "high": 5,
+      "critical": 0,
+      "total": 16
+    },
+    "dependencies": {
+      "prod": 614,
+      "dev": 588,
+      "optional": 117,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 1294
+    }
+  }
+}

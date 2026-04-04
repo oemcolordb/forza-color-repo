@@ -1,82 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Location, LocationType } from './types';
+import React from 'react';
 import SpeedCameraList from './SpeedCameraList';
 import Breadcrumbs from '../components/Breadcrumbs';
-import LocationCard from './LocationCard';
-import MapDisplay from './MapDisplay';
-import locationData from './data/fh5-locations.json';
+import ScenicFinder from './ScenicFinder';
 import { useMapPersistence } from '../hooks/useMapPersistence';
 
 export default function LocationFinderPage() {
-  const [locations] = useState<Location[]>(locationData.locations as Location[])
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null)
-  
-  const {
-    progress,
-    isLoading,
-    lastSynced,
-    syncError,
-    markLocationVisited,
-    toggleFavoriteLocation,
-    setFilters: persistFilters,
-    setLastViewed,
-  } = useMapPersistence()
-
-  const filters = progress.activeFilters
-  const visitedSet = useMemo(() => new Set(progress.visitedLocations), [progress.visitedLocations])
-  const favoritesSet = useMemo(() => new Set(progress.favoriteLocations), [progress.favoriteLocations])
-
-  const filteredLocations = locations.filter(l => filters.includes(l.type))
-
-  // Initialize selected location from saved progress or first location
-  useEffect(() => {
-    if (isLoading) return
-    
-    if (progress.lastViewedLocation) {
-      const lastViewed = locations.find(l => l.id === progress.lastViewedLocation)
-      if (lastViewed && filters.includes(lastViewed.type)) {
-        setSelectedLocation(lastViewed)
-        return
-      }
-    }
-    
-    if (filteredLocations.length > 0 && !selectedLocation) {
-      setSelectedLocation(filteredLocations[0])
-    }
-  }, [isLoading, progress.lastViewedLocation, locations, filters, filteredLocations, selectedLocation])
-
-  // Handle location selection with persistence
-  const handleSelectLocation = (location: Location) => {
-    setSelectedLocation(location)
-    setLastViewed(location.id)
-    markLocationVisited(location.id)
-  }
-
-  // Handle filter changes with persistence
-  const handleFiltersChange = (newFilters: LocationType[]) => {
-    persistFilters(newFilters)
-  }
-  const sidebarBackgrounds = ['/2-3.jpeg', '/3-4.jpeg', '/4-4.jpeg', '/5-5.jpeg', '/6-6.jpg']
-  const selectedIndex = selectedLocation
-    ? Math.max(
-        0,
-        filteredLocations.findIndex(location => location.id === selectedLocation.id)
-      )
-    : 0
-  const activeSidebarBackground = sidebarBackgrounds[selectedIndex % sidebarBackgrounds.length]
-
-  useEffect(() => {
-    if (!selectedLocation) return
-    if (filters.includes(selectedLocation.type)) return
-
-    if (filteredLocations.length > 0) {
-      setSelectedLocation(filteredLocations[0])
-    } else {
-      setSelectedLocation(null)
-    }
-  }, [filters, filteredLocations, selectedLocation])
+  const { progress, isLoading, lastSynced, syncError } = useMapPersistence()
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col">
@@ -134,48 +65,13 @@ export default function LocationFinderPage() {
         <Breadcrumbs isDarkMode={true} />
       </div>
 
-      <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 max-w-screen-2xl mx-auto w-full">
-        <aside
-          className="lg:col-span-1 bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700/50 shadow-2xl flex flex-col overflow-hidden max-h-screen relative"
-          style={{
-            backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.88)), url(${activeSidebarBackground})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          <div className="p-4 border-b border-gray-700 flex-shrink-0">
-            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-300">
-              FH5 Locations
-            </h2>
-            <p className="text-sm text-gray-400">Collectibles, events, and landmarks.</p>
-          </div>
-          <div className="flex-1 overflow-y-auto p-2">
-            <div className="space-y-2">
-              {filteredLocations.map(location => (
-                <LocationCard
-                  key={location.id}
-                  location={location}
-                  isSelected={selectedLocation?.id === location.id}
-                  isFavorite={favoritesSet.has(location.id)}
-                  isVisited={visitedSet.has(location.id)}
-                  onSelect={() => handleSelectLocation(location)}
-                  onToggleFavorite={() => toggleFavoriteLocation(location.id)}
-                />
-              ))}
-            </div>
-          </div>
-        </aside>
+      <main className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 max-w-screen-2xl mx-auto w-full">
         <section className="lg:col-span-2 bg-gray-800/50 rounded-xl border border-gray-700/50 shadow-2xl overflow-hidden flex flex-col">
-          <MapDisplay
-            selectedLocation={selectedLocation}
-            allLocations={locations}
-            filters={filters}
-            onFiltersChange={handleFiltersChange}
-          />
+          <ScenicFinder />
         </section>
 
         {/* Speed Cameras Table */}
-        <div className="mt-8 bg-gray-900/80 rounded-xl border border-blue-700/40 shadow-xl p-4">
+        <div className="mt-8 bg-gray-900/80 rounded-xl border border-blue-700/40 shadow-xl p-4 lg:col-span-2">
           <h2 className="text-lg font-bold mb-2 text-blue-300">All Speed Cameras (Live)</h2>
           <SpeedCameraList />
         </div>

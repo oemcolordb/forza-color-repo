@@ -1,0 +1,25 @@
+{
+  "method": "extent-fallback",
+  "canvasBox": {
+    "left": 300,
+    "top": 924,
+    "width": 1300,
+    "height": 900
+  },
+  "dataExtent": {
+    "minLat": 0.5408972,
+    "maxLat": 0.8401671,
+    "minLng": -0.9633369,
+    "maxLng": -0.4502817
+  },
+  "px_from_lnglat": {
+    "a": 2533.8404132732694,
+    "b": 0,
+    "c": 2740.9419688173903
+  },
+  "py_from_lnglat": {
+    "a": 0,
+    "b": 3007.3188115477033,
+    "c": -702.6503246734803
+  }
+}
