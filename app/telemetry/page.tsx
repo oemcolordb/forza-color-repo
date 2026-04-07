@@ -6,13 +6,34 @@ import TelemetryDashboard from '../components/TelemetryDashboard'
 import TokyoBackground from '../components/TokyoBackground'
 import { getSecureAssetUrl } from '../lib/assetProtection'
 
+type PortCheckStatus = 'idle' | 'checking' | 'open' | 'closed'
+
 export default function TelemetryPage() {
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const [portStatus, setPortStatus] = useState<PortCheckStatus>('idle')
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
     setIsDarkMode(savedTheme !== 'light')
   }, [])
+
+  function checkBridgePort() {
+    setPortStatus('checking')
+    const ws = new WebSocket('ws://localhost:8080')
+    const timer = setTimeout(() => {
+      ws.close()
+      setPortStatus('closed')
+    }, 4000)
+    ws.onopen = () => {
+      clearTimeout(timer)
+      ws.close()
+      setPortStatus('open')
+    }
+    ws.onerror = () => {
+      clearTimeout(timer)
+      setPortStatus('closed')
+    }
+  }
 
   return (
     <div
@@ -96,6 +117,35 @@ export default function TelemetryPage() {
               <li>Set &quot;Data Out Packet Format&quot; to &quot;Dash&quot;</li>
               <li>Refresh this page — the dashboard below will connect automatically</li>
             </ol>
+
+            {/* Port check */}
+            <div className="mt-5 flex items-center gap-4">
+              <button
+                onClick={checkBridgePort}
+                disabled={portStatus === 'checking'}
+                className="px-4 py-2 rounded text-sm font-semibold bg-orange-500 hover:bg-orange-400 disabled:opacity-50 disabled:cursor-not-allowed text-white transition-colors"
+              >
+                {portStatus === 'checking' ? 'Checking…' : '🔍 Check Bridge (Port 8080)'}
+              </button>
+
+              {portStatus === 'open' && (
+                <span className="text-sm text-green-400 font-medium">
+                  ✅ Bridge is running — ready to receive Forza data on port 5300
+                </span>
+              )}
+              {portStatus === 'closed' && (
+                <span className="text-sm text-red-400 font-medium">
+                  ❌ Bridge not detected — run{' '}
+                  <code className="bg-black/40 px-1 rounded text-green-400">node server.js</code>{' '}
+                  first
+                </span>
+              )}
+            </div>
+
+            <p className="mt-2 text-xs text-gray-500">
+              Browsers can&apos;t check UDP directly — this tests the WebSocket bridge on port 8080.
+              If it&apos;s reachable, the bridge is live and listening for Forza&apos;s UDP packets on port 5300.
+            </p>
           </div>
         </div>
 
