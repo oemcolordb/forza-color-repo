@@ -14,7 +14,8 @@ const TelemetryDashboard = () => {
 
   useEffect(() => {
     // WebSocket connection for real-time telemetry data
-    const wsUrl = process.env.NEXT_PUBLIC_TELEMETRY_WS_URL || 'ws://localhost:8080/telemetry'
+    // Bridge server listens at ws://localhost:8080 (no path suffix)
+    const wsUrl = process.env.NEXT_PUBLIC_TELEMETRY_WS_URL || 'ws://localhost:8080'
     const ws = new WebSocket(wsUrl)
 
     ws.onopen = () => setIsConnected(true)
