@@ -82,6 +82,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
     if (filteredColors.length === 0) return []
 
     const baseColor = filteredColors[Math.floor(Math.random() * filteredColors.length)]
+    if (!baseColor || !baseColor.color1) return []
     const baseHue = baseColor.color1.h * 360
 
     let harmony = [baseColor]
