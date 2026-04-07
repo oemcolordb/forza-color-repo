@@ -60,10 +60,12 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(request)
         .then(response => {
-          const responseClone = response.clone()
-          caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(request, responseClone)
-          })
+          if (request.method === 'GET' && request.url.startsWith('http') && response.status === 200) {
+            const responseClone = response.clone()
+            caches.open(DYNAMIC_CACHE).then(cache => {
+              cache.put(request, responseClone)
+            })
+          }
           return response
         })
         .catch(() => {
@@ -88,10 +90,12 @@ self.addEventListener('fetch', event => {
     event.respondWith(
       fetch(request)
         .then(response => {
-          const responseClone = response.clone()
-          caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(request, responseClone)
-          })
+          if (request.method === 'GET' && request.url.startsWith('http') && response.status === 200) {
+            const responseClone = response.clone()
+            caches.open(DYNAMIC_CACHE).then(cache => {
+              cache.put(request, responseClone)
+            })
+          }
           return response
         })
         .catch(() => {
@@ -107,10 +111,12 @@ self.addEventListener('fetch', event => {
       return (
         response ||
         fetch(request).then(fetchResponse => {
-          const responseClone = fetchResponse.clone()
-          caches.open(DYNAMIC_CACHE).then(cache => {
-            cache.put(request, responseClone)
-          })
+          if (request.method === 'GET' && request.url.startsWith('http') && fetchResponse.status === 200) {
+            const responseClone = fetchResponse.clone()
+            caches.open(DYNAMIC_CACHE).then(cache => {
+              cache.put(request, responseClone)
+            })
+          }
           return fetchResponse
         })
       )
