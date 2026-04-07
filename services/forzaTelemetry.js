@@ -3,7 +3,7 @@ import dgram from 'dgram'
 class ForzaTelemetryReceiver {
   static DRIVETRAIN_TYPES = ['FWD', 'RWD', 'AWD']
   static PACKET_SIZE = 324
-  constructor(port = 9999) {
+  constructor(port = 5300) {
     this.port = port
     this.socket = null
     this.isListening = false

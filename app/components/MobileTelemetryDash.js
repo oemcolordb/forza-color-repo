@@ -36,23 +36,42 @@ const MobileTelemetryDash = () => {
     return (
       <div className="min-h-screen text-white p-4 flex flex-col justify-center">
         <div className="max-w-sm mx-auto">
-          <h1 className="text-2xl font-bold mb-6 text-center">Forza Telemetry</h1>
-          <div className="space-y-4">
+          <h1 className="text-2xl font-bold mb-4 text-center">🏎️ Forza Telemetry</h1>
+
+          {/* Why we need an IP explanation */}
+          <div className="mb-5 p-4 rounded-lg bg-yellow-900/40 border border-yellow-600/40 text-sm text-yellow-200 space-y-2">
+            <p className="font-semibold text-yellow-300">📡 Why do I need to enter an IP?</p>
+            <p>
+              Browsers can&apos;t receive UDP data directly — it&apos;s a browser security limit.
+              Forza outputs telemetry as raw UDP packets, so a tiny bridge converts them to
+              WebSocket so this page can display them live.
+            </p>
+            <p>
+              The bridge runs on your gaming PC on port <span className="font-mono text-white">8080</span>.
+              If you&apos;re on the same PC, enter <span className="font-mono text-white">localhost</span>.
+              On a phone or second screen, enter your PC&apos;s local IP address.
+            </p>
+          </div>
+
+          <div className="space-y-3">
             <input
               type="text"
-              placeholder="PC IP Address (e.g., 192.168.1.100)"
+              placeholder="e.g. localhost or 192.168.1.100"
               value={serverIP}
               onChange={e => setServerIP(e.target.value)}
-              className="w-full p-3 bamboo-input"
+              className="w-full p-3 bamboo-input rounded"
             />
             <button onClick={handleConnect} className="w-full p-3 bamboo-button rounded font-bold">
-              Connect
+              Connect to Bridge
             </button>
           </div>
-          <div className="mt-6 text-sm text-gray-400">
-            <p>1. Run telemetry server on PC</p>
-            <p>2. Enter PC's IP address</p>
-            <p>3. Start Forza Horizon 5</p>
+
+          <div className="mt-5 p-3 rounded bg-black/30 text-xs text-gray-400 space-y-1">
+            <p className="text-gray-300 font-semibold">Before connecting:</p>
+            <p>1. Open a terminal on your gaming PC</p>
+            <p>2. Run: <span className="font-mono text-green-400">node server.js</span></p>
+            <p>3. In Forza: Settings → HUD → Data Out <span className="font-mono text-white">ON</span>, Port <span className="font-mono text-white">5300</span></p>
+            <p>4. Enter your PC IP above and hit Connect</p>
           </div>
         </div>
       </div>

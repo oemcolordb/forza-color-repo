@@ -64,12 +64,37 @@ export default function TelemetryPage() {
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               ⚙️ <span>Setup Instructions</span>
             </h2>
-            <ol className="list-decimal list-inside space-y-2 text-sm">
+            <ol className="list-decimal list-inside space-y-3 text-sm">
+              <li>
+                Install{' '}
+                <a
+                  href="https://nodejs.org/en/download"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-orange-400 underline hover:text-orange-300"
+                >
+                  Node.js
+                </a>{' '}
+                (LTS version) on your PC if you haven&apos;t already
+              </li>
+              <li>
+                Download{' '}
+                <a
+                  href="/server.js"
+                  download="server.js"
+                  className="text-orange-400 underline hover:text-orange-300"
+                >
+                  server.js
+                </a>{' '}
+                and run it with:{' '}
+                <code className="bg-black/40 px-1 rounded text-green-400">node server.js</code>
+              </li>
               <li>In Forza Horizon 5, go to Settings → HUD and Gameplay</li>
-              <li>Set "Data Out" to "On"</li>
-              <li>Set "Data Out IP Address" to "127.0.0.1"</li>
-              <li>Set "Data Out IP Port" to "9999"</li>
-              <li>Set "Data Out Packet Format" to "Dash"</li>
+              <li>Set &quot;Data Out&quot; to &quot;On&quot;</li>
+              <li>Set &quot;Data Out IP Address&quot; to &quot;127.0.0.1&quot;</li>
+              <li>Set &quot;Data Out IP Port&quot; to &quot;5300&quot;</li>
+              <li>Set &quot;Data Out Packet Format&quot; to &quot;Dash&quot;</li>
+              <li>Refresh this page — the dashboard below will connect automatically</li>
             </ol>
           </div>
         </div>

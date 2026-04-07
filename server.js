@@ -17,7 +17,7 @@ import MicrosoftStoreFix from './scripts/fix-microsoft-store.js'
  * @param {number} udpPort - Port to receive Forza UDP telemetry (default: 9999)
  * @param {number} wsPort - WebSocket port for client connections (default: 8080)
  */
-const bridge = new TelemetryBridge(9999, 8080)
+const bridge = new TelemetryBridge(5300, 8080)
 
 /**
  * Add UDP forwarders for multiple applications
@@ -31,7 +31,7 @@ const bridge = new TelemetryBridge(9999, 8080)
 // bridge.addForwarder('192.168.1.101', 9997)
 
 console.log('Starting Forza Horizon 5 Telemetry Bridge...')
-console.log('UDP Port: 9999 (configure in Forza settings)')
+console.log('UDP Port: 5300 (matches Forza Data Out IP Port setting)')
 console.log('WebSocket Port: 8080 (for web dashboards)')
 console.log('Mobile Dashboard: http://localhost:3000/mobile-dash')
 
