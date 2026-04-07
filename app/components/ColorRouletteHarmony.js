@@ -45,6 +45,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
   const filteredColors = useMemo(() => {
     const config = CATEGORIES[category]
     return colors.filter(color => {
+      if (!color || !color.color1) return false
       const makeMatch = config.makes.length === 0 || config.makes.includes(color.make)
       const colorMatch =
         config.colors.length === 0 ||
