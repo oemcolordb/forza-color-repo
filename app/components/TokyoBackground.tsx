@@ -27,9 +27,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
 
   const selectedMedia = useMemo(() => {
     const mediaFiles = [
-      { file: 'manuel-velasquez-ssfp9okorys-unsplash-1200x801.jpg', type: 'image' as const },
-      { file: '3060_04.jpg', type: 'image' as const },
-      { file: '3060_06.jpg', type: 'image' as const },
+      // Videos (7 available)
       {
         file: 'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
         type: 'video' as const,
@@ -43,9 +41,27 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
         type: 'video' as const,
       },
       {
+        file: 'Mp 4 H 280 Szq 5 E KT 7 Ee 1 C A Vh 3 C KR Vdnf L 9 S 52 V 6 GG 2 R Md Ll V 2 Qx Y Cc.mp4',
+        type: 'video' as const,
+      },
+      {
+        file: 'Mp 4 H 280 U Rk Qu 5 Hjg Vq B 14 A V 582 Kiio P 3 Db Lnqmo L 5 Z WZBEM Az 5 Z 5.mp4',
+        type: 'video' as const,
+      },
+      {
+        file: 'Mp 4 H 280 Uw 0 WJIUIA Uq 31 Fa H Pqs T Zh Kewnh 32 BCLPE Fhxml I 4 ZV 5 Q.mp4',
+        type: 'video' as const,
+      },
+      {
         file: 'Mp 4 H 280 Yq 68 Y FSH 7 L G 3 Xq O 4 Vv IA 6 F Ud IEJIB 01 Qeq N 1 T Sur DR 5 T I.mp4',
         type: 'video' as const,
       },
+      // Images
+      { file: 'manuel-velasquez-ssfp9okORYs-unsplash-1200x801.jpg', type: 'image' as const },
+      { file: 'assets/images/neon-shibuya-crossing-tokyo-japan-1140x760.jpg', type: 'image' as const },
+      { file: 'assets/images/tokyo-panorama.jpg', type: 'image' as const },
+      { file: 'assets/images/1-5.jpeg', type: 'image' as const },
+      { file: 'forza-color-sheet-preview.jpg', type: 'image' as const },
     ]
 
     const now = new Date()
@@ -54,7 +70,10 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
     const chosen = mediaFiles[mediaIndex]
 
     if (isMobile && chosen.type === 'video') {
-      return mediaFiles[0]
+      // On mobile use a real image fallback (first image in the list)
+      const imageFiles = mediaFiles.filter(m => m.type === 'image')
+      const imageIndex = thirtyMinuteSlots % imageFiles.length
+      return imageFiles[imageIndex]
     }
 
     return chosen

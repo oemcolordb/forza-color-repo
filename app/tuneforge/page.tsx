@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
 import Breadcrumbs from '../components/Breadcrumbs'
 import { getCountryFlag, formatPrice } from '../lib/countryFlags'
+import TokyoBackground from '../components/TokyoBackground'
+import { getSecureAssetUrl } from '../lib/assetProtection'
 
 import { TuningCalculator, TRACKS } from '../lib/tuning-calculator'
 import { Car as BaseCar } from '../types/car'
@@ -589,7 +591,7 @@ export default function TuneForge() {
       tune: tuneData,
       exportDate: new Date().toISOString(),
       version: '1.0',
-      app: 'Forza TuneForge AI',
+      app: 'Forza TuneForge',
     }
 
     const dataStr = JSON.stringify(exportData, null, 2)
@@ -637,7 +639,7 @@ export default function TuneForge() {
       tuneData
     )
       .map(([key, value]) => `${key}: ${value}`)
-      .join('\n')}\n\nCreated with Forza TuneForge AI`
+      .join('\n')}\n\nCreated with Forza TuneForge — Tune Build & Sharing Platform`
 
     if (navigator.share) {
       navigator.share({
@@ -773,22 +775,17 @@ export default function TuneForge() {
   return (
     <div
       className={`min-h-screen relative ${isDarkMode ? 'text-white' : 'text-black'}`}
-      style={{
-        backgroundImage: 'url("/assets/images/tokyo-panorama.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
     >
-      <div className="absolute inset-0 bg-black/60"></div>
+      <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+      <div className="absolute inset-0 bg-black/60 pointer-events-none z-0"></div>
       <header
         className={`relative z-10 flex flex-col gap-3 p-4 backdrop-blur-sm border-b sm:flex-row sm:items-center sm:justify-between ${
           isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
       >
         <div>
-          <h1 className="text-2xl font-bold">🏎️ Forza TuneForge AI</h1>
-          <p className="text-xs opacity-75">Professional Tuning Platform</p>
+          <h1 className="text-2xl font-bold">🏎️ Forza TuneForge</h1>
+          <p className="text-xs opacity-75">Tune Build &amp; Sharing Platform</p>
         </div>
         <div className="flex w-full gap-3 sm:w-auto sm:gap-4 sm:justify-end">
           <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-2xl p-2 rounded bamboo-button-ghost">
