@@ -61,6 +61,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           </Button>
 
           {/* More dropdown with click-outside-to-close */}
+          <PWAInstallButton isDarkMode={isDarkMode} />
           <div ref={moreRef} className="relative">
             <button
               onClick={() => setMoreOpen(prev => !prev)}

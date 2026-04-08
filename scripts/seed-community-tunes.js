@@ -95,7 +95,7 @@ async function main() {
     process.exit(1)
   }
 
-  const raw = JSON.parse(fs.readFileSync(jsonPath, 'utf8'))
+  const raw = JSON.parse(fs.readFileSync(jsonPath, 'utf8').replace(/^\uFEFF/, ''))
   console.log(`📂 Loaded ${raw.length} tune entries from JSON`)
 
   await ensureTable()

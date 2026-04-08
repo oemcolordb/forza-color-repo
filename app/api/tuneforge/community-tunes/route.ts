@@ -20,14 +20,25 @@ export const GET = async (request: Request) => {
 
   try {
     if (make && model) {
-      // Fuzzy match — tune DB names may differ slightly from cars.json names
+      // Normalize locale variants before matching (e.g. "Evoluzione" → "Evolution")
+      const normalizedModel = model
+        .replace(/evoluzione/gi, 'Evolution')
+        .replace(/\s+/g, ' ')
+        .trim()
+
+      // Bidirectional fuzzy match: DB model contains query OR query contains DB model.
+      // This handles cases where the tune DB uses a shorter name (e.g. "599XX EVOLUTION")
+      // while cars.json has the full name ("599XX Evoluzione").
       const result = await client.execute({
         sql: `SELECT * FROM community_tunes
               WHERE lower(car_make) LIKE lower(?)
-                AND lower(car_model) LIKE lower(?)
+                AND (
+                  lower(car_model) LIKE lower(?)
+                  OR lower(?) LIKE '%' || lower(car_model) || '%'
+                )
               ORDER BY votes DESC, created_at DESC
               LIMIT 50`,
-        args: [`%${make}%`, `%${model}%`],
+        args: [`%${make}%`, `%${normalizedModel}%`, normalizedModel],
       })
       return NextResponse.json(result.rows)
     }
