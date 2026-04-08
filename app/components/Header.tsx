@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { HeaderProps } from '../types'
 import { ErrorBoundary } from '../lib/errorBoundary'
 import Button from './ui/Button'
+import PWAInstallButton from './PWAInstallButton'
 
 const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
   const [moreOpen, setMoreOpen] = useState(false)
@@ -38,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           </span>
         </h1>
         <p className={`mt-2 text-sm font-medium opacity-70 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
-          Paint color database &amp; livery tools for Forza Horizon 5 &amp; Motorsport
+          Made with love by AltF4ToQu1t with credits to the legends at GTPLANET
         </p>
 
         {/* Primary nav — always visible */}
@@ -62,7 +63,6 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           {/* More dropdown with click-outside-to-close */}
           <div ref={moreRef} className="relative">
             <button
-              type="button"
               onClick={() => setMoreOpen(prev => !prev)}
               aria-expanded={moreOpen}
               aria-haspopup="true"

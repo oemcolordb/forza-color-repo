@@ -144,7 +144,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     return (
       <div
-        className={`group rounded-lg overflow-hidden flex flex-col transition-all duration-300 hover:scale-105 hover:shadow-xl hover-lift ${
+        className={`group rounded-lg overflow-hidden flex flex-col hover:shadow-xl ${
           isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
         style={{
@@ -408,21 +408,6 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                         {copiedKey === 'hsl' ? 'Copied' : 'Copy'}
                       </button>
                     </div>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono truncate">{primaryHex.toUpperCase()}</span>
-                      <button
-                        type="button"
-                        className="px-2 py-0.5 rounded text-[10px] bamboo-button-ghost"
-                        onClick={e => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          copyToClipboard('hex', primaryHex.toUpperCase())
-                        }}
-                        aria-label="Copy HEX"
-                      >
-                        {copiedKey === 'hex' ? 'Copied' : 'Copy'}
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -456,17 +441,6 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
             )}
           </div>
           <div className="flex justify-center items-center gap-3 mt-3 relative z-10">
-            <button
-              onClick={e => {
-                e.preventDefault()
-                e.stopPropagation()
-                copyToClipboard('hex-quick', primaryHex.toUpperCase())
-              }}
-              className="transition-colors px-2 py-1 rounded-md text-xs min-h-[32px] flex items-center justify-center bamboo-button-ghost"
-              aria-label={`Copy HEX for ${color.colorName}`}
-            >
-              {copiedKey === 'hex-quick' ? 'Copied HEX' : 'Copy HEX'}
-            </button>
             {onToggleFavorite && (
               <button
                 onClick={e => {
