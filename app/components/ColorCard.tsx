@@ -112,15 +112,16 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
 
     const [copiedKey, setCopiedKey] = React.useState<string | null>(null)
 
-    const gradient = React.useMemo(
-      () => createForzaGradient(color.color1, color.color2),
-      [color.color1, color.color2]
-    )
+    const gradient = React.useMemo(() => {
+      const c1 = color.color1 ?? { h: 0, s: 0, b: 0.5 }
+      const c2 = color.color2 ?? { h: 0, s: 0, b: 0.5 }
+      return createForzaGradient(c1, c2)
+    }, [color.color1, color.color2])
 
-    const primaryRgb = React.useMemo(
-      () => hsbToRgb(color.color1.h, color.color1.s, color.color1.b),
-      [color.color1.h, color.color1.s, color.color1.b]
-    )
+    const primaryRgb = React.useMemo(() => {
+      const c1 = color.color1 ?? { h: 0, s: 0, b: 0.5 }
+      return hsbToRgb(c1.h, c1.s, c1.b)
+    }, [color.color1])
 
     const primaryHex = React.useMemo(() => rgbToHex(primaryRgb), [primaryRgb])
     const primaryHsl = React.useMemo(() => rgbToHsl(primaryRgb), [primaryRgb])

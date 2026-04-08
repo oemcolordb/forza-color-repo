@@ -20,12 +20,14 @@ export const GET = async (request: Request) => {
 
   try {
     if (make && model) {
+      // Fuzzy match — tune DB names may differ slightly from cars.json names
       const result = await client.execute({
         sql: `SELECT * FROM community_tunes
-              WHERE car_make = ? AND car_model = ?
+              WHERE lower(car_make) LIKE lower(?)
+                AND lower(car_model) LIKE lower(?)
               ORDER BY votes DESC, created_at DESC
               LIMIT 50`,
-        args: [make, model],
+        args: [`%${make}%`, `%${model}%`],
       })
       return NextResponse.json(result.rows)
     }
