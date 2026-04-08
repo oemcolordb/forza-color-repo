@@ -162,12 +162,17 @@ export default function HomePage() {
         }
 
         const { getColorData } = await import('../services/colorDataLazy')
-        const originalColors = await getColorData()
+        const rawColors = await getColorData()
 
         // Validate data
-        if (!Array.isArray(originalColors)) {
+        if (!Array.isArray(rawColors)) {
           throw new Error('Invalid color data format')
         }
+
+        // Strip entries with no HSB color data (scraper junk from Restoration Shop, Custom Shop, etc.)
+        const originalColors = rawColors.filter(
+          (c: CarColor) => c.color1 && typeof c.color1 === 'object' && typeof (c.color1 as { h?: unknown }).h === 'number'
+        )
 
         setColors(originalColors)
         setAllColors(originalColors)
