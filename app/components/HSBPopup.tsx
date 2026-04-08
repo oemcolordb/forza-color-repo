@@ -12,19 +12,35 @@ interface HSBPopupProps {
   isDarkMode: boolean
 }
 
+function hsbToRgbStr(h: number, s: number, b: number): string {
+  const c = b * s
+  const x = c * (1 - Math.abs(((h * 6) % 2) - 1))
+  const m = b - c
+  let r = 0, g = 0, bl = 0
+  if (h < 1 / 6)      { r = c; g = x; bl = 0 }
+  else if (h < 2 / 6) { r = x; g = c; bl = 0 }
+  else if (h < 3 / 6) { r = 0; g = c; bl = x }
+  else if (h < 4 / 6) { r = 0; g = x; bl = c }
+  else if (h < 5 / 6) { r = x; g = 0; bl = c }
+  else                { r = c; g = 0; bl = x }
+  return `rgb(${Math.round((r + m) * 255)}, ${Math.round((g + m) * 255)}, ${Math.round((bl + m) * 255)})`
+}
+
+function fmtHSB(hsb: { h: number; s: number; b: number }) {
+  return {
+    h: Math.round(hsb.h * 360),
+    s: Math.round(hsb.s * 100),
+    b: Math.round(hsb.b * 100),
+  }
+}
+
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
   const closeButtonRef = React.useRef<HTMLButtonElement | null>(null)
 
   if (!isOpen || !color) return null
 
-  const formatHSB = (hsb: { h: number; s: number; b: number }) => ({
-    h: hsb.h.toFixed(2),
-    s: hsb.s.toFixed(2),
-    b: hsb.b.toFixed(2),
-  })
-
-  const hsb1 = formatHSB(color.color1)
-  const hsb2 = formatHSB(color.color2)
+  const hsb1 = fmtHSB(color.color1)
+  const hsb2 = fmtHSB(color.color2)
 
   return (
     <DialogShell
@@ -69,12 +85,12 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
               <div className="text-sm font-medium mb-2">Color 1</div>
               <div
                 className="w-full h-8 rounded border mb-2"
-                style={{
-                  backgroundColor: `rgb(${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos((color.color1.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color1.b * (1 - color.color1.s + color.color1.s * Math.cos(((color.color1.h * 360 - 240) * Math.PI) / 180)))})`,
-                }}
+                style={{ backgroundColor: hsbToRgbStr(color.color1.h, color.color1.s, color.color1.b) }}
               />
-              <div className="text-sm font-mono">
-                {hsb1.h} {hsb1.s} {hsb1.b}
+              <div className="text-sm font-mono grid grid-cols-3 gap-1">
+                <span>H: {hsb1.h}</span>
+                <span>S: {hsb1.s}%</span>
+                <span>B: {hsb1.b}%</span>
               </div>
             </div>
 
@@ -82,12 +98,12 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
               <div className="text-sm font-medium mb-2">Color 2</div>
               <div
                 className="w-full h-8 rounded border mb-2"
-                style={{
-                  backgroundColor: `rgb(${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos((color.color2.h * 360 * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 120) * Math.PI) / 180)))}, ${Math.round(255 * color.color2.b * (1 - color.color2.s + color.color2.s * Math.cos(((color.color2.h * 360 - 240) * Math.PI) / 180)))})`,
-                }}
+                style={{ backgroundColor: hsbToRgbStr(color.color2.h, color.color2.s, color.color2.b) }}
               />
-              <div className="text-sm font-mono">
-                {hsb2.h} {hsb2.s} {hsb2.b}
+              <div className="text-sm font-mono grid grid-cols-3 gap-1">
+                <span>H: {hsb2.h}</span>
+                <span>S: {hsb2.s}%</span>
+                <span>B: {hsb2.b}%</span>
               </div>
             </div>
           </div>

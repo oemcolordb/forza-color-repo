@@ -169,10 +169,16 @@ export default function HomePage() {
           throw new Error('Invalid color data format')
         }
 
-        // Strip entries with no HSB color data (scraper junk from Restoration Shop, Custom Shop, etc.)
-        const originalColors = rawColors.filter(
-          (c: CarColor) => c.color1 && typeof c.color1 === 'object' && typeof (c.color1 as { h?: unknown }).h === 'number'
-        )
+        // Strip entries with no HSB color data or out-of-range values (scraper junk, bad data)
+        const originalColors = rawColors.filter((c: CarColor) => {
+          const c1 = c.color1 as { h?: unknown; s?: unknown; b?: unknown } | null
+          if (!c1 || typeof c1 !== 'object') return false
+          return (
+            typeof c1.h === 'number' && c1.h >= 0 && c1.h <= 1 &&
+            typeof c1.s === 'number' && c1.s >= 0 && c1.s <= 1 &&
+            typeof c1.b === 'number' && c1.b >= 0 && c1.b <= 1
+          )
+        })
 
         setColors(originalColors)
         setAllColors(originalColors)
