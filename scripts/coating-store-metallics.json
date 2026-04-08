@@ -1,0 +1,869 @@
+[
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Alien Green Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.437,
+      "s": 0.801,
+      "b": 0.552
+    },
+    "color2": {
+      "h": 0.437,
+      "s": 0.549,
+      "b": 0.715
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Apple Green Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.347,
+      "s": 0.663,
+      "b": 0.618
+    },
+    "color2": {
+      "h": 0.347,
+      "s": 0.454,
+      "b": 0.8
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Aqua Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.524,
+      "s": 0.701,
+      "b": 0.677
+    },
+    "color2": {
+      "h": 0.524,
+      "s": 0.481,
+      "b": 0.877
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Arctic Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.546,
+      "s": 0.425,
+      "b": 0.742
+    },
+    "color2": {
+      "h": 0.546,
+      "s": 0.292,
+      "b": 0.961
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Beryllium Orange Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.054,
+      "s": 0.931,
+      "b": 0.673
+    },
+    "color2": {
+      "h": 0.054,
+      "s": 0.639,
+      "b": 0.872
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Black Sparkle Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.556,
+      "s": 0.105,
+      "b": 0.104
+    },
+    "color2": {
+      "h": 0.556,
+      "s": 0.072,
+      "b": 0.135
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Blue Moon Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.681,
+      "s": 0.288,
+      "b": 0.29
+    },
+    "color2": {
+      "h": 0.681,
+      "s": 0.197,
+      "b": 0.375
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Blue Ray Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.589,
+      "s": 1,
+      "b": 0.407
+    },
+    "color2": {
+      "h": 0.589,
+      "s": 0.708,
+      "b": 0.528
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Burnt Orange Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.069,
+      "s": 0.768,
+      "b": 0.666
+    },
+    "color2": {
+      "h": 0.069,
+      "s": 0.526,
+      "b": 0.863
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Champagne Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.177,
+      "s": 0.224,
+      "b": 0.535
+    },
+    "color2": {
+      "h": 0.177,
+      "s": 0.153,
+      "b": 0.693
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Charcoal Grey Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.567,
+      "s": 0.054,
+      "b": 0.341
+    },
+    "color2": {
+      "h": 0.567,
+      "s": 0.037,
+      "b": 0.442
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Coffee Bean Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.042,
+      "s": 0.252,
+      "b": 0.172
+    },
+    "color2": {
+      "h": 0.042,
+      "s": 0.173,
+      "b": 0.223
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Copperhead Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.05,
+      "s": 0.999,
+      "b": 0.77
+    },
+    "color2": {
+      "h": 0.05,
+      "s": 0.685,
+      "b": 0.997
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Cotton Candy Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.932,
+      "s": 0.606,
+      "b": 0.67
+    },
+    "color2": {
+      "h": 0.932,
+      "s": 0.415,
+      "b": 0.868
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Crimson Crush Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.992,
+      "s": 0.777,
+      "b": 0.611
+    },
+    "color2": {
+      "h": 0.992,
+      "s": 0.533,
+      "b": 0.791
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Dark Quasar Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.587,
+      "s": 0.933,
+      "b": 0.559
+    },
+    "color2": {
+      "h": 0.587,
+      "s": 0.64,
+      "b": 0.724
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Dusty Rose Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.005,
+      "s": 0.308,
+      "b": 0.4
+    },
+    "color2": {
+      "h": 0.005,
+      "s": 0.211,
+      "b": 0.519
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Egyptian Gold Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.107,
+      "s": 0.748,
+      "b": 0.708
+    },
+    "color2": {
+      "h": 0.107,
+      "s": 0.513,
+      "b": 0.917
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Euro Racing Green Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.471,
+      "s": 0.668,
+      "b": 0.341
+    },
+    "color2": {
+      "h": 0.471,
+      "s": 0.458,
+      "b": 0.442
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Fawn Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.129,
+      "s": 0.276,
+      "b": 0.459
+    },
+    "color2": {
+      "h": 0.129,
+      "s": 0.189,
+      "b": 0.595
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Fine Silver Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.5,
+      "s": 0.043,
+      "b": 0.68
+    },
+    "color2": {
+      "h": 0.5,
+      "s": 0.03,
+      "b": 0.881
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Fire Red Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.994,
+      "s": 0.874,
+      "b": 0.801
+    },
+    "color2": {
+      "h": 0.994,
+      "s": 0.599,
+      "b": 1
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "FireHawk Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.995,
+      "s": 0.875,
+      "b": 0.804
+    },
+    "color2": {
+      "h": 0.995,
+      "s": 0.6,
+      "b": 1
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Frost Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.532,
+      "s": 0.454,
+      "b": 0.583
+    },
+    "color2": {
+      "h": 0.532,
+      "s": 0.311,
+      "b": 0.756
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Galactic Green Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.425,
+      "s": 0.842,
+      "b": 0.297
+    },
+    "color2": {
+      "h": 0.425,
+      "s": 0.577,
+      "b": 0.384
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Gunmetal Grey Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.433,
+      "s": 0.059,
+      "b": 0.307
+    },
+    "color2": {
+      "h": 0.433,
+      "s": 0.04,
+      "b": 0.398
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Lavender Frost Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.698,
+      "s": 0.125,
+      "b": 0.607
+    },
+    "color2": {
+      "h": 0.698,
+      "s": 0.086,
+      "b": 0.787
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Light Gold Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.163,
+      "s": 0.28,
+      "b": 0.555
+    },
+    "color2": {
+      "h": 0.163,
+      "s": 0.192,
+      "b": 0.719
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Marooned Red Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.981,
+      "s": 0.852,
+      "b": 0.583
+    },
+    "color2": {
+      "h": 0.981,
+      "s": 0.584,
+      "b": 0.756
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Mystic Maroon Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.973,
+      "s": 0.74,
+      "b": 0.445
+    },
+    "color2": {
+      "h": 0.973,
+      "s": 0.508,
+      "b": 0.577
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Peach Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.063,
+      "s": 0.591,
+      "b": 0.711
+    },
+    "color2": {
+      "h": 0.063,
+      "s": 0.405,
+      "b": 0.921
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Pewter Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.452,
+      "s": 0.058,
+      "b": 0.442
+    },
+    "color2": {
+      "h": 0.452,
+      "s": 0.04,
+      "b": 0.572
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Platinum Mist Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.4,
+      "s": 0.034,
+      "b": 0.532
+    },
+    "color2": {
+      "h": 0.4,
+      "s": 0.023,
+      "b": 0.689
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Plum Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.758,
+      "s": 0.531,
+      "b": 0.286
+    },
+    "color2": {
+      "h": 0.758,
+      "s": 0.364,
+      "b": 0.371
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Purple Haze Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.725,
+      "s": 0.714,
+      "b": 0.421
+    },
+    "color2": {
+      "h": 0.725,
+      "s": 0.49,
+      "b": 0.545
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Red Gold Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.094,
+      "s": 0.546,
+      "b": 0.597
+    },
+    "color2": {
+      "h": 0.094,
+      "s": 0.374,
+      "b": 0.773
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Royal Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.608,
+      "s": 0.948,
+      "b": 0.673
+    },
+    "color2": {
+      "h": 0.608,
+      "s": 0.65,
+      "b": 0.872
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Sangria Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.976,
+      "s": 0.541,
+      "b": 0.235
+    },
+    "color2": {
+      "h": 0.976,
+      "s": 0.371,
+      "b": 0.304
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Sassy Pink Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.944,
+      "s": 0.74,
+      "b": 0.759
+    },
+    "color2": {
+      "h": 0.944,
+      "s": 0.508,
+      "b": 0.984
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Shady Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.587,
+      "s": 0.439,
+      "b": 0.19
+    },
+    "color2": {
+      "h": 0.587,
+      "s": 0.301,
+      "b": 0.246
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Silver Ice Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.417,
+      "s": 0.015,
+      "b": 0.476
+    },
+    "color2": {
+      "h": 0.417,
+      "s": 0.01,
+      "b": 0.617
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Slate Blue Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.542,
+      "s": 0.471,
+      "b": 0.37
+    },
+    "color2": {
+      "h": 0.542,
+      "s": 0.323,
+      "b": 0.479
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Stellar Silver Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.531,
+      "s": 0.1,
+      "b": 0.58
+    },
+    "color2": {
+      "h": 0.531,
+      "s": 0.068,
+      "b": 0.751
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Teal Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.504,
+      "s": 0.943,
+      "b": 0.507
+    },
+    "color2": {
+      "h": 0.504,
+      "s": 0.647,
+      "b": 0.657
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Texas Tea Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.103,
+      "s": 0.253,
+      "b": 0.187
+    },
+    "color2": {
+      "h": 0.103,
+      "s": 0.174,
+      "b": 0.242
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Titanium Frost Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.417,
+      "s": 0.068,
+      "b": 0.535
+    },
+    "color2": {
+      "h": 0.417,
+      "s": 0.047,
+      "b": 0.693
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Tungsten Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.548,
+      "s": 0.175,
+      "b": 0.435
+    },
+    "color2": {
+      "h": 0.548,
+      "s": 0.12,
+      "b": 0.563
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Viola Crystal Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.69,
+      "s": 0.293,
+      "b": 0.359
+    },
+    "color2": {
+      "h": 0.69,
+      "s": 0.201,
+      "b": 0.465
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Watermelon Red Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.994,
+      "s": 0.875,
+      "b": 0.825
+    },
+    "color2": {
+      "h": 0.994,
+      "s": 0.6,
+      "b": 1
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Wool Grey Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.222,
+      "s": 0.082,
+      "b": 0.4
+    },
+    "color2": {
+      "h": 0.222,
+      "s": 0.056,
+      "b": 0.519
+    }
+  },
+  {
+    "make": "The Coating Store",
+    "model": "",
+    "year": null,
+    "colorName": "Zombie Green Metallic",
+    "colorType": "Metal Flake",
+    "color1": {
+      "h": 0.21,
+      "s": 0.714,
+      "b": 0.625
+    },
+    "color2": {
+      "h": 0.21,
+      "s": 0.49,
+      "b": 0.809
+    }
+  }
+]

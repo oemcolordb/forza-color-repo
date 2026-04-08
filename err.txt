@@ -1,0 +1,1 @@
+Max channel drift: 29   Avg: 11.5
