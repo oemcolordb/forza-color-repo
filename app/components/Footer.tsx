@@ -26,6 +26,9 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             🌿
           </span>
         </p>
+        <p className="mt-2 text-sm font-medium opacity-70 text-slate-600">
+          Paint Tunes &amp; ♥ By AltF4ToQu1t &amp; Motorsport
+        </p>
       </div>
     </footer>
   )
