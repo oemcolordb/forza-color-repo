@@ -2,7 +2,9 @@ import dgram from 'dgram'
 
 class ForzaTelemetryReceiver {
   static DRIVETRAIN_TYPES = ['FWD', 'RWD', 'AWD']
-  static PACKET_SIZE = 324
+  // Full Dash packet: 332 bytes (Sled 232 + Dash-extra 100)
+  // Official spec: https://support.forzamotorsport.net/hc/en-us/articles/21742934024211
+  static PACKET_SIZE = 332
   constructor(port = 5300) {
     this.port = port
     this.socket = null
@@ -38,161 +40,121 @@ class ForzaTelemetryReceiver {
   }
 
   parsePacket(buffer) {
-    // Complete Forza Horizon 5 "Dash" packet (324 bytes)
+    // Guard helpers — returns 0 if offset is beyond packet length
+    const f32  = (o) => buffer.length >= o + 4 ? buffer.readFloatLE(o)   : 0
+    const s32  = (o) => buffer.length >= o + 4 ? buffer.readInt32LE(o)   : 0
+    const u32  = (o) => buffer.length >= o + 4 ? buffer.readUInt32LE(o)  : 0
+    const u16  = (o) => buffer.length >= o + 2 ? buffer.readUInt16LE(o)  : 0
+    const u8   = (o) => buffer.length >= o + 1 ? buffer.readUInt8(o)     : 0
+    const s8   = (o) => buffer.length >= o + 1 ? buffer.readInt8(o)      : 0
+
+    // ── SLED section (bytes 0-231) ────────────────────────────────────
     return {
-      // Core telemetry
-      isRaceOn: buffer.readInt32LE(0),
-      timestampMS: buffer.readUInt32LE(4),
+      isRaceOn:         s32(0),
+      timestampMS:      u32(4),
 
-      // Motion
-      engineMaxRpm: buffer.readFloatLE(8),
-      engineIdleRpm: buffer.readFloatLE(12),
-      currentEngineRpm: buffer.readFloatLE(16),
+      engineMaxRpm:     f32(8),
+      engineIdleRpm:    f32(12),
+      currentEngineRpm: f32(16),
 
-      accelerationX: buffer.readFloatLE(20),
-      accelerationY: buffer.readFloatLE(24),
-      accelerationZ: buffer.readFloatLE(28),
+      // Local-space acceleration (X=right, Y=up, Z=forward)
+      accelerationX: f32(20),
+      accelerationY: f32(24),
+      accelerationZ: f32(28),
 
-      velocityX: buffer.readFloatLE(32),
-      velocityY: buffer.readFloatLE(36),
-      velocityZ: buffer.readFloatLE(40),
+      // Local-space velocity
+      velocityX: f32(32),
+      velocityY: f32(36),
+      velocityZ: f32(40),
 
-      angularVelocityX: buffer.readFloatLE(44),
-      angularVelocityY: buffer.readFloatLE(48),
-      angularVelocityZ: buffer.readFloatLE(52),
+      // Local-space angular velocity
+      angularVelocityX: f32(44),
+      angularVelocityY: f32(48),
+      angularVelocityZ: f32(52),
 
-      yaw: buffer.readFloatLE(56),
-      pitch: buffer.readFloatLE(60),
-      roll: buffer.readFloatLE(64),
+      yaw:   f32(56),
+      pitch: f32(60),
+      roll:  f32(64),
 
-      // Suspension (normalized 0-1)
-      suspensionTravelNormalized: [
-        buffer.readFloatLE(68),
-        buffer.readFloatLE(72),
-        buffer.readFloatLE(76),
-        buffer.readFloatLE(80),
-      ],
+      // Suspension travel normalized (0=max stretch, 1=max compression)
+      // Order: FL, FR, RL, RR
+      suspensionTravelNormalized: [f32(68), f32(72), f32(76), f32(80)],
 
-      // Suspension (meters)
-      suspensionTravelMeters: [
-        buffer.readFloatLE(84),
-        buffer.readFloatLE(88),
-        buffer.readFloatLE(92),
-        buffer.readFloatLE(96),
-      ],
+      // Tire slip ratio (0=100% grip, |x|>1=loss of grip) — FL FR RL RR
+      tireSlipRatio: [f32(84), f32(88), f32(92), f32(96)],
 
-      // Wheel rotation speed (rad/s)
-      wheelRotationSpeed: [
-        buffer.readFloatLE(100),
-        buffer.readFloatLE(104),
-        buffer.readFloatLE(108),
-        buffer.readFloatLE(112),
-      ],
+      // Wheel rotation speed (radians/sec) — FL FR RL RR
+      wheelRotationSpeed: [f32(100), f32(104), f32(108), f32(112)],
 
-      // Wheel on rumble strip (0/1)
-      wheelOnRumbleStrip: [
-        buffer.readInt32LE(116),
-        buffer.readInt32LE(120),
-        buffer.readInt32LE(124),
-        buffer.readInt32LE(128),
-      ],
+      // 1 = on rumble strip, 0 = off — FL FR RL RR
+      wheelOnRumbleStrip: [s32(116), s32(120), s32(124), s32(128)],
 
-      // Wheel in puddle (0-1)
-      wheelInPuddleDepth: [
-        buffer.readFloatLE(132),
-        buffer.readFloatLE(136),
-        buffer.readFloatLE(140),
-        buffer.readFloatLE(144),
-      ],
+      // Puddle depth 0-1 (1=deepest) — FL FR RL RR
+      wheelInPuddleDepth: [f32(132), f32(136), f32(140), f32(144)],
 
-      // Surface rumble
-      surfaceRumble: [
-        buffer.readFloatLE(148),
-        buffer.readFloatLE(152),
-        buffer.readFloatLE(156),
-        buffer.readFloatLE(160),
-      ],
+      // Surface rumble (controller force feedback) — FL FR RL RR
+      surfaceRumble: [f32(148), f32(152), f32(156), f32(160)],
 
-      // Tire slip ratio
-      tireSlipRatio: [
-        buffer.readFloatLE(164),
-        buffer.readFloatLE(168),
-        buffer.readFloatLE(172),
-        buffer.readFloatLE(176),
-      ],
+      // Tire slip angle (0=100% grip, |x|>1=loss of grip) — FL FR RL RR
+      tireSlipAngle: [f32(164), f32(168), f32(172), f32(176)],
 
-      // Tire slip angle
-      tireSlipAngle: [
-        buffer.readFloatLE(180),
-        buffer.readFloatLE(184),
-        buffer.readFloatLE(188),
-        buffer.readFloatLE(192),
-      ],
+      // Tire combined slip (0=100% grip, |x|>1=loss of grip) — FL FR RL RR
+      tireCombinedSlip: [f32(180), f32(184), f32(188), f32(192)],
 
-      // Tire combined slip
-      tireCombinedSlip: [
-        buffer.readFloatLE(196),
-        buffer.readFloatLE(200),
-        buffer.readFloatLE(204),
-        buffer.readFloatLE(208),
-      ],
+      // Actual suspension travel in meters — FL FR RL RR
+      suspensionTravelMeters: [f32(196), f32(200), f32(204), f32(208)],
 
-      // Tire temperature
-      tireTemp: [
-        buffer.readFloatLE(212),
-        buffer.readFloatLE(216),
-        buffer.readFloatLE(220),
-        buffer.readFloatLE(224),
-      ],
+      // Car identification (all S32)
+      carOrdinal:          s32(212),
+      carClass:            s32(216), // 0=D, 1=C, 2=B, 3=A, 4=S1, 5=S2, 6=X
+      carPerformanceIndex: s32(220), // 100-999
+      drivetrainType:      s32(224), // 0=FWD, 1=RWD, 2=AWD
+      numCylinders:        s32(228),
 
-      // Tire wear
-      tireWear: [
-        buffer.readFloatLE(228),
-        buffer.readFloatLE(232),
-        buffer.readFloatLE(236),
-        buffer.readFloatLE(240),
-      ],
+      // ── DASH extra (bytes 232-331) ────────────────────────────────────
+      positionX: f32(232),
+      positionY: f32(236),
+      positionZ: f32(240),
 
-      boost: buffer.readFloatLE(244),
-      fuel: buffer.readFloatLE(248),
-      distanceTraveled: buffer.readFloatLE(252),
-      bestLap: buffer.readFloatLE(256),
-      lastLap: buffer.readFloatLE(260),
-      currentLap: buffer.readFloatLE(264),
-      currentRaceTime: buffer.readFloatLE(268),
+      speed:  f32(244), // m/s
+      power:  f32(248), // watts
+      torque: f32(252), // Nm
 
-      lapNumber: buffer.readUInt16LE(272),
-      racePosition: buffer.readUInt8(274),
+      // Tire temperatures (Celsius) — FL FR RL RR
+      tireTemp: [f32(256), f32(260), f32(264), f32(268)],
 
-      // Input
-      throttle: buffer.readUInt8(275),
-      brake: buffer.readUInt8(276),
-      clutch: buffer.readUInt8(277),
-      handbrake: buffer.readUInt8(278),
-      gear: buffer.readUInt8(279),
-      steer: buffer.readInt8(280),
+      boost:            f32(272),
+      fuel:             f32(276),
+      distanceTraveled: f32(280),
 
-      normalizedDrivingLine: buffer.readInt8(281),
-      normalizedAIBrakeDifference: buffer.readInt8(282),
+      bestLap:         f32(284),
+      lastLap:         f32(288),
+      currentLap:      f32(292),
+      currentRaceTime: f32(296),
 
-      // Car data
-      carOrdinal: buffer.readInt32LE(284),
-      carClass: buffer.readInt32LE(288),
-      carPerformanceIndex: buffer.readInt32LE(292),
-      drivetrainType: buffer.readInt32LE(296), // 0=FWD, 1=RWD, 2=AWD
-      numCylinders: buffer.readInt32LE(300),
+      lapNumber:    u16(300),
+      racePosition: u8(302),
 
-      // Position
-      positionX: buffer.readFloatLE(304),
-      positionY: buffer.readFloatLE(308),
-      positionZ: buffer.readFloatLE(312),
+      // Raw driver inputs (0-255)
+      throttle:  u8(303), // labeled "Accel" in official spec
+      brake:     u8(304),
+      clutch:    u8(305),
+      handbrake: u8(306),
+      gear:      u8(307), // 0=reverse, 1=neutral, 2=1st … 7=6th
+      steer:     s8(308), // -128 (full left) to 127 (full right)
 
-      speed: buffer.readFloatLE(316),
-      power: buffer.readFloatLE(320),
+      normalizedDrivingLine:       s8(309),
+      normalizedAIBrakeDifference: s8(310),
+
+      // byte 311: alignment padding
+
+      // Tire wear (0.0-1.0) — FL FR RL RR
+      tireWear: [f32(312), f32(316), f32(320), f32(324)],
+
+      // Track identifier
+      trackOrdinal: s32(328),
 
       timestamp: Date.now(),
     }
   }
 }
-
-export default ForzaTelemetryReceiver
