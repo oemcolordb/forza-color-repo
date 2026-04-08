@@ -14,17 +14,17 @@ const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({ children, className
   const layoutClasses = React.useMemo(() => {
     const { isMobile, isTablet, isDesktop, screenWidth } = deviceInfo
 
-    let classes = 'container mx-auto relative z-10 '
+    let classes = 'w-full relative z-10 '
 
     if (isMobile) {
-      classes += 'px-2 py-2 max-w-full '
+      classes += 'px-2 py-2 '
       if (screenWidth < 400) {
         classes += 'text-sm '
       }
     } else if (isTablet) {
-      classes += 'px-4 py-3 max-w-6xl '
+      classes += 'px-4 py-3 '
     } else if (isDesktop) {
-      classes += 'px-4 py-4 max-w-7xl '
+      classes += 'px-4 py-4 '
     }
 
     return classes + className

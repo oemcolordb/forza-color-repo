@@ -1,12 +1,27 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { HeaderProps } from '../types'
 import { ErrorBoundary } from '../lib/errorBoundary'
 import Button from './ui/Button'
 
 const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
+  const [moreOpen, setMoreOpen] = useState(false)
+  const moreRef = useRef<HTMLDivElement>(null)
+
+  // Close "More" menu when clicking outside
+  useEffect(() => {
+    if (!moreOpen) return
+    const handler = (e: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setMoreOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [moreOpen])
+
   return (
     <ErrorBoundary>
-      <header className="py-8 text-center bg-transparent relative">
+      <header className="py-6 text-center bg-transparent relative">
         <Button
           onClick={onToggleTheme}
           variant="ghost"
@@ -23,44 +38,55 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           </span>
         </h1>
 
-        <div className="mt-6 flex flex-wrap justify-center gap-4">
+        {/* Primary nav — always visible */}
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
           <Button as="a" href="/tuneforge" variant="primary" size="lg" className="hover-lift">
             🔧 TuneForge Lab
+          </Button>
+          <Button as="a" href="/garage" variant="primary" size="lg" className="hover-lift">
+            🏎️ Car Database
           </Button>
           <Button as="a" href="/location-finder" variant="primary" size="lg" className="hover-lift">
             📍 Location Finder
           </Button>
-          <Button
-            as="a"
-            href="/how-to-use"
-            variant="primary"
-            size="lg"
-            className="hidden hover-lift sm:inline-flex"
-          >
+          <Button as="a" href="/how-to-use" variant="primary" size="lg" className="hover-lift hidden sm:inline-flex">
             📖 How to Use
           </Button>
-          <Button as="a" href="/blog" variant="primary" size="lg" className="hidden hover-lift sm:inline-flex">
+          <Button as="a" href="/blog" variant="primary" size="lg" className="hover-lift hidden sm:inline-flex">
             📝 Color Blog
           </Button>
-          <details className="sm:hidden">
-            <summary className="list-none cursor-pointer inline-flex items-center gap-2 px-6 py-3 bamboo-button">
-              More Tools
-            </summary>
-            <div className="mt-2 flex flex-col gap-2">
-              <a href="/how-to-use" className="inline-flex items-center justify-center gap-2 px-4 py-2 bamboo-button-ghost">
-                📖 How to Use
-              </a>
-              <a href="/blog" className="inline-flex items-center justify-center gap-2 px-4 py-2 bamboo-button-ghost">
-                📝 Color Blog
-              </a>
-            </div>
-          </details>
-        </div>
 
-        {/* Mobile scroll indicator */}
-        <div className="mt-8 md:hidden flex flex-col items-center animate-bounce">
-          <div className="text-[color:var(--bamboo-paper)] text-sm mb-2">Scroll down to explore colors</div>
-          <div className="text-2xl">👇</div>
+          {/* More dropdown with click-outside-to-close */}
+          <div ref={moreRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setMoreOpen(prev => !prev)}
+              aria-expanded={moreOpen}
+              aria-haspopup="true"
+              className="inline-flex items-center gap-1 px-5 py-3 bamboo-button rounded-lg font-medium"
+            >
+              More <span className={`transition-transform duration-150 ${moreOpen ? 'rotate-180' : ''}`}>▾</span>
+            </button>
+
+            {moreOpen && (
+              <div
+                className={`absolute right-0 mt-1 z-50 min-w-[190px] rounded-xl shadow-2xl border py-2 flex flex-col ${
+                  isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-200'
+                }`}
+                role="menu"
+              >
+                <a onClick={() => setMoreOpen(false)} href="/about"    role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left">ℹ️ About</a>
+                <a onClick={() => setMoreOpen(false)} href="/help"     role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left">❓ Help</a>
+                <a onClick={() => setMoreOpen(false)} href="/contact"  role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left">✉️ Contact</a>
+                <a onClick={() => setMoreOpen(false)} href="/privacy"  role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left">🔒 Privacy</a>
+                <a onClick={() => setMoreOpen(false)} href="/terms"    role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left">📜 Terms</a>
+                <hr className={`my-1 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`} />
+                <a onClick={() => setMoreOpen(false)} href="/image-match" role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left">🖼️ Image Match</a>
+                <a onClick={() => setMoreOpen(false)} href="/how-to-use" role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left sm:hidden">📖 How to Use</a>
+                <a onClick={() => setMoreOpen(false)} href="/blog"       role="menuitem" className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left sm:hidden">📝 Color Blog</a>
+              </div>
+            )}
+          </div>
         </div>
       </header>
     </ErrorBoundary>

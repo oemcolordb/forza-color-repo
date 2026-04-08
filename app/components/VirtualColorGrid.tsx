@@ -25,17 +25,28 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   expandedColorId: _expandedColorId,
 }) => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+  const [gridHeight, setGridHeight] = useState(600)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // Calculate grid dimensions
-  const CARD_WIDTH = 280
-  const CARD_HEIGHT = 200
-  const GAP = 20
+  // Smaller, denser cards to maximize swatches visible on screen
+  const CARD_WIDTH = 175
+  const CARD_HEIGHT = 160
+  const GAP = 6
 
   const columnsCount = Math.max(1, Math.floor((containerSize.width + GAP) / (CARD_WIDTH + GAP)))
   const rowsCount = Math.ceil(colors.length / columnsCount)
 
-  // Resize observer for responsive grid
+  // Set grid height based on viewport so it fills the visible area
+  useEffect(() => {
+    const updateHeight = () => {
+      setGridHeight(Math.max(420, window.innerHeight - 220))
+    }
+    updateHeight()
+    window.addEventListener('resize', updateHeight)
+    return () => window.removeEventListener('resize', updateHeight)
+  }, [])
+
+  // Resize observer for responsive column count
   useEffect(() => {
     const resizeObserver = new ResizeObserver(entries => {
       for (const entry of entries) {
@@ -89,17 +100,17 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   }
 
   return (
-    <div ref={containerRef} className="w-full h-[600px] p-2">
+    <div ref={containerRef} className="w-full" style={{ height: `${gridHeight}px` }}>
       {containerSize.width > 0 && (
         <Grid
           columnCount={columnsCount}
           columnWidth={CARD_WIDTH + GAP}
-          height={Math.min(600, containerSize.height)}
+          height={gridHeight}
           rowCount={rowsCount}
           rowHeight={CARD_HEIGHT + GAP}
           width={containerSize.width}
-          overscanRowCount={2}
-          overscanColumnCount={1}
+          overscanRowCount={3}
+          overscanColumnCount={2}
         >
           {Cell}
         </Grid>

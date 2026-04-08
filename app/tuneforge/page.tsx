@@ -56,6 +56,21 @@ interface SavedTune {
   version: string
 }
 
+interface CommunityTune {
+  id: string
+  car_make: string
+  car_model: string
+  tune_name: string
+  tuner_name: string
+  share_code: string | null
+  discipline: string
+  pi_class: string | null
+  pi_value: number | null
+  tune_data: string
+  votes: number
+  created_at: string
+}
+
 export default function TuneForge() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
@@ -104,6 +119,16 @@ export default function TuneForge() {
   const [handlingBalance, setHandlingBalance] = useState(0)
   const [bumpStiffness, setBumpStiffness] = useState(65)
 
+  // Community tunes
+  const [communityTunes, setCommunityTunes] = useState<CommunityTune[]>([])
+  const [communityLoading, setCommunityLoading] = useState(false)
+  const [selectedCommunityId, setSelectedCommunityId] = useState('')
+  const [showTuneSubmit, setShowTuneSubmit] = useState(false)
+  const [submitCode, setSubmitCode] = useState('')
+  const [submitTuner, setSubmitTuner] = useState('')
+  const [submitDiscipline, setSubmitDiscipline] = useState('General')
+  const [submitTuneName, setSubmitTuneName] = useState('')
+
   useEffect(() => {
     const saved = localStorage.getItem('theme')
     if (saved) setIsDarkMode(saved === 'dark')
@@ -111,6 +136,18 @@ export default function TuneForge() {
     loadSavedTunes()
     // eslint-disable-next-line
   }, [])
+
+  // Fetch community tunes whenever selected car changes
+  useEffect(() => {
+    if (!selectedCar) { setCommunityTunes([]); return }
+    setCommunityLoading(true)
+    setSelectedCommunityId('')
+    fetch(`/api/tuneforge/community-tunes?make=${encodeURIComponent(selectedCar.manufacturer)}&model=${encodeURIComponent(selectedCar.model)}`)
+      .then(r => r.json())
+      .then(data => setCommunityTunes(Array.isArray(data) ? data : []))
+      .catch(() => setCommunityTunes([]))
+      .finally(() => setCommunityLoading(false))
+  }, [selectedCar])
 
   const loadSampleCars = async () => {
     setLoadingStatus('Loading car database...')
@@ -138,9 +175,9 @@ export default function TuneForge() {
         country: car.country,
         stats: car.stats,
         pi: car.pi,
-        drivetrain: getDrivetrain(car.manufacturer, car.model),
-        weight: Math.round(1200 + Math.random() * 800),
-        engine: generateEngine(car.manufacturer, car.model),
+        drivetrain: estimateDrivetrain(car.type, car.stats),
+        weight: estimateWeight(car.type, car.pi.class),
+        engine: estimateEngine(car.pi.value, car.stats.acceleration),
         tags: [car.country, car.type],
       }))
 
@@ -154,17 +191,61 @@ export default function TuneForge() {
     }
   }
 
-  const getDrivetrain = (_make: string, _model: string) => {
-    const drivetrains = ['RWD', 'FWD', 'AWD']
-    return drivetrains[Math.floor(Math.random() * drivetrains.length)]
+  // Deterministic weight estimate from car type + PI class.
+  // cars.json does not include real weight — these are Forza-plausible baselines,
+  // not real-world kerb weights.
+  const estimateWeight = (type: string, piClass: string): number => {
+    const typeBase: Record<string, number> = {
+      'Hypercar':    1100,
+      'Track Car':   1050,
+      'Sports Car':  1300,
+      'Supercar':    1350,
+      'Coupe':       1400,
+      'Convertible': 1450,
+      'Classic':     1500,
+      'Rally Car':   1350,
+      'Sedan':       1600,
+      'Wagon':       1650,
+      'SUV':         2050,
+      'Truck':       2300,
+    }
+    const piAdj: Record<string, number> = {
+      X: -250, S2: -200, S1: -150, A: -50, B: 0, C: 50, D: 100,
+    }
+    return (typeBase[type] ?? 1450) + (piAdj[piClass] ?? 0)
   }
 
-  const generateEngine = (_make: string, _model: string) => {
+  // Drivetrain estimate from car type + launch stat.
+  // Strong launch (>= 8) without high handling stat strongly correlates with AWD.
+  // Most classics and rear-engined sports cars in FH5 are RWD.
+  // FWD is rare in this dataset (mostly hatchbacks/saloons).
+  const estimateDrivetrain = (type: string, stats: BaseCar['stats']): string => {
+    if (type === 'Rally Car' || type === 'SUV' || type === 'Truck') return 'AWD'
+    if (stats.launch >= 8.0) return 'AWD'
+    if (type === 'Classic' || type === 'Track Car') return 'RWD'
+    if (type === 'Sports Car' || type === 'Supercar' || type === 'Hypercar') {
+      return stats.handling >= 8.5 ? 'RWD' : 'AWD'
+    }
+    if (type === 'Sedan' || type === 'Wagon') return 'FWD'
+    return 'RWD'
+  }
+
+  // Power estimate from PI value + acceleration stat.
+  // In Forza's internal model, PI encodes power-to-weight holistically.
+  // This gives a plausible horsepower figure — not a datasheet value.
+  const estimateEngine = (piValue: number, accelStat: number) => {
+    const horsepower = Math.round((piValue - 400) * 1.8 + accelStat * 18)
+    const aspirated = piValue < 700
+    // Displacement + cylinder count: rough proxy from power range
+    const displacement = aspirated
+      ? Math.round((2.4 + (horsepower / 400)) * 10) / 10
+      : Math.round((1.8 + (horsepower / 600)) * 10) / 10
+    const cylinders = horsepower < 300 ? 4 : horsepower < 500 ? 6 : horsepower < 700 ? 8 : 10
     return {
-      displacement: Math.round((2.0 + Math.random() * 4.0) * 10) / 10,
-      cylinders: [4, 6, 8, 10, 12][Math.floor(Math.random() * 5)],
-      aspiration: Math.random() > 0.6 ? 'Turbo' : 'NA',
-      horsepower: Math.round(200 + Math.random() * 600),
+      displacement,
+      cylinders,
+      aspiration: aspirated ? 'NA' : 'Turbo',
+      horsepower: Math.max(150, horsepower),
     }
   }
 
@@ -583,6 +664,48 @@ export default function TuneForge() {
     alert(`Loaded tune "${tune.name}"`)
   }
 
+  const applyCommunityTune = (tune: CommunityTune) => {
+    try {
+      const parsed = JSON.parse(tune.tune_data)
+      setTuneData(parsed)
+      setActiveTab('advanced')
+    } catch {
+      alert('Failed to load tune data')
+    }
+  }
+
+  const submitCommunityTune = async () => {
+    if (!selectedCar || !submitTuneName.trim()) return
+    const id = `ct-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+    const payload = {
+      id,
+      car_make:   selectedCar.manufacturer,
+      car_model:  selectedCar.model,
+      tune_name:  submitTuneName.trim(),
+      tuner_name: submitTuner.trim() || 'Anonymous',
+      share_code: submitCode.trim() || null,
+      discipline: submitDiscipline,
+      pi_class:   selectedCar.pi?.class ?? null,
+      pi_value:   selectedCar.pi?.value ?? null,
+      tune_data:  JSON.stringify(tuneData),
+    }
+    const res = await fetch('/api/tuneforge/community-tunes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    if (res.ok) {
+      setCommunityTunes(prev => [{ ...payload, votes: 0, created_at: new Date().toISOString(), share_code: payload.share_code } as CommunityTune, ...prev])
+      setShowTuneSubmit(false)
+      setSubmitCode('')
+      setSubmitTuner('')
+      setSubmitTuneName('')
+      setSubmitDiscipline('General')
+    } else {
+      alert('Failed to submit tune')
+    }
+  }
+
   const updateTuneValue = (key: string, value: number) => {
     setTuneData({ ...tuneData, [key]: value })
   }
@@ -816,6 +939,103 @@ export default function TuneForge() {
                     isDarkMode={isDarkMode}
                   />
                 </div>
+              </div>
+
+              {/* ── Community Tunes ── */}
+              <div className={`mt-4 p-3 rounded border ${isDarkMode ? 'bamboo-surface-dark border-yellow-600/30' : 'bamboo-surface border-yellow-500/30'}`}>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-bold text-yellow-400">🎮 Community Tunes</h4>
+                  <button
+                    onClick={() => setShowTuneSubmit(s => !s)}
+                    className="text-xs bamboo-button-ghost px-2 py-0.5 rounded"
+                  >
+                    {showTuneSubmit ? 'Cancel' : '+ Share mine'}
+                  </button>
+                </div>
+
+                {communityLoading ? (
+                  <p className="text-xs opacity-60">Loading tunes…</p>
+                ) : communityTunes.length === 0 ? (
+                  <p className="text-xs opacity-50">No community tunes yet for this car.</p>
+                ) : (
+                  <div className="space-y-1">
+                    <select
+                      value={selectedCommunityId}
+                      onChange={e => setSelectedCommunityId(e.target.value)}
+                      className="w-full text-xs bamboo-input rounded px-2 py-1"
+                    >
+                      <option value="">— Browse {communityTunes.length} tune{communityTunes.length !== 1 ? 's' : ''} —</option>
+                      {communityTunes.map(t => (
+                        <option key={t.id} value={t.id}>
+                          {t.tune_name} by {t.tuner_name} [{t.discipline}] {t.share_code ? `· ${t.share_code}` : ''} ▲{t.votes}
+                        </option>
+                      ))}
+                    </select>
+                    {selectedCommunityId && (() => {
+                      const t = communityTunes.find(x => x.id === selectedCommunityId)
+                      if (!t) return null
+                      return (
+                        <div className="flex gap-2 mt-1">
+                          <button
+                            onClick={() => applyCommunityTune(t)}
+                            className="flex-1 text-xs bamboo-button rounded px-2 py-1"
+                          >
+                            Apply tune
+                          </button>
+                          {t.share_code && (
+                            <button
+                              onClick={() => { navigator.clipboard.writeText(t.share_code!); }}
+                              className="text-xs bamboo-button-ghost border border-yellow-600/40 rounded px-2 py-1"
+                              title="Copy share code"
+                            >
+                              📋 {t.share_code}
+                            </button>
+                          )}
+                        </div>
+                      )
+                    })()}
+                  </div>
+                )}
+
+                {showTuneSubmit && (
+                  <div className="mt-3 space-y-2 border-t border-yellow-600/20 pt-3">
+                    <input
+                      placeholder="Tune name *"
+                      value={submitTuneName}
+                      onChange={e => setSubmitTuneName(e.target.value)}
+                      className="w-full text-xs bamboo-input rounded px-2 py-1"
+                    />
+                    <input
+                      placeholder="Your name (optional)"
+                      value={submitTuner}
+                      onChange={e => setSubmitTuner(e.target.value)}
+                      className="w-full text-xs bamboo-input rounded px-2 py-1"
+                    />
+                    <input
+                      placeholder="Share code (9 digits, optional)"
+                      value={submitCode}
+                      onChange={e => setSubmitCode(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                      className="w-full text-xs bamboo-input rounded px-2 py-1"
+                      maxLength={9}
+                    />
+                    <select
+                      value={submitDiscipline}
+                      onChange={e => setSubmitDiscipline(e.target.value)}
+                      className="w-full text-xs bamboo-input rounded px-2 py-1"
+                    >
+                      {['General','Track','Drift','Rally','Drag','Cross-Country','Road'].map(d => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={submitCommunityTune}
+                      disabled={!submitTuneName.trim()}
+                      className="w-full text-xs bamboo-button rounded px-2 py-1 disabled:opacity-40"
+                    >
+                      Submit tune
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ) : (

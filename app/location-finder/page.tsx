@@ -75,6 +75,28 @@ export default function LocationFinderPage() {
           <h2 className="text-lg font-bold mb-2 text-blue-300">All Speed Cameras (Live)</h2>
           <SpeedCameraList />
         </div>
+
+        {/* Credits */}
+        <div className="mt-4 bg-gray-800/60 rounded-xl border border-yellow-500/40 shadow-xl p-6 lg:col-span-2 text-center">
+          <p className="text-yellow-300 text-xl font-extrabold mb-2">🙏 A Massive Thank You to the Swiss Game Guides Team!</p>
+          <p className="text-white font-bold text-base mb-3">
+            This location finder is powered by the incredible interactive FH5 map at{' '}
+            <a
+              href="https://swissgameguides.app/maps/forza_horizon_5/mexico"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-yellow-400 underline hover:text-yellow-200 transition-colors font-extrabold"
+            >
+              swissgameguides.app
+            </a>
+            . This resource is an <span className="font-extrabold text-yellow-300">absolute blessing</span> for the Forza Horizon 5 community.
+          </p>
+          <p className="text-gray-300 font-bold">
+            Huge credit and gratitude to the developers and map creators at Swiss Game Guides —{' '}
+            <span className="text-yellow-300 font-extrabold">you legends have made navigating Mexico so much easier for everyone.</span>{' '}
+            Thank you for your time, effort, and dedication to the community. 💛
+          </p>
+        </div>
       </main>
     </div>
   )

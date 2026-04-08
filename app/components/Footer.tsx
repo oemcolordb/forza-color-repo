@@ -7,82 +7,17 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
   return (
     <footer
-      className={`py-8 mt-16 border-t ${
+      className={`py-5 mt-8 border-t ${
         isDarkMode ? 'bamboo-surface-dark border-[color:var(--bamboo-border)]' : 'bamboo-surface border-[color:var(--bamboo-border)]'
       }`}
     >
       <div className="container mx-auto px-4 text-center">
-        <div className={`mb-6 ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-          <h3 className="text-lg font-bold mb-2">
-            <span className="text-[color:var(--bamboo-stalk)]">
-              Forza Color Universe
-            </span>
-          </h3>
-          <p className="text-sm mb-4">
-            Comprehensive database of automotive paint colors from Forza racing games
-          </p>
-
-          {/* Navigation Links */}
-          <nav className="flex flex-wrap justify-center gap-4 text-sm">
-            <a
-              href="/about"
-              className={`hover:underline transition-colors ${
-                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              About
-            </a>
-            <a
-              href="/help"
-              className={`hover:underline transition-colors ${
-                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Help
-            </a>
-            <a
-              href="/contact"
-              className={`hover:underline transition-colors ${
-                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Contact
-            </a>
-            <a
-              href="/privacy"
-              className={`hover:underline transition-colors ${
-                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Privacy
-            </a>
-            <a
-              href="/terms"
-              className={`hover:underline transition-colors ${
-                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Terms
-            </a>
-            <a
-              href="/blog"
-              className={`hover:underline transition-colors ${
-                isDarkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Blog
-            </a>
-          </nav>
-        </div>
-
-        <div className={`border-t pt-4 ${isDarkMode ? 'border-[color:var(--bamboo-border)]' : 'border-[color:var(--bamboo-border)]'}`}>
-          <p className={`text-sm font-semibold ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-            Credits: To the GTPlanet community, with special thanks to Terronium-12 (original
-            creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and
-            MadaraxUchiha, whose dedication built and maintained the Forza Color Database
-            Spreadsheet.
-          </p>
-        </div>
+        <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+          Credits: To the GTPlanet community, with special thanks to Terronium-12 (original
+          creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and
+          MadaraxUchiha, whose dedication built and maintained the Forza Color Database
+          Spreadsheet.
+        </p>
       </div>
     </footer>
   )

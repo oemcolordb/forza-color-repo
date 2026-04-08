@@ -30,7 +30,6 @@ import HSBPopup from './components/HSBPopup'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
-import ZoomResponsiveContainer from './components/ZoomResponsiveContainer'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
 const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })
@@ -514,36 +513,7 @@ export default function HomePage() {
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
         />
 
-        <div className="px-4 sm:px-6 mb-4">
-          <a
-            href="/location-finder"
-            className={`mx-auto max-w-3xl flex items-center justify-center gap-2 px-4 py-3 rounded-xl border font-semibold transition-all hover:scale-[1.01] ${
-              isDarkMode
-                ? 'bamboo-surface-dark border-gray-600 text-white'
-                : 'bamboo-surface border-gray-300 text-gray-900'
-            }`}
-            title="Open Forza Location Finder"
-          >
-            <span>📍</span>
-            <span>Looking for Location Finder? Open it here</span>
-          </a>
-        </div>
 
-        <div className="px-4 sm:px-6 mb-6">
-          <div
-            className={`mx-auto max-w-3xl rounded-xl border p-3 sm:p-4 ${
-              isDarkMode ? 'bamboo-surface-dark border-gray-600' : 'bamboo-surface border-gray-300'
-            }`}
-          >
-            <iframe
-              src="https://www.udio.com/embed/2hWoS58SsVgnS4kmPhFX2M?embedVariant=default&utm_source=generator"
-              title="Udio Embed"
-              className="w-full h-[228px] rounded-xl"
-              loading="lazy"
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
-            />
-          </div>
-        </div>
 
         {/* Error Display */}
         {error && (
@@ -564,17 +534,6 @@ export default function HomePage() {
           isDarkMode={isDarkMode}
           deviceInfo={deviceInfo}
         />
-
-        {/* TuneForge Quick Access */}
-        <div className="fixed bottom-6 right-6 z-40">
-          <a
-            href="/tuneforge"
-            className="flex items-center gap-2 px-4 py-3 bamboo-button font-medium rounded-full shadow-lg transition-all transform hover:scale-105"
-            title="Open TuneForge Lab"
-          >
-            🔧 TuneForge
-          </a>
-        </div>
 
         <ErrorBoundary
           onError={error => {
@@ -900,69 +859,52 @@ export default function HomePage() {
               showFavoritesOnly={showFavoritesOnly}
               onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
             />
-
-            {/* Color Gallery with Zoom-Responsive Container */}
-            <ZoomResponsiveContainer isDarkMode={isDarkMode}>
-              <div
-                className={`relative rounded-xl overflow-hidden p-4 ${
-                  isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🏆</span>
-                  <span className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                    COLOR GALLERY
-                  </span>
-                  <div className="ml-auto flex items-center gap-2">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                      <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                    </div>
-                    <span className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-                      {filteredColors.length} colors
-                    </span>
-                  </div>
-                </div>
-
-                {/* Simple car decoration */}
-                <div className="absolute top-4 right-16 opacity-20">
-                  <svg
-                    width="60"
-                    height="20"
-                    viewBox="0 0 60 20"
-                    className={isDarkMode ? 'fill-blue-400' : 'fill-blue-600'}
-                  >
-                    <path d="M5 15 Q8 10 15 12 L25 10 Q35 8 45 10 L50 12 Q52 15 50 16 L45 17 L15 17 L10 16 Q5 15 5 15 Z" />
-                    <circle cx="15" cy="17" r="2" />
-                    <circle cx="45" cy="17" r="2" />
-                  </svg>
-                </div>
-
-                {filteredColors.length > 1000 ? (
-                  <VirtualColorGrid
-                    colors={filteredColors}
-                    onColorSelect={handleColorSelect}
-                    onShowInfo={showColorHSB}
-                    favorites={favorites}
-                    onToggleFavorite={toggleFavorite}
-                    isDarkMode={isDarkMode}
-                    expandedColorId={expandedColorId}
-                  />
-                ) : (
-                  <SimpleColorGrid
-                    colors={filteredColors}
-                    onColorSelect={handleColorSelect}
-                    onShowInfo={showColorHSB}
-                    favorites={favorites}
-                    onToggleFavorite={toggleFavorite}
-                    isDarkMode={isDarkMode}
-                    expandedColorId={expandedColorId}
-                  />
-                )}
-              </div>
-            </ZoomResponsiveContainer>
           </ResponsiveLayout>
+
+          {/* Full-width Color Gallery — hugs screen edges, maximises swatches visible */}
+          <div className={`w-full ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+            {/* Gallery header bar */}
+            <div className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
+              <span className="text-xl">🏆</span>
+              <span className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                COLOR GALLERY
+              </span>
+              <div className="ml-auto flex items-center gap-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                </div>
+                <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                  {filteredColors.length} colors
+                </span>
+              </div>
+            </div>
+
+            {filteredColors.length > 1000 ? (
+              <VirtualColorGrid
+                colors={filteredColors}
+                onColorSelect={handleColorSelect}
+                onShowInfo={showColorHSB}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+                isDarkMode={isDarkMode}
+                expandedColorId={expandedColorId}
+              />
+            ) : (
+              <div className="p-1">
+                <SimpleColorGrid
+                  colors={filteredColors}
+                  onColorSelect={handleColorSelect}
+                  onShowInfo={showColorHSB}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  expandedColorId={expandedColorId}
+                />
+              </div>
+            )}
+          </div>
         </ErrorBoundary>
 
         <Footer isDarkMode={isDarkMode} />

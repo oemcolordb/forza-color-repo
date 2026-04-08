@@ -219,6 +219,6 @@ export default function HowToUsePage() {
           </div>
         </div>
       </div>
-    </div>{/* end video wrapper */}
+    </div>
   )
 }
