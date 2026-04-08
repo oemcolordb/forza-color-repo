@@ -1,7 +1,7 @@
 // Service Worker for PWA functionality
-const CACHE_NAME = 'forza-colors-v2'
-const STATIC_CACHE = 'forza-static-v2'
-const DYNAMIC_CACHE = 'forza-dynamic-v2'
+const CACHE_NAME = 'forza-colors-v3'
+const STATIC_CACHE = 'forza-static-v3'
+const DYNAMIC_CACHE = 'forza-dynamic-v3'
 
 // Detect development mode
 const isDev = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1'
