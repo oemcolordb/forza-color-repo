@@ -1,5 +1,101 @@
 /* Enhanced animations for extra sauce */
 
+/* ====================================================
+   🌿 420 EASTER EGG ANIMATIONS — keep it lowkey 😏
+   ==================================================== */
+
+@keyframes leaf-spin {
+  0%   { transform: rotate(0deg)   scale(1);   }
+  25%  { transform: rotate(90deg)  scale(1.08); }
+  50%  { transform: rotate(180deg) scale(1.15); }
+  75%  { transform: rotate(270deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1);   }
+}
+
+@keyframes leaf-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes leaf-fall {
+  0% {
+    transform: translateY(-60px) rotate(var(--leaf-rot, 0deg)) scale(1);
+    opacity: 1;
+  }
+  70% { opacity: 1; }
+  100% {
+    transform: translateY(110vh) rotate(calc(var(--leaf-rot, 0deg) + 720deg)) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes leaf-sway {
+  0%   { transform: translateX(0)   rotate(0deg); }
+  25%  { transform: translateX(8px) rotate(5deg); }
+  75%  { transform: translateX(-8px) rotate(-5deg); }
+  100% { transform: translateX(0)   rotate(0deg); }
+}
+
+@keyframes smoke-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.4);
+    opacity: 0.7;
+  }
+  40% {
+    transform: translateY(-18px) translateX(4px) scale(0.9);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-45px) translateX(-6px) scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes smoke-rise-2 {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.3);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-22px) translateX(-5px) scale(1.0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-50px) translateX(8px) scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes ember-glow {
+  0%   { box-shadow: 0 0 4px 2px #ff6a00, 0 0 8px 4px rgba(255,106,0,0.5);  opacity: 1;   }
+  50%  { box-shadow: 0 0 8px 4px #ff3d00, 0 0 16px 8px rgba(255,61,0,0.6);  opacity: 0.8; }
+  100% { box-shadow: 0 0 4px 2px #ff6a00, 0 0 8px 4px rgba(255,106,0,0.5);  opacity: 1;   }
+}
+
+@keyframes blaze-pulse {
+  0%   { text-shadow: 0 0 8px #4ade80,  0 0 16px #16a34a; }
+  50%  { text-shadow: 0 0 20px #86efac, 0 0 40px #4ade80, 0 0 60px #16a34a; }
+  100% { text-shadow: 0 0 8px #4ade80,  0 0 16px #16a34a; }
+}
+
+@keyframes 420-slide-in {
+  0%   { transform: translateY(40px) scale(0.8); opacity: 0; }
+  60%  { transform: translateY(-6px) scale(1.04); opacity: 1; }
+  100% { transform: translateY(0) scale(1);       opacity: 1; }
+}
+
+.animate-leaf-spin      { animation: leaf-spin      1.8s ease-in-out infinite; }
+.animate-leaf-spin-slow { animation: leaf-spin-slow 6s   linear       infinite; }
+.animate-leaf-sway      { animation: leaf-sway      3s   ease-in-out  infinite; }
+.animate-leaf-fall      { animation: leaf-fall var(--leaf-dur, 3s) ease-in forwards; }
+.animate-smoke          { animation: smoke-rise     2s   ease-out     infinite; }
+.animate-smoke-2        { animation: smoke-rise-2   2.6s ease-out     infinite; }
+.animate-ember-glow     { animation: ember-glow     1.2s ease-in-out  infinite; }
+.animate-blaze-pulse    { animation: blaze-pulse    2s   ease-in-out  infinite; }
+.animate-420-slide-in   { animation: 420-slide-in   0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+/* End 420 easter egg animations */
+
 @keyframes rainbow {
   0% {
     background-position: 0% 50%;

@@ -1,17 +1,33 @@
 'use client'
 
 export const dynamic = 'force-dynamic'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import TokyoBackground from '../components/TokyoBackground'
 import { getSecureAssetUrl } from '../lib/assetProtection'
 
 export default function About() {
   const [isDarkMode, setIsDarkMode] = useState(true)
+  // 🌿 secret: click the title 4 times to reveal the stash
+  const [blazeCount, setBlazeCount] = useState(0)
+  const [showStash, setShowStash] = useState(false)
+  const blazeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
     setIsDarkMode(savedTheme !== 'light')
   }, [])
+
+  const handleTitleClick = () => {
+    const next = blazeCount + 1
+    setBlazeCount(next)
+    if (blazeTimer.current) clearTimeout(blazeTimer.current)
+    if (next >= 4) {
+      setShowStash(true)
+      setBlazeCount(0)
+    } else {
+      blazeTimer.current = setTimeout(() => setBlazeCount(0), 2000)
+    }
+  }
 
   return (
     <div
@@ -37,10 +53,47 @@ export default function About() {
             </div>
           </div>
           <div className="mt-4">
-            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text">
+            <h1
+              className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text cursor-default select-none"
+              onClick={handleTitleClick}
+              title={blazeCount > 0 ? `${4 - blazeCount} more…` : undefined}
+            >
               🏁 About Forza Color Universe
+              {/* subtle leaf hint that only appears after first click */}
+              {blazeCount > 0 && (
+                <span className="ml-2 text-green-500 text-2xl align-middle animate-leaf-sway inline-block" aria-hidden>
+                  {'🌿'.repeat(blazeCount)}
+                </span>
+              )}
             </h1>
           </div>
+
+          {/* 🌿 Secret stash — revealed after 4 title clicks */}
+          {showStash && (
+            <div
+              className="mt-4 rounded-xl p-5 border border-green-500/40 bg-green-950/60 backdrop-blur-sm text-green-300 animate-420-slide-in"
+              role="status"
+              aria-live="polite"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-4xl animate-leaf-spin inline-block">🌿</span>
+                <div>
+                  <div className="text-lg font-bold text-green-400">you found the stash 😎</div>
+                  <div className="text-xs opacity-70">↑↑↓↓←→←→BA for the full experience</div>
+                </div>
+                <span className="text-4xl animate-leaf-spin-slow inline-block ml-auto">🍃</span>
+              </div>
+              <blockquote className="text-sm italic opacity-80 border-l-2 border-green-500/50 pl-3">
+                "The best color in the world is the one that looks good on your car." — Some wise tuner, probably at 4:20
+              </blockquote>
+              <button
+                onClick={() => setShowStash(false)}
+                className="mt-3 text-xs text-green-600 hover:text-green-400 transition-colors"
+              >
+                put it away
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="space-y-8">
