@@ -454,9 +454,9 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text animate-pulse">
-            🔧 TuneForge Loading...
+            🎨 Loading Paint Codes...
           </h1>
-          <p className="text-lg mb-4" style={{color: "var(--bamboo-paper)"}}>Forging your automotive experience...</p>
+          <p className="text-lg mb-4" style={{color: "var(--bamboo-paper)"}}>Loading your Forza color database...</p>
 
           <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
             Loading colors. Progress {Math.round(loadingProgress)} percent.
@@ -482,9 +482,9 @@ export default function HomePage() {
           </div>
 
           <p className="text-sm text-orange-300 mt-2 opacity-75" aria-hidden="true">
-            {loadingProgress < 30 && 'Heating the forge...'}
-            {loadingProgress >= 30 && loadingProgress < 60 && 'Shaping the gears...'}
-            {loadingProgress >= 60 && loadingProgress < 90 && 'Tempering the steel...'}
+            {loadingProgress < 30 && 'Sorting paint codes...'}
+            {loadingProgress >= 30 && loadingProgress < 60 && 'Loading manufacturers...'}
+            {loadingProgress >= 60 && loadingProgress < 90 && 'Filtering colors...'}
             {loadingProgress >= 90 && 'Almost ready...'}
           </p>
         </div>
@@ -540,6 +540,91 @@ export default function HomePage() {
             setError(error.message)
           }}
         >
+          <ResponsiveLayout>
+            {/* Hero — value proposition for new visitors */}
+            <p className={`mb-3 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              {allColors.length > 0 ? (
+                <>
+                  <span className="font-bold" style={{color: 'var(--bamboo-stalk)'}}>
+                    {allColors.length.toLocaleString()} Forza paint codes
+                  </span>
+                  {' '}across {makes.length} manufacturers — search, copy HSB values, apply in-game.
+                </>
+              ) : (
+                <>The ultimate{' '}
+                  <span className="font-bold" style={{color: 'var(--bamboo-stalk)'}}>Forza paint color database</span>
+                  {' '}— search, copy HSB values, apply in-game.
+                </>
+              )}
+            </p>
+
+            {/* Search Controls — primary action */}
+            <OptimizedSearchControls
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              selectedMake={selectedMake}
+              onMakeChange={setSelectedMake}
+              selectedColorType={selectedColorType}
+              onColorTypeChange={setSelectedColorType}
+              makes={makes}
+              colorTypes={colorTypes.filter((t): t is string => typeof t === 'string')}
+              isDarkMode={isDarkMode}
+              showManufacturerBorders={showManufacturerBorders}
+              onToggleManufacturerBorders={() =>
+                setShowManufacturerBorders(!showManufacturerBorders)
+              }
+              favoritesCount={favorites.length}
+              showFavoritesOnly={showFavoritesOnly}
+              onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
+            />
+          </ResponsiveLayout>
+
+          {/* Full-width Color Gallery — immediately after search */}
+          <div className={`w-full ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+            {/* Gallery header bar */}
+            <div className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
+              <span className="text-xl">🏆</span>
+              <span className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                COLOR GALLERY
+              </span>
+              <div className="ml-auto flex items-center gap-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                </div>
+                <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                  {filteredColors.length} colors
+                </span>
+              </div>
+            </div>
+
+            {filteredColors.length > 1000 ? (
+              <VirtualColorGrid
+                colors={filteredColors}
+                onColorSelect={handleColorSelect}
+                onShowInfo={showColorHSB}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+                isDarkMode={isDarkMode}
+                expandedColorId={expandedColorId}
+              />
+            ) : (
+              <div className="p-1">
+                <SimpleColorGrid
+                  colors={filteredColors}
+                  onColorSelect={handleColorSelect}
+                  onShowInfo={showColorHSB}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  expandedColorId={expandedColorId}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Tools — below gallery for engaged / returning users */}
           <ResponsiveLayout>
             {/* Garage Stats */}
             <div
@@ -840,71 +925,7 @@ export default function HomePage() {
               </div>
             )}
 
-            {/* Search Controls */}
-            <OptimizedSearchControls
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              selectedMake={selectedMake}
-              onMakeChange={setSelectedMake}
-              selectedColorType={selectedColorType}
-              onColorTypeChange={setSelectedColorType}
-              makes={makes}
-              colorTypes={colorTypes.filter((t): t is string => typeof t === 'string')}
-              isDarkMode={isDarkMode}
-              showManufacturerBorders={showManufacturerBorders}
-              onToggleManufacturerBorders={() =>
-                setShowManufacturerBorders(!showManufacturerBorders)
-              }
-              favoritesCount={favorites.length}
-              showFavoritesOnly={showFavoritesOnly}
-              onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
-            />
           </ResponsiveLayout>
-
-          {/* Full-width Color Gallery — hugs screen edges, maximises swatches visible */}
-          <div className={`w-full ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
-            {/* Gallery header bar */}
-            <div className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
-              <span className="text-xl">🏆</span>
-              <span className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                COLOR GALLERY
-              </span>
-              <div className="ml-auto flex items-center gap-2">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                </div>
-                <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-                  {filteredColors.length} colors
-                </span>
-              </div>
-            </div>
-
-            {filteredColors.length > 1000 ? (
-              <VirtualColorGrid
-                colors={filteredColors}
-                onColorSelect={handleColorSelect}
-                onShowInfo={showColorHSB}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-                isDarkMode={isDarkMode}
-                expandedColorId={expandedColorId}
-              />
-            ) : (
-              <div className="p-1">
-                <SimpleColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                  expandedColorId={expandedColorId}
-                />
-              </div>
-            )}
-          </div>
         </ErrorBoundary>
 
         <Footer isDarkMode={isDarkMode} />

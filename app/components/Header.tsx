@@ -37,6 +37,9 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
             Forza-Color-Repo
           </span>
         </h1>
+        <p className={`mt-2 text-sm font-medium opacity-70 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+          Paint color database &amp; livery tools for Forza Horizon 5 &amp; Motorsport
+        </p>
 
         {/* Primary nav — always visible */}
         <div className="mt-4 flex flex-wrap justify-center gap-2">
