@@ -26,21 +26,13 @@ function hsbToRgbStr(h: number, s: number, b: number): string {
   return `rgb(${Math.round((r + m) * 255)}, ${Math.round((g + m) * 255)}, ${Math.round((bl + m) * 255)})`
 }
 
-function fmtHSB(hsb: { h: number; s: number; b: number }) {
-  return {
-    h: Math.round(hsb.h * 360),
-    s: Math.round(hsb.s * 100),
-    b: Math.round(hsb.b * 100),
-  }
-}
-
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
   const closeButtonRef = React.useRef<HTMLButtonElement | null>(null)
 
   if (!isOpen || !color) return null
 
-  const hsb1 = fmtHSB(color.color1)
-  const hsb2 = fmtHSB(color.color2)
+  const hsb1 = { h: color.color1.h.toFixed(2), s: color.color1.s.toFixed(2), b: color.color1.b.toFixed(2) }
+  const hsb2 = { h: color.color2.h.toFixed(2), s: color.color2.s.toFixed(2), b: color.color2.b.toFixed(2) }
 
   return (
     <DialogShell
@@ -87,10 +79,8 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
                 className="w-full h-8 rounded border mb-2"
                 style={{ backgroundColor: hsbToRgbStr(color.color1.h, color.color1.s, color.color1.b) }}
               />
-              <div className="text-sm font-mono grid grid-cols-3 gap-1">
-                <span>H: {hsb1.h}</span>
-                <span>S: {hsb1.s}%</span>
-                <span>B: {hsb1.b}%</span>
+              <div className="text-sm font-mono">
+                {hsb1.h} {hsb1.s} {hsb1.b}
               </div>
             </div>
 
@@ -100,10 +90,8 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
                 className="w-full h-8 rounded border mb-2"
                 style={{ backgroundColor: hsbToRgbStr(color.color2.h, color.color2.s, color.color2.b) }}
               />
-              <div className="text-sm font-mono grid grid-cols-3 gap-1">
-                <span>H: {hsb2.h}</span>
-                <span>S: {hsb2.s}%</span>
-                <span>B: {hsb2.b}%</span>
+              <div className="text-sm font-mono">
+                {hsb2.h} {hsb2.s} {hsb2.b}
               </div>
             </div>
           </div>
