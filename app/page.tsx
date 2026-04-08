@@ -30,6 +30,9 @@ import HSBPopup from './components/HSBPopup'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
+import OfflineIndicator from './components/OfflineIndicator'
+import OptimizedStatsBar from './components/OptimizedStatsBar'
+import ExportButton from './components/ExportButton'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
 const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })
@@ -50,7 +53,8 @@ export default function HomePage() {
   const [selectedColorType, setSelectedColorType] = useState('')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [favorites, setFavorites] = useState<string[]>([])
-  const [, setColorHistory] = useState<string[]>([])
+  const [colorHistory, setColorHistory] = useState<string[]>([])
+  const [isOnline, setIsOnline] = useState(true)
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
@@ -71,6 +75,19 @@ export default function HomePage() {
   useAnalytics()
   usePerformance()
   useOfflineStorage()
+
+  // Track online/offline status
+  useEffect(() => {
+    setIsOnline(navigator.onLine)
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
 
   // Create favorites set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
@@ -275,218 +292,68 @@ export default function HomePage() {
   )
 
   if (isInitialLoad) {
-    const videoUrl =
-      '/Mp%204%20H%20280%203%20Q%20Nlf%203%20J%20O%20Aem%208%20Kv%20Cu%20Uuya%20AN%20Cr%20O%20Du%20C%20Qs%2063%20S%20Vq%20Z%20Rad%206%20O%2011%20BZ.mp4'
-
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900 to-slate-900 flex items-center justify-center relative overflow-hidden">
-        {/* Background Video */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
-          autoPlay
-          muted
-          loop
-          playsInline
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center relative overflow-hidden text-white">
+        {/* Subtle green ambient glow */}
+        <div className="absolute inset-0 bg-gradient-radial from-green-900/20 via-transparent to-transparent" />
 
-        {/* Forge Background Glow */}
-        <div className="absolute inset-0 bg-gradient-radial from-orange-600/20 via-red-600/10 to-transparent animate-pulse"></div>
+        <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
+          {/* Burning joint + smoke */}
+          <div className="relative flex flex-col items-center" style={{ height: 96 }}>
+            {/* Smoke puffs */}
+            <span
+              className="absolute text-white/60 text-xl select-none animate-smoke"
+              style={{ top: -8, left: '48%', animationDelay: '0s' }}
+              aria-hidden
+            >○</span>
+            <span
+              className="absolute text-white/40 text-sm select-none animate-smoke-2"
+              style={{ top: -4, left: '44%', animationDelay: '0.7s' }}
+              aria-hidden
+            >○</span>
+            <span
+              className="absolute text-white/30 text-xs select-none animate-smoke"
+              style={{ top: -2, left: '52%', animationDelay: '1.4s' }}
+              aria-hidden
+            >○</span>
 
-        {/* Anvil Background */}
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 opacity-20">
-          <svg width="200" height="120" viewBox="0 0 200 120" className="fill-gray-600">
-            <path d="M20 80 L180 80 L180 90 L170 100 L30 100 L20 90 Z" />
-            <path d="M40 60 L160 60 L160 80 L40 80 Z" />
-            <path d="M160 50 L180 50 L185 60 L180 70 L160 70 Z" />
-            <circle cx="100" cy="40" r="8" className="fill-gray-500" />
-          </svg>
-        </div>
-
-        <div className="text-center z-10">
-          <div className="relative mb-8">
-            {/* Engine Block */}
-            <div className="w-32 h-24 mx-auto relative">
-              <svg className="w-full h-full" viewBox="0 0 120 80">
-                <defs>
-                  <linearGradient id="engineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#6b7280" />
-                    <stop offset="50%" stopColor="#4b5563" />
-                    <stop offset="100%" stopColor="#374151" />
-                  </linearGradient>
-                  <linearGradient id="pistonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#fbbf24" />
-                    <stop offset="50%" stopColor="#f59e0b" />
-                    <stop offset="100%" stopColor="#d97706" />
-                  </linearGradient>
-                  <filter id="engineGlow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                    <feMerge>
-                      <feMergeNode in="coloredBlur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
-
-                {/* Engine Block */}
-                <rect
-                  x="10"
-                  y="30"
-                  width="100"
-                  height="40"
-                  rx="5"
-                  fill="url(#engineGradient)"
-                  filter="url(#engineGlow)"
-                />
-
-                {/* Cylinder Heads */}
-                <rect x="15" y="25" width="15" height="10" rx="2" fill="#4b5563" />
-                <rect x="35" y="25" width="15" height="10" rx="2" fill="#4b5563" />
-                <rect x="55" y="25" width="15" height="10" rx="2" fill="#4b5563" />
-                <rect x="75" y="25" width="15" height="10" rx="2" fill="#4b5563" />
-                <rect x="95" y="25" width="10" height="10" rx="2" fill="#4b5563" />
-
-                {/* Animated Pistons */}
-                {[0, 1, 2, 3, 4].map(i => {
-                  const x = 17.5 + i * 20
-                  const delay = i * 0.2
-                  return (
-                    <g key={i}>
-                      <rect
-                        x={x}
-                        y="15"
-                        width="5"
-                        height="15"
-                        rx="1"
-                        fill="url(#pistonGradient)"
-                        filter="url(#engineGlow)"
-                        className="animate-bounce"
-                        style={{
-                          animationDuration: '1s',
-                          animationDelay: `${delay}s`,
-                          transformOrigin: 'center bottom',
-                        }}
-                      />
-                      {/* Connecting Rod */}
-                      <line
-                        x1={x + 2.5}
-                        y1="30"
-                        x2={x + 2.5}
-                        y2="15"
-                        stroke="#9ca3af"
-                        strokeWidth="1.5"
-                        className="animate-pulse"
-                        style={{
-                          animationDuration: '1s',
-                          animationDelay: `${delay}s`,
-                        }}
-                      />
-                    </g>
-                  )
-                })}
-
-                {/* Crankshaft */}
-                <ellipse cx="60" cy="55" rx="45" ry="3" fill="#1f2937" opacity="0.8" />
-                <rect x="15" y="53" width="90" height="4" rx="2" fill="#374151" />
-
-                {/* Engine Details */}
-                <circle
-                  cx="25"
-                  cy="50"
-                  r="3"
-                  fill="#ef4444"
-                  opacity="0.8"
-                  className="animate-pulse"
-                />
-                <circle
-                  cx="95"
-                  cy="50"
-                  r="3"
-                  fill="#10b981"
-                  opacity="0.8"
-                  className="animate-pulse"
-                  style={{ animationDelay: '0.5s' }}
-                />
-
-                {/* Exhaust Pipes */}
-                <rect x="110" y="35" width="8" height="3" rx="1" fill="#6b7280" />
-                <rect x="110" y="42" width="8" height="3" rx="1" fill="#6b7280" />
-                <rect x="110" y="49" width="8" height="3" rx="1" fill="#6b7280" />
-              </svg>
-            </div>
-
-            {/* Exhaust Smoke */}
-            <div className="absolute top-0 right-4">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-2 h-2 bg-gray-400 rounded-full opacity-60 animate-ping"
-                  style={{
-                    animationDelay: `${i * 0.3}s`,
-                    animationDuration: '2s',
-                    position: 'absolute',
-                    top: `${i * 8}px`,
-                    right: `${i * 2}px`,
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* RPM Gauge */}
-            <div className="absolute top-2 left-8 w-8 h-8">
-              <svg className="w-full h-full" viewBox="0 0 40 40">
-                <circle cx="20" cy="20" r="18" fill="none" stroke="#374151" strokeWidth="2" />
-                <circle cx="20" cy="20" r="15" fill="#1f2937" />
-                <line
-                  x1="20"
-                  y1="20"
-                  x2="20"
-                  y2="8"
-                  stroke="#ef4444"
-                  strokeWidth="2"
-                  className="animate-spin"
-                  style={{ animationDuration: '0.5s', transformOrigin: '20px 20px' }}
-                />
-                <circle cx="20" cy="20" r="2" fill="#ef4444" />
-              </svg>
-            </div>
+            {/* The joint */}
+            <svg width="24" height="72" viewBox="0 0 24 72" aria-hidden className="mt-4">
+              <polygon points="12,0 10,8 14,8" fill="#d4c5a9" />
+              <rect x="6" y="8" width="12" height="50" rx="4" fill="#f5f0e8" />
+              <line x1="6" y1="22" x2="18" y2="22" stroke="#e0d8cc" strokeWidth="0.8" />
+              <line x1="6" y1="36" x2="18" y2="36" stroke="#e0d8cc" strokeWidth="0.8" />
+              <line x1="6" y1="50" x2="18" y2="50" stroke="#e0d8cc" strokeWidth="0.8" />
+              <rect x="6" y="58" width="12" height="14" rx="3" fill="#c8a96a" />
+              <circle cx="12" cy="8" r="4" fill="#ff4500" className="animate-ember-glow" />
+              <circle cx="12" cy="8" r="2" fill="#ff8c00" />
+            </svg>
           </div>
 
-          <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-yellow-400 to-red-400 text-transparent bg-clip-text animate-pulse">
-            🎨 Loading Paint Codes...
+          <h1 className="text-2xl font-bold tracking-wide text-green-300">
+            🌿 Loading Paint Codes…
           </h1>
-          <p className="text-lg mb-4" style={{color: "var(--bamboo-paper)"}}>Loading your Forza color database...</p>
 
           <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
             Loading colors. Progress {Math.round(loadingProgress)} percent.
           </div>
 
-          {/* Loading Bar */}
-          <div className="w-64 h-3 rounded-full mx-auto mb-4 overflow-hidden bamboo-surface-dark">
+          {/* Loading bar */}
+          <div className="w-56 h-2 rounded-full bg-gray-800 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full animate-pulse"
-              style={{ width: `${loadingProgress}%`, transition: 'width 0.3s ease' }}
-            ></div>
+              className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all duration-300"
+              style={{ width: `${loadingProgress}%` }}
+            />
           </div>
 
-          {/* Sparks Animation */}
-          <div className="flex justify-center items-center gap-1 mt-4">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-1 h-1 bg-yellow-400 rounded-full animate-ping"
-                style={{ animationDelay: `${i * 200}ms`, animationDuration: '1s' }}
-              ></div>
-            ))}
-          </div>
-
-          <p className="text-sm text-orange-300 mt-2 opacity-75" aria-hidden="true">
-            {loadingProgress < 30 && 'Sorting paint codes...'}
-            {loadingProgress >= 30 && loadingProgress < 60 && 'Loading manufacturers...'}
-            {loadingProgress >= 60 && loadingProgress < 90 && 'Filtering colors...'}
-            {loadingProgress >= 90 && 'Almost ready...'}
+          <p className="text-sm text-green-400/70">
+            {loadingProgress < 30 && 'Sorting paint codes…'}
+            {loadingProgress >= 30 && loadingProgress < 60 && 'Loading manufacturers…'}
+            {loadingProgress >= 60 && loadingProgress < 90 && 'Filtering colors…'}
+            {loadingProgress >= 90 && 'Almost ready…'}
           </p>
+
+          <p className="text-xs text-white/30 mt-1">Rolling something special…</p>
         </div>
       </div>
     )
@@ -513,7 +380,7 @@ export default function HomePage() {
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
         />
 
-
+        <OfflineIndicator isOnline={isOnline} />
 
         {/* Error Display */}
         {error && (
