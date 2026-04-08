@@ -69,7 +69,7 @@ self.addEventListener('fetch', event => {
           return response
         })
         .catch(() => {
-          return caches.match(request)
+          return caches.match(request).then(r => r || Response.error())
         })
     )
     return
@@ -99,7 +99,7 @@ self.addEventListener('fetch', event => {
           return response
         })
         .catch(() => {
-          return caches.match('/offline.html')
+          return caches.match('/offline.html').then(r => r || Response.error())
         })
     )
     return
@@ -108,9 +108,9 @@ self.addEventListener('fetch', event => {
   // Handle other requests
   event.respondWith(
     caches.match(request).then(response => {
-      return (
-        response ||
-        fetch(request).then(fetchResponse => {
+      if (response) return response
+      return fetch(request)
+        .then(fetchResponse => {
           if (request.method === 'GET' && request.url.startsWith('http') && fetchResponse.status === 200) {
             const responseClone = fetchResponse.clone()
             caches.open(DYNAMIC_CACHE).then(cache => {
@@ -119,7 +119,7 @@ self.addEventListener('fetch', event => {
           }
           return fetchResponse
         })
-      )
+        .catch(() => Response.error())
     })
   )
 })

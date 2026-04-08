@@ -42,6 +42,7 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
 
     const hueDistribution = colors.reduce(
       (acc, color) => {
+        if (!color.color1) return acc
         const hue = Math.floor(color.color1.h * 12) // 12 hue buckets
         const hueName = [
           'Red',
