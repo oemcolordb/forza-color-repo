@@ -28,7 +28,7 @@ export function ScenicFinder() {
 
     try {
       // Gemini client is not bundled — always use fallback curated links
-      let aiClient: any = null;
+      const aiClient: any = null;
 
       if (!aiClient) {
         setSpots([

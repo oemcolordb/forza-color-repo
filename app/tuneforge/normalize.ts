@@ -86,8 +86,8 @@ export function generateTune(car: CarProfile, objective: TuneObjective): Normali
   const isAWD = car.drivetrain === 'AWD'
 
   // ── Baseline springs ───────────────────────────────────────────────────────
-  let baseF = baseSpring(car.weight * (car.frontBias / 100))
-  let baseR = baseSpring(car.weight * (rearBias / 100))
+  const baseF = baseSpring(car.weight * (car.frontBias / 100))
+  const baseR = baseSpring(car.weight * (rearBias / 100))
 
   // ── Objective multipliers ──────────────────────────────────────────────────
   const obj: Record<TuneObjective, () => NormalizedTune> = {

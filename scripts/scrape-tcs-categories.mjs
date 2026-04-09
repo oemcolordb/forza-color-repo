@@ -151,7 +151,7 @@ async function sampleColors(page, products) {
 
     const sampled = await page.evaluate(
       async ({ items, script }) => {
-        // eslint-disable-next-line no-eval
+         
         eval(script)
         const out = []
         for (const item of items) {

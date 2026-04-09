@@ -45,7 +45,7 @@ for (let i = 0; i < products.length; i += BATCH) {
   process.stderr.write(`batch ${Math.floor(i/BATCH)+1}/${Math.ceil(products.length/BATCH)} (${i+1}-${Math.min(i+BATCH, products.length)})...\r`)
   
   const results = await page.evaluate(async (items, script) => {
-    // eslint-disable-next-line no-eval
+     
     eval(script)
     const out = []
     for (const item of items) {
