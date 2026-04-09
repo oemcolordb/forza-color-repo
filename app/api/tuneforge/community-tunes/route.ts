@@ -29,25 +29,35 @@ export const GET = async (request: Request) => {
       // Bidirectional fuzzy match: DB model contains query OR query contains DB model.
       // This handles cases where the tune DB uses a shorter name (e.g. "599XX EVOLUTION")
       // while cars.json has the full name ("599XX Evoluzione").
-      const result = await client.execute({
-        sql: `SELECT * FROM community_tunes
-              WHERE lower(car_make) LIKE lower(?)
-                AND (
-                  lower(car_model) LIKE lower(?)
-                  OR lower(?) LIKE '%' || lower(car_model) || '%'
-                )
-              ORDER BY votes DESC, created_at DESC
-              LIMIT 50`,
-        args: [`%${make}%`, `%${normalizedModel}%`, normalizedModel],
-      })
-      return NextResponse.json(result.rows)
+      try {
+        const result = await client.execute({
+          sql: `SELECT * FROM community_tunes
+                WHERE lower(car_make) LIKE lower(?)
+                  AND (
+                    lower(car_model) LIKE lower(?)
+                    OR lower(?) LIKE '%' || lower(car_model) || '%'
+                  )
+                ORDER BY votes DESC, created_at DESC
+                LIMIT 50`,
+          args: [`%${make}%`, `%${normalizedModel}%`, normalizedModel],
+        })
+        return NextResponse.json(result.rows)
+      } catch (dbErr) {
+        console.warn('community-tunes query failed, returning empty list:', dbErr)
+        return NextResponse.json([])
+      }
     }
 
     // No filter — return most popular
-    const result = await client.execute(
-      `SELECT * FROM community_tunes ORDER BY votes DESC, created_at DESC LIMIT 50`
-    )
-    return NextResponse.json(result.rows)
+    try {
+      const result = await client.execute(
+        `SELECT * FROM community_tunes ORDER BY votes DESC, created_at DESC LIMIT 50`
+      )
+      return NextResponse.json(result.rows)
+    } catch (dbErr) {
+      console.warn('community-tunes fallback query failed, returning empty list:', dbErr)
+      return NextResponse.json([])
+    }
   } catch {
     return NextResponse.json({ error: 'Fetch failed' }, { status: 500 })
   }

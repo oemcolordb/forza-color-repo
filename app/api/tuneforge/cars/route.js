@@ -41,9 +41,20 @@ export async function GET() {
       )
     }
 
-    const result = await client.execute(
-      'SELECT DISTINCT car_make, car_model FROM community_tunes ORDER BY car_make, car_model'
-    )
+    // Try DB query but fall back to cars.json if the DB call fails (avoid 500)
+    let result
+    try {
+      result = await client.execute(
+        'SELECT DISTINCT car_make, car_model FROM community_tunes ORDER BY car_make, car_model'
+      )
+    } catch (dbErr) {
+      console.warn('Turso query failed; falling back to cars.json:', dbErr)
+      return NextResponse.json(
+        allCars.sort((a, b) =>
+          a.manufacturer.localeCompare(b.manufacturer) || a.model.localeCompare(b.model)
+        )
+      )
+    }
 
     // Build car list: enrich with cars.json data where available, otherwise use tune DB names
     const cars = result.rows.map(row => {

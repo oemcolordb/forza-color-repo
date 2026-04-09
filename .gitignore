@@ -44,3 +44,6 @@ Thumbs.db
 
 pnpm-lock.yaml
 package-lock.json
+.claude/CLAUDE.local.md
+.claude/settings.local.json
+.claude/agent-memory/

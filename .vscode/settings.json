@@ -17,5 +17,8 @@
       "icon": "terminal-powershell"
     }
   },
-  "terminal.integrated.defaultProfile.windows": "PowerShell (Core)"
+  "terminal.integrated.defaultProfile.windows": "PowerShell (Core)",
+  "claudeBuddy.managedProjects": [
+    "c:\\Users\\xxx\\OneDrive\\Documents\\forza-color-repo"
+  ]
 }
