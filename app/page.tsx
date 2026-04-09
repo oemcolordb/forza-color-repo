@@ -293,6 +293,11 @@ export default function HomePage() {
     [expandedColorId]
   )
 
+  // Show color HSB/details (used by child components)
+  const showColorHSB = useCallback((color: CarColor) => {
+    handleColorSelect(color)
+  }, [handleColorSelect])
+
   if (isInitialLoad) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center relative overflow-hidden text-white">

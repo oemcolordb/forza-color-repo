@@ -1,4 +1,6 @@
 // Auto-generated car data interfaces
+import type { Car } from '../types/car';
+
 export interface CarMetadata {
   totalCars: number;
   manufacturers: number;
