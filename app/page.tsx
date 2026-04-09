@@ -756,7 +756,6 @@ export default function HomePage() {
                           style={{
                             backgroundColor: `rgb(${color.rgb[0]}, ${color.rgb[1]}, ${color.rgb[2]})`,
                           }}
-                          title={`${color.percentage}% - Click to view`}
                         />
                       ))}
                     </div>
@@ -787,7 +786,6 @@ export default function HomePage() {
                           style={{
                             background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
                           }}
-                          title={`${color.colorName} - ${color.make}`}
                           aria-label={`Select ${color.colorName} from ${color.make}`}
                         />
                       ))}

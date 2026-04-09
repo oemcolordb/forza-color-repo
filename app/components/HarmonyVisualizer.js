@@ -47,6 +47,11 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
   }
 
   if (!currentHarmony || currentHarmony.length === 0) {
+
+  const safeHarmony = currentHarmony.filter(c => c?.color1 && c?.color2)
+
+  const safeHarmony = currentHarmony.filter(c => c?.color1 && c?.color2)
+
     return (
       <div
         className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg h-full flex items-center justify-center`}
@@ -63,6 +68,8 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
     )
   }
 
+  const safeHarmony = currentHarmony.filter(c => c?.color1 && c?.color2)
+
   return (
     <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-slate-800' : 'bg-white'} shadow-lg h-full hover-lift`}>
       <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -75,13 +82,13 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
           {harmonyMode}
         </h4>
         <p className={`text-xs ${isDarkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-          {currentHarmony.length} colors generated
+          {safeHarmony.length} colors generated
         </p>
       </div>
 
       {/* Large color swatches */}
       <div className="space-y-3 mb-4">
-        {currentHarmony.map((color, index) => (
+        {safeHarmony.map((color, index) => (
           <button
             key={index}
             onClick={() => onColorSelect?.(color)}
@@ -122,7 +129,7 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
           Palette Preview
         </h5>
         <div className="flex rounded-lg overflow-hidden h-8 shadow-inner">
-          {currentHarmony.map((color, index) => (
+          {safeHarmony.map((color, index) => (
             <div
               key={index}
               className="flex-1 cursor-pointer hover:scale-105 transition-transform"
@@ -141,8 +148,8 @@ const HarmonyVisualizer = ({ currentHarmony, harmonyMode, isDarkMode, onColorSel
         <div className="flex items-center justify-between">
           <span>Hue Range:</span>
           <span>
-            {Math.min(...currentHarmony.map(c => Math.round(c.color1.h * 360)))}° -{' '}
-            {Math.max(...currentHarmony.map(c => Math.round(c.color1.h * 360)))}°
+            {Math.min(...safeHarmony.map(c => Math.round(c.color1.h * 360)))}° -{' '}
+            {Math.max(...safeHarmony.map(c => Math.round(c.color1.h * 360)))}°
           </span>
         </div>
       </div>
