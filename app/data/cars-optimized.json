@@ -25667,8 +25667,26 @@
       "Truck",
       "Wagon"
     ],
-    "countries": ["France", "Germany", "Italy", "Japan", "United Kingdom", "United States"],
-    "rarities": ["Common", "Epic", "Legendary", "Rare"],
-    "piClasses": ["A", "B", "C", "S1", "S2"]
+    "countries": [
+      "France",
+      "Germany",
+      "Italy",
+      "Japan",
+      "United Kingdom",
+      "United States"
+    ],
+    "rarities": [
+      "Common",
+      "Epic",
+      "Legendary",
+      "Rare"
+    ],
+    "piClasses": [
+      "A",
+      "B",
+      "C",
+      "S1",
+      "S2"
+    ]
   }
 }

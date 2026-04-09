@@ -155,11 +155,10 @@ export default function TuneForge() {
     setLoadingStatus('Loading car database...')
 
     try {
-      setLoadingStatus('Connecting to car database...')
-      const { carDatabase } = await import('../../services/carDatabase')
-
-      setLoadingStatus('Loading all cars...')
-      const allCars = await carDatabase.getAllCars()
+      setLoadingStatus('Fetching cars with community tunes...')
+      const res = await fetch('/api/tuneforge/cars')
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const allCars: BaseCar[] = await res.json()
 
       if (!allCars || allCars.length === 0) {
         throw new Error('No car data available')
@@ -185,7 +184,7 @@ export default function TuneForge() {
 
       setCars(processedCars)
       setSelectedCar(processedCars[0])
-      setLoadingStatus(`${processedCars.length} cars loaded successfully`)
+      setLoadingStatus(`${processedCars.length} cars loaded`)
     } catch (error) {
       console.error('TuneForge: Failed to load car database:', error)
       setLoadingStatus('Loading fallback cars...')

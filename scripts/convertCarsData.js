@@ -131,9 +131,19 @@ export const CAR_TYPES = ${JSON.stringify(
       fs.mkdirSync(outputDir, { recursive: true })
     }
 
-    // Write optimized data
+    // Write optimized data to app/data/ (for server-side imports)
     fs.writeFileSync(
       path.join(outputDir, 'cars-optimized.json'),
+      JSON.stringify(optimizedData, null, 2)
+    )
+
+    // Also write to public/data/ so the client fetch at /data/cars-optimized.json works
+    const publicDataDir = path.join(__dirname, '..', 'public', 'data')
+    if (!fs.existsSync(publicDataDir)) {
+      fs.mkdirSync(publicDataDir, { recursive: true })
+    }
+    fs.writeFileSync(
+      path.join(publicDataDir, 'cars-optimized.json'),
       JSON.stringify(optimizedData, null, 2)
     )
 

@@ -38,7 +38,9 @@
   for = "/api/*"
   [headers.values]
     Cache-Control = "public, max-age=300, s-maxage=600"
-    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Origin = "https://forza-color-repo.vercel.app"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
 
 [[headers]]
   for = "/*.js"

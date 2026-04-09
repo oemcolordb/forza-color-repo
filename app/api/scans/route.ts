@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
+import { checkBotId } from 'botid/server'
 
 const client =
   process.env.TURSO_DATABASE_URL &&
@@ -33,6 +34,9 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const botCheck = await checkBotId()
+  if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+
   if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
 
   try {

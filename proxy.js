@@ -23,7 +23,7 @@ function isRateLimited(key, max) {
   return e.c > max
 }
 
-export function middleware(request) {
+export function proxy(request) {
   const { pathname } = request.nextUrl
   const ip =
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
@@ -87,6 +87,5 @@ export function middleware(request) {
 }
 
 export const config = {
-  // Run on all routes except Next.js internals and static assets
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)', '/api/:path*'],
 }

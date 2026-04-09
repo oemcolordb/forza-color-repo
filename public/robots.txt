@@ -15,6 +15,12 @@ Disallow: /admin/
 Disallow: /_next/
 Disallow: /netlify/
 
+# Block raw data files from bots
+Disallow: /cars.json
+Disallow: /tuneforge-cars-full.json
+Disallow: /discord-manifest.json
+Disallow: /data/
+
 # Sitemap location
 Sitemap: https://forza-color-repo.vercel.app/sitemap.xml
 

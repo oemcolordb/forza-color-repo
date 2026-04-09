@@ -26,7 +26,6 @@ import ProgressiveLoader from './components/ProgressiveLoader'
 import GamingErrorBoundary from './components/GamingErrorBoundary'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
-import HSBPopup from './components/HSBPopup'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
@@ -64,8 +63,6 @@ export default function HomePage() {
   const [loadingProgress, setLoadingProgress] = useState<number>(0)
   const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [hsbPopupColor, setHsbPopupColor] = useState<CarColor | null>(null)
-  const [showHsbPopup, setShowHsbPopup] = useState(false)
   const [showComparison, setShowComparison] = useState(false)
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
@@ -283,12 +280,6 @@ export default function HomePage() {
     })
   }, [])
 
-  // Show HSB popup for color data
-  const showColorHSB = useCallback((color: CarColor) => {
-    setHsbPopupColor(color)
-    setShowHsbPopup(true)
-  }, [])
-
   // Handle color selection with history tracking
   const handleColorSelect = useCallback(
     (color: CarColor) => {
@@ -481,7 +472,6 @@ export default function HomePage() {
               <VirtualColorGrid
                 colors={filteredColors}
                 onColorSelect={handleColorSelect}
-                onShowInfo={showColorHSB}
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 isDarkMode={isDarkMode}
@@ -492,7 +482,6 @@ export default function HomePage() {
                 <SimpleColorGrid
                   colors={filteredColors}
                   onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
                   favorites={favorites}
                   onToggleFavorite={toggleFavorite}
                   isDarkMode={isDarkMode}
@@ -809,13 +798,6 @@ export default function HomePage() {
         <Footer isDarkMode={isDarkMode} />
 
         <PerformanceMonitor isDarkMode={isDarkMode} deviceInfo={deviceInfo} />
-
-        <HSBPopup
-          color={hsbPopupColor}
-          isOpen={showHsbPopup}
-          onClose={() => setShowHsbPopup(false)}
-          isDarkMode={isDarkMode}
-        />
 
         <ColorComparison
           colors={allColors}

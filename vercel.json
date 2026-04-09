@@ -5,6 +5,16 @@
   "env": {
     "NEXT_TELEMETRY_DISABLED": "1"
   },
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "https://forza-color-repo.vercel.app" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+      ]
+    }
+  ],
   "functions": {
     "app/api/**/*.ts": {
       "memory": 1024,

@@ -196,7 +196,6 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
           </button>
         </div>
       </div>
-      </div>
     )
   }
 )
