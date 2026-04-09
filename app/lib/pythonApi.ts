@@ -63,6 +63,15 @@ export async function isPythonApiAvailable(): Promise<boolean> {
   }
 
   try {
+    // The Python API is a local development service only.
+    // Skip the health check when running in production to avoid CSP violations.
+    if (
+      typeof window !== 'undefined' &&
+      window.location.hostname !== 'localhost' &&
+      window.location.hostname !== '127.0.0.1'
+    ) {
+      return false
+    }
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 1500)
     const response = await fetch(`${PYTHON_API_BASE}/health`, {
