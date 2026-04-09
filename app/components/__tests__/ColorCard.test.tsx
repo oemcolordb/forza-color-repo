@@ -35,7 +35,7 @@ describe('ColorCard', () => {
     expect(screen.getByText('Normal')).toBeInTheDocument()
   })
 
-  it('calls onSelect when info button is clicked', () => {
+  it('calls onSelect when color swatch is clicked', () => {
     render(
       <ColorCard
         color={mockColor}
@@ -45,8 +45,8 @@ describe('ColorCard', () => {
       />
     )
 
-    const infoButton = screen.getByLabelText('Learn more about Rosso Corsa')
-    fireEvent.click(infoButton)
+    const selectButton = screen.getByLabelText('Select Rosso Corsa')
+    fireEvent.click(selectButton)
 
     expect(mockOnSelect).toHaveBeenCalledWith(mockColor)
   })

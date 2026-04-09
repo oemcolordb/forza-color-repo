@@ -55,7 +55,6 @@ export default function HomePage() {
   const [colorHistory, setColorHistory] = useState<string[]>([])
   const [isOnline, setIsOnline] = useState(true)
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const [expandedColorId, setExpandedColorId] = useState<string | null>(null)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
   const [harmonyMode, setHarmonyMode] = useState('')
@@ -284,13 +283,12 @@ export default function HomePage() {
   const handleColorSelect = useCallback(
     (color: CarColor) => {
       const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-      setExpandedColorId(expandedColorId === colorId ? null : colorId)
       setColorHistory(prev => {
         const filtered = prev.filter(id => id !== colorId)
         return [colorId, ...filtered.slice(0, 49)] // Keep last 50
       })
     },
-    [expandedColorId]
+    []
   )
 
   // Show color HSB/details (used by child components)
@@ -480,7 +478,6 @@ export default function HomePage() {
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 isDarkMode={isDarkMode}
-                expandedColorId={expandedColorId}
               />
             ) : (
               <div className="p-1">
@@ -490,7 +487,6 @@ export default function HomePage() {
                   favorites={favorites}
                   onToggleFavorite={toggleFavorite}
                   isDarkMode={isDarkMode}
-                  expandedColorId={expandedColorId}
                 />
               </div>
             )}

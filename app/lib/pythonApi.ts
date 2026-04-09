@@ -49,6 +49,13 @@ export function fileToBase64(file: File): Promise<string> {
 }
 
 export async function isPythonApiAvailable(): Promise<boolean> {
+  // Only attempt the health check when an explicit non-localhost URL has been
+  // configured via the environment variable. Hitting the default localhost
+  // endpoint in production violates the Content Security Policy.
+  const configuredUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL
+  if (!configuredUrl || configuredUrl.includes('localhost') || configuredUrl.includes('127.0.0.1')) {
+    return false
+  }
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 1500)

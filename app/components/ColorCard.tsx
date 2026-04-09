@@ -5,7 +5,6 @@ import { CarColor } from '../types'
 interface ColorCardProps {
   color: CarColor
   onSelect: (_color: CarColor) => void
-  onShowInfo?: (_color: CarColor) => void
   isFavorite?: boolean
   onToggleFavorite?: () => void
   isDarkMode?: boolean
@@ -27,7 +26,7 @@ function getFinishFromColorType(colorType?: string): PaintFinish {
 }
 
 const ColorCard: React.FC<ColorCardProps> = React.memo(
-  ({ color, onSelect, onShowInfo, isFavorite = false, onToggleFavorite, isDarkMode = true }) => {
+  ({ color, onSelect, isFavorite = false, onToggleFavorite, isDarkMode = true }) => {
     const finish = React.useMemo(() => getFinishFromColorType(color.colorType), [color.colorType])
 
     const gradient = React.useMemo(() => {
@@ -180,20 +179,6 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
               {isFavorite ? '❤️' : '🤍'}
             </button>
           )}
-          <button
-            onClick={e => {
-              e.stopPropagation()
-              if (onShowInfo) {
-                onShowInfo(color)
-              } else {
-                onSelect(color)
-              }
-            }}
-            className="transition-colors p-2 rounded-full min-w-[32px] min-h-[32px] flex items-center justify-center bamboo-button-ghost"
-            aria-label={`Learn more about ${color.colorName}`}
-          >
-            ℹ️
-          </button>
         </div>
       </div>
     )
