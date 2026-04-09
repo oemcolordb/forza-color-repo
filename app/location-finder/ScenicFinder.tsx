@@ -27,17 +27,8 @@ export function ScenicFinder() {
     setShowMap(false);
 
     try {
-      // Try to dynamically import the Google GenAI client. If unavailable, fall back to curated links.
+      // Gemini client is not bundled — always use fallback curated links
       let aiClient: any = null;
-      try {
-        const mod = await import('@google/genai');
-        const modAny = mod as any;
-        const GoogleGenAI = (modAny && (modAny.GoogleGenAI || modAny.default?.GoogleGenAI || modAny.default)) || modAny;
-        aiClient = new GoogleGenAI({ apiKey: (process.env as any).GEMINI_API_KEY });
-      } catch (err) {
-        console.warn('Gemini client not available, using fallback links', err);
-        aiClient = null;
-      }
 
       if (!aiClient) {
         setSpots([
