@@ -12,7 +12,6 @@ interface VirtualColorGridProps {
   onShowInfo?: (color: CarColor) => void
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
-  expandedColorId?: string | null
 }
 
 const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
@@ -22,7 +21,6 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
   onShowInfo,
   onToggleFavorite,
   isDarkMode,
-  expandedColorId: _expandedColorId,
 }) => {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
   const [gridHeight, setGridHeight] = useState(600)

@@ -49,6 +49,19 @@ export function fileToBase64(file: File): Promise<string> {
 }
 
 export async function isPythonApiAvailable(): Promise<boolean> {
+  // Skip health check if the API base points to localhost but we're running
+  // on a non-localhost origin (e.g. production deployment). Attempting a
+  // cross-origin fetch to localhost violates the Content-Security-Policy and
+  // would always fail anyway.
+  if (
+    typeof window !== 'undefined' &&
+    PYTHON_API_BASE.includes('localhost') &&
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1'
+  ) {
+    return false
+  }
+
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 1500)
