@@ -106,12 +106,11 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
       <div className={getGridClasses()}>
         {displayedColors.map((color, index) => {
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-          const uniqueKey = `${colorId}-${index}`
           const isFavorite = favorites.includes(colorId)
 
           return (
             <ColorCard
-              key={uniqueKey}
+              key={colorId}
               color={color}
               onSelect={onColorSelect}
               isFavorite={isFavorite}

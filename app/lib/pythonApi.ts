@@ -53,7 +53,13 @@ export async function isPythonApiAvailable(): Promise<boolean> {
   // configured via the environment variable. Hitting the default localhost
   // endpoint in production violates the Content Security Policy.
   const configuredUrl = process.env.NEXT_PUBLIC_PYTHON_API_URL
-  if (!configuredUrl || configuredUrl.includes('localhost') || configuredUrl.includes('127.0.0.1')) {
+  if (!configuredUrl) return false
+  try {
+    const { hostname } = new URL(configuredUrl)
+    if (hostname.toLowerCase() === 'localhost' || hostname === '127.0.0.1' || hostname === '::1') {
+      return false
+    }
+  } catch {
     return false
   }
   try {
