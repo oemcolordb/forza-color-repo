@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
+import { jwtVerify } from 'jose'
 
 // ─── Protected data files ────────────────────────────────────────────────────
 const PROTECTED_DATA = ['/cars.json', '/tuneforge-cars-full.json', '/discord-manifest.json']
 
 // ─── Known bot / scraper User-Agent patterns ────────────────────────────────
 const BOT_UA = /curl|wget|python-requests|httpx|scrapy|bot|spider|crawl|go-http|java\//i
+
+// ─── JWT Configuration ───────────────────────────────────────────────────────
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-for-dev'
 
 // ─── In-memory rate limiter (best-effort; resets on cold start) ──────────────
 const _rl = new Map()
@@ -21,7 +25,7 @@ function isRateLimited(key, max) {
   return e.c > max
 }
 
-export function proxy(request) {
+export async function proxy(request) {
   const { pathname } = request.nextUrl
   const ip =
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
@@ -64,6 +68,30 @@ export function proxy(request) {
     }
   }
 
+  // ── JWT Validation for Protected API Routes ──────────────────────────────────
+  if (pathname.startsWith('/api/protected')) {
+    const authHeader = request.headers.get('authorization')
+    const token = authHeader?.split(' ')[1]
+
+    if (!token) {
+      return new NextResponse(JSON.stringify({ message: 'Authentication required' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+    try {
+      const secret = new TextEncoder().encode(JWT_SECRET)
+      await jwtVerify(token, secret)
+    } catch (error) {
+      console.error('JWT Verification Error:', error)
+      return new NextResponse(JSON.stringify({ message: 'Invalid or expired token' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+  }
+
   // ── Security headers ─────────────────────────────────────────────────────────
   const response = NextResponse.next()
 
@@ -92,8 +120,4 @@ export function proxy(request) {
   )
 
   return response
-}
-
-export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)', '/api/:path*'],
 }
