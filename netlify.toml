@@ -1,0 +1,74 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NEXT_PRIVATE_STANDALONE = "true"
+
+[[redirects]]
+  from = "/forza-colors"
+  to = "/forza-color-sheet"
+  status = 301
+
+[[redirects]]
+  from = "/color-database"
+  to = "/forza-color-sheet"
+  status = 301
+
+[[redirects]]
+  from = "/paint-colors"
+  to = "/forza-color-sheet"
+  status = 301
+
+[[redirects]]
+  from = "/automotive-colors"
+  to = "/forza-color-sheet"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300, s-maxage=600"
+    Access-Control-Allow-Origin = "https://forza-color-repo.vercel.app"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/forza-color-sheet-preview.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+    Content-Type = "image/jpeg"
+
+# SEO-friendly redirects for common search terms
+[[redirects]]
+  from = "/search"
+  to = "/?search=:query"
+  status = 200
+  query = {query = ":query"}
+
+# Prerender important pages for better SEO
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  directory = "netlify/functions"

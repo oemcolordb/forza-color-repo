@@ -1,0 +1,621 @@
+/* Enhanced animations for extra sauce */
+
+/* ====================================================
+   🌿 420 EASTER EGG ANIMATIONS — keep it lowkey 😏
+   ==================================================== */
+
+@keyframes leaf-spin {
+  0%   { transform: rotate(0deg)   scale(1);   }
+  25%  { transform: rotate(90deg)  scale(1.08); }
+  50%  { transform: rotate(180deg) scale(1.15); }
+  75%  { transform: rotate(270deg) scale(1.08); }
+  100% { transform: rotate(360deg) scale(1);   }
+}
+
+@keyframes leaf-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes leaf-fall {
+  0% {
+    transform: translateY(-60px) rotate(var(--leaf-rot, 0deg)) scale(1);
+    opacity: 1;
+  }
+  70% { opacity: 1; }
+  100% {
+    transform: translateY(110vh) rotate(calc(var(--leaf-rot, 0deg) + 720deg)) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes leaf-sway {
+  0%   { transform: translateX(0)   rotate(0deg); }
+  25%  { transform: translateX(8px) rotate(5deg); }
+  75%  { transform: translateX(-8px) rotate(-5deg); }
+  100% { transform: translateX(0)   rotate(0deg); }
+}
+
+@keyframes smoke-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.4);
+    opacity: 0.7;
+  }
+  40% {
+    transform: translateY(-18px) translateX(4px) scale(0.9);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-45px) translateX(-6px) scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes smoke-rise-2 {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.3);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-22px) translateX(-5px) scale(1.0);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-50px) translateX(8px) scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes ember-glow {
+  0%   { box-shadow: 0 0 4px 2px #ff6a00, 0 0 8px 4px rgba(255,106,0,0.5);  opacity: 1;   }
+  50%  { box-shadow: 0 0 8px 4px #ff3d00, 0 0 16px 8px rgba(255,61,0,0.6);  opacity: 0.8; }
+  100% { box-shadow: 0 0 4px 2px #ff6a00, 0 0 8px 4px rgba(255,106,0,0.5);  opacity: 1;   }
+}
+
+@keyframes blaze-pulse {
+  0%   { text-shadow: 0 0 8px #4ade80,  0 0 16px #16a34a; }
+  50%  { text-shadow: 0 0 20px #86efac, 0 0 40px #4ade80, 0 0 60px #16a34a; }
+  100% { text-shadow: 0 0 8px #4ade80,  0 0 16px #16a34a; }
+}
+
+@keyframes blaze-slide-in {
+  0%   { transform: translateY(40px) scale(0.8); opacity: 0; }
+  60%  { transform: translateY(-6px) scale(1.04); opacity: 1; }
+  100% { transform: translateY(0) scale(1);       opacity: 1; }
+}
+
+.animate-leaf-spin      { animation: leaf-spin      1.8s ease-in-out infinite; }
+.animate-leaf-spin-slow { animation: leaf-spin-slow 6s   linear       infinite; }
+.animate-leaf-sway      { animation: leaf-sway      3s   ease-in-out  infinite; }
+.animate-leaf-fall      { animation: leaf-fall var(--leaf-dur, 3s) ease-in forwards; }
+.animate-smoke          { animation: smoke-rise     2s   ease-out     infinite; }
+.animate-smoke-2        { animation: smoke-rise-2   2.6s ease-out     infinite; }
+.animate-ember-glow     { animation: ember-glow     1.2s ease-in-out  infinite; }
+.animate-blaze-pulse    { animation: blaze-pulse    2s   ease-in-out  infinite; }
+.animate-420-slide-in   { animation: blaze-slide-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+/* End 420 easter egg animations */
+
+@keyframes rainbow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) rotate(5deg);
+  }
+  70% {
+    transform: scale(0.9) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Utility classes */
+.animate-rainbow {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: rainbow 3s ease infinite;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Hover effects */
+.hover-lift {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hover-rainbow:hover {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: rainbow 0.8s ease infinite;
+  color: white;
+}
+
+/* Special effects */
+.glass-effect {
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.neon-glow {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor;
+}
+
+.neon-flicker {
+  animation: neon-flicker 2s ease-in-out infinite alternate;
+}
+
+.neon-text {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor,
+    0 0 20px currentColor;
+}
+
+@keyframes neon-flicker {
+  0%,
+  100% {
+    text-shadow:
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor;
+    opacity: 1;
+  }
+  50% {
+    text-shadow:
+      0 0 2px currentColor,
+      0 0 5px currentColor,
+      0 0 8px currentColor;
+    opacity: 0.8;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Tokyo Background Animations */
+@keyframes window-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  75% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes window-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes window-twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes window-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.7;
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px currentColor;
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow:
+      0 0 25px currentColor,
+      0 0 35px currentColor;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+@keyframes rain {
+  0% {
+    transform: translateY(-100vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes windRain {
+  0% {
+    transform: translateY(-100vh) translateX(0) skewX(var(--wind-skew, 0deg));
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(var(--wind-drift, 10px)) skewX(var(--wind-skew, 0deg));
+    opacity: 0;
+  }
+}
+
+@keyframes windLeaf {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+    opacity: var(--particle-opacity, 0.8);
+  }
+  25% {
+    transform: translateX(var(--wind-x, 5px)) translateY(var(--wind-y, -3px)) rotate(90deg)
+      scale(1.1);
+  }
+  50% {
+    transform: translateX(calc(var(--wind-x, 5px) * 2)) translateY(var(--wind-y, -3px))
+      rotate(180deg) scale(0.9);
+  }
+  75% {
+    transform: translateX(var(--wind-x, 5px)) translateY(calc(var(--wind-y, -3px) * 0.5))
+      rotate(270deg) scale(1.05);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(360deg) scale(1);
+    opacity: var(--particle-opacity, 0.8);
+  }
+}
+
+@keyframes leafFloat {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) translateX(2px) rotate(90deg);
+  }
+  50% {
+    transform: translateY(0) translateX(5px) rotate(180deg);
+  }
+  75% {
+    transform: translateY(3px) translateX(2px) rotate(270deg);
+  }
+  100% {
+    transform: translateY(0) translateX(0) rotate(360deg);
+  }
+}
+
+@keyframes petalDrift {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translateY(-3px) translateX(3px) rotate(120deg) scale(1.1);
+  }
+  66% {
+    transform: translateY(2px) translateX(-2px) rotate(240deg) scale(0.9);
+  }
+  100% {
+    transform: translateY(0) translateX(0) rotate(360deg) scale(1);
+  }
+}
+
+@keyframes dustSwirl {
+  0% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(10px) translateY(-5px) scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(20px) translateY(0) scale(1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes windGust {
+  0%,
+  100% {
+    transform: translateX(0) scale(1);
+  }
+  50% {
+    transform: translateX(15px) scale(1.1);
+  }
+}
+
+@keyframes atmosphericFlow {
+  0% {
+    transform: translateX(-100px) translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(-20px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes buildingGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(59, 130, 246, 0.3),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(59, 130, 246, 0.6),
+      inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes hologramFlicker {
+  0%,
+  100% {
+    opacity: 1;
+    transform: skewX(0deg);
+  }
+  25% {
+    opacity: 0.8;
+    transform: skewX(1deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: skewX(-1deg);
+  }
+  75% {
+    opacity: 0.85;
+    transform: skewX(0.5deg);
+  }
+}
+
+@keyframes cityPulse {
+  0%,
+  100% {
+    background-size: 100% 100%;
+    filter: brightness(1) saturate(1);
+  }
+  50% {
+    background-size: 105% 105%;
+    filter: brightness(1.1) saturate(1.2);
+  }
+}
+
+@keyframes neonScan {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Utility classes for Tokyo animations */
+.animate-window-flicker {
+  animation: window-flicker 3s ease-in-out infinite;
+}
+
+.animate-window-pulse {
+  animation: window-pulse 4s ease-in-out infinite;
+}
+
+.animate-window-twinkle {
+  animation: window-twinkle 2.5s ease-in-out infinite;
+}
+
+.animate-window-shimmer {
+  animation: window-shimmer 3.5s ease-in-out infinite;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-rain {
+  animation: rain 2s linear infinite;
+}
+
+.animate-wind-rain {
+  animation: windRain 2s linear infinite;
+}
+
+.animate-leaf-float {
+  animation: leafFloat 4s ease-in-out infinite;
+}
+
+.animate-petal-drift {
+  animation: petalDrift 3s ease-in-out infinite;
+}
+
+.animate-dust-swirl {
+  animation: dustSwirl 6s ease-in-out infinite;
+}
+
+.animate-wind-gust {
+  animation: windGust 2s ease-in-out infinite;
+}
+
+.animate-atmospheric-flow {
+  animation: atmosphericFlow 8s linear infinite;
+}
+
+.animate-building-glow {
+  animation: buildingGlow 4s ease-in-out infinite;
+}
+
+.animate-hologram-flicker {
+  animation: hologramFlicker 3s ease-in-out infinite;
+}
+
+.animate-city-pulse {
+  animation: cityPulse 6s ease-in-out infinite;
+}
+
+.animate-neon-scan {
+  animation: neonScan 2s ease-in-out infinite;
+}
+
+.animate-wind-leaf {
+  animation: windLeaf 4s ease-in-out infinite;
+}
+
+/* Wind effect utilities */
+.wind-particle {
+  --wind-x: 0px;
+  --wind-y: 0px;
+  --particle-opacity: 0.8;
+  --wind-skew: 0deg;
+  --wind-drift: 0px;
+}
+
+.glow-effect {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* Shimmer animation for analytics bars */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-12deg);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+/* Responsive animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rainbow,
+  .animate-bounce-in,
+  .animate-window-flicker,
+  .animate-window-pulse,
+  .animate-window-twinkle,
+  .animate-window-shimmer,
+  .animate-glow-pulse,
+  .animate-float,
+  .animate-rain,
+  .animate-wind-rain,
+  .animate-leaf-float,
+  .animate-petal-drift,
+  .animate-dust-swirl,
+  .animate-wind-gust,
+  .animate-atmospheric-flow {
+    animation: none;
+  }
+
+  .glow-effect {
+    filter: none;
+  }
+}

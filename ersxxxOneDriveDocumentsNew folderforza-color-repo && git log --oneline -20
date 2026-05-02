@@ -1,0 +1,96 @@
+[33mcommit 7cfba8592b2a772711aeb6eb1e7e0aa924b36c94[m
+Author: xblackxscars123 <xblackxscars123@gmail.com>
+Date:   Thu Apr 16 19:11:41 2026 +1200
+
+    Remove obsolete scripts and implement new encryption/decryption for source files
+    
+    - Deleted `ign_transform.json`, `matchColorToModels.js`, and `merge_autocolor_strict.js` as they are no longer needed.
+    - Updated `seed-community-tunes.js` to improve environment variable loading.
+    - Refactored `carDatabase.ts` to streamline data fetching.
+    - Added new agent configuration for "Horizon Oracle" to enhance data scraping and tuning calculations.
+    - Created workspace and configuration files for better development setup.
+    - Introduced `lock-source.mjs` and `unlock-source.mjs` scripts for encrypting and decrypting source files to enhance security.
+    - Added new API route for AI tuning calculations in `route.ts`.
+
+ .github/agents/horizon-oracle.agent.md             |   219 [32m+[m
+ .gitignore                                         |    18 [32m+[m[31m-[m
+ .roo/forza-color-repo.code-workspace               |    20 [32m+[m
+ .roo/mcp.json                                      |    14 [32m+[m
+ .vscode/settings.json                              |   127 [32m+[m[31m-[m
+ FH5_DATA_MIGRATION_SUMMARY.md                      |   198 [31m-[m
+ app/about/page.tsx.enc                             |   Bin [31m0[m -> [32m13737[m bytes
+ app/api/dev/analytics/route.ts.enc                 |   Bin [31m0[m -> [32m3917[m bytes
+ app/api/favorites/route.ts.enc                     |   Bin [31m0[m -> [32m6092[m bytes
+ app/api/fh5-locations/route.ts.enc                 |   Bin [31m0[m -> [32m685[m bytes
+ app/api/map-progress/route.ts.enc                  |   Bin [31m0[m -> [32m4166[m bytes
+ app/api/map-proxy/route.ts.enc                     |   Bin [31m0[m -> [32m7114[m bytes
+ app/api/ml/enhance-colors/route.ts.enc             |   Bin [31m0[m -> [32m3749[m bytes
+ app/api/scans/route.ts.enc                         |   Bin [31m0[m -> [32m3094[m bytes
+ app/api/scrape/route.ts.enc                        |   Bin [31m0[m -> [32m1031[m bytes
+ app/api/todos/__tests__/route.test.ts.enc          |   Bin [31m0[m -> [32m880[m bytes
+ app/api/todos/route.ts.enc                         |   Bin [31m0[m -> [32m836[m bytes
+ app/api/tuneforge/ai-tune/route.ts                 |   304 [32m+[m
+ app/api/tuneforge/ai-tune/route.ts.enc             |   Bin [31m0[m -> [32m11511[m bytes
+ app/api/tuneforge/cars/route.js.enc                |   Bin [31m0[m -> [32m1698[m bytes
+ app/api/tuneforge/community-tunes/route.ts.enc     |   Bin [31m0[m -> [32m4416[m bytes
+ app/api/tuneforge/database/route.ts.enc            |   Bin [31m0[m -> [32m1033[m bytes
+ app/api/tuneforge/tunes/route.ts.enc               |   Bin [31m0[m -> [32m1025[m bytes
+ app/blog/page.tsx.enc                              |   Bin [31m0[m -> [32m9395[m bytes
+ app/color-sitemap.xml/route.ts.enc                 |   Bin [31m0[m -> [32m2013[m bytes
+ app/components/AdvancedTools.tsx.enc               |   Bin [31m0[m -> [32m15165[m bytes
+ app/components/AuthModal.tsx.enc                   |   Bin [31m0[m -> [32m4698[m bytes
+ app/components/AuthProvider.tsx.enc                |   Bin [31m0[m -> [32m3160[m bytes
+ app/components/Breadcrumbs.tsx.enc                 |   Bin [31m0[m -> [32m2237[m bytes
+ app/components/CarStatsRadarChart.tsx.enc          |   Bin [31m0[m -> [32m3723[m bytes
+ app/components/ColorAnalyticsDashboard.tsx.enc     |   Bin [31m0[m -> [32m11981[m bytes
+ app/components/ColorCard.tsx                       |    15 [32m+[m[31m-[m
+ app/components/ColorCard.tsx.enc                   |   Bin [31m0[m -> [32m9184[m bytes
+ app/components/ColorComparison.tsx.enc             |   Bin [31m0[m -> [32m7313[m bytes
+ app/components/ColorGenerator.js.enc               |   Bin [31m0[m -> [32m13457[m bytes
+ app/components/ColorRouletteHarmony.js.enc         |   Bin [31m0[m -> [32m16374[m bytes
+ app/components/CreditsBackground.tsx.enc           |   Bin [31m0[m -> [32m2660[m bytes
+ app/components/EasterEgg420.tsx.enc                |   Bin [31m0[m -> [32m9511[m bytes
+ app/components/EnhancedAuthProvider.tsx.enc        |   Bin [31m0[m -> [32m6267[m bytes
+ app/components/ErrorBoundary.js.enc                |   Bin [31m0[m -> [32m2157[m bytes
+ app/components/ExportButton.js.enc                 |   Bin [31m0[m -> [32m1606[m bytes
+ app/components/Footer.tsx.enc                      |   Bin [31m0[m -> [32m1507[m bytes
+ app/components/ForzaColorSheetSEO.tsx.enc          |   Bin [31m0[m -> [32m12026[m bytes
+ app/components/GamingErrorBoundary.tsx.enc         |   Bin [31m0[m -> [32m1912[m bytes
+ app/components/GamingSEO.tsx.enc                   |   Bin [31m0[m -> [32m6336[m bytes
+ app/components/HSBPopup.tsx.enc                    |   Bin [31m0[m -> [32m3690[m bytes
+ app/components/HarmonyVisualizer.js.enc            |   Bin [31m0[m -> [32m5361[m bytes
+ app/components/Header.tsx.enc                      |   Bin [31m0[m -> [32m5485[m bytes
+ app/components/ImageColorExtractor.tsx.enc         |   Bin [31m0[m -> [32m25281[m bytes
+ app/components/KeyboardShortcuts.tsx.enc           |   Bin [31m0[m -> [32m4326[m bytes
+ app/components/LazyColorLoader.js.enc              |   Bin [31m0[m -> [32m1446[m bytes
+ app/components/LoadingSpinner.js.enc               |   Bin [31m0[m -> [32m1283[m bytes
+ app/components/MobileColorStats.js.enc             |   Bin [31m0[m -> [32m1811[m bytes
+ app/components/MobileGamingOptimizer.tsx.enc       |   Bin [31m0[m -> [32m5185[m bytes
+ app/components/MobileOptimizedBackground.js.enc    |   Bin [31m0[m -> [32m1583[m bytes
+ app/components/MobileTelemetryDash.js.enc          |   Bin [31m0[m -> [32m6840[m bytes
+ app/components/ModelBrowser.js.enc                 |   Bin [31m0[m -> [32m2309[m bytes
+ app/components/OfflineIndicator.js.enc             |   Bin [31m0[m -> [32m363[m bytes
+ app/components/OptimizedSearchControls.tsx.enc     |   Bin [31m0[m -> [32m6422[m bytes
+ app/components/OptimizedStatsBar.js.enc            |   Bin [31m0[m -> [32m2786[m bytes
+ app/components/PWAInstallButton.tsx.enc            |   Bin [31m0[m -> [32m1586[m bytes
+ app/components/PaintEffect3D.js.enc                |   Bin [31m0[m -> [32m489[m bytes
+ app/components/PerformanceMonitor.js.enc           |   Bin [31m0[m -> [32m2516[m bytes
+ app/components/ProgressiveLoader.js.enc            |   Bin [31m0[m -> [32m965[m bytes
+ app/components/ResponsiveLayout.tsx.enc            |   Bin [31m0[m -> [32m1044[m bytes
+ app/components/SimpleColorGrid.tsx.enc             |   Bin [31m0[m -> [32m4987[m bytes
+ app/components/SoundtrackPlayer.tsx.enc            |   Bin [31m0[m -> [32m7232[m bytes
+ app/components/StatusAlert.js.enc                  |   Bin [31m0[m -> [32m2083[m bytes
+ app/components/StructuredData.tsx.enc              |   Bin [31m0[m -> [32m2183[m bytes
+ app/components/TelemetryDashboard.js               |     2 [32m+[m[31m-[m
+ app/components/TelemetryDashboard.js.enc           |   Bin [31m0[m -> [32m17163[m bytes
+ app/components/TelemetryMap.js.enc                 |   Bin [31m0[m -> [32m3930[m bytes
+ app/components/TelemetryPanel.tsx.enc              |   Bin [31m0[m -> [32m8594[m bytes
+ app/components/ThirdPartyErrorBoundary.js.enc      |   Bin [31m0[m -> [32m1542[m bytes
+ app/components/TokyoBackground.tsx.enc             |   Bin [31m0[m -> [32m8385[m bytes
+ app/components/VirtualColorGrid.tsx                |     2 [32m+[m[31m-[m
+ app/components/VirtualColorGrid.tsx.enc            |   Bin [31m0[m -> [32m3706[m bytes
+ app/components/WindSystem.js.enc                   |   Bin [31m0[m -> [32m226[m bytes
+ app/components/ZoomResponsiveContainer.tsx.enc     |   Bin [31m0[m -> [32m7074[m bytes
+ app/components/__tests__/ColorCard.test.tsx.enc    |   Bin [31m0[m -> [32m3760[m bytes
+ .../__tests__/ImageColorExtractor.test.tsx.enc     |   Bin [31m0[m -> [32m2256[m bytes
+ app/components/__tests

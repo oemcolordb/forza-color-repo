@@ -1,0 +1,96 @@
+{
+  "lastRun": "2025-07-14T00:00:00.000Z",
+  "entries": [
+    {
+      "source": "https://guides4gamers.com/forza-horizon-5/pois/barn-finds/",
+      "fetchedAt": "2025-07-14T00:00:00.000Z",
+      "fields": ["barnFindCarName", "barnFindCount"],
+      "status": "ok",
+      "notes": "Verified all 14 FH5 barn find car names. Previous data had wrong/non-existent cars (Porsche 968 Turbo S, Peel P50, Mercury Cougar Eliminator, etc.). Replaced with verified names: BMW 2002 Turbo 1973, Chevrolet Corvette 1953, Dodge Dart Hemi Super Stock 1968, Dodge Viper GTS ACR 1999, Ferrari 250 GTO 1962, Ferrari F40 Competizione 1989, Ford F-100 1956, Ford Mustang GT 2+2 Fastback 1968, Ford Racing Escort MK1 1967, GMC Jimmy 1970, Jaguar Sport XJR-15 1991, Porsche 911 Carrera RS 1973, Renault 4L Export 1968, Toyota #1 T100 Baja Truck 1993."
+    },
+    {
+      "source": "local:public/maps/fh5-mexico.jpg (map image analysis)",
+      "fetchedAt": "2025-07-14T00:00:00.000Z",
+      "fields": ["coordinates.x", "coordinates.y"],
+      "status": "partial",
+      "notes": "All 50 placeholder coordinates replaced with map-image-calibrated estimates. Methodology: viewed 4000x2394 fh5-mexico.jpg and cross-referenced with FH5 geography (La Gran Caldera ~x39 y22, Guanajuato ~x67 y14, Playa Azul ~x87 y70, El Estadio ~x52 y38). Coordinates are approximate — use the MapGenie Helper tool in the app to calibrate with precision from mapgenie.io/forza-horizon-5/maps/mexico. All automated scraping of MapGenie/IGN failed (JS-rendered maps). API path bug also fixed: route.ts was reading from nonexistent app/location-finder/data/ path, now correctly reads public/data/fh5-locations.json."
+    },
+    {
+      "source": "local:app/data/carColors.json",
+      "fetchedAt": "2026-04-16T10:31:17.032Z",
+      "fields": [
+        "color1.h",
+        "color1.s",
+        "color1.b",
+        "color2.h",
+        "color2.s",
+        "color2.b",
+        "make",
+        "colorName",
+        "colorType"
+      ],
+      "status": "ok",
+      "notes": "Repair run: 1 hue-range fixes, 67 zero-color1 inferred, 383 null-color2 derived, 10 zero-color2 derived, 86 duplicates removed. 11886 entries remain."
+    },
+    {
+      "source": "https://kudosprime.com/fh5/carlist.php",
+      "fetchedAt": "2026-04-16T10:51:58.521Z",
+      "fields": [
+        "year",
+        "manufacturer",
+        "model",
+        "type",
+        "price",
+        "rarity",
+        "country",
+        "drivetrain",
+        "hp",
+        "weight_kg",
+        "stats",
+        "pi"
+      ],
+      "status": "ok",
+      "notes": "Scraped 5 listed, parsed 0 raw, 0 after dedup."
+    },
+    {
+      "source": "https://kudosprime.com/fh5/carlist.php",
+      "fetchedAt": "2026-04-16T11:25:08.534Z",
+      "fields": [
+        "year",
+        "manufacturer",
+        "model",
+        "type",
+        "price",
+        "rarity",
+        "country",
+        "drivetrain",
+        "hp",
+        "weight_kg",
+        "stats",
+        "pi"
+      ],
+      "status": "ok",
+      "notes": "Scraped 5 listed, parsed 50 raw, 50 after dedup."
+    },
+    {
+      "source": "https://kudosprime.com/fh5/carlist.php",
+      "fetchedAt": "2026-04-16T11:28:40.592Z",
+      "fields": [
+        "year",
+        "manufacturer",
+        "model",
+        "type",
+        "price",
+        "rarity",
+        "country",
+        "drivetrain",
+        "hp",
+        "weight_kg",
+        "stats",
+        "pi"
+      ],
+      "status": "ok",
+      "notes": "Scraped 903 listed, parsed 834 raw, 834 after dedup."
+    }
+  ]
+}

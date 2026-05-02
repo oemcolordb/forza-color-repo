@@ -1,0 +1,37 @@
+{
+  "buildCommand": "npm run build",
+  "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "https://forza-color-repo.vercel.app" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type" }
+      ]
+    }
+  ],
+  "functions": {
+    "app/api/**/*.ts": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "forza-colour-repo.vercel.app"
+        }
+      ],
+      "destination": "https://forza-color-repo.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
+}

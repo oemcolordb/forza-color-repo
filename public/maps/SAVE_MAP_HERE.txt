@@ -1,0 +1,39 @@
+IMPORTANT: Save the Forza Horizon 5 Mexico Map Image Here
+================================================================
+
+You uploaded the FH5 Mexico map earlier (the aerial/top-down view showing terrain, roads, and coastlines).
+
+TO FIX THE DARK GREY SQUARE ISSUE:
+
+1. Find the map image you uploaded (the aerial view of Mexico, NOT the car screenshots)
+2. Save it to this directory as one of these filenames:
+   - fh5-mexico.webp (preferred)
+   - fh5-mexico.jpg
+   - fh5-mexico.png
+
+The file should be saved at:
+C:\Users\GAMING\Documents\GitHub\forza-color-repo\public\maps\fh5-mexico.webp
+
+WHAT THE MAP SHOULD LOOK LIKE:
+- Top-down/aerial view of the entire Mexico map
+- Shows terrain (jungle, desert, mountains, beaches)
+- Shows road network clearly
+- Shows coastlines on west and east sides
+- Similar to the image you uploaded earlier with white road outlines
+
+NOT the car screenshots - those are for a different feature.
+
+Once saved, refresh your browser and the map will display with all the location pins overlaid on the real terrain!
+
+Current Status:
+- The code is looking for the map at: /maps/fh5-mexico.webp
+- It will try fallbacks: .jpg, .png, then fh5-mexico-temp.jpg
+- A temporary placeholder has been created but it's not the right map
+- You need to save the ACTUAL Mexico map image here
+
+The map image you need is the one that looks like this:
+- Full Mexico terrain visible
+- Aerial/satellite view
+- Roads shown as white/light lines
+- Ocean visible on both sides
+- Approximately square aspect ratio

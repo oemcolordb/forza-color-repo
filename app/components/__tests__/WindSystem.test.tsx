@@ -1,0 +1,42 @@
+import React from 'react'
+import { render } from '@testing-library/react'
+import { screen } from '@testing-library/dom'
+import WindSystem from '../WindSystem'
+
+// Mock window dimensions
+Object.defineProperty(window, 'innerWidth', {
+  writable: true,
+  configurable: true,
+  value: 1200,
+})
+
+Object.defineProperty(window, 'innerHeight', {
+  writable: true,
+  configurable: true,
+  value: 800,
+})
+
+describe('WindSystem', () => {
+  it('renders without crashing', () => {
+    render(<WindSystem _isDarkMode={true} />)
+    // Component should render without throwing errors
+  })
+
+  it('renders with light mode', () => {
+    render(<WindSystem _isDarkMode={false} />)
+    // Component should render without throwing errors
+  })
+
+  it('accepts intensity prop', () => {
+    render(<WindSystem _isDarkMode={true} _intensity={0.5} />)
+    // Component should render without throwing errors
+  })
+
+  it('renders wind indicators', () => {
+    render(<WindSystem _isDarkMode={true} />)
+
+    // Should have wind direction and strength indicators
+    const container = screen.getByTestId('wind-system')
+    expect(container).toBeInTheDocument()
+  })
+})

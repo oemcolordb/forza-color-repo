@@ -1,0 +1,397 @@
+{
+  "metadata": {
+    "version": "1.1.0",
+    "source": "Community data compilation — coordinates estimated from map image analysis; verify in-game for precision",
+    "attribution": "Location data compiled from community guides. Forza Horizon 5 © Microsoft Corporation.",
+    "totalLocations": 50,
+    "lastUpdated": "2025-07-14",
+    "coordinateNote": "Coordinates are x/y percentages (0-100) of the fh5-mexico.jpg map image (4000x2394px). Use the MapGenie Helper in the Location Finder to calibrate with precision.",
+    "accuracyNote": "Community-sourced and estimated; not official game data."
+  },
+  "locations": [
+    {
+      "id": "barn-find-1",
+      "name": "Barn Find - 1973 BMW 2002 Turbo",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 65, "y": 19 },
+      "description": "Hidden barn containing the 1973 BMW 2002 Turbo — found in the Guanajuato hills area"
+    },
+    {
+      "id": "barn-find-2",
+      "name": "Barn Find - 1953 Chevrolet Corvette",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 22, "y": 27 },
+      "description": "Hidden barn containing the 1953 Chevrolet Corvette — found north of the main highway near Baja"
+    },
+    {
+      "id": "barn-find-3",
+      "name": "Barn Find - 1968 Dodge Dart Hemi Super Stock",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 51, "y": 55 },
+      "description": "Hidden barn containing the 1968 Dodge Dart Hemi Super Stock — found near Teotihuacán"
+    },
+    {
+      "id": "barn-find-4",
+      "name": "Barn Find - 1999 Dodge Viper GTS ACR",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 75, "y": 62 },
+      "description": "Hidden barn containing the 1999 Dodge Viper GTS ACR — found in the southeast jungle near Tulum"
+    },
+    {
+      "id": "barn-find-5",
+      "name": "Barn Find - 1962 Ferrari 250 GTO",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 16, "y": 55 },
+      "description": "Hidden barn containing the 1962 Ferrari 250 GTO — found near Mulegé on the west coast"
+    },
+    {
+      "id": "barn-find-6",
+      "name": "Barn Find - 1989 Ferrari F40 Competizione",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 55, "y": 63 },
+      "description": "Hidden barn containing the 1989 Ferrari F40 Competizione — found near Cascadas de Agua Azul"
+    },
+    {
+      "id": "barn-find-7",
+      "name": "Barn Find - 1956 Ford F-100",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 60, "y": 47 },
+      "description": "Hidden barn containing the 1956 Ford F-100 — found in Tierra Próspera farmland"
+    },
+    {
+      "id": "barn-find-8",
+      "name": "Barn Find - 1968 Ford Mustang GT 2+2 Fastback",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 84, "y": 69 },
+      "description": "Hidden barn containing the 1968 Ford Mustang GT 2+2 Fastback — found near Playa Azul"
+    },
+    {
+      "id": "barn-find-9",
+      "name": "Barn Find - 1967 Ford Racing Escort MK1",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 40, "y": 25 },
+      "description": "Hidden barn containing the 1967 Ford Racing Escort MK1 — found near La Gran Caldera volcano"
+    },
+    {
+      "id": "barn-find-10",
+      "name": "Barn Find - 1970 GMC Jimmy",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 13, "y": 23 },
+      "description": "Hidden barn containing the 1970 GMC Jimmy — found in the Baja California desert northwest"
+    },
+    {
+      "id": "barn-find-11",
+      "name": "Barn Find - 1991 Jaguar Sport XJR-15",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 30, "y": 36 },
+      "description": "Hidden barn containing the 1991 Jaguar Sport XJR-15 — found near Copper Canyon"
+    },
+    {
+      "id": "barn-find-12",
+      "name": "Barn Find - 1973 Porsche 911 Carrera RS",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 62, "y": 25 },
+      "description": "Hidden barn containing the 1973 Porsche 911 Carrera RS — found in the Guanajuato hills"
+    },
+    {
+      "id": "barn-find-13",
+      "name": "Barn Find - 1968 Renault 4L Export",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 81, "y": 58 },
+      "description": "Hidden barn containing the 1968 Renault 4L Export — found near the Tulum ruins"
+    },
+    {
+      "id": "barn-find-14",
+      "name": "Barn Find - 1993 Toyota #1 T100 Baja Truck",
+      "type": "Barn Find",
+      "category": "Collectibles",
+      "coordinates": { "x": 10, "y": 14 },
+      "description": "Hidden barn containing the 1993 Toyota #1 T100 Baja Truck — found near Dunas Blancas"
+    },
+    {
+      "id": "landmark-1",
+      "name": "Guanajuato",
+      "type": "Landmark",
+      "category": "Locations",
+      "coordinates": { "x": 67, "y": 14 },
+      "description": "Historic colonial city in northeast Mexico — orange terracotta rooftops in the hills"
+    },
+    {
+      "id": "landmark-2",
+      "name": "Playa Azul",
+      "type": "Landmark",
+      "category": "Locations",
+      "coordinates": { "x": 87, "y": 70 },
+      "description": "Coastal beach resort on the eastern coast — Horizon Apex outpost nearby"
+    },
+    {
+      "id": "landmark-3",
+      "name": "La Gran Caldera",
+      "type": "Landmark",
+      "category": "Locations",
+      "coordinates": { "x": 39, "y": 22 },
+      "description": "Massive volcanic crater — north-center of the map, visible from far away"
+    },
+    {
+      "id": "landmark-4",
+      "name": "Tulum",
+      "type": "Landmark",
+      "category": "Locations",
+      "coordinates": { "x": 82, "y": 57 },
+      "description": "Ancient Mayan ruins in the southeast jungle"
+    },
+    {
+      "id": "landmark-5",
+      "name": "Dunas Blancas",
+      "type": "Landmark",
+      "category": "Locations",
+      "coordinates": { "x": 10, "y": 9 },
+      "description": "White sand dunes on the northwest coast"
+    },
+    {
+      "id": "player-house-1",
+      "name": "Hotel Castillo",
+      "type": "Player House",
+      "category": "Locations",
+      "coordinates": { "x": 66, "y": 15 },
+      "description": "Luxury hotel in Guanajuato — costs 5,000,000 CR, grants daily Wheelspin"
+    },
+    {
+      "id": "player-house-2",
+      "name": "Casa Bella",
+      "type": "Player House",
+      "category": "Locations",
+      "coordinates": { "x": 43, "y": 43 },
+      "description": "Free starter house near the Horizon Festival — unlocks Skill Songs"
+    },
+    {
+      "id": "festival-site-1",
+      "name": "Horizon Festival México",
+      "type": "Festival Site",
+      "category": "Locations",
+      "coordinates": { "x": 42, "y": 44 },
+      "description": "Main Horizon Festival site — center-left of the map"
+    },
+    {
+      "id": "festival-site-2",
+      "name": "Horizon Apex Outpost",
+      "type": "Festival Site",
+      "category": "Locations",
+      "coordinates": { "x": 80, "y": 67 },
+      "description": "Apex outpost near Tulum — unlocked via Tulum Expedition, enables Road Racing events"
+    },
+    {
+      "id": "festival-site-3",
+      "name": "Horizon Baja Outpost",
+      "type": "Festival Site",
+      "category": "Locations",
+      "coordinates": { "x": 22, "y": 21 },
+      "description": "Baja outpost in the northwest desert — unlocked via Baja Expedition, enables Cross Country events"
+    },
+    {
+      "id": "festival-site-4",
+      "name": "Horizon Wilds Outpost",
+      "type": "Festival Site",
+      "category": "Locations",
+      "coordinates": { "x": 65, "y": 54 },
+      "description": "Wilds outpost in the jungle — unlocked via Jungle Expedition, enables Dirt Racing events"
+    },
+    {
+      "id": "festival-site-5",
+      "name": "Horizon Rush Outpost",
+      "type": "Festival Site",
+      "category": "Locations",
+      "coordinates": { "x": 32, "y": 29 },
+      "description": "Rush outpost at Copper Canyon — unlocked via Canyon Expedition, enables PR Stunts events"
+    },
+    {
+      "id": "festival-site-6",
+      "name": "Horizon Street Scene Outpost",
+      "type": "Festival Site",
+      "category": "Locations",
+      "coordinates": { "x": 67, "y": 17 },
+      "description": "Street Scene outpost in Guanajuato — unlocked via Guanajuato Expedition, enables Street Racing events"
+    },
+    {
+      "id": "danger-sign-1",
+      "name": "Danger Sign - Desert Dunes",
+      "type": "Danger Sign",
+      "category": "PR Stunts",
+      "coordinates": { "x": 20, "y": 18 },
+      "description": "Jump ramp in the Baja dunes — ★★★ 1,050 ft"
+    },
+    {
+      "id": "danger-sign-2",
+      "name": "Danger Sign - Basejump",
+      "type": "Danger Sign",
+      "category": "PR Stunts",
+      "coordinates": { "x": 38, "y": 26 },
+      "description": "Epic jump near La Gran Caldera — ★★★ 1,650 ft"
+    },
+    {
+      "id": "danger-sign-3",
+      "name": "Danger Sign - Launch Control",
+      "type": "Danger Sign",
+      "category": "PR Stunts",
+      "coordinates": { "x": 64, "y": 52 },
+      "description": "Jump from the jungle aerodrome — ★★★ 1,450 ft"
+    },
+    {
+      "id": "speed-trap-1",
+      "name": "Speed Trap - Federal Highway",
+      "type": "Speed Trap",
+      "category": "PR Stunts",
+      "coordinates": { "x": 52, "y": 42 },
+      "description": "Speed measurement on the main Federal Highway — ★★★ 270 mph"
+    },
+    {
+      "id": "speed-trap-2",
+      "name": "Speed Trap - Oceano Azul",
+      "type": "Speed Trap",
+      "category": "PR Stunts",
+      "coordinates": { "x": 86, "y": 65 },
+      "description": "Speed trap on the eastern coastal road — ★★★ 225 mph"
+    },
+    {
+      "id": "speed-zone-1",
+      "name": "Speed Zone - Trebol",
+      "type": "Speed Zone",
+      "category": "PR Stunts",
+      "coordinates": { "x": 54, "y": 40 },
+      "description": "High-speed cloverleaf interchange — ★★★ 260 mph"
+    },
+    {
+      "id": "drift-zone-1",
+      "name": "Drift Zone - Cara Este",
+      "type": "Drift Zone",
+      "category": "PR Stunts",
+      "coordinates": { "x": 37, "y": 30 },
+      "description": "Volcanic hillside drift zone — ★★★ 500,000 pts"
+    },
+    {
+      "id": "trailblazer-1",
+      "name": "Trailblazer - The Juggernaut",
+      "type": "Trailblazer",
+      "category": "PR Stunts",
+      "coordinates": { "x": 42, "y": 44 },
+      "description": "Epic mega-trailblazer across all of Mexico (Horizon Rush) — 300s time limit"
+    },
+    {
+      "id": "trailblazer-2",
+      "name": "Trailblazer - Sand and Deliver",
+      "type": "Trailblazer",
+      "category": "PR Stunts",
+      "coordinates": { "x": 18, "y": 24 },
+      "description": "Desert trailblazer in the Baja dunes — 65s time limit"
+    },
+    {
+      "id": "road-race-1",
+      "name": "Road Race - The Goliath",
+      "type": "Road Racing Event",
+      "category": "Race Events",
+      "coordinates": { "x": 42, "y": 44 },
+      "description": "The ultimate 34-mile Horizon Festival Mexico circuit — starts at the main festival site"
+    },
+    {
+      "id": "road-race-2",
+      "name": "Road Race - Horizon Mexico Circuit",
+      "type": "Road Racing Event",
+      "category": "Race Events",
+      "coordinates": { "x": 42, "y": 45 },
+      "description": "2.0 mile circuit around the Horizon Festival Mexico site — 3 laps"
+    },
+    {
+      "id": "dirt-race-1",
+      "name": "Dirt Race - Barranca Trail",
+      "type": "Dirt Racing Event",
+      "category": "Race Events",
+      "coordinates": { "x": 31, "y": 31 },
+      "description": "3.9 mile dirt trail descending Copper Canyon switchbacks"
+    },
+    {
+      "id": "cross-country-1",
+      "name": "Cross Country - Ek' Balam Circuit",
+      "type": "Cross Country Event",
+      "category": "Race Events",
+      "coordinates": { "x": 76, "y": 53 },
+      "description": "Cross country circuit around the ancient Ek' Balam ruins — 3 laps"
+    },
+    {
+      "id": "street-race-1",
+      "name": "Street Race - Tunnel Run",
+      "type": "Street Racing Event",
+      "category": "Race Events",
+      "coordinates": { "x": 67, "y": 17 },
+      "description": "3.5 mile street race using Guanajuato's tunnel network"
+    },
+    {
+      "id": "drag-race-1",
+      "name": "Drag Race - Aerodromo Drag Strip",
+      "type": "Drag Racing Event",
+      "category": "Race Events",
+      "coordinates": { "x": 65, "y": 53 },
+      "description": "1 mile drag strip on a derelict jungle runway — Aeródromo en La Selva"
+    },
+    {
+      "id": "expedition-1",
+      "name": "Tulum Expedition",
+      "type": "Expedition",
+      "category": "Locations",
+      "coordinates": { "x": 80, "y": 64 },
+      "description": "Expedition starting near Tulum — unlocks Horizon Apex Outpost and Road Racing events"
+    },
+    {
+      "id": "expedition-2",
+      "name": "Baja Expedition",
+      "type": "Expedition",
+      "category": "Locations",
+      "coordinates": { "x": 21, "y": 19 },
+      "description": "Expedition in the Baja desert — unlocks Horizon Baja Outpost and Cross Country events"
+    },
+    {
+      "id": "treasure-1",
+      "name": "Treasure Chest - Mulegé Beach",
+      "type": "Treasure",
+      "category": "Collectibles",
+      "coordinates": { "x": 13, "y": 66 },
+      "description": "Seasonal treasure chest on the west coast beach near Mulegé"
+    },
+    {
+      "id": "treasure-2",
+      "name": "Treasure Chest - Ek' Balam Ruins",
+      "type": "Treasure",
+      "category": "Collectibles",
+      "coordinates": { "x": 76, "y": 52 },
+      "description": "Seasonal treasure chest near the ancient Ek' Balam jungle ruins"
+    },
+    {
+      "id": "showcase-1",
+      "name": "Showcase - On A Wing And A Prayer",
+      "type": "Showcase",
+      "category": "Locations",
+      "coordinates": { "x": 43, "y": 43 },
+      "description": "First showcase event at the Horizon Festival — race against an aircraft. Reward: 1994 Hoonigan Ford Escort RS Cosworth"
+    },
+    {
+      "id": "showcase-2",
+      "name": "Showcase - Buggy And The Beast",
+      "type": "Showcase",
+      "category": "Locations",
+      "coordinates": { "x": 22, "y": 22 },
+      "description": "Desert showcase at Horizon Baja — unlocked through Horizon Baja outpost"
+    }
+  ]
+}

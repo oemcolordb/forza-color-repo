@@ -1,0 +1,41 @@
+{
+  "name": "Forza Color Universe",
+  "short_name": "ForzaColors",
+  "description": "10,000+ Official Forza Paint Colors Database",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "categories": ["games", "utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Colors",
+      "short_name": "Search",
+      "description": "Search the color database",
+      "url": "/?search=true",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "TuneForge Lab",
+      "short_name": "TuneForge",
+      "description": "Access tuning tools",
+      "url": "/tuneforge",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

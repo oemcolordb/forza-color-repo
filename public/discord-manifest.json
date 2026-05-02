@@ -1,0 +1,19 @@
+{
+  "name": "Forza Color Universe",
+  "description": "Explore 10,000+ official automotive paint colors from Forza racing games",
+  "icon": "/icon.svg",
+  "id": "forza-colors-app",
+  "type": "embedded",
+  "guild_id": "",
+  "bot_public": true,
+  "bot_require_code_grant": false,
+  "verify_key": "",
+  "primary_sku_id": "",
+  "slug": "forza-colors",
+  "cover_image": "/Tokyo-Panorama.jpg",
+  "hook": true,
+  "rpc_origins": ["https://forza-colors.netlify.app"],
+  "tags": ["automotive", "colors", "forza", "racing", "paint"],
+  "privacy_policy_url": "https://forza-colors.netlify.app/privacy",
+  "terms_of_service_url": "https://forza-colors.netlify.app/terms"
+}

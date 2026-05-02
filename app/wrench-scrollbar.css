@@ -1,0 +1,24 @@
+/* Wrench-styled scrollbars */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(205, 187, 151, 0.25);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #7aa24b 0%, #5f8d3a 50%, #2f6b3a 100%);
+  border-radius: 8px;
+  border: 2px solid rgba(205, 187, 151, 0.35);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #8fd35b 0%, #6fc342 50%, #47a35a 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(205, 187, 151, 0.25);
+}

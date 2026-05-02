@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../.vscode"
+		}
+	],
+	"settings": {
+		"terminal.integrated.profiles.windows": {
+			"PowerShell (Core)": {
+				"path": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+				"args": [],
+				"icon": "terminal-powershell"
+			}
+		},
+		"terminal.integrated.defaultProfile.windows": "PowerShell (Core)"
+	}
+}

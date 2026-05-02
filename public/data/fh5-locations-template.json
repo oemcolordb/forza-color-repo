@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "source": "MapGenie.io - Forza Horizon 5",
+    "attribution": "Location data from MapGenie.io. Forza Horizon 5 © Microsoft Corporation.",
+    "totalLocations": 536,
+    "lastUpdated": "2026-03-15",
+    "categories": {
+      "LOCATIONS": 75,
+      "COLLECTIBLES": 268,
+      "RACE EVENTS": 69,
+      "HORIZON STORIES": 57,
+      "PR STUNTS": 75,
+      "OTHER": 32
+    }
+  },
+  "locations": [
+    {
+      "id": "expedition-1",
+      "name": "Expedition 1",
+      "type": "Expedition",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "Expedition location - coordinates need to be set"
+    },
+    {
+      "id": "festival-site-1",
+      "name": "Festival Site 1",
+      "type": "Festival Site",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "Festival Site - coordinates need to be set"
+    },
+    {
+      "id": "player-house-1",
+      "name": "Player House 1",
+      "type": "Player House",
+      "category": "LOCATIONS",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "Player House - coordinates need to be set"
+    },
+    {
+      "id": "barn-find-1",
+      "name": "Barn Find #1",
+      "type": "Barn Find",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "Barn Find - coordinates need to be set"
+    },
+    {
+      "id": "fast-travel-1",
+      "name": "Fast Travel Board #1",
+      "type": "Fast Travel Board",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "Fast Travel Board - coordinates need to be set"
+    },
+    {
+      "id": "xp-board-1",
+      "name": "XP Board #1",
+      "type": "XP Board",
+      "category": "COLLECTIBLES",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "XP Board - coordinates need to be set"
+    },
+    {
+      "id": "danger-sign-1",
+      "name": "Danger Sign #1",
+      "type": "Danger Sign",
+      "category": "PR STUNTS",
+      "coordinates": { "x": 50, "y": 50 },
+      "description": "Danger Sign - coordinates need to be set"
+    }
+  ],
+  "instructions": {
+    "howToAddPins": "To add location pins manually:",
+    "steps": [
+      "1. Open MapGenie (https://mapgenie.io/forza-horizon-5/maps/mexico)",
+      "2. Click on a location pin to see its details",
+      "3. Estimate the X,Y coordinates as percentages (0-100)",
+      "4. X = horizontal position (0=left edge, 100=right edge)",
+      "5. Y = vertical position (0=top edge, 100=bottom edge)",
+      "6. Update the coordinates in this file",
+      "7. Add proper name and description from MapGenie"
+    ],
+    "categoryTotals": {
+      "Expedition": 5,
+      "Festival Site": 6,
+      "Landmark": 56,
+      "Player House": 7,
+      "Playground Game": 3,
+      "Showcase": 4,
+      "Barn Find": 14,
+      "Fast Travel Board": 50,
+      "Treasure": 4,
+      "XP Board": 200,
+      "Cross Country Event": 20,
+      "Dirt Racing Event": 20,
+      "Drag Racing Event": 3,
+      "Road Racing Event": 25,
+      "Street Racing Event": 21,
+      "Born Fast": 8,
+      "El Camino": 9,
+      "Lucha de Carreteras": 8,
+      "Test Driver": 15,
+      "V10": 12,
+      "Vocho": 13,
+      "Danger Sign": 20,
+      "Drift Zone": 20,
+      "Speed Trap": 31,
+      "Speed Zone": 22,
+      "Trailblazer": 13,
+      "Expedition Accolade": 14,
+      "Miscellaneous": 5,
+      "Trailblazer Finish": 13,
+      "Vehicle": 5
+    }
+  }
+}
