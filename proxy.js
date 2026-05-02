@@ -68,8 +68,15 @@ export async function proxy(request) {
     }
   }
 
-  // ── JWT Validation for Protected API Routes ──────────────────────────────────
-  if (pathname.startsWith('/api/protected')) {
+  // ── Selective JWT Validation ────────────────────────────────────────────────
+  // Protect /api/user/* (Favorites, profiles, settings)
+  const isUserRoute = pathname.startsWith('/api/user')
+  // Protect POST/PUT/DELETE on /api/tunes (Voting, rating, submitting content)
+  const isTuneMutation = pathname.startsWith('/api/tunes') && request.method !== 'GET'
+  // Protect POST on /api/process-image (Expensive Python ML Service compute)
+  const isMLService = pathname === '/api/process-image' && request.method === 'POST'
+
+  if (isUserRoute || isTuneMutation || isMLService) {
     const authHeader = request.headers.get('authorization')
     const token = authHeader?.split(' ')[1]
 

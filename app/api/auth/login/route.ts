@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getDb } from '@/app/lib/db';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-for-dev';
 
@@ -16,12 +17,39 @@ export async function POST(request: Request) {
       );
     }
 
-    // Mocked user for now - replace with actual DB lookup
+    const db = getDb();
+
+    // Lookup user by email
+    const result = await db.execute({
+      sql: 'SELECT id, email, name, password_hash, role FROM users WHERE email = ?',
+      args: [email],
+    });
+
+    if (result.rows.length === 0) {
+      return NextResponse.json(
+        { message: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
+
+    const userRow = result.rows[0];
+    const passwordHash = userRow.password_hash as string;
+
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, passwordHash);
+
+    if (!isValidPassword) {
+      return NextResponse.json(
+        { message: 'Invalid credentials' },
+        { status: 401 }
+      );
+    }
+
     const user = {
-      id: 'generated-uuid-1234',
-      email,
-      name: 'Mock User',
-      role: 'user',
+      id: userRow.id as string,
+      email: userRow.email as string,
+      name: userRow.name as string,
+      role: userRow.role as string,
     };
 
     const token = jwt.sign(

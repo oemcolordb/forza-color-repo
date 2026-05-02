@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { getDb } from '@/app/lib/db';
+import { v4 as uuidv4 } from 'uuid';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-for-dev';
 
@@ -23,9 +25,33 @@ export async function POST(request: Request) {
       );
     }
 
-    // Mocked user creation - replace with actual DB insert
+    const db = getDb();
+
+    // Check if user already exists
+    const existingUser = await db.execute({
+      sql: 'SELECT id FROM users WHERE email = ?',
+      args: [email],
+    });
+
+    if (existingUser.rows.length > 0) {
+      return NextResponse.json(
+        { message: 'User with this email already exists' },
+        { status: 409 }
+      );
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Create user
+    const userId = uuidv4();
+    await db.execute({
+      sql: `INSERT INTO users (id, email, name, password_hash, role) VALUES (?, ?, ?, ?, ?)`,
+      args: [userId, email, name, passwordHash, 'user'],
+    });
+
     const user = {
-      id: `user-${Date.now()}`,
+      id: userId,
       email,
       name,
       role: 'user',

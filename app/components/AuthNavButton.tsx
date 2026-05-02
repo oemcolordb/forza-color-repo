@@ -36,7 +36,7 @@ export default function AuthNavButton() {
     return (
       <button
         onClick={handleLogout}
-        className="px-4 py-2 text-sm font-medium text-white transition-colors bg-red-600 rounded-md hover:bg-red-700"
+        className="px-4 py-2 text-sm font-medium transition-all duration-200 rounded-md border border-red-500/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
       >
         Logout
       </button>
@@ -44,11 +44,19 @@ export default function AuthNavButton() {
   }
 
   return (
-    <Link
-      href="/login"
-      className="px-4 py-2 text-sm font-medium text-white transition-colors bg-blue-600 rounded-md hover:bg-blue-700"
-    >
-      Login
-    </Link>
+    <div className="flex items-center gap-3">
+      <Link
+        href="/login"
+        className="px-4 py-2 text-sm font-medium transition-all duration-200 rounded-md text-gray-700 dark:text-gray-300 hover:text-[color:var(--bamboo-stalk)]"
+      >
+        Log in
+      </Link>
+      <Link
+        href="/signup"
+        className="px-4 py-2 text-sm font-bold text-white transition-all duration-200 rounded-md bg-gradient-to-r from-[color:var(--bamboo-stalk)] to-[color:var(--bamboo-moss)] hover:scale-105 shadow-md hover:shadow-lg"
+      >
+        Sign up
+      </Link>
+    </div>
   );
 }
