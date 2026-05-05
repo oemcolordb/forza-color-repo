@@ -6,6 +6,7 @@ import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
 import EasterEgg420 from './components/EasterEgg420'
+import { AuthProvider } from './components/AuthProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -203,7 +204,7 @@ export default function RootLayout({ children }) {
           Skip to main content
         </a>
         <ThirdPartyErrorBoundary />
-        <ErrorBoundary>{children}</ErrorBoundary>
+        <AuthProvider><ErrorBoundary>{children}</ErrorBoundary></AuthProvider>
         {/* 🌿 hidden easter eggs — global */}
         <EasterEgg420 />
         <Analytics />
