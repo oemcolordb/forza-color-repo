@@ -34,19 +34,28 @@ export default async (request, context) => {
 
   // Cache successful responses
   if (response.ok) {
-    const data = await response.text()
-    context.cookies.set(cacheKey, data, {
-      maxAge: 3600, // 1 hour
-      httpOnly: true,
-    })
+    // Clone response before consuming body to ensure we can return it if caching fails
+    const responseClone = response.clone()
 
-    return new Response(data, {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Cache': 'MISS',
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
+    try {
+      const data = await response.text()
+      context.cookies.set(cacheKey, data, {
+        maxAge: 3600, // 1 hour
+        httpOnly: true,
+      })
+
+      return new Response(data, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Cache': 'MISS',
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+    } catch (error) {
+      console.error('Failed to cache response:', error)
+      // Return the cloned response if caching fails
+      return responseClone
+    }
   }
 
   return response

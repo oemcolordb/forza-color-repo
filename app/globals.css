@@ -496,3 +496,23 @@
     background-color: rgb(126 34 206);
   }
 }
+
+/* Progress bar components */
+.progress-track {
+  background: rgba(205, 187, 151, 0.25);
+}
+
+.progress-fill {
+  width: var(--progress-width, 0%);
+  background: linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%);
+}
+
+/* Gear ratio bar components */
+.gear-bar-track {
+  background: rgba(205, 187, 151, 0.15);
+}
+
+.gear-bar-fill {
+  width: var(--gear-width, 0%);
+  background: linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%);
+}

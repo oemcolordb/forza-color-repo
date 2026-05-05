@@ -29,7 +29,9 @@ export default async (request, context) => {
   const windowMs = 60000 // 1 minute
   const maxRequests = 100 // per minute
 
-  const key = `${clientIP}-${Math.floor(now / windowMs)}`
+  // Use pipe separator to avoid conflicts with IPv6 addresses containing colons/dashes
+  const timeWindow = Math.floor(now / windowMs)
+  const key = `${clientIP}|${timeWindow}`
   const current = rateLimitMap.get(key) || 0
 
   if (current >= maxRequests) {
@@ -46,11 +48,22 @@ export default async (request, context) => {
   rateLimitMap.set(key, current + 1)
 
   // Cleanup old entries to prevent memory leaks
-  if (rateLimitMap.size > 10000) {
+  // Uses pipe separator format: clientIP|timeWindow
+  // Run cleanup on ~10% of requests to prevent unbounded growth
+  if (Math.random() < 0.1 || rateLimitMap.size > 5000) {
     const cutoff = now - windowMs * 2
+    let cleaned = 0
     for (const [k] of rateLimitMap) {
-      const timestamp = parseInt(k.split('-').pop())
-      if (timestamp < cutoff) rateLimitMap.delete(k)
+      const parts = k.split('|')
+      const windowTimestamp = parseInt(parts[parts.length - 1])
+      if (!isNaN(windowTimestamp) && windowTimestamp < cutoff) {
+        rateLimitMap.delete(k)
+        cleaned++
+      }
+    }
+    // Log cleanup stats in edge function environment for monitoring
+    if (cleaned > 0) {
+      console.warn(`Rate limit cleanup: removed ${cleaned} stale entries, ${rateLimitMap.size} remaining`)
     }
   }
 

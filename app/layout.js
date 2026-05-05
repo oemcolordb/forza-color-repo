@@ -8,6 +8,7 @@ import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
 import EasterEgg420 from './components/EasterEgg420'
 import { TransitionProvider } from './context/TransitionContext'
 import ClientTransitionWrapper from './components/ClientTransitionWrapper'
+import { AuthProvider } from './components/AuthProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -201,19 +202,21 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
-        <TransitionProvider>
-          <ClientTransitionWrapper>
-            <a href="#main-content" className="skip-link">
-              Skip to main content
-            </a>
-            <ThirdPartyErrorBoundary />
-            <ErrorBoundary>{children}</ErrorBoundary>
-            {/* 🌿 hidden easter eggs — global */}
-            <EasterEgg420 />
-          </ClientTransitionWrapper>
-          <Analytics />
-          <SpeedInsights />
-        </TransitionProvider>
+        <AuthProvider>
+          <TransitionProvider>
+            <ClientTransitionWrapper>
+              <a href="#main-content" className="skip-link">
+                Skip to main content
+              </a>
+              <ThirdPartyErrorBoundary />
+              <ErrorBoundary>{children}</ErrorBoundary>
+              {/* 🌿 hidden easter eggs — global */}
+              <EasterEgg420 />
+            </ClientTransitionWrapper>
+            <Analytics />
+            <SpeedInsights />
+          </TransitionProvider>
+        </AuthProvider>
       </body>
     </html>
   )

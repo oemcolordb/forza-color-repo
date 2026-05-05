@@ -1,0 +1,67 @@
+[
+  {
+    "id": "manteomax-car-pass-0",
+    "car_make": "Car",
+    "car_model": "Pass",
+    "tune_name": "A Road Racing Tune",
+    "tuner_name": "ManteoMax",
+    "share_code": "805 550 552",
+    "discipline": "Road Racing",
+    "pi_class": "A",
+    "pi_value": 902,
+    "tune_data": "{\"source\": \"ManteoMax_Cars.pdf\", \"tuner\": \"ManteoMax\", \"extracted_car\": \"Car Pass\"}",
+    "votes": 0
+  },
+  {
+    "id": "manteomax-taxi-roof-1",
+    "car_make": "Taxi",
+    "car_model": "roof",
+    "tune_name": "A Road Racing Tune",
+    "tuner_name": "ManteoMax",
+    "share_code": "542 805 550",
+    "discipline": "Road Racing",
+    "pi_class": "A",
+    "pi_value": 902,
+    "tune_data": "{\"source\": \"ManteoMax_Cars.pdf\", \"tuner\": \"ManteoMax\", \"extracted_car\": \"Taxi roof\"}",
+    "votes": 0
+  },
+  {
+    "id": "manteomax-nissan-rr-2",
+    "car_make": "Nissan",
+    "car_model": "RR",
+    "tune_name": "A Road Racing Tune",
+    "tuner_name": "ManteoMax",
+    "share_code": "805 550 552",
+    "discipline": "Road Racing",
+    "pi_class": "A",
+    "pi_value": 902,
+    "tune_data": "{\"source\": \"ManteoMax_Cars.pdf\", \"tuner\": \"ManteoMax\", \"extracted_car\": \"Nissan RR\"}",
+    "votes": 0
+  },
+  {
+    "id": "manteomax-roof-delete-3",
+    "car_make": "Roof",
+    "car_model": "delete",
+    "tune_name": "A Road Racing Tune",
+    "tuner_name": "ManteoMax",
+    "share_code": "805 550 552",
+    "discipline": "Road Racing",
+    "pi_class": "A",
+    "pi_value": 902,
+    "tune_data": "{\"source\": \"ManteoMax_Cars.pdf\", \"tuner\": \"ManteoMax\", \"extracted_car\": \"Roof delete\"}",
+    "votes": 0
+  },
+  {
+    "id": "manteomax-fwd-195-4",
+    "car_make": "FWD",
+    "car_model": "195",
+    "tune_name": "A Road Racing Tune",
+    "tuner_name": "ManteoMax",
+    "share_code": "542 805 550",
+    "discipline": "Road Racing",
+    "pi_class": "A",
+    "pi_value": 902,
+    "tune_data": "{\"source\": \"ManteoMax_Cars.pdf\", \"tuner\": \"ManteoMax\", \"extracted_car\": \"FWD 195\"}",
+    "votes": 0
+  }
+]

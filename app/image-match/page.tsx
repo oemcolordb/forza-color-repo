@@ -7,6 +7,16 @@ import { getColorData } from '../../services/colorData'
 import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
 
+// Safe JSON parsing helper
+function safeJsonParse<T>(jsonString: string, defaultValue: T): T {
+  try {
+    return JSON.parse(jsonString) as T
+  } catch {
+    console.warn('Failed to parse JSON:', jsonString)
+    return defaultValue
+  }
+}
+
 interface SavedScan {
   id: string
   imageName: string
@@ -43,7 +53,8 @@ function ImageMatchPageInner() {
       .then((data: CarColor[]) => {
         setColorData(data)
       })
-      .catch(() => {
+      .catch((error: unknown) => {
+        console.warn('Failed to load color data:', error)
         setColorData([])
       })
       .finally(() => {
@@ -66,8 +77,8 @@ function ImageMatchPageInner() {
       setSavedScans(
         data.map((scan: Record<string, string>) => ({
           ...scan,
-          extractedColors: JSON.parse(scan.extractedColors),
-          matches: JSON.parse(scan.matches),
+          extractedColors: safeJsonParse(scan.extractedColors, []),
+          matches: safeJsonParse(scan.matches, []),
         }))
       )
     } catch (error) {

@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import Link from 'next/link'
+import { useAuth } from '../components/AuthProvider'
 import { Car } from '../types/car'
 import { countryFlags } from '../lib/countryFlags'
 import Breadcrumbs from '../components/Breadcrumbs'
@@ -96,6 +98,7 @@ function CarCard({ car, isDarkMode }: { car: Car; isDarkMode: boolean }) {
 
 export default function GaragePage() {
   const [isDarkMode, setIsDarkMode] = useState(true)
+  const { user } = useAuth()
   const [cars, setCars] = useState<Car[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -204,6 +207,21 @@ export default function GaragePage() {
       <div className="max-w-screen-2xl mx-auto px-4 py-4">
         <Breadcrumbs isDarkMode={isDarkMode} />
 
+        {!user && (
+          <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className={`font-bold ${isDarkMode ? 'text-blue-400' : 'text-blue-700'}`}>Save your favorite colors across all devices!</h3>
+              <p className={`text-sm ${isDarkMode ? 'text-blue-300/80' : 'text-blue-600/80'}`}>Create a free account to securely sync your tuning presets and favorite colors to the cloud.</p>
+            </div>
+            <Link
+              href="/signup"
+              className="shrink-0 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              Sign Up Now
+            </Link>
+          </div>
+        )}
+
         {/* Filters */}
         <div className={`rounded-xl border p-4 mb-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 ${
           isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-200'
@@ -215,25 +233,25 @@ export default function GaragePage() {
             onChange={e => setSearch(e.target.value)}
             className={`${inputCls} col-span-2 sm:col-span-3 lg:col-span-2`}
           />
-          <select value={filterManufacturer} onChange={e => setFilterManufacturer(e.target.value)} className={selectCls}>
+          <select value={filterManufacturer} onChange={e => setFilterManufacturer(e.target.value)} className={selectCls} aria-label="Filter by manufacturer">
             <option value="">All Manufacturers</option>
             {manufacturers.map(m => <option key={m} value={m}>{m}</option>)}
           </select>
-          <select value={filterPIClass} onChange={e => setFilterPIClass(e.target.value)} className={selectCls}>
+          <select value={filterPIClass} onChange={e => setFilterPIClass(e.target.value)} className={selectCls} aria-label="Filter by PI class">
             <option value="">All PI Classes</option>
             {['D','C','B','A','S1','S2','X'].map(c => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select value={filterType} onChange={e => setFilterType(e.target.value)} className={selectCls}>
+          <select value={filterType} onChange={e => setFilterType(e.target.value)} className={selectCls} aria-label="Filter by car type">
             <option value="">All Types</option>
             {types.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
-          <select value={filterRarity} onChange={e => setFilterRarity(e.target.value)} className={selectCls}>
+          <select value={filterRarity} onChange={e => setFilterRarity(e.target.value)} className={selectCls} aria-label="Filter by rarity">
             <option value="">All Rarities</option>
             {['Common','Rare','Epic','Legendary'].map(r => <option key={r} value={r}>{r}</option>)}
           </select>
           <div className="col-span-2 sm:col-span-3 lg:col-span-5 flex items-center gap-3">
             <label className={`text-xs font-medium shrink-0 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Sort:</label>
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className={`${selectCls} flex-1`}>
+            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className={`${selectCls} flex-1`} aria-label="Sort cars by">
               <option value="manufacturer">Manufacturer A–Z</option>
               <option value="pi">PI Value (high first)</option>
               <option value="speed">Top Speed (high first)</option>

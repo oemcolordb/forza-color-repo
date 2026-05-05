@@ -1,74 +1,76 @@
-import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { getDb } from '@/app/lib/db';
-import { v4 as uuidv4 } from 'uuid';
+import { NextRequest, NextResponse } from 'next/server'
+import { getDb, ensureTables } from '../../../lib/db'
+import { SignJWT } from 'jose'
+import { randomUUID, randomBytes, scryptSync } from 'crypto'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-for-dev';
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'forza-color-universe-super-secret-key-123'
+)
 
-export async function POST(request: Request) {
+// Zero-dependency secure password hashing using Node's built-in crypto
+function hashPassword(password: string) {
+  const salt = randomBytes(16).toString('hex')
+  const derivedKey = scryptSync(password, salt, 64).toString('hex')
+  return `${salt}:${derivedKey}`
+}
+
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, email, password } = body;
+    await ensureTables()
+    const db = getDb()
+    const { email, password, name, sessionId } = await request.json()
 
-    if (!name || !email || !password) {
-      return NextResponse.json(
-        { message: 'Name, email and password are required' },
-        { status: 400 }
-      );
+    if (!email || !password) {
+      return NextResponse.json({ message: 'Email and password are required' }, { status: 400 })
     }
-
-    if (password.length < 8) {
-      return NextResponse.json(
-        { message: 'Password must be at least 8 characters' },
-        { status: 400 }
-      );
-    }
-
-    const db = getDb();
 
     // Check if user already exists
     const existingUser = await db.execute({
       sql: 'SELECT id FROM users WHERE email = ?',
       args: [email],
-    });
+    })
 
     if (existingUser.rows.length > 0) {
-      return NextResponse.json(
-        { message: 'User with this email already exists' },
-        { status: 409 }
-      );
+      return NextResponse.json({ message: 'A user with this email already exists' }, { status: 400 })
     }
 
-    // Hash password
-    const passwordHash = await bcrypt.hash(password, 10);
+    const id = randomUUID()
+    const hashedPassword = hashPassword(password)
 
-    // Create user
-    const userId = uuidv4();
     await db.execute({
-      sql: `INSERT INTO users (id, email, name, password_hash, role) VALUES (?, ?, ?, ?, ?)`,
-      args: [userId, email, name, passwordHash, 'user'],
-    });
+      sql: 'INSERT INTO users (id, email, password, name) VALUES (?, ?, ?, ?)',
+      args: [id, email, hashedPassword, name || ''],
+    })
 
-    const user = {
-      id: userId,
-      email,
-      name,
-      role: 'user',
-    };
+    // Migrate any anonymous favorites linked to this session to the new user account
+    if (sessionId) {
+      await db.execute({
+        sql: 'UPDATE favorites SET userId = ? WHERE sessionId = ? AND userId IS NULL',
+        args: [id, sessionId],
+      })
+    }
 
-    const token = jwt.sign(
-      { sub: user.id, email: user.email, name: user.name, role: user.role },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    // Generate JWT
+    const token = await new SignJWT({ sub: id, email, name, role: 'user' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('7d')
+      .sign(JWT_SECRET)
 
-    return NextResponse.json(
-      { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error('Signup error:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    const response = NextResponse.json({ user: { id, email, name, role: 'user' } })
+
+    // Set HTTP-only secure cookie
+    response.cookies.set('forza_auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    })
+
+    return response
+  } catch (error: any) {
+    console.error('Signup error:', error)
+    return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 })
   }
 }

@@ -1,5 +1,13 @@
 {
   "mcpServers": {
+        "google-workspace": {
+      "command": "npx",
+      "args": ["-y", "@googleworkspace/mcp"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "278327469362-j2i7cigeh3cgdb5g1r69pk8vaj38cnei.apps.googleusercontent.com",
+        "GOOGLE_CLIENT_SECRET": "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"
+      }
+    },
     "github": {
       "command": "npx",
       "args": ["@modelcontextprotocol/server-github"],

@@ -1,69 +1,85 @@
-import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { getDb } from '@/app/lib/db';
+import { NextRequest, NextResponse } from 'next/server'
+import { getDb, ensureTables } from '../../../lib/db'
+import { SignJWT } from 'jose'
+import { scryptSync, timingSafeEqual } from 'crypto'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key-for-dev';
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || 'forza-color-universe-super-secret-key-123'
+)
 
-export async function POST(request: Request) {
+function verifyPassword(password: string, hash: string) {
+  const [salt, key] = hash.split(':')
+  const keyBuffer = Buffer.from(key, 'hex')
+  const derivedKey = scryptSync(password, salt, 64)
+  return timingSafeEqual(keyBuffer, derivedKey)
+}
+
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { email, password } = body;
+    await ensureTables()
+    const db = getDb()
+    const { email, password, sessionId } = await request.json()
 
     if (!email || !password) {
-      return NextResponse.json(
-        { message: 'Email and password are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: 'Email and password are required' }, { status: 400 })
     }
 
-    const db = getDb();
-
-    // Lookup user by email
     const result = await db.execute({
-      sql: 'SELECT id, email, name, password_hash, role FROM users WHERE email = ?',
+      sql: 'SELECT * FROM users WHERE email = ?',
       args: [email],
-    });
+    })
 
-    if (result.rows.length === 0) {
-      return NextResponse.json(
-        { message: 'Invalid credentials' },
-        { status: 401 }
-      );
+    const user = result.rows[0] as any
+
+    if (!user || !verifyPassword(password, user.password)) {
+      return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 })
     }
 
-    const userRow = result.rows[0];
-    const passwordHash = userRow.password_hash as string;
+    // Merge any anonymous favorites linked to this session to the existing account safely
+    if (sessionId) {
+      // First, update any favorites that don't conflict with the user's existing favorites
+      await db.execute({
+        sql: `UPDATE favorites
+              SET userId = ?
+              WHERE sessionId = ? AND userId IS NULL
+              AND car_id NOT IN (SELECT car_id FROM favorites WHERE userId = ?)`,
+        args: [user.id, sessionId, user.id],
+      })
 
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, passwordHash);
-
-    if (!isValidPassword) {
-      return NextResponse.json(
-        { message: 'Invalid credentials' },
-        { status: 401 }
-      );
+      // Then, delete any remaining local favorites that were duplicates
+      await db.execute({
+        sql: 'DELETE FROM favorites WHERE sessionId = ? AND userId IS NULL',
+        args: [sessionId],
+      })
     }
 
-    const user = {
-      id: userRow.id as string,
-      email: userRow.email as string,
-      name: userRow.name as string,
-      role: userRow.role as string,
-    };
+    // Generate JWT
+    const token = await new SignJWT({
+      sub: user.id as string,
+      email: user.email as string,
+      name: user.name as string,
+      role: 'user',
+    })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('7d')
+      .sign(JWT_SECRET)
 
-    const token = jwt.sign(
-      { sub: user.id, email: user.email, name: user.name, role: user.role },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    const userData = { id: user.id, email: user.email, name: user.name, role: 'user' }
+    const response = NextResponse.json({ user: userData })
 
-    return NextResponse.json(
-      { token, user: { id: user.id, email: user.email, name: user.name, role: user.role } },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error('Login error:', error);
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    // Set HTTP-only secure cookie
+    response.cookies.set('forza_auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+    })
+
+    return response
+  } catch (error: any) {
+    console.error('Login error:', error)
+    return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 })
   }
 }

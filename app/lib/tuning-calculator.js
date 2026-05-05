@@ -17,6 +17,50 @@
 //   • Brake balance responds to handlingBalance slider (v6.6.0)
 //   • Aero balance sensitivity ±55 kg (v6.7.0); front base at 185× (v6.9.0)
 
+// ---------------------------------------------------------------------------
+// THE FORZA ZERO-BALANCE TUNING FORMULA [3]
+// ---------------------------------------------------------------------------
+// The 50/50 balance formula — frequently referred to in the Forza community as the
+// "Zero-Balance" tuning method — is a mathematical equation used to distribute a
+// vehicle's mechanical grip in exact proportion to its weight distribution.
+//
+// CORE FORMULA: (Maximum Setting - Minimum Setting) × Weight Bias % + Minimum Setting = X
+// Abbreviated as: (A - B)C + B = X
+//
+// Where:
+//   A = Maximum (Stiffest) Setting: The highest possible value on the tuning slider
+//   B = Minimum (Softest) Setting: The lowest possible value on the tuning slider
+//   C = Weight Distribution Percentage: Amount of weight on the axle as decimal (e.g., 0.52 for 52%)
+//
+// To tune your entire car, run this calculation twice per component:
+//   • Once using front weight percentage for front settings
+//   • Once using rear weight percentage for rear settings
+//
+// COMPONENT APPLICATIONS:
+//
+// 1. Anti-Roll Bars (ARBs) - Range: 1–65
+//    Example (52% Front Weight): (65 - 1) × 0.52 + 1 = 34.28 → Set Front ARB to 34.3
+//    Example (48% Rear Weight):  (65 - 1) × 0.48 + 1 = 31.72 → Set Rear ARB to 31.7
+//
+// 2. Springs - Varies by car weight and suspension type
+//    Example (53% front, springs 100–1300 lb/in):
+//      Front: (1300 - 100) × 0.53 + 100 = 736 lb/in
+//      Rear:  (1300 - 100) × 0.47 + 100 = 664 lb/in
+//
+// 3. Damping (Rebound & Bump) - Range: 1–20
+//    "Rule of 19" for Rebound Baseline:
+//      Front Rebound: (19 × Front Weight %) + 0.5
+//      Rear Rebound:  (19 × Rear Weight %) + 1.0  (Note: +1.0 for rear stability)
+//    Bump Stiffness: 50–75% of Rebound value
+//
+// WHY THIS MATH MATTERS:
+// By deriving suspension kinematics entirely from weight distribution, you bypass
+// heuristic guesswork. Static weight transfer is handled by springs; transient
+// weight transfer (pitch/dive during braking/accelerating) is absorbed by dampers.
+// This provides an inherently neutral, highly predictable driving platform.
+//
+// Source [3]: Forza community Zero-Balance Tuning Formula (50/50 balance method)
+
 export class TuningCalculator {
   constructor(carData, options = {}) {
     this.car      = carData

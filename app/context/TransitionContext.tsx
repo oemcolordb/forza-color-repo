@@ -56,18 +56,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
 
   // Voting state
   const [votes, setVotes] = useState<Record<string, number>>({
+    'fade': 0,
+    'crossfade': 0,
     'soft-fade': 0,
-    'gentle-slide': 0,
-    'soft-scale': 0,
-    'crossfade-blur': 0,
-    'page-peel': 0,
-    'reveal-wipe': 0,
-    'fade-up': 0,
-    'shutter-reveal': 0,
-    'drop-in': 0,
-    'rise-up': 0,
-    'loading-pulse': 0,
-    'rewind-sweep': 0,
   })
   const [userVotes, setUserVotes] = useState<Record<string, boolean>>({})
   const [isLoadingVotes, setIsLoadingVotes] = useState(false)
@@ -273,7 +264,11 @@ const noopTransitionContext: TransitionContextType = {
   userFavorites: [],
   toggleFavorite: () => {},
   isFavorite: () => false,
-  votes: { 'soft-fade': 0, crossfade: 0, fade: 0 } as Record<TransitionType, number>,
+  votes: {
+    'fade': 0,
+    'crossfade': 0,
+    'soft-fade': 0,
+  } as Record<TransitionType, number>,
   userVotes: {},
   voteForTransition: async () => {},
   removeVote: async () => {},

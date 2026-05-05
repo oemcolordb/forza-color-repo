@@ -35,6 +35,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(result.rows)
   } catch (error) {
+    console.error('Scans GET error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
@@ -72,6 +73,7 @@ export async function POST(request: Request) {
       message: 'Scan saved successfully',
     })
   } catch (error) {
+    console.error('Scans POST error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
@@ -95,6 +97,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Scan deleted' })
   } catch (error) {
+    console.error('Scans DELETE error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

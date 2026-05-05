@@ -15,9 +15,22 @@ const STORAGE_KEY = 'forza-map-progress'
 const SYNC_INTERVAL = 30000 // 30 seconds
 const DEBOUNCE_DELAY = 2000 // 2 seconds
 
+// Safe localStorage getter with JSON parsing and error handling
+function safeLocalStorageGet<T>(key: string, defaultValue: T): T {
+  if (typeof window === 'undefined') return defaultValue
+  try {
+    const item = localStorage.getItem(key)
+    if (!item) return defaultValue
+    return JSON.parse(item) as T
+  } catch (error) {
+    console.warn(`Failed to parse localStorage key "${key}":`, error)
+    return defaultValue
+  }
+}
+
 function getSessionId(): string {
   if (typeof window === 'undefined') return ''
-  
+
   let sessionId = localStorage.getItem('forza-session-id')
   if (!sessionId) {
     sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
@@ -37,7 +50,7 @@ export function useMapPersistence() {
   const [isLoading, setIsLoading] = useState(true)
   const [lastSynced, setLastSynced] = useState<Date | null>(null)
   const [syncError, setSyncError] = useState<string | null>(null)
-  
+
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null)
   const syncIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const pendingChangesRef = useRef(false)
@@ -56,20 +69,20 @@ export function useMapPersistence() {
         // Try to load from cloud
         const sessionId = getSessionId()
         const response = await fetch(`/api/map-progress?sessionId=${sessionId}`)
-        
+
         if (response.ok) {
           const cloudData = await response.json()
           if (cloudData.lastUpdated) {
             // Cloud data exists, check if it's newer
             const localTimestamp = localStorage.getItem(`${STORAGE_KEY}-timestamp`)
             const cloudTimestamp = new Date(cloudData.lastUpdated).getTime()
-            
+
             if (!localTimestamp || cloudTimestamp > parseInt(localTimestamp)) {
               setProgress({
                 visitedLocations: cloudData.visitedLocations || [],
                 favoriteLocations: cloudData.favoriteLocations || [],
-                activeFilters: cloudData.activeFilters?.length > 0 
-                  ? cloudData.activeFilters 
+                activeFilters: cloudData.activeFilters?.length > 0
+                  ? cloudData.activeFilters
                   : Object.values(LocationType),
                 lastViewedLocation: cloudData.lastViewedLocation,
                 zoomLevel: cloudData.zoomLevel || 1,
@@ -92,13 +105,13 @@ export function useMapPersistence() {
   const saveProgress = useCallback((newProgress: Partial<MapProgress>) => {
     setProgress(prev => {
       const updated = { ...prev, ...newProgress }
-      
+
       // Save to localStorage immediately
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
       localStorage.setItem(`${STORAGE_KEY}-timestamp`, Date.now().toString())
-      
+
       pendingChangesRef.current = true
-      
+
       return updated
     })
 
@@ -106,7 +119,7 @@ export function useMapPersistence() {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current)
     }
-    
+
     debounceTimerRef.current = setTimeout(() => {
       syncToCloud()
     }, DEBOUNCE_DELAY)
@@ -115,11 +128,11 @@ export function useMapPersistence() {
   // Sync to cloud
   const syncToCloud = useCallback(async () => {
     if (!pendingChangesRef.current) return
-    
+
     try {
       const sessionId = getSessionId()
-      const currentProgress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-      
+      const currentProgress = safeLocalStorageGet<Partial<MapProgress>>(STORAGE_KEY, {})
+
       const response = await fetch('/api/map-progress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -162,8 +175,8 @@ export function useMapPersistence() {
     const handleBeforeUnload = () => {
       if (pendingChangesRef.current) {
         const sessionId = getSessionId()
-        const currentProgress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-        
+        const currentProgress = safeLocalStorageGet<Partial<MapProgress>>(STORAGE_KEY, {})
+
         // Use sendBeacon for reliable sync on page close
         navigator.sendBeacon(
           '/api/map-progress',

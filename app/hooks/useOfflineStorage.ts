@@ -40,7 +40,8 @@ export function useOfflineStorage() {
     try {
       const cached = localStorage.getItem('forza-offline-colors')
       return cached ? JSON.parse(cached) : []
-    } catch {
+    } catch (error) {
+      console.warn('Failed to get offline colors:', error)
       return []
     }
   }, [])

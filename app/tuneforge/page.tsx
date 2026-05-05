@@ -83,7 +83,6 @@ export default function TuneForge() {
   const [savedTunes, setSavedTunes] = useState<SavedTune[]>([])
   const [sortBy, setSortBy] = useState('manufacturer-az')
   const [aiQuery, setAiQuery] = useState('')
-  const [aiResponse, setAiResponse] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMessages, setAiMessages] = useState<{role: 'user'|'assistant'; content: string}[]>([])
 
@@ -92,7 +91,6 @@ export default function TuneForge() {
   const [weatherCondition, setWeatherCondition] = useState('dry')
   const [trackSurface, setTrackSurface] = useState('tarmac')
   const [lapTimeTarget, setLapTimeTarget] = useState('')
-  const [_, _setActivePreset] = useState('')
   const [isCalculating, setIsCalculating] = useState(false)
   const [calculationProgress, setCalculationProgress] = useState(0)
   const [loadingStatus, setLoadingStatus] = useState('Initializing...')
@@ -201,7 +199,7 @@ export default function TuneForge() {
       }))
 
       setCars(processedCars)
-      setSelectedCar(processedCars[0])
+      setSelectedCar(processedCars.length > 0 ? processedCars[0] : null)
       setLoadingStatus(`${processedCars.length} cars loaded`)
     } catch (error) {
       console.error('TuneForge: Failed to load car database:', error)
@@ -379,7 +377,8 @@ export default function TuneForge() {
     if (saved) {
       try {
         setSavedTunes(JSON.parse(saved))
-      } catch {
+      } catch (error) {
+        console.warn('Failed to load saved tunes:', error)
         setSavedTunes([])
       }
     }
@@ -719,7 +718,8 @@ export default function TuneForge() {
           setActiveTab('advanced')
           alert(`Tune "${importedData.tuneName}" imported successfully!`)
         }
-      } catch {
+      } catch (error) {
+        console.warn('Failed to import tune file:', error)
         alert('Invalid tune file format')
       }
     }
@@ -771,7 +771,8 @@ export default function TuneForge() {
       const parsed = JSON.parse(tune.tune_data)
       setTuneData(parsed)
       setActiveTab('advanced')
-    } catch {
+    } catch (error) {
+      console.warn('Failed to apply community tune:', error)
       alert('Failed to load tune data')
     }
   }
@@ -825,11 +826,6 @@ export default function TuneForge() {
   }
   const springUnitLabel = springUnit === 'lbf/in' ? ' lb/in' : springUnit === 'N/mm' ? ' N/mm' : ' kgf/mm'
 
-  const _getTireCompoundName = (value: number) => {
-    const compounds = ['', 'Vintage', 'Stock', 'Street', 'Sport', 'Semi-Slick', 'Slick', 'Rally']
-    return compounds[value] || 'Unknown'
-  }
-
   const getAITuningAdvice = async () => {
     if (!aiQuery.trim() || !selectedCar) return
 
@@ -862,7 +858,6 @@ export default function TuneForge() {
       const data = await res.json()
       const reply: string = data.response || 'No response received.'
       setAiMessages(prev => [...prev, { role: 'assistant', content: reply }])
-      setAiResponse(reply)
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'AI tuning advice temporarily unavailable.'
       setAiMessages(prev => [...prev, { role: 'assistant', content: `⚠️ ${message}` }])
@@ -1065,6 +1060,8 @@ export default function TuneForge() {
                       value={selectedCommunityId}
                       onChange={e => setSelectedCommunityId(e.target.value)}
                       className="w-full text-xs bamboo-input rounded px-2 py-1"
+                      aria-label="Browse community tunes"
+                      title="Browse community tunes"
                     >
                       <option value="">— Browse {communityTunes.length} tune{communityTunes.length !== 1 ? 's' : ''} —</option>
                       {communityTunes.map(t => (
@@ -1124,6 +1121,8 @@ export default function TuneForge() {
                       value={submitDiscipline}
                       onChange={e => setSubmitDiscipline(e.target.value)}
                       className="w-full text-xs bamboo-input rounded px-2 py-1"
+                      aria-label="Select tune discipline"
+                      title="Select tune discipline"
                     >
                       {['General','Track','Drift','Rally','Drag','Cross-Country','Road'].map(d => (
                         <option key={d} value={d}>{d}</option>
@@ -1607,13 +1606,11 @@ export default function TuneForge() {
                     <span>Progress</span>
                     <span>{calculationProgress}%</span>
                   </div>
-                  <div className="w-full rounded-full h-2" style={{ background: 'rgba(205, 187, 151, 0.25)' }}>
+                  <div className="w-full rounded-full h-2 progress-track">
                     <div
-                      className="h-2 rounded-full transition-all duration-300"
-                      style={{
-                        width: `${calculationProgress}%`,
-                        background: 'linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%)',
-                      }}
+                      className="h-2 rounded-full transition-all duration-300 progress-fill"
+                      data-width={calculationProgress}
+                      style={{ width: `${calculationProgress}%` }}
                     ></div>
                   </div>
                 </div>
@@ -2459,13 +2456,11 @@ export default function TuneForge() {
                     return (
                       <div key={k} className="flex items-center gap-2 text-xs">
                         <span className="w-8 text-right opacity-60">{i+1}</span>
-                        <div className="flex-1 rounded-full h-4 overflow-hidden" style={{background: 'rgba(205,187,151,0.15)'}}>
+                        <div className="flex-1 rounded-full h-4 overflow-hidden gear-bar-track">
                           <div
-                            className="h-4 rounded-full transition-all duration-300"
-                            style={{
-                              width: `${pct}%`,
-                              background: 'linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%)',
-                            }}
+                            className="h-4 rounded-full transition-all duration-300 gear-bar-fill"
+                            data-width={pct}
+                            style={{ width: `${pct}%` }}
                           />
                         </div>
                         <span className="w-10 font-bold text-[color:var(--bamboo-stalk)]">{val.toFixed(2)}</span>
@@ -2744,7 +2739,7 @@ export default function TuneForge() {
               </div>
               {aiMessages.length > 0 && (
                 <button
-                  onClick={() => { setAiMessages([]); setAiResponse('') }}
+                  onClick={() => { setAiMessages([]) }}
                   className="text-xs bamboo-button-ghost px-2 py-1 rounded opacity-60 hover:opacity-100 shrink-0"
                   title="Clear chat history"
                 >

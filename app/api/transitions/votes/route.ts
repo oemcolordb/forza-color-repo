@@ -145,8 +145,12 @@ export async function POST(request: NextRequest) {
           args: [voteId, transitionId, userId, ipAddress]
         })
       } catch (error) {
-        // If unique constraint violation, user already voted
-        // Just return current count
+        // If unique constraint violation, user already voted - this is expected
+        // Just return current count. Log other unexpected errors.
+        const errorMessage = (error as Error).message || ''
+        if (!errorMessage.includes('UNIQUE') && !errorMessage.includes('unique')) {
+          console.warn('Unexpected error during vote insert:', error)
+        }
       }
 
     } else if (action === 'unvote') {

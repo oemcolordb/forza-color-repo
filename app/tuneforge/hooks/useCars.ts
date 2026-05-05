@@ -87,7 +87,7 @@ export function useCars() {
       }))
 
       setCars(processedCars)
-      setSelectedCar(processedCars[0])
+      setSelectedCar(processedCars.length > 0 ? processedCars[0] : null)
       setLoadingStatus(`${processedCars.length} cars loaded`)
     } catch (error) {
       console.error('TuneForge: Failed to load car database:', error)

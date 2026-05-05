@@ -1,10 +1,19 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { CarColor } from '../types'
 
 interface StructuredDataProps {
   colors?: CarColor[]
   type?: 'website' | 'color' | 'collection'
+}
+
+// Sanitize string to prevent XSS in JSON
+function sanitizeForJson(str: string): string {
+  return str
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
 }
 
 const StructuredData: React.FC<StructuredDataProps> = ({ colors, type = 'website' }) => {
@@ -59,10 +68,26 @@ const StructuredData: React.FC<StructuredDataProps> = ({ colors, type = 'website
     return baseData
   }
 
+  const scriptRef = useRef<HTMLScriptElement>(null)
+
+  useEffect(() => {
+    if (scriptRef.current) {
+      const data = getStructuredData()
+      // Sanitize color data before serializing
+      const sanitizedData = JSON.parse(JSON.stringify(data, (key, value) => {
+        if (typeof value === 'string') {
+          return sanitizeForJson(value)
+        }
+        return value
+      }))
+      scriptRef.current.textContent = JSON.stringify(sanitizedData)
+    }
+  }, [colors, type])
+
   return (
     <script
+      ref={scriptRef}
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(getStructuredData()) }}
     />
   )
 }

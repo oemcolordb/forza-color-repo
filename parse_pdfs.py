@@ -41,16 +41,19 @@ for pdf_file in pdf_files:
     print(f"Processing {pdf_file}...")
     doc = fitz.open(pdf_file)
     for page in doc:
-        text = page.get_text("text")
-        lines = text.split('\n')
-        # Simple heuristic: try to find rows that look like car color data
-        # We know columns are usually: Make, Color, Paint Type, HSB...
-        # Wait, get_text("text") might output lines sequentially based on coordinates.
-        # It's better to use get_text("blocks") or just simple heuristics.
-        
-        # Let's save the raw text to see its structure
-        with open('pdf_text_sample.txt', 'w', encoding='utf-8') as f:
-            f.write(text)
-        break
-    break
+        # Using 'blocks' gives us: (x0, y0, x1, y1, "lines in block", block_no, block_type)
+        blocks = page.get_text("blocks")
 
+        # Sort blocks vertically (y0) then horizontally (x0) for better reading order
+        blocks.sort(key=lambda b: (b[1], b[0]))
+
+        text_content = ""
+        for block in blocks:
+            # block[6] == 0 indicates text (1 is for an image block)
+            if block[6] == 0:
+                # Clean up excess newlines inside the block
+                text_content += block[4].strip() + "\n"
+
+        # Let's save the raw text to see its structure
+        with open('pdf_text_sample.txt', 'a', encoding='utf-8') as f:
+            f.write(f"--- New Page ---\n{text_content}\n")

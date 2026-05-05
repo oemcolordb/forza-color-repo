@@ -8,6 +8,17 @@ function isBotRequest(request: Request): boolean {
   return botPatterns.some(pattern => userAgent.includes(pattern))
 }
 
+// Safe JSON parsing helper to handle malformed database entries
+function safeJsonParse<T>(jsonString: string | null, defaultValue: T): T {
+  if (!jsonString) return defaultValue
+  try {
+    return JSON.parse(jsonString) as T
+  } catch {
+    console.warn('Failed to parse JSON from database:', jsonString)
+    return defaultValue
+  }
+}
+
 const client =
   process.env.TURSO_DATABASE_URL &&
   process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
@@ -38,9 +49,9 @@ export async function GET(request: Request) {
     }
 
     const result = await client.execute({
-      sql: `SELECT visitedLocations, favoriteLocations, activeFilters, lastViewedLocation, zoomLevel, lastUpdated 
-            FROM map_progress 
-            WHERE sessionId = ? OR userId = ? 
+      sql: `SELECT visitedLocations, favoriteLocations, activeFilters, lastViewedLocation, zoomLevel, lastUpdated
+            FROM map_progress
+            WHERE sessionId = ? OR userId = ?
             ORDER BY lastUpdated DESC LIMIT 1`,
       args: [sessionId, userId || ''],
     })
@@ -58,9 +69,9 @@ export async function GET(request: Request) {
 
     const row = result.rows[0]
     return NextResponse.json({
-      visitedLocations: JSON.parse(row.visitedLocations as string),
-      favoriteLocations: JSON.parse(row.favoriteLocations as string),
-      activeFilters: JSON.parse(row.activeFilters as string),
+      visitedLocations: safeJsonParse(row.visitedLocations as string, []),
+      favoriteLocations: safeJsonParse(row.favoriteLocations as string, []),
+      activeFilters: safeJsonParse(row.activeFilters as string, []),
       lastViewedLocation: row.lastViewedLocation,
       zoomLevel: row.zoomLevel,
       lastUpdated: row.lastUpdated,

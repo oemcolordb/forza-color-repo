@@ -17,6 +17,7 @@ export const POST = async () => {
     const result = await client.execute('CREATE TABLE IF NOT EXISTS todos (description TEXT);')
     return NextResponse.json({ success: true, result })
   } catch (error) {
+    console.error('Todos POST error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

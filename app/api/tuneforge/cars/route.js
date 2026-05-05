@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import fs from 'fs'
+import { promises as fs } from 'fs'
 import path from 'path'
 import { enrichCarWithSpecs } from '../../../lib/car-specs'
 
@@ -7,7 +7,8 @@ export async function GET() {
   try {
     // Load the full 1200-car database from the optimized dataset
     const filePath = path.join(process.cwd(), 'app', 'data', 'cars-optimized.json')
-    const raw = JSON.parse(fs.readFileSync(filePath, 'utf8'))
+    const fileContents = await fs.readFile(filePath, 'utf8')
+    const raw = JSON.parse(fileContents)
     // The file wraps cars in { cars: [...] }
     const allCars = Array.isArray(raw) ? raw : (raw.cars ?? [])
 
@@ -27,6 +28,3 @@ export async function GET() {
     return NextResponse.json({ error: 'Failed to load car data' }, { status: 500 })
   }
 }
-
-
-
