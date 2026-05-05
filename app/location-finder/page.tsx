@@ -28,7 +28,7 @@ export default function LocationFinderPage() {
         <h1 className="text-3xl font-bold mb-2 text-white text-center">Forza Horizon 5 Location Finder</h1>
         <p className="text-lg text-blue-200 mb-4 text-center">Coming Soon</p>
         <p className="text-gray-300 text-center mb-2">The interactive map and location database are being rebuilt with 100% verified in-game data. This feature will return when the data is complete and accurate.</p>
-        <p className="text-gray-400 text-center text-sm">If you have a MapGenie or community export of all locations, <a href=\"mailto:admin@oemcolordb.com\" className=\"text-blue-400 underline\">contact us</a> to help accelerate the launch.</p>
+        <p className="text-gray-400 text-center text-sm">If you have a MapGenie or community export of all locations, <a href="mailto:admin@oemcolordb.com" className="text-blue-400 underline">contact us</a> to help accelerate the launch.</p>
         <a href="/" className="mt-8 px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow">← Back to Home</a>
       </div>
     </div>

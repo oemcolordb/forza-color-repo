@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../lib/db'
+import { getDb, ensureTables } from '../../../lib/db'
 import { SignJWT } from 'jose'
 import { randomUUID, randomBytes, scryptSync } from 'crypto'
 
