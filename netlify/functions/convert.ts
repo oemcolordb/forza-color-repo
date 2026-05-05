@@ -1,5 +1,5 @@
 // Color conversion utilities
-const hsbToRgb = (h, s, b) => {
+const hsbToRgb = (h: number, s: number, b: number) => {
   const c = b * s
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1))
   const m = b - c
@@ -40,11 +40,11 @@ const hsbToRgb = (h, s, b) => {
   }
 }
 
-const rgbToHex = (r, g, b) => {
+const rgbToHex = (r: number, g: number, b: number) => {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
 }
 
-exports.handler = async (event, context) => {
+exports.handler = async (event: { httpMethod: string; body: string }, _context: unknown) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
