@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../../lib/db'
+import { getDb, ensureTables } from '../../lib/db'
 import { cookies } from 'next/headers'
 import { TransitionType, TRANSITION_METADATA } from '../../../components/transitions/PageTransitions'
 
