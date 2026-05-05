@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../../lib/db'
+import { getDb, ensureTables } from '../../lib/db'
 import { randomUUID } from 'crypto'
 
 export async function GET(request: NextRequest) {

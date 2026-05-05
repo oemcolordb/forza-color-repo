@@ -1,19 +1,11 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@libsql/client'
+import { getDb } from '@/app/lib/db'
 
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
 
 // Secret dev-only endpoint for favorites analytics
 // Protected by DEV_ANALYTICS_KEY environment variable
 export async function GET(request: Request) {
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+  const client = getDb()
 
   try {
     const { searchParams } = new URL(request.url)
@@ -46,7 +38,7 @@ export async function GET(request: Request) {
 
     // Get favorites trend over time
     const trendData = await client.execute({
-      sql: `SELECT 
+      sql: `SELECT
               date(createdAt) as date,
               COUNT(*) as total,
               SUM(CASE WHEN action = 'add' THEN 1 ELSE 0 END) as adds,
@@ -81,7 +73,7 @@ export async function GET(request: Request) {
 
     // Get total stats
     const stats = await client.execute({
-      sql: `SELECT 
+      sql: `SELECT
               COUNT(DISTINCT sessionId) as uniqueSessions,
               COUNT(DISTINCT userId) as uniqueUsers,
               COUNT(*) as totalActions,

@@ -4,26 +4,13 @@ import React from 'react'
 import { CarColor } from '../types'
 import DialogShell from './ui/DialogShell'
 import Button from './ui/Button'
+import { hsbToCSS } from '../lib/colorUtils'
 
 interface HSBPopupProps {
   color: CarColor | null
   isOpen: boolean
   onClose: () => void
   isDarkMode: boolean
-}
-
-function hsbToRgbStr(h: number, s: number, b: number): string {
-  const c = b * s
-  const x = c * (1 - Math.abs(((h * 6) % 2) - 1))
-  const m = b - c
-  let r = 0, g = 0, bl = 0
-  if (h < 1 / 6) { r = c; g = x; bl = 0 }
-  else if (h < 2 / 6) { r = x; g = c; bl = 0 }
-  else if (h < 3 / 6) { r = 0; g = c; bl = x }
-  else if (h < 4 / 6) { r = 0; g = x; bl = c }
-  else if (h < 5 / 6) { r = x; g = 0; bl = c }
-  else { r = c; g = 0; bl = x }
-  return `rgb(${Math.round((r + m) * 255)}, ${Math.round((g + m) * 255)}, ${Math.round((bl + m) * 255)})`
 }
 
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
@@ -88,7 +75,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
               <div className="text-sm font-medium mb-2">Color 1</div>
               <div
                 className="w-full h-8 rounded border mb-2"
-                style={{ backgroundColor: hsbToRgbStr(color.color1.h, color.color1.s, color.color1.b) }}
+                style={{ backgroundColor: hsbToCSS(color.color1) }}
               />
               <div className="text-sm font-mono">
                 {hsb1.h} {hsb1.s} {hsb1.b}
@@ -99,7 +86,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
               <div className="text-sm font-medium mb-2">Color 2</div>
               <div
                 className="w-full h-8 rounded border mb-2"
-                style={{ backgroundColor: hsbToRgbStr(color.color2.h, color.color2.s, color.color2.b) }}
+                style={{ backgroundColor: hsbToCSS(color.color2) }}
               />
               <div className="text-sm font-mono">
                 {hsb2.h} {hsb2.s} {hsb2.b}

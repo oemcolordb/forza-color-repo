@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@libsql/client'
+import { getDb } from '@/app/lib/db'
 
 // Simple server-side bot detection
 function isBotRequest(request: Request): boolean {
@@ -8,17 +8,9 @@ function isBotRequest(request: Request): boolean {
   return botPatterns.some(pattern => userAgent.includes(pattern))
 }
 
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
 
 export async function GET(request: Request) {
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+  const client = getDb()
 
   try {
     const { searchParams } = new URL(request.url)
@@ -45,7 +37,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Access denied' }, { status: 403 })
   }
 
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+  const client = getDb()
 
   try {
     const body = await request.json()
@@ -79,7 +71,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+  const client = getDb()
 
   try {
     const { searchParams } = new URL(request.url)
