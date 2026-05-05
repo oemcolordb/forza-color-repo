@@ -48,8 +48,8 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           <Button as="a" href="/garage" variant="primary" size="lg" className="hover-lift">
             🏎️ Car Database
           </Button>
-          <Button as="a" href="https://swissgameguides.app/maps/forza_horizon_5/mexico" target="_blank" rel="noopener noreferrer" variant="primary" size="lg" className="hover-lift">
-            📍 FH5 Map
+          <Button as="a" href="/location-finder" variant="primary" size="lg" className="hover-lift">
+            📍 Location Finder
           </Button>
           <Button
             as="a"

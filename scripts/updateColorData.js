@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 // Read the carColors.json file
-const colorDataPath = path.join(__dirname, '..', 'public', 'carColors.json')
+const colorDataPath = path.join(__dirname, '..', 'carColors.json')
 let colorData
 
 try {

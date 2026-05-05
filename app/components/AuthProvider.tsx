@@ -11,9 +11,9 @@ interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (_email: string, _password: string) => Promise<void>
-  signup: (_email: string, _password: string, _name: string) => Promise<void>
-  logout: () => Promise<void>
+  login: (email: string, password: string) => Promise<void>
+  signup: (email: string, password: string, name: string) => Promise<void>
+  logout: () => void
   loading: boolean
 }
 
@@ -34,31 +34,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchUser = async () => {
+    // Check for existing session
+    const token = sessionStorage.getItem('forza-auth-token')
+    if (token) {
       try {
-        const res = await fetch('/api/auth/me')
-        if (res.ok) {
-          const data = await res.json()
-          setUser(data.user)
+        const userData = JSON.parse(atob(token.split('.')[1]))
+        if (userData.exp > Date.now() / 1000) {
+          setUser({
+            id: userData.sub,
+            email: userData.email,
+            name: userData.name,
+            role: userData.role || 'user',
+          })
+        } else {
+          sessionStorage.removeItem('forza-auth-token')
         }
       } catch {
-        console.warn('Failed to fetch session state')
-      } finally {
-        setLoading(false)
+        sessionStorage.removeItem('forza-auth-token')
       }
     }
-    fetchUser()
+    setLoading(false)
   }, [])
 
   const login = async (email: string, password: string) => {
-    const sessionId = typeof window !== 'undefined' ? localStorage.getItem('forza-session-id') || 'anonymous' : 'anonymous';
-
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
       },
-      body: JSON.stringify({ email, password, sessionId }),
+      credentials: 'same-origin',
+      body: JSON.stringify({ email, password }),
     })
 
     if (!response.ok) {
@@ -66,19 +72,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw new Error(error.message || 'Login failed')
     }
 
-    const { user: userData } = await response.json()
+    const { token, user: userData } = await response.json()
+    sessionStorage.setItem('forza-auth-token', token)
     setUser(userData)
   }
 
   const signup = async (email: string, password: string, name: string) => {
-    const sessionId = typeof window !== 'undefined' ? localStorage.getItem('forza-session-id') || 'anonymous' : 'anonymous';
-
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
       },
-      body: JSON.stringify({ email, password, name, sessionId }),
+      credentials: 'same-origin',
+      body: JSON.stringify({ email, password, name }),
     })
 
     if (!response.ok) {
@@ -86,16 +93,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw new Error(error.message || 'Signup failed')
     }
 
-    const { user: userData } = await response.json()
+    const { token, user: userData } = await response.json()
+    sessionStorage.setItem('forza-auth-token', token)
     setUser(userData)
   }
 
-  const logout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' })
-    } catch (e) {
-      console.warn('Logout request failed', e)
-    }
+  const logout = () => {
+    sessionStorage.removeItem('forza-auth-token')
     setUser(null)
   }
 

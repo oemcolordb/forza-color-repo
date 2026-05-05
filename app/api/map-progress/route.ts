@@ -1,28 +1,26 @@
 import { NextResponse } from 'next/server'
-import { getDb } from '@/app/lib/db'
+import { createClient } from '@libsql/client'
+import { checkBotId } from 'botid/server'
 
-// Simple server-side bot detection
-function isBotRequest(request: Request): boolean {
-  const userAgent = request.headers.get('user-agent')?.toLowerCase() || ''
-  const botPatterns = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget', 'python-requests']
-  return botPatterns.some(pattern => userAgent.includes(pattern))
-}
-
-// Safe JSON parsing helper to handle malformed database entries
-function safeJsonParse<T>(jsonString: string | null, defaultValue: T): T {
-  if (!jsonString) return defaultValue
-  try {
-    return JSON.parse(jsonString) as T
-  } catch {
-    console.warn('Failed to parse JSON from database:', jsonString)
-    return defaultValue
-  }
-}
-
+const client =
+  process.env.TURSO_DATABASE_URL &&
+  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
+    ? createClient({
+        url: process.env.TURSO_DATABASE_URL,
+        authToken: process.env.TURSO_AUTH_TOKEN || '',
+      })
+    : null
 
 // GET - Retrieve map progress from cloud
 export async function GET(request: Request) {
-  const client = getDb()
+  if (!client) return NextResponse.json({
+    visitedLocations: [],
+    favoriteLocations: [],
+    activeFilters: [],
+    lastViewedLocation: null,
+    zoomLevel: 1,
+    lastUpdated: null,
+  })
 
   try {
     const { searchParams } = new URL(request.url)
@@ -34,9 +32,9 @@ export async function GET(request: Request) {
     }
 
     const result = await client.execute({
-      sql: `SELECT visitedLocations, favoriteLocations, activeFilters, lastViewedLocation, zoomLevel, lastUpdated
-            FROM map_progress
-            WHERE sessionId = ? OR userId = ?
+      sql: `SELECT visitedLocations, favoriteLocations, activeFilters, lastViewedLocation, zoomLevel, lastUpdated 
+            FROM map_progress 
+            WHERE sessionId = ? OR userId = ? 
             ORDER BY lastUpdated DESC LIMIT 1`,
       args: [sessionId, userId || ''],
     })
@@ -54,9 +52,9 @@ export async function GET(request: Request) {
 
     const row = result.rows[0]
     return NextResponse.json({
-      visitedLocations: safeJsonParse(row.visitedLocations as string, []),
-      favoriteLocations: safeJsonParse(row.favoriteLocations as string, []),
-      activeFilters: safeJsonParse(row.activeFilters as string, []),
+      visitedLocations: JSON.parse(row.visitedLocations as string),
+      favoriteLocations: JSON.parse(row.favoriteLocations as string),
+      activeFilters: JSON.parse(row.activeFilters as string),
       lastViewedLocation: row.lastViewedLocation,
       zoomLevel: row.zoomLevel,
       lastUpdated: row.lastUpdated,
@@ -69,11 +67,10 @@ export async function GET(request: Request) {
 
 // POST - Save map progress to cloud
 export async function POST(request: Request) {
-  if (isBotRequest(request)) {
-    return NextResponse.json({ error: 'Access denied' }, { status: 403 })
-  }
+  const botCheck = await checkBotId()
+  if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
 
-  const client = getDb()
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
 
   try {
     const body = await request.json()

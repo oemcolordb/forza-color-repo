@@ -14,6 +14,7 @@ interface ScenicSpot {
 }
 
 export function ScenicFinder() {
+  const [query] = useState('Forza Horizon 5');
   const [isSearching, setIsSearching] = useState(false);
   const [spots, setSpots] = useState<ScenicSpot[]>([]);
   const [showMap, setShowMap] = useState(true);
@@ -34,7 +35,7 @@ export function ScenicFinder() {
 
     try {
       // Gemini client is not bundled — always use fallback curated links
-      const aiClient: unknown = null;
+      const aiClient: any = null;
 
       if (!aiClient) {
         setSpots([
@@ -45,40 +46,31 @@ export function ScenicFinder() {
         return;
       }
 
-      const prompt = `Find interactive maps and scenic location markers specifically for "Forza Horizon 5".
+      const prompt = `Find interactive maps and scenic location markers specifically for "Forza Horizon 5". 
            Look for MapGenie maps, community-marked photography spots, drift zones, and hidden beauty spots.
            Provide a list of the best interactive map links or community guides for FH5.`;
 
       // Attempt to use the client to generate content; shapes may vary by SDK version.
-       
-      const client = aiClient as any
-      const response = await client.models?.generateContent
-        ? await client.models.generateContent({
+      const response = await aiClient.models?.generateContent
+        ? await aiClient.models.generateContent({
             model: "gemini-3-flash-preview",
             contents: prompt,
             config: { tools: [{ googleSearch: {} }] },
           })
-        : await client.generate?.({ prompt });
+        : await aiClient.generate?.({ prompt });
 
-      interface GroundingChunk {
-        web?: {
-          uri?: string
-          title?: string
-        }
-      }
-
-      const chunks: GroundingChunk[] = response?.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+      const chunks = response?.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
 
       const searchLinks = chunks
-        .filter((c): c is GroundingChunk & { web: { uri: string } } => !!c.web?.uri)
-        .map(c => ({
+        .filter((c: any) => c.web?.uri)
+        .map((c: any) => ({
           title: c.web?.title || "View Source",
           url: c.web?.uri || "",
           description: "Forza Horizon 5 Map / Guide",
         }));
 
       if (searchLinks.length > 0) {
-        setSpots(searchLinks.map(link => ({ name: link.title, description: link.description, url: link.url })));
+        setSpots(searchLinks.map((link: any) => ({ name: link.title, description: link.description, url: link.url })));
       } else {
         // fallback if AI didn't return useful links
         setSpots([
@@ -137,7 +129,7 @@ export function ScenicFinder() {
 
       {showMap ? (
         <div className="relative h-screen w-full overflow-hidden bg-black">
-          <iframe
+          <iframe 
             src={proxyMapUrl}
             className="w-full h-full border-0"
             title="FH5 Interactive Map"
@@ -168,9 +160,9 @@ export function ScenicFinder() {
           </div>
 
           <div className="absolute top-20 right-4 z-20">
-            <a
-              href={mainMapUrl}
-              target="_blank"
+            <a 
+              href={mainMapUrl} 
+              target="_blank" 
               rel="noopener noreferrer"
               className="p-3 rounded-xl bg-black/70 backdrop-blur-md text-white hover:bg-orange-500 transition-all flex items-center gap-2 text-xs font-mono uppercase border border-white/10"
             >

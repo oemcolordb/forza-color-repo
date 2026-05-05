@@ -246,7 +246,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                 {color.colorType}
               </div>
             ) : (
-              <div className="text-[10px] opacity-0">—</div>
+              <div className="text-[10px] opacity-0">―</div>
             )}
           </div>
           <div className="flex items-center gap-1 shrink-0">

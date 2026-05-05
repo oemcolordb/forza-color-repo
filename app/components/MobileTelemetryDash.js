@@ -19,13 +19,7 @@ const MobileTelemetryDash = () => {
 
     ws.onopen = () => setConnected(true)
     ws.onclose = () => setConnected(false)
-    ws.onmessage = event => {
-      try {
-        setData(JSON.parse(event.data))
-      } catch (error) {
-        console.warn('Failed to parse telemetry data:', error)
-      }
-    }
+    ws.onmessage = event => setData(JSON.parse(event.data))
     ws.onerror = () => setConnected(false)
 
     return () => ws.close()

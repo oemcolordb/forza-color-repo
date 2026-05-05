@@ -104,7 +104,7 @@ Tire: F 30 PSI / R 22 PSI | Camber: F −3.5° / R −1.2° | Toe: F −0.5° / 
 ARB: F 26 / R 10 | Springs: F 135 / R 90 lbf/in | Height: F 4.8 / R 5.2 cm
 Rebound: F 9 / R 7 | Bump: F 6 / R 5 | Diff Accel: 18% / Decel: 8% | Brake: 46%
 
-### Track/Circuit
+### Track/Circuit  
 Tire: F 28 PSI / R 27 PSI | Camber: F −2.8° / R −2.2° | Toe: F −0.1° / R +0.1°
 ARB: F 42 / R 46 | Springs: F 205 / R 185 lbf/in | Height: F 5.0 / R 5.5 cm
 Rebound: F 13 / R 11 | Bump: F 8 / R 7 | Diff Accel: 55% / Decel: 25% | Brake: 50%
@@ -122,38 +122,6 @@ Diff Accel: 85% / Decel: 0% | Aero: minimum | Brake: 52%
 ### Wet Weather
 Tire: F 25 PSI / R 24 PSI | Camber: F −1.5° / R −1.0° | ARB: F 25 / R 22
 Springs: soften by ~20 lbf/in | Height: raise by 0.5 cm | Diff Accel: reduce by 15%
-
-## THE FORZA ZERO-BALANCE TUNING FORMULA
-
-The 50/50 balance formula — known as the "Zero-Balance" tuning method — distributes a vehicle's mechanical grip in exact proportion to its weight distribution. The goal is to perfectly balance the car so both axles saturate their tire grip limits simultaneously, eliminating unpredictable oversteer or understeer.
-
-### Core Formula
-**(Maximum Setting - Minimum Setting) × Weight Bias % + Minimum Setting = X**
-Abbreviated as: **(A - B)C + B = X**
-
-Where:
-- **A** = Maximum (Stiffest) Setting: Highest value on the tuning slider for that upgrade
-- **B** = Minimum (Softest) Setting: Lowest value on the tuning slider for that upgrade
-- **C** = Weight Distribution Percentage: Weight on the axle as decimal (e.g., 0.52 for 52%)
-
-Run this calculation twice per component: once with front weight % for front settings, once with rear weight % for rear settings.
-
-### Applying to Components
-
-**Anti-Roll Bars (ARBs) — Range: 1–65**
-- Front ARB (52% front): (65 - 1) × 0.52 + 1 = 34.3
-- Rear ARB (48% rear): (65 - 1) × 0.48 + 1 = 31.7
-
-**Springs — Example: 100–1300 lb/in, 53% front bias**
-- Front: (1300 - 100) × 0.53 + 100 = 736 lb/in
-- Rear: (1300 - 100) × 0.47 + 100 = 664 lb/in
-
-**Damping — Rebound & Bump — Range: 1–20**
-- Front Rebound: (19 × Front Weight %) + 0.5
-- Rear Rebound: (19 × Rear Weight %) + 1.0 (adds 1.0 for rear stability)
-- Bump Stiffness: 50–75% of Rebound value (prevents tire skipping)
-
-Use this math to derive suspension kinematics from weight distribution for a neutral, predictable platform.
 
 ## FH5 KNOWLEDGE FROM OFFICIAL TUNING GUIDE
 
@@ -181,7 +149,7 @@ When a user asks for a tune, structure your response as:
 - Rear pressure: X PSI
 
 **📐 Alignment**
-- Front camber: X°
+- Front camber: X°  
 - Rear camber: X°
 - Front toe: X°
 - Rear toe: X°

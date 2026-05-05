@@ -1,34 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getDb, ensureTables } from '@/app/lib/db'
 
-// Validate and sanitize IP address
-function validateIPAddress(ip: string): string {
-  // Trim whitespace
-  const trimmed = ip.trim()
-
-  // Check for valid IPv4 format
-  const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/
-  if (ipv4Regex.test(trimmed)) {
-    // Validate each octet is 0-255
-    const octets = trimmed.split('.').map(Number)
-    if (octets.every(o => o >= 0 && o <= 255)) {
-      return trimmed
-    }
-  }
-
-  // Check for valid IPv6 format (basic check)
-  const ipv6Regex = /^([0-9a-fA-F:]+)$/
-  if (ipv6Regex.test(trimmed) && trimmed.includes(':')) {
-    // Basic IPv6 validation - must have at least 2 colons and valid length
-    if (trimmed.length <= 45 && trimmed.split(':').length >= 2) {
-      return trimmed.toLowerCase()
-    }
-  }
-
-  // Return 'unknown' for invalid IPs
-  return 'unknown'
-}
-
 // GET /api/tuneforge/community-tunes?make=Ford&model=Mustang
 export const GET = async (request: Request) => {
   await ensureTables()
@@ -89,8 +61,7 @@ export const POST = async (request: Request) => {
   const client = getDb()
 
   try {
-    const rawIp = request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown'
-    const ip_address = validateIPAddress(rawIp)
+    const ip_address = request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown'
     const body = await request.json()
     const {
       id,
@@ -124,8 +95,7 @@ export const POST = async (request: Request) => {
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Failed to save community tune:', error)
+  } catch {
     return NextResponse.json({ error: 'Save failed' }, { status: 500 })
   }
 }
@@ -145,8 +115,7 @@ export const PATCH = async (request: Request) => {
       args: [id],
     })
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Failed to vote on community tune:', error)
+  } catch {
     return NextResponse.json({ error: 'Vote failed' }, { status: 500 })
   }
 }

@@ -2,21 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
-interface TuningPreset {
-  id: string
-  name: string
-  carId?: string
-  settings: Record<string, number | string>
-  createdAt?: string
-}
-
-interface ColorSet {
-  id: string
-  name: string
-  colors: string[]
-  createdAt?: string
-}
-
 interface User {
   id: string
   email?: string
@@ -24,21 +9,21 @@ interface User {
   avatar?: string
   provider: 'email' | 'discord' | 'xbox'
   favorites: string[]
-  tuningPresets: TuningPreset[]
-  colorSets: ColorSet[]
+  tuningPresets: any[]
+  colorSets: any[]
 }
 
 interface AuthContextType {
   user: User | null
   loading: boolean
-  signIn: (_email: string, _password: string) => Promise<void>
-  signUp: (_email: string, _password: string, _username: string) => Promise<void>
+  signIn: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, username: string) => Promise<void>
   signInWithDiscord: () => Promise<void>
   signInWithXbox: () => Promise<void>
   signOut: () => Promise<void>
-  syncFavorites: (_favorites: string[]) => Promise<void>
-  syncTuningPresets: (_presets: TuningPreset[]) => Promise<void>
-  syncColorSets: (_sets: ColorSet[]) => Promise<void>
+  syncFavorites: (favorites: string[]) => Promise<void>
+  syncTuningPresets: (presets: any[]) => Promise<void>
+  syncColorSets: (sets: any[]) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -57,44 +42,10 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     // Check for existing session
     const savedUser = localStorage.getItem('forza-user')
     if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser))
-      } catch (error) {
-        console.warn('Failed to parse saved user from localStorage:', error)
-        localStorage.removeItem('forza-user')
-      }
+      setUser(JSON.parse(savedUser))
     }
     setLoading(false)
   }, [])
-
-  const syncFromCloud = async (userId: string) => {
-    // This function will be called after login to sync data
-    // Implement cloud sync logic here if needed
-  }
-
-  const mergeLocalFavorites = async (userId: string, cloudFavorites: string[] = []) => {
-    try {
-      const savedLocal = localStorage.getItem('forza-offline-colors')
-      const localFavorites: string[] = savedLocal ? JSON.parse(savedLocal) : []
-
-      if (localFavorites.length > 0) {
-        // Merge without duplicates
-        const mergedFavorites = Array.from(new Set([...cloudFavorites, ...localFavorites]))
-        
-        // Sync merged up to cloud
-        await fetch('/api/favorites', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId, favorites: mergedFavorites }),
-        })
-        
-        return mergedFavorites
-      }
-    } catch (e) {
-      console.warn('Failed to merge local favorites:', e)
-    }
-    return cloudFavorites
-  }
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -107,23 +58,6 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       if (!response.ok) throw new Error('Sign in failed')
 
       const userData = await response.json()
-      
-      // Fetch user's current cloud favorites
-      let cloudFavorites: string[] = []
-      try {
-        const favRes = await fetch(`/api/favorites?userId=${userData.id}`)
-        if (favRes.ok) {
-          const favData = await favRes.json()
-          cloudFavorites = favData.favorites || []
-        }
-      } catch (e) {
-        console.warn('Could not fetch cloud favorites during sign in', e)
-      }
-
-      // Merge local storage favorites
-      const mergedFavorites = await mergeLocalFavorites(userData.id, cloudFavorites)
-      userData.favorites = mergedFavorites
-
       setUser(userData)
       localStorage.setItem('forza-user', JSON.stringify(userData))
 
@@ -146,11 +80,6 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       if (!response.ok) throw new Error('Sign up failed')
 
       const userData = await response.json()
-      
-      // Merge local storage favorites for new user
-      const mergedFavorites = await mergeLocalFavorites(userData.id, [])
-      userData.favorites = mergedFavorites
-
       setUser(userData)
       localStorage.setItem('forza-user', JSON.stringify(userData))
     } catch (error) {
@@ -199,47 +128,44 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     if (!user) return
 
     try {
-      const response = await fetch('/api/sync/favorites', {
+      await fetch('/api/sync/favorites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, favorites }),
       })
 
-      if (!response.ok) throw new Error('Failed to sync favorites')
       setUser({ ...user, favorites })
     } catch (error) {
       console.error('Sync favorites error:', error)
     }
   }
 
-  const syncTuningPresets = async (presets: TuningPreset[]) => {
+  const syncTuningPresets = async (presets: any[]) => {
     if (!user) return
 
     try {
-      const response = await fetch('/api/sync/presets', {
+      await fetch('/api/sync/presets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, presets }),
       })
 
-      if (!response.ok) throw new Error('Failed to sync presets')
       setUser({ ...user, tuningPresets: presets })
     } catch (error) {
       console.error('Sync presets error:', error)
     }
   }
 
-  const syncColorSets = async (sets: ColorSet[]) => {
+  const syncColorSets = async (sets: any[]) => {
     if (!user) return
 
     try {
-      const response = await fetch('/api/sync/colorsets', {
+      await fetch('/api/sync/colorsets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, sets }),
       })
 
-      if (!response.ok) throw new Error('Failed to sync color sets')
       setUser({ ...user, colorSets: sets })
     } catch (error) {
       console.error('Sync color sets error:', error)
@@ -249,8 +175,6 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
   const syncFromCloud = async (userId: string) => {
     try {
       const response = await fetch(`/api/sync/all?userId=${userId}`)
-      if (!response.ok) throw new Error('Failed to sync from cloud')
-
       const data = await response.json()
 
       if (data.favorites) {

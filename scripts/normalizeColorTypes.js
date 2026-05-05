@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 // Read the color data from JSON file
-const colorDataPath = path.join(__dirname, '..', 'public', 'carColors.json')
+const colorDataPath = path.join(__dirname, '..', 'carColors.json')
 const colorDataContent = fs.readFileSync(colorDataPath, 'utf8')
 const colors = JSON.parse(colorDataContent)
 

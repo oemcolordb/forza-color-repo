@@ -54,7 +54,7 @@ const OptimizedStatsBar = React.memo(
     return (
       <div className={containerClasses}>
         <div className={gridClasses}>
-          {stats.map((stat, _index) => (
+          {stats.map((stat, index) => (
             <div key={stat.label} className={deviceInfo.isMobile ? 'min-w-0' : 'flex-1 min-w-0'}>
               <div className={`${textSizes.value} font-bold ${stat.color}`}>{stat.value}</div>
               <div

@@ -22,9 +22,8 @@ export const useAnalytics = () => {
       }
 
       localStorage.setItem('forza-analytics', JSON.stringify(analytics))
-    } catch (error) {
+    } catch {
       // Fail silently — analytics should never break the app
-      console.warn('Analytics track failed:', error)
     }
   }, [])
 
@@ -42,8 +41,7 @@ export const useAnalytics = () => {
       return Object.entries(colorViews)
         .sort(([, a], [, b]) => b - a)
         .slice(0, 20)
-    } catch (error) {
-      console.warn('Analytics getHeatmapData failed:', error)
+    } catch {
       return []
     }
   }, [])

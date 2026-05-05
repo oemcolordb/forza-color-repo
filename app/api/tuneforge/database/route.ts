@@ -18,8 +18,7 @@ export const POST = async () => {
     `)
 
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Database POST error:', error)
+  } catch {
     return NextResponse.json({ error: 'Database error' }, { status: 500 })
   }
 }
@@ -31,8 +30,7 @@ export const GET = async () => {
   try {
     const tunes = await client.execute('SELECT * FROM tunes ORDER BY created_at DESC')
     return NextResponse.json(tunes.rows)
-  } catch (error) {
-    console.error('Database GET error:', error)
+  } catch {
     return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
   }
 }

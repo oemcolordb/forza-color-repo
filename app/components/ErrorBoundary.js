@@ -13,7 +13,7 @@ class ErrorBoundary extends React.Component {
     return { hasError: true, error }
   }
 
-  componentDidCatch(_error, _errorInfo) {
+  componentDidCatch(error, errorInfo) {
     // Error caught by boundary
   }
 

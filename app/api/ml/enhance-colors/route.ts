@@ -1,11 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-// Simple server-side bot detection
-function isBotRequest(request: Request): boolean {
-  const userAgent = request.headers.get('user-agent')?.toLowerCase() || ''
-  const botPatterns = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget', 'python-requests']
-  return botPatterns.some(pattern => userAgent.includes(pattern))
-}
+import { checkBotId } from 'botid/server'
 
 interface ExtractedColor {
   rgb: [number, number, number]
@@ -16,9 +10,8 @@ interface ExtractedColor {
 
 export async function POST(request: NextRequest) {
   try {
-    if (isBotRequest(request)) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 })
-    }
+    const botCheck = await checkBotId()
+    if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
 
     const { colors } = await request.json()
 

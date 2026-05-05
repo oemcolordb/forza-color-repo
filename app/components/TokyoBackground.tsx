@@ -4,10 +4,9 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react'
 interface TokyoBackgroundProps {
   isDarkMode: boolean
   getSecureAssetUrl: (_url: string) => string
-  hidden?: boolean
 }
 
-const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl, hidden = false }) => {
+const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [backgroundMedia, setBackgroundMedia] = useState('')
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image')
@@ -121,10 +120,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
   }, [getSecureAssetUrl, selectedMedia])
 
   return (
-    <div
-      className="fixed inset-0 overflow-hidden pointer-events-none z-0 transition-opacity duration-700"
-      style={{ opacity: hidden ? 0 : 1 }}
-    >
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {mediaLoaded &&
         backgroundMedia &&
         !mediaError &&

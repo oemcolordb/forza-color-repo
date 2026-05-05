@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server'
-import { getDb } from '@/app/lib/db'
+import { createClient } from '@libsql/client'
+import { checkBotId } from 'botid/server'
 
-// Simple server-side bot detection
-function isBotRequest(request: Request): boolean {
-  const userAgent = request.headers.get('user-agent')?.toLowerCase() || ''
-  const botPatterns = ['bot', 'crawler', 'spider', 'scraper', 'curl', 'wget', 'python-requests']
-  return botPatterns.some(pattern => userAgent.includes(pattern))
-}
-
+const client =
+  process.env.TURSO_DATABASE_URL &&
+  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
+    ? createClient({
+        url: process.env.TURSO_DATABASE_URL,
+        authToken: process.env.TURSO_AUTH_TOKEN || '',
+      })
+    : null
 
 export async function GET(request: Request) {
-  const client = getDb()
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
 
   try {
     const { searchParams } = new URL(request.url)
@@ -27,17 +29,15 @@ export async function GET(request: Request) {
 
     return NextResponse.json(result.rows)
   } catch (error) {
-    console.error('Scans GET error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
 
 export async function POST(request: Request) {
-  if (isBotRequest(request)) {
-    return NextResponse.json({ error: 'Access denied' }, { status: 403 })
-  }
+  const botCheck = await checkBotId()
+  if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
 
-  const client = getDb()
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
 
   try {
     const body = await request.json()
@@ -65,13 +65,12 @@ export async function POST(request: Request) {
       message: 'Scan saved successfully',
     })
   } catch (error) {
-    console.error('Scans POST error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
 
 export async function DELETE(request: Request) {
-  const client = getDb()
+  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
 
   try {
     const { searchParams } = new URL(request.url)
@@ -89,7 +88,6 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Scan deleted' })
   } catch (error) {
-    console.error('Scans DELETE error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

@@ -6,9 +6,6 @@ import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
 import EasterEgg420 from './components/EasterEgg420'
-import { TransitionProvider } from './context/TransitionContext'
-import ClientTransitionWrapper from './components/ClientTransitionWrapper'
-import { AuthProvider } from './components/AuthProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,11 +16,11 @@ export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app'),
   title: {
     default:
-      'Forza Color Universe - Ultimate FH5 Tools, Paint Database & TuneForge',
-    template: '%s | Forza Color Universe',
+      'Forza Color Sheet 2019-2024 - Official Paint Colors Database | Forza Horizon 5 & Motorsport',
+    template: '%s | Forza Color Sheet',
   },
   description:
-    'The ultimate Forza Horizon 5 companion: 10,000+ paint colors with HSB values, TuneForge tuning calculator, interactive Location Finder with neon maps, and Image Color Matching. All-in-one Forza toolkit.',
+    'Official Forza Color Sheet with 10,000+ paint colors from Forza Horizon 5, Forza Motorsport 2019-2024. Complete Forza color database, paint codes, and livery creator tools for all Forza games.',
   keywords: [
     // Primary target keywords
     'Forza Color Sheet',
@@ -82,26 +79,26 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
-    title: 'Forza Color Universe - Ultimate FH5 Tools & Database',
+    title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description:
-      'Complete Forza ecosystem: 10,000+ paint colors, TuneForge tuning calculator, Location Finder with interactive maps, and Image Color Matching. The ultimate Forza Horizon 5 companion.',
-    siteName: 'Forza Color Universe',
+      'Complete Forza Color Sheet with 10,000+ official paint colors from Forza Horizon 5 & Motorsport 2019-2024. The ultimate Forza color database and paint codes reference.',
+    siteName: 'Forza Color Sheet',
     images: [
       {
-        url: '/api/og?title=Forza+Color+Universe&subtitle=Ultimate+FH5+Tools+%26+Database&stats=10,000%2B+Colors',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Forza Color Universe - Ultimate FH5 Tools & Database',
+        alt: 'Forza Color Universe - FH5 Paint Colors & Livery Creator',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Forza Color Universe - Ultimate FH5 Tools & Database',
+    title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description:
-      'Complete Forza ecosystem: 10,000+ paint colors, TuneForge tuning calculator, Location Finder with interactive maps.',
+      'Complete Forza Color Sheet with 10,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
     creator: '@ResinRonin',
-    images: ['/api/og?title=Forza+Color+Universe&subtitle=Ultimate+FH5+Tools+%26+Database&stats=10,000%2B+Colors'],
+    images: ['/og-image.jpg'],
   },
   alternates: {
     canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
@@ -202,21 +199,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
-        <AuthProvider>
-          <TransitionProvider>
-            <ClientTransitionWrapper>
-              <a href="#main-content" className="skip-link">
-                Skip to main content
-              </a>
-              <ThirdPartyErrorBoundary />
-              <ErrorBoundary>{children}</ErrorBoundary>
-              {/* 🌿 hidden easter eggs — global */}
-              <EasterEgg420 />
-            </ClientTransitionWrapper>
-            <Analytics />
-            <SpeedInsights />
-          </TransitionProvider>
-        </AuthProvider>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <ThirdPartyErrorBoundary />
+        <ErrorBoundary>{children}</ErrorBoundary>
+        {/* 🌿 hidden easter eggs — global */}
+        <EasterEgg420 />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

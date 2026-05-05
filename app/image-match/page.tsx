@@ -3,19 +3,9 @@
 import React, { useState, useEffect } from 'react'
 import ImageColorExtractor from '../components/ImageColorExtractor'
 import Breadcrumbs from '../components/Breadcrumbs'
-import { getColorData } from '../../services/colorData'
+import colorData from '../../services/colorData'
 import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
-
-// Safe JSON parsing helper
-function safeJsonParse<T>(jsonString: string, defaultValue: T): T {
-  try {
-    return JSON.parse(jsonString) as T
-  } catch {
-    console.warn('Failed to parse JSON:', jsonString)
-    return defaultValue
-  }
-}
 
 interface SavedScan {
   id: string
@@ -43,24 +33,7 @@ function ImageMatchPageInner() {
   const [currentImageData, setCurrentImageData] = useState('')
   const [saving, setSaving] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
-  const [colorData, setColorData] = useState<CarColor[]>([])
-  const [isLoadingColors, setIsLoadingColors] = useState(true)
   const { user } = useAuth()
-
-  useEffect(() => {
-    // Load color data asynchronously
-    getColorData()
-      .then((data: CarColor[]) => {
-        setColorData(data)
-      })
-      .catch((error: unknown) => {
-        console.warn('Failed to load color data:', error)
-        setColorData([])
-      })
-      .finally(() => {
-        setIsLoadingColors(false)
-      })
-  }, [])
 
   useEffect(() => {
     if (user) {
@@ -77,8 +50,8 @@ function ImageMatchPageInner() {
       setSavedScans(
         data.map((scan: Record<string, string>) => ({
           ...scan,
-          extractedColors: safeJsonParse(scan.extractedColors, []),
-          matches: safeJsonParse(scan.matches, []),
+          extractedColors: JSON.parse(scan.extractedColors),
+          matches: JSON.parse(scan.matches),
         }))
       )
     } catch (error) {
@@ -185,22 +158,15 @@ function ImageMatchPageInner() {
           {/* Left Column - Uploader */}
           <div className="lg:col-span-2">
             <div className="rounded-xl p-6 shadow-2xl bamboo-surface-dark">
-              {isLoadingColors ? (
-                <div className="flex items-center justify-center py-12 text-gray-400">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-current mr-3"></div>
-                  Loading color database...
-                </div>
-              ) : (
-                <ImageColorExtractor
-                  colors={colorData}
-                  onColorsExtracted={setExtracted}
-                  onColorsFound={setMatches}
-                  onColorSelect={setSelected}
-                  isDarkMode={true}
-                  showTutorial={false}
-                  onImageUpload={handleImageUpload}
-                />
-              )}
+              <ImageColorExtractor
+                colors={colorData}
+                onColorsExtracted={setExtracted}
+                onColorsFound={setMatches}
+                onColorSelect={setSelected}
+                isDarkMode={true}
+                showTutorial={false}
+                onImageUpload={handleImageUpload}
+              />
             </div>
 
             {/* Matches */}

@@ -18,22 +18,22 @@ Object.defineProperty(window, 'innerHeight', {
 
 describe('WindSystem', () => {
   it('renders without crashing', () => {
-    render(<WindSystem _isDarkMode={true} />)
+    render(<WindSystem isDarkMode={true} />)
     // Component should render without throwing errors
   })
 
   it('renders with light mode', () => {
-    render(<WindSystem _isDarkMode={false} />)
+    render(<WindSystem isDarkMode={false} />)
     // Component should render without throwing errors
   })
 
   it('accepts intensity prop', () => {
-    render(<WindSystem _isDarkMode={true} _intensity={0.5} />)
+    render(<WindSystem isDarkMode={true} intensity={0.5} />)
     // Component should render without throwing errors
   })
 
   it('renders wind indicators', () => {
-    render(<WindSystem _isDarkMode={true} />)
+    render(<WindSystem isDarkMode={true} />)
 
     // Should have wind direction and strength indicators
     const container = screen.getByTestId('wind-system')

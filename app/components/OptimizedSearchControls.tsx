@@ -126,21 +126,20 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
               >
                 Manufacturer
               </label>
-              <input
+              <select
                 id="make-filter"
-                list="makes-list"
                 value={selectedMake}
                 onChange={e => onMakeChange(e.target.value)}
-                placeholder="All Makes"
-                className={`${selectClasses} w-full`}
+                className={selectClasses}
                 aria-label="Filter by manufacturer"
-                autoComplete="off"
-              />
-              <datalist id="makes-list">
+              >
+                <option value="">All Makes</option>
                 {makes.map(make => (
-                  <option key={make} value={make} />
+                  <option key={make} value={make}>
+                    {make}
+                  </option>
                 ))}
-              </datalist>
+              </select>
             </div>
             <div>
               <label

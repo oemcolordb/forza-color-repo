@@ -1,5 +1,22 @@
 "use client";
 
+import React, { useState, useEffect, useCallback } from 'react';
+import Breadcrumbs from '../components/Breadcrumbs';
+import MapDisplay from './MapDisplay';
+import LocationCard from './LocationCard';
+import { useMapPersistence } from '../hooks/useMapPersistence';
+import { Location, LocationType, LocationCategory } from './types';
+
+const ALL_FILTER_TYPES = Object.values(LocationType)
+
+const CATEGORY_TYPES: Record<string, LocationType[]> = {
+  COLLECTIBLES: [LocationType.BarnFind, LocationType.FastTravelBoard, LocationType.XPBoard, LocationType.Treasure],
+  LOCATIONS: [LocationType.Landmark, LocationType.FestivalSite, LocationType.PlayerHouse, LocationType.Expedition, LocationType.Showcase, LocationType.PlaygroundGame],
+  'RACE EVENTS': [LocationType.RoadRacingEvent, LocationType.DirtRacingEvent, LocationType.CrossCountryEvent, LocationType.StreetRacingEvent, LocationType.DragRacingEvent],
+  'PR STUNTS': [LocationType.DangerSign, LocationType.DriftZone, LocationType.SpeedTrap, LocationType.SpeedZone, LocationType.Trailblazer],
+  'HORIZON STORIES': [LocationType.BornFast, LocationType.ElCamino, LocationType.LuchaDeCarreteras, LocationType.TestDriver, LocationType.V10, LocationType.Vocho],
+}
+
 export default function LocationFinderPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-sans flex flex-col items-center justify-center">
@@ -11,11 +28,7 @@ export default function LocationFinderPage() {
         <h1 className="text-3xl font-bold mb-2 text-white text-center">Forza Horizon 5 Location Finder</h1>
         <p className="text-lg text-blue-200 mb-4 text-center">Coming Soon</p>
         <p className="text-gray-300 text-center mb-2">The interactive map and location database are being rebuilt with 100% verified in-game data. This feature will return when the data is complete and accurate.</p>
-        <p className="text-gray-400 text-center text-sm">
-          If you have a MapGenie or community export of all locations,{' '}
-          <a href="mailto:admin@oemcolordb.com" className="text-blue-400 underline">contact us</a>{' '}
-          to help accelerate the launch.
-        </p>
+        <p className="text-gray-400 text-center text-sm">If you have a MapGenie or community export of all locations, <a href=\"mailto:admin@oemcolordb.com\" className=\"text-blue-400 underline\">contact us</a> to help accelerate the launch.</p>
         <a href="/" className="mt-8 px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow">← Back to Home</a>
       </div>
     </div>

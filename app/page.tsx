@@ -30,7 +30,8 @@ import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import OfflineIndicator from './components/OfflineIndicator'
-import SoundtrackPlayer from './components/SoundtrackPlayer'
+import OptimizedStatsBar from './components/OptimizedStatsBar'
+import ExportButton from './components/ExportButton'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
 const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })
@@ -52,7 +53,7 @@ export default function HomePage() {
   const [selectedColorType, setSelectedColorType] = useState('')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [favorites, setFavorites] = useState<string[]>([])
-  const [_colorHistory, setColorHistory] = useState<string[]>([])
+  const [colorHistory, setColorHistory] = useState<string[]>([])
   const [selectedHSBColor, setSelectedHSBColor] = useState<CarColor | null>(null)
   const [isOnline, setIsOnline] = useState(true)
   const [isDarkMode, setIsDarkMode] = useState(true)
@@ -67,7 +68,6 @@ export default function HomePage() {
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
 
   useAnalytics()
@@ -167,8 +167,16 @@ export default function HomePage() {
           throw new Error('Invalid color data format')
         }
 
-        // Use all colors - HSB values have been generated for all entries
-        const originalColors = rawColors
+        // Strip entries with no HSB color data or out-of-range values (scraper junk, bad data)
+        const originalColors = rawColors.filter((c: CarColor) => {
+          const c1 = c.color1 as { h?: unknown; s?: unknown; b?: unknown } | null
+          if (!c1 || typeof c1 !== 'object') return false
+          return (
+            typeof c1.h === 'number' && c1.h >= 0 && c1.h <= 1 &&
+            typeof c1.s === 'number' && c1.s >= 0 && c1.s <= 1 &&
+            typeof c1.b === 'number' && c1.b >= 0 && c1.b <= 1
+          )
+        })
 
         setColors(originalColors)
         setAllColors(originalColors)
@@ -366,6 +374,7 @@ export default function HomePage() {
         <ForzaColorSheetSEO
           colorCount={allColors.length}
           manufacturerCount={makes.length}
+          isDarkMode={isDarkMode}
         />
         <MobileGamingOptimizer deviceInfo={deviceInfo} />
       </GamingErrorBoundary>
@@ -393,7 +402,7 @@ export default function HomePage() {
           />
         )}
 
-        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} hidden={isMusicPlaying} />
+        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
         <CreditsBackground isDarkMode={isDarkMode} />
         <ProgressiveLoader
           progress={loadingProgress}
@@ -423,9 +432,6 @@ export default function HomePage() {
                 </>
               )}
             </p>
-
-            {/* Music Player — horizontal bar above search */}
-            <SoundtrackPlayer isDarkMode={isDarkMode} variant="horizontal-bar" onPlayStateChange={setIsMusicPlaying} />
 
             {/* Search Controls — primary action */}
             <OptimizedSearchControls

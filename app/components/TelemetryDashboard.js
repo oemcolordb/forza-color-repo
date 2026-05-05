@@ -1,5 +1,5 @@
 'use client'
-import React, { useReducer, useEffect, useRef } from 'react'
+import React, { useReducer, useEffect, useRef, useMemo } from 'react'
 import TelemetryMap from './TelemetryMap'
 
 // ─── helpers ────────────────────────────────────────────────────────────────

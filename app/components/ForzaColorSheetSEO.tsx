@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 interface ForzaColorSheetSEOProps {
   colorCount?: number
   manufacturerCount?: number
+  isDarkMode?: boolean
 }
 
 /**
@@ -14,7 +15,7 @@ interface ForzaColorSheetSEOProps {
 export default function ForzaColorSheetSEO({
   colorCount = 10000,
   manufacturerCount = 200,
-  
+  isDarkMode = true,
 }: ForzaColorSheetSEOProps) {
   useEffect(() => {
     // Dynamic title updates based on content

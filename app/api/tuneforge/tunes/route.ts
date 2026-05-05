@@ -14,8 +14,7 @@ export const POST = async (request: Request) => {
     })
 
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Failed to save tune:', error)
+  } catch {
     return NextResponse.json({ error: 'Save failed' }, { status: 500 })
   }
 }
@@ -27,8 +26,7 @@ export const GET = async () => {
   try {
     const result = await client.execute('SELECT * FROM tunes ORDER BY created_at DESC LIMIT 50')
     return NextResponse.json(result.rows)
-  } catch (error) {
-    console.error('Failed to fetch tunes:', error)
+  } catch {
     return NextResponse.json({ error: 'Fetch failed' }, { status: 500 })
   }
 }

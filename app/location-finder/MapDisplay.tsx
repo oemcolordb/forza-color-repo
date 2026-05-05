@@ -3,8 +3,8 @@ import { Location, LocationType } from './types'
 import styles from './MapDisplay.module.css'
 
 // Actual pixel dimensions of /maps/fh5-mexico.jpg — used for pin coordinate maths
-const MAP_IMG_W = 3840
-const MAP_IMG_H = 2160
+const MAP_IMG_W = 4000
+const MAP_IMG_H = 2394
 
 interface MapDisplayProps {
   selectedLocation: Location | null

@@ -75,46 +75,7 @@ export async function ensureTables(): Promise<void> {
     `CREATE INDEX IF NOT EXISTS idx_community_tunes_votes ON community_tunes (votes DESC)`,
     `CREATE TABLE IF NOT EXISTS favorites (
       id           TEXT    PRIMARY KEY,
-      car_id       TEXT    NOT NULL, -- The unique identifier for the color
-      sessionId    TEXT,             -- For anonymous users
-      userId       TEXT,             -- For authenticated users
-      color_data   TEXT,             -- Full color object JSON
-      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`,
-    `CREATE INDEX IF NOT EXISTS idx_favorites_session ON favorites (sessionId)`,
-    `CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites (userId)`,
-    // Transition votes table for storing user votes on page transitions
-    `CREATE TABLE IF NOT EXISTS transition_votes (
-      id           TEXT    PRIMARY KEY,
-      transition_id TEXT   NOT NULL,
-      user_id      TEXT    NOT NULL,
-      ip_address   TEXT,
-      voted_at     DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(transition_id, user_id)
-    )`,
-    `CREATE INDEX IF NOT EXISTS idx_transition_votes_id ON transition_votes (transition_id)`,
-    `CREATE INDEX IF NOT EXISTS idx_transition_votes_user ON transition_votes (user_id)`,
-    // Map progress table for storing user map exploration state
-    `CREATE TABLE IF NOT EXISTS map_progress (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      sessionId TEXT NOT NULL,
-      userId TEXT,
-      visitedLocations TEXT NOT NULL,
-      favoriteLocations TEXT NOT NULL,
-      activeFilters TEXT NOT NULL,
-      lastViewedLocation TEXT,
-      zoomLevel REAL DEFAULT 1,
-      lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(sessionId)
-    )`,
-    `CREATE INDEX IF NOT EXISTS idx_map_progress_session ON map_progress (sessionId)`,
-    `CREATE INDEX IF NOT EXISTS idx_map_progress_user ON map_progress (userId)`,
-    // Users table for authentication
-    `CREATE TABLE IF NOT EXISTS users (
-      id           TEXT    PRIMARY KEY,
-      email        TEXT    UNIQUE NOT NULL,
-      password     TEXT    NOT NULL,
-      name         TEXT,
+      car_id       TEXT    NOT NULL,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
   ], 'deferred')
