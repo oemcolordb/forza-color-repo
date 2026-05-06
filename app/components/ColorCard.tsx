@@ -242,7 +242,7 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
         <div className="px-2 pb-2 pt-1 flex justify-between items-center w-full relative z-10">
           <div className="truncate mr-2">
             {color.colorType ? (
-              <div className="text-[10px] text-gray-400 opacity-90 uppercase tracking-wider font-semibold">
+              <div className={`text-[10px] uppercase tracking-wider font-semibold ${isDarkMode ? 'text-gray-400' : 'text-contrast-secondary'}`}>
                 {color.colorType}
               </div>
             ) : (

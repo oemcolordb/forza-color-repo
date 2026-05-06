@@ -36,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up px-6 py-4 rounded-lg inline-block bamboo-surface-dark">
           <span className="text-[color:var(--bamboo-stalk)] neon-text">Forza-Color-Repo</span>
         </h1>
-        <p className="mt-2 text-sm font-medium text-[#00ff00] drop-shadow-md">
+        <p className={`mt-2 text-sm font-medium drop-shadow-md ${isDarkMode ? 'text-[#00ff00]' : 'text-contrast-secondary'}`}>
           Made with love by AltF4ToQu1t with credits to the legends at GTPLANET
         </p>
 
@@ -98,7 +98,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/about"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   ℹ️ About
                 </a>
@@ -106,7 +106,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/help"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   ❓ Help
                 </a>
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/contact"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   ✉️ Contact
                 </a>
@@ -122,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/privacy"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   🔒 Privacy
                 </a>
@@ -130,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/terms"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   📜 Terms
                 </a>
@@ -139,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/image-match"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   🖼️ Image Match
                 </a>
@@ -147,7 +147,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/how-to-use"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left sm:hidden"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left sm:hidden ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   📖 How to Use
                 </a>
@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
                   onClick={() => setMoreOpen(false)}
                   href="/blog"
                   role="menuitem"
-                  className="px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left sm:hidden"
+                  className={`px-4 py-2 hover:bg-white/10 transition-colors text-sm text-left sm:hidden ${isDarkMode ? 'text-white' : 'text-contrast-primary'}`}
                 >
                   📝 Color Blog
                 </a>

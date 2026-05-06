@@ -59,7 +59,7 @@ const OptimizedStatsBar = React.memo(
               <div className={`${textSizes.value} font-bold ${stat.color}`}>{stat.value}</div>
               <div
                 className={`${textSizes.label} text-readable-tight ${
-                  isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                  isDarkMode ? 'text-gray-300' : 'text-contrast-secondary'
                 }`}
               >
                 {stat.label}

@@ -6,7 +6,8 @@
 @tailwind utilities;
 
 :root {
-  --bamboo-ink: #0b1a10;
+  --bamboo-ink: #07120a;
+  --bamboo-ink-secondary: #2a3d2f;
   --bamboo-paper: #f5f1e6;
   --bamboo-paper-2: #efe7d5;
   --bamboo-stalk: #7aa24b;
@@ -15,6 +16,15 @@
   --bamboo-bark: #cdbb97;
   --bamboo-border: rgba(122, 162, 75, 0.45);
   --bamboo-shadow: rgba(11, 26, 16, 0.22);
+}
+
+/* Base text color for proper inheritance */
+html {
+  color: var(--bamboo-ink);
+}
+
+body {
+  color: var(--bamboo-ink);
 }
 
 .skip-link {
@@ -515,4 +525,40 @@
 .gear-bar-fill {
   width: var(--gear-width, 0%);
   background: linear-gradient(90deg, var(--bamboo-stalk) 0%, var(--bamboo-moss) 100%);
+}
+
+/* Text contrast utility classes for day mode */
+.text-contrast-primary {
+  color: var(--bamboo-ink);
+}
+
+.text-contrast-secondary {
+  color: var(--bamboo-ink-secondary);
+}
+
+.text-contrast-muted {
+  color: rgba(7, 18, 10, 0.65);
+}
+
+.dark .text-contrast-muted {
+  color: rgba(231, 243, 234, 0.65);
+}
+
+/* Ensure proper contrast on colored backgrounds */
+.contrast-auto {
+  --contrast-threshold: 0.5;
+}
+
+/* Force text color inheritance */
+.inherit-color {
+  color: inherit;
+}
+
+/* Placeholder text color */
+.placeholder-contrast-muted::placeholder {
+  color: rgba(7, 18, 10, 0.5);
+}
+
+.dark .placeholder-contrast-muted::placeholder {
+  color: rgba(231, 243, 234, 0.5);
 }
