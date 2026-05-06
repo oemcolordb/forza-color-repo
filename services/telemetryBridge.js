@@ -148,6 +148,9 @@ class TelemetryBridge {
 
   setupWebSocket() {
     this.wss.on('connection', ws => {
+      ws.isAlive = true
+      ws.on('pong', () => { ws.isAlive = true })
+
       this.clients.add(ws)
 
       // Send last known data immediately on new connection
@@ -156,7 +159,20 @@ class TelemetryBridge {
       }
 
       ws.on('close', () => this.clients.delete(ws))
+      ws.on('error', () => this.clients.delete(ws))
     })
+
+    // Heartbeat interval to keep clients alive and prevent idle timeouts
+    this.heartbeat = setInterval(() => {
+      this.wss.clients.forEach(ws => {
+        if (ws.isAlive === false) {
+          this.clients.delete(ws)
+          return ws.terminate()
+        }
+        ws.isAlive = false
+        ws.ping()
+      })
+    }, 30000)
   }
 
   setupTelemetry() {
@@ -212,6 +228,7 @@ class TelemetryBridge {
 
   stop() {
     clearInterval(this._broadcastTimer)
+    if (this.heartbeat) clearInterval(this.heartbeat)
     this.recorder.stop()
     this.receiver.stop()
     this.wss.close()

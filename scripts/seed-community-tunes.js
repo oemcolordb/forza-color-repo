@@ -86,6 +86,7 @@ async function ensureTable() {
       pi_value    INTEGER,
       tune_data   TEXT NOT NULL DEFAULT '{}',
       votes       INTEGER NOT NULL DEFAULT 0,
+      ip_address  TEXT,
       created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `)

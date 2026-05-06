@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkBotId } from 'botid/server'
+
 interface ExtractedColor {
   rgb: [number, number, number]
   hsb: { h: number; s: number; b: number }
@@ -8,6 +10,9 @@ interface ExtractedColor {
 
 export async function POST(request: NextRequest) {
   try {
+    const botCheck = await checkBotId()
+    if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+
     const { colors } = await request.json()
 
     if (!colors || !Array.isArray(colors)) {

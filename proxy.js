@@ -15,6 +15,9 @@ const _rl = new Map()
 const WINDOW = 60_000 // 1 minute
 
 function isRateLimited(key, max) {
+  // Prevent memory leak from unbounded Map growth
+  if (_rl.size > 10000) _rl.clear()
+
   const now = Date.now()
   const e = _rl.get(key)
   if (!e || now - e.s > WINDOW) {
