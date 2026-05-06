@@ -119,9 +119,9 @@ export default function About() {
               </h2>
               <p className="text-lg leading-relaxed">
                 Forza Color Universe is the most comprehensive digital catalog of automotive paint
-                colors extracted from the Forza racing game series. We preserve and make accessible
-                over 10,000 official automotive colors for enthusiasts, designers, and developers
-                worldwide.
+                colors and tunes extracted from the Forza Horizon 5 game series. We preserve and make
+                accessible over 30,000 official automotive colors and 99+ community-curated tunes for
+                enthusiasts, tuners, and developers worldwide.
               </p>
             </div>
           </div>
@@ -147,13 +147,14 @@ export default function About() {
                 ⚡ <span>What We Offer</span>
               </h2>
               <ul className="space-y-3">
-                <li>🎨 10,000+ official automotive paint colors from Forza games</li>
+                <li>🎨 30,000+ official automotive paint colors from Forza Horizon 5</li>
+                <li>🎵 99+ community-curated tunes with share codes for TuneForge</li>
                 <li>🔍 Advanced search and filtering by manufacturer, model, and year</li>
                 <li>📊 Detailed color analytics with HSB values and color types</li>
-                <li>📸 Image color extraction and matching tools</li>
+                <li>📸 Paint Scanner AI - Extract colors from car images</li>
+                <li>🏎️ TuneForge - Browse and apply community tunes by car</li>
                 <li>📁 Export functionality for design projects</li>
                 <li>📱 Mobile-optimized experience for all devices</li>
-                <li>🎮 Real-time Forza telemetry integration</li>
               </ul>
             </div>
           </div>
@@ -179,10 +180,10 @@ export default function About() {
                 🔧 <span>Technology Stack</span>
               </h2>
               <p className="leading-relaxed">
-                Built with modern web technologies including Next.js, TypeScript, and Tailwind CSS.
-                Features real-time UDP telemetry processing, advanced color analysis algorithms, and
-                performance optimizations like virtual scrolling for handling massive datasets
-                efficiently.
+                Built with Next.js, TypeScript, and Tailwind CSS. Powered by Python ML for Paint Scanner
+                AI, Turso database for community tunes, and advanced color analysis algorithms.
+                Features PWA support for offline access and optimized virtual scrolling for handling
+                massive color datasets efficiently.
               </p>
             </div>
           </div>
@@ -288,9 +289,10 @@ export default function About() {
               </h2>
               <p className="leading-relaxed">
                 Credits: To the GTPlanet community, with special thanks to Terronium-12 (original
-                creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653, and
-                MadaraxUchiha, whose dedication built and maintained the Forza Color Database
-                Spreadsheet.
+                creator), Frizbe (revival), and ongoing contributors Mitcho2001, JaCor653,
+                MadaraxUchiha, and the broader Forza community whose dedication built and maintained
+                the Forza Color Database Spreadsheet. Additional thanks to the tuners who shared
+                their setups including Purist, TopTierRamen, snosaes, bala, and K1Z Howzer.
               </p>
             </div>
           </div>
