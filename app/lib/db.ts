@@ -78,5 +78,15 @@ export async function ensureTables(): Promise<void> {
       car_id       TEXT    NOT NULL,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
+    `CREATE TABLE IF NOT EXISTS password_reset_tokens (
+      id           TEXT    PRIMARY KEY,
+      email        TEXT    NOT NULL,
+      token        TEXT    NOT NULL UNIQUE,
+      expires_at   DATETIME NOT NULL,
+      used         INTEGER NOT NULL DEFAULT 0,
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_reset_tokens_email ON password_reset_tokens (email)`,
+    `CREATE INDEX IF NOT EXISTS idx_reset_tokens_token ON password_reset_tokens (token)`,
   ], 'deferred')
 }
