@@ -22,6 +22,12 @@ except ImportError:
 try:
     from PIL import Image
     import pytesseract
+
+    # Auto-detect Tesseract on Windows if it's not in the PATH
+    if os.name == 'nt':
+        # Hardcoded Tesseract path
+        pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
     HAS_OCR = True
 except ImportError:
     HAS_OCR = False
@@ -274,6 +280,17 @@ def extract_from_tables(page):
                 car_text = str(row[car_col]) if car_col is not None and len(row) > car_col else ''
                 car_info = parse_car_name(car_text)
 
+                # Fallback: if car name isn't perfectly recognized, use the raw text anyway
+                if not car_info and car_text:
+                    clean_text = re.sub(r'\s+', ' ', car_text).strip()
+                    if clean_text:
+                        parts = clean_text.split(' ')
+                        car_info = {
+                            'year': '', 'make': parts[0],
+                            'model': ' '.join(parts[1:]) if len(parts)>1 else parts[0],
+                            'full_name': clean_text[:80]
+                        }
+
                 # Extract share code
                 code_text = str(row[code_col]) if code_col is not None and len(row) > code_col else ''
                 share_code = None
@@ -287,7 +304,7 @@ def extract_from_tables(page):
                         share_code = f"{match.group(1)} {match.group(2)} {match.group(3)}"
                         break
 
-                if car_info and share_code:
+                if share_code:
                     # Get PI
                     pi_text = str(row[pi_col]) if pi_col is not None and len(row) > pi_col else ''
                     pi_class, pi_value = extract_pi_from_text(pi_text)
@@ -365,7 +382,21 @@ def extract_from_text_content(page_text):
                     if car_info:
                         break
 
-        if car_info:
+        # Fallback: Just grab the text next to the share code
+        if not car_info:
+            clean_line = code_info['line'].replace(code_info['code'], '').strip()
+            clean_line = re.sub(r'\s+', ' ', clean_line)
+            if clean_line:
+                parts = clean_line.split(' ')
+                car_info = {
+                    'year': '', 'make': parts[0] if parts else 'Unknown',
+                    'model': ' '.join(parts[1:]) if len(parts)>1 else 'Unknown',
+                    'full_name': clean_line[:80]
+                }
+            else:
+                car_info = {'year': '', 'make': 'Unknown', 'model': 'Unknown', 'full_name': 'Unknown Vehicle'}
+
+        if code_info['code']:
             pi_class, pi_value = extract_pi_from_text(context)
 
             tunes.append({

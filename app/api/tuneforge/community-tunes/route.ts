@@ -9,8 +9,6 @@ export const GET = async (request: Request) => {
   const make  = searchParams.get('make')?.trim()
   const model = searchParams.get('model')?.trim()
 
-  console.log(`[DEBUG] Community tunes request: make="${make}", model="${model}"`)
-
   try {
     if (make && model) {
       // Normalize locale variants before matching (e.g. "Evoluzione" → "Evolution")
@@ -19,38 +17,21 @@ export const GET = async (request: Request) => {
         .replace(/\s+/g, ' ')
         .trim()
 
-      // Extract short model name (e.g., "GT-R" from "Nissan GT-R Nismo")
-      const shortModel = normalizedModel.split(' ').pop() || normalizedModel
-
-      // Bidirectional fuzzy match with multiple strategies
-      // Strategy 1: Exact make + model contains query
-      // Strategy 2: Exact make + query contains model
-      // Strategy 3: Make contains + short model match (for partial matches)
+      // Bidirectional fuzzy match: DB model contains query OR query contains DB model.
+      // This handles cases where the tune DB uses a shorter name (e.g. "599XX EVOLUTION")
+      // while cars.json has the full name ("599XX Evoluzione").
       try {
         const result = await client.execute({
           sql: `SELECT * FROM community_tunes
-                WHERE (
-                  -- Strategy 1: Make matches AND model contains query
-                  (lower(car_make) LIKE lower(?)
-                   AND lower(car_model) LIKE lower(?))
-                  OR
-                  -- Strategy 2: Make matches AND query contains model
-                  (lower(car_make) LIKE lower(?)
-                   AND lower(?) LIKE '%' || lower(car_model) || '%')
-                  OR
-                  -- Strategy 3: Make contains AND short model matches
-                  (lower(car_make) LIKE lower(?)
-                   AND lower(car_model) LIKE lower(?))
-                )
+                WHERE lower(car_make) LIKE lower(?)
+                  AND (
+                    lower(car_model) LIKE lower(?)
+                    OR lower(?) LIKE '%' || lower(car_model) || '%'
+                  )
                 ORDER BY votes DESC, created_at DESC
                 LIMIT 50`,
-          args: [
-            `%${make}%`, `%${normalizedModel}%`,  // Strategy 1
-            `%${make}%`, normalizedModel,         // Strategy 2
-            `%${make}%`, `%${shortModel}%`        // Strategy 3
-          ],
+          args: [`%${make}%`, `%${normalizedModel}%`, normalizedModel],
         })
-        console.log(`[DEBUG] Found ${result.rows.length} tunes for ${make} ${model}`)
         return NextResponse.json(result.rows)
       } catch (dbErr) {
         console.warn('community-tunes query failed, returning empty list:', dbErr)
