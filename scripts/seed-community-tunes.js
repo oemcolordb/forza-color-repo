@@ -94,9 +94,16 @@ async function ensureTable() {
 }
 
 async function main() {
-  const jsonPath = path.join(__dirname, 'tunes-extracted.json')
+  let jsonPath = path.join(__dirname, 'cleaned_tunes.json')
   if (!fs.existsSync(jsonPath)) {
-    console.error('❌ tunes-extracted.json not found. Run scripts/extract-tunes.ps1 first.')
+    jsonPath = path.join(__dirname, 'extracted_tunes.json')
+  }
+  if (!fs.existsSync(jsonPath)) {
+    // Check root directory
+    jsonPath = path.join(__dirname, '..', 'extracted_tunes.json')
+  }
+  if (!fs.existsSync(jsonPath)) {
+    console.error('❌ extracted_tunes.json not found. Run the extraction script first.')
     process.exit(1)
   }
 
@@ -114,21 +121,32 @@ async function main() {
     const batch = raw.slice(i, i + BATCH)
     for (const entry of batch) {
       try {
-        const { make, model } = parseCarName(entry.car_name || '')
+        // Support both old and new JSON formats
+        let make = entry.car_make
+        let model = entry.car_model
+
+        if (!make || !model) {
+          const parsed = parseCarName(entry.car_name || entry.car || '')
+          make = parsed.make || 'Unknown'
+          model = parsed.model || 'Unknown'
+        }
+
         const tuneName = (entry.tune_name || 'Community Tune').trim() || 'Community Tune'
-        const tunerName = (entry.tuner_name || 'Unknown').trim() || 'Unknown'
+        const tunerName = (entry.tuner_name || 'Community').trim() || 'Community'
         const shareCode = entry.share_code || null
         const piClass = entry.pi_class || null
+        const piValue = entry.pi_value || null
         const discipline = entry.discipline || 'Road'
-        const id = slugify(`${make}-${model}-${tuneName}-${shareCode || i}`)
+        const tuneData = entry.tune_data || '{}'
+        const id = slugify(`${make}-${model}-${tuneName}-${shareCode || Math.random().toString(36).slice(2, 7)}`)
 
         await client.execute({
           sql: `INSERT OR IGNORE INTO community_tunes
                   (id, car_make, car_model, tune_name, tuner_name,
-                   share_code, discipline, pi_class, tune_data)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                   share_code, discipline, pi_class, pi_value, tune_data)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           args: [id, make, model, tuneName, tunerName,
-                 shareCode, discipline, piClass, '{}'],
+                 shareCode, discipline, piClass, piValue, tuneData],
         })
         inserted++
       } catch (err) {

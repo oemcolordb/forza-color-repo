@@ -145,21 +145,32 @@ Volkswagen,Macaron,Not in source,Not in source,2022 Wuling Hongguang Mini EV Mac
 Saleen,Black Label,Not in source,Not in source,2020 Saleen Sportruck XR Black Label,7
 3M Wraps,Gloss White (G10),Not in source,"Low: (0.53, 0.01, 0.99) High: Not in source",Not in source,5
 Autogoody,Matte Black,Not in source,"Low: (0.00, 0.00, 0.16) High: (0.00, 0.00, 0.08)",Not in source,5
-VVIVID+,Ultra Gloss Smurf Blue,Not in source,"Low: (0.59, 0.79, 1.00) High: Not in source",Not in source,5`;
+VVIVID+,Ultra Gloss Smurf Blue,Not in source,"Low: (0.59, 0.79, 1.00) High: Not in source",Not in source,5
+Nissan,Midnight Purple II,Two-Tone,"Low: (0.81, 0.85, 0.25) High: (0.65, 0.75, 0.35)",Reddit Community Deep Dive,Reddit
+Nissan,Bayside Blue,Metal Flake,"Low: (0.62, 0.88, 0.45) High: (0.60, 0.70, 0.85)",Reddit Community Deep Dive,Reddit
+Ford,Mystichrome,Two-Tone,"Low: (0.56, 1.00, 0.40) High: (0.76, 1.00, 0.55)",Reddit Community Deep Dive,Reddit
+Porsche,Rubystar (Ruby Star),Normal,"Low: (0.93, 0.65, 0.75) High: Not in source",Reddit Community Deep Dive,Reddit
+BMW,Yas Marina Blue,Metal Flake,"Low: (0.58, 0.65, 0.70) High: (0.58, 0.40, 0.85)",Reddit Community Deep Dive,Reddit
+Lexus,Structural Blue,Metal Flake,"Low: (0.63, 0.95, 0.55) High: (0.61, 0.80, 0.85)",Reddit Community Deep Dive,Reddit
+Nissan,Millennium Jade,Metal Flake,"Low: (0.22, 0.20, 0.55) High: (0.20, 0.15, 0.75)",Reddit Community Deep Dive,Reddit
+Subaru,Hyper Blue,Normal,"Low: (0.57, 0.85, 0.85) High: Not in source",Reddit Community Deep Dive,Reddit
+Porsche,Chalk / Crayon,Normal,"Low: (0.10, 0.05, 0.75) High: Not in source",Reddit Community Deep Dive,Reddit
+Dodge,Stryker Red,Two-Tone,"Low: (0.01, 1.00, 0.65) High: (0.04, 0.95, 0.85)",Reddit Community Deep Dive,Reddit
+McLaren,Cerulean Blue,Metal Flake,"Low: (0.59, 0.85, 0.60) High: (0.55, 0.75, 0.90)",Reddit Community Deep Dive,Reddit`;
 
 // Parse CSV
 function parseCSV(csv) {
   const lines = csv.trim().split('\n');
   const headers = lines[0].split(',');
   const data = [];
-  
+
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i];
     // Handle quoted fields properly
     const fields = [];
     let field = '';
     let inQuotes = false;
-    
+
     for (let j = 0; j < line.length; j++) {
       const char = line[j];
       if (char === '"') {
@@ -172,7 +183,7 @@ function parseCSV(csv) {
       }
     }
     fields.push(field.trim());
-    
+
     if (fields.length >= 4) {
       data.push({
         make: fields[0],
@@ -182,7 +193,7 @@ function parseCSV(csv) {
       });
     }
   }
-  
+
   return data;
 }
 
@@ -190,17 +201,17 @@ function parseCSV(csv) {
 function parseHSB(hsbString) {
   const lowMatch = hsbString.match(/Low:\s*\(([^)]+)\)/);
   const highMatch = hsbString.match(/High:\s*\(([^)]+)\)/);
-  
+
   let color1 = { h: 0, s: 0, b: 0 };
   let color2 = { h: 0, s: 0, b: 0 };
-  
+
   if (lowMatch) {
     const values = lowMatch[1].split(',').map(v => parseFloat(v.trim()));
     if (values.length >= 3) {
       color1 = { h: values[0], s: values[1], b: values[2] };
     }
   }
-  
+
   if (highMatch) {
     const values = highMatch[1].split(',').map(v => parseFloat(v.trim()));
     if (values.length >= 3) {
@@ -210,7 +221,7 @@ function parseHSB(hsbString) {
     // If no high value, use low value
     color2 = { ...color1 };
   }
-  
+
   // Validate values are in range
   color1.h = Math.max(0, Math.min(1, color1.h));
   color1.s = Math.max(0, Math.min(1, color1.s));
@@ -218,14 +229,14 @@ function parseHSB(hsbString) {
   color2.h = Math.max(0, Math.min(1, color2.h));
   color2.s = Math.max(0, Math.min(1, color2.s));
   color2.b = Math.max(0, Math.min(1, color2.b));
-  
+
   return { color1, color2 };
 }
 
 // Normalize paint type
 function normalizePaintType(type) {
   if (!type || type === 'Not in source') return 'Normal';
-  
+
   const normalized = type.toLowerCase();
   if (normalized.includes('metal flake')) return 'Metal Flake';
   if (normalized.includes('matte')) return 'Matte';
@@ -235,7 +246,7 @@ function normalizePaintType(type) {
   if (normalized.includes('polished')) return 'Polished';
   if (normalized.includes('two-tone')) return 'Two-Tone';
   if (normalized.includes('normal')) return 'Normal';
-  
+
   return type;
 }
 
@@ -245,12 +256,12 @@ function convertToCarColorFormat(data) {
     .filter(item => item.make && item.colorName && item.hsbValues && item.hsbValues !== 'Not in source')
     .map(item => {
       const { color1, color2 } = parseHSB(item.hsbValues);
-      
+
       // Skip if HSB values couldn't be parsed
       if (color1.h === 0 && color1.s === 0 && color1.b === 0) {
         return null;
       }
-      
+
       return {
         make: item.make === 'Not in source' ? 'Custom' : item.make,
         model: '',
@@ -291,7 +302,7 @@ if (uniqueNewColors.length > 0) {
   fs.writeFileSync(colorsPath, JSON.stringify(combined, null, 2));
   console.log(`Updated carColors.json with ${uniqueNewColors.length} new colors`);
   console.log(`Total colors now: ${combined.length}`);
-  
+
   // Log some examples
   console.log('\nSample new colors:');
   uniqueNewColors.slice(0, 5).forEach(c => {
