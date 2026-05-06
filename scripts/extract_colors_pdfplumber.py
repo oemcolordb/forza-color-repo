@@ -136,9 +136,9 @@ def extract_colors_from_pdf(pdf_path):
                         continue
 
                     # Try to extract HSB values from the line
-                c1, c2 = parse_hsb_values(line)
+                    c1, c2 = parse_hsb_values(line)
 
-                if c1:
+                    if c1:
                         # Extract color name from the line (everything before the numbers)
                         name_part = re.split(r'\d+\.\d+', line)[0].strip()
                         color_name = extract_color_name(name_part)
@@ -150,13 +150,13 @@ def extract_colors_from_pdf(pdf_path):
                                 'year': None,
                                 'colorName': color_name,
                                 'colorType': normalize_paint_type(category),
-                            'color1': c1,
-                            'color2': c2,
+                                'color1': c1,
+                                'color2': c2,
                                 'source': filename,
                                 'page': page_num
                             }
                             colors.append(color_entry)
-                        print(f"  Found: {color_name} - Base({c1['h']:.2f}, {c1['s']:.2f}, {c1['b']:.2f})")
+                            print(f"  Found: {color_name} - Base({c1['h']:.2f}, {c1['s']:.2f}, {c1['b']:.2f})")
 
     except Exception as e:
         print(f"Error processing {filename}: {e}")
