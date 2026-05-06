@@ -53,10 +53,18 @@ def normalize_paint_type(ptype):
 def parse_hsb_values(text):
     """Extract HSB (Hue, Saturation, Brightness) values from text."""
     if not text or "Not in source" in text:
-        return None
+        return None, None
 
     # Match patterns like "0.13 L    0.04 R    0.92 R" or "1.00    0.83    0.57"
     nums = re.findall(r'(\d+\.\d+)', text)
+    if len(nums) >= 6:
+        try:
+            c1 = {'h': float(nums[0]), 's': float(nums[1]), 'b': float(nums[2])}
+            c2 = {'h': float(nums[3]), 's': float(nums[4]), 'b': float(nums[5])}
+            if all(0 <= v <= 1 for v in c1.values()) and all(0 <= v <= 1 for v in c2.values()):
+                return c1, c2
+        except ValueError:
+            pass
     if len(nums) >= 3:
         try:
             h = float(nums[0])
@@ -65,10 +73,10 @@ def parse_hsb_values(text):
 
             # Validate ranges (0-1)
             if 0 <= h <= 1 and 0 <= s <= 1 and 0 <= b <= 1:
-                return {'h': h, 's': s, 'b': b}
+                return {'h': h, 's': s, 'b': b}, {'h': h, 's': s, 'b': b}
         except ValueError:
             pass
-    return None
+    return None, None
 
 
 def extract_color_name(line):
@@ -128,9 +136,9 @@ def extract_colors_from_pdf(pdf_path):
                         continue
 
                     # Try to extract HSB values from the line
-                    hsb = parse_hsb_values(line)
+                c1, c2 = parse_hsb_values(line)
 
-                    if hsb:
+                if c1:
                         # Extract color name from the line (everything before the numbers)
                         name_part = re.split(r'\d+\.\d+', line)[0].strip()
                         color_name = extract_color_name(name_part)
@@ -142,13 +150,13 @@ def extract_colors_from_pdf(pdf_path):
                                 'year': None,
                                 'colorName': color_name,
                                 'colorType': normalize_paint_type(category),
-                                'color1': hsb,
-                                'color2': hsb,  # Same for single-tone colors
+                            'color1': c1,
+                            'color2': c2,
                                 'source': filename,
                                 'page': page_num
                             }
                             colors.append(color_entry)
-                            print(f"  Found: {color_name} - HSB({hsb['h']:.2f}, {hsb['s']:.2f}, {hsb['b']:.2f})")
+                        print(f"  Found: {color_name} - Base({c1['h']:.2f}, {c1['s']:.2f}, {c1['b']:.2f})")
 
     except Exception as e:
         print(f"Error processing {filename}: {e}")

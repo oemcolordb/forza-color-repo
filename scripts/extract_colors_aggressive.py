@@ -38,12 +38,20 @@ def normalize_paint_type(filename):
 def parse_hsb_values(text):
     """Aggressively hunt for sequences of 3 floats between 0.00 and 1.00"""
     nums = re.findall(r'(0\.\d+|1\.00)', text)
-    if len(nums) >= 3:
+    if len(nums) >= 6:
         try:
-            return {'h': float(nums[0]), 's': float(nums[1]), 'b': float(nums[2])}
+            c1 = {'h': float(nums[0]), 's': float(nums[1]), 'b': float(nums[2])}
+            c2 = {'h': float(nums[3]), 's': float(nums[4]), 'b': float(nums[5])}
+            return c1, c2
         except ValueError:
             pass
-    return None
+    elif len(nums) >= 3:
+        try:
+            c1 = {'h': float(nums[0]), 's': float(nums[1]), 'b': float(nums[2])}
+            return c1, c1
+        except ValueError:
+            pass
+    return None, None
 
 def extract_colors_from_page(text, filename):
     colors = []
@@ -57,8 +65,8 @@ def extract_colors_from_page(text, filename):
         line = line.strip()
         if len(line) < 5: continue
 
-        hsb = parse_hsb_values(line)
-        if hsb:
+        c1, c2 = parse_hsb_values(line)
+        if c1:
             # Try to extract the color name (everything before the first number)
             parts = re.split(r'0\.\d+|1\.00', line)
             name_part = parts[0].strip()
@@ -73,8 +81,8 @@ def extract_colors_from_page(text, filename):
                     'year': None,
                     'colorName': name_part,
                     'colorType': 'Normal',
-                    'color1': hsb,
-                    'color2': hsb,
+                    'color1': c1,
+                    'color2': c2,
                     'source': filename
                 })
     return colors
