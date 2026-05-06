@@ -78,6 +78,15 @@ export async function ensureTables(): Promise<void> {
       car_id       TEXT    NOT NULL,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
+    `CREATE TABLE IF NOT EXISTS users (
+      id           TEXT    PRIMARY KEY,
+      email        TEXT    NOT NULL UNIQUE,
+      password     TEXT    NOT NULL,
+      name         TEXT,
+      role         TEXT    DEFAULT 'user',
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_users_email ON users (email)`,
     `CREATE TABLE IF NOT EXISTS password_reset_tokens (
       id           TEXT    PRIMARY KEY,
       email        TEXT    NOT NULL,
