@@ -484,16 +484,14 @@ export default function HomePage() {
                 isDarkMode={isDarkMode}
               />
             ) : (
-              <div className="p-1">
-                <SimpleColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                />
-              </div>
+              <SimpleColorGrid
+                colors={filteredColors}
+                onColorSelect={handleColorSelect}
+                onShowInfo={showColorHSB}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+                isDarkMode={isDarkMode}
+              />
             )}
           </div>
 
