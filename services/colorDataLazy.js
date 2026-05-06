@@ -3,6 +3,16 @@
 let colorDataCache = null
 let colorDataPromise = null
 
+// Helper to check if color has valid HSB (not all zeros/black)
+const hasValidHSB = (color) => {
+  const hsb = color?.color1
+  if (!hsb) return false
+  // Valid if at least one of H, S, B is non-zero
+  return (hsb.h !== undefined && hsb.h !== 0) ||
+         (hsb.s !== undefined && hsb.s !== 0) ||
+         (hsb.b !== undefined && hsb.b !== 0)
+}
+
 export const getColorData = () => {
   if (colorDataCache) {
     return Promise.resolve(colorDataCache)
@@ -15,8 +25,10 @@ export const getColorData = () => {
   colorDataPromise = fetch('/carColors.json')
     .then(response => response.json())
     .then(data => {
-      colorDataCache = data
-      console.log('Color data loaded:', data?.length || 0, 'colors')
+      // Filter out colors with invalid/missing HSB (GTA colors with no Forza data)
+      const validColors = (data || []).filter(hasValidHSB)
+      colorDataCache = validColors
+      console.log('Color data loaded:', validColors.length, 'valid colors (', (data || []).length - validColors.length, 'invalid filtered)')
       return colorDataCache || []
     })
     .catch(error => {
