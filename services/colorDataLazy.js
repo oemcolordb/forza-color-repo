@@ -35,9 +35,14 @@ export const getMakes = async () => {
     return makesCache
   }
 
-  const colors = await getColorData()
-  const uniqueMakes = Array.from(new Set(colors.map(color => color.make)))
-  makesCache = uniqueMakes.sort()
+  const allColors = await getColorData()
+  const makes = [...new Set(
+    allColors
+      .map(color => color.make)
+      .filter(make => make && typeof make === 'string' && make.trim() !== '')
+      .map(make => make.trim())
+  )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }))
+  makesCache = makes
   return makesCache
 }
 
