@@ -4,14 +4,17 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react'
 interface TokyoBackgroundProps {
   isDarkMode: boolean
   getSecureAssetUrl: (_url: string) => string
+  backgroundIndex?: number
+  onRotate?: () => void
 }
 
-const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl }) => {
+const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl, backgroundIndex: externalIndex, onRotate }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [backgroundMedia, setBackgroundMedia] = useState('')
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image')
   const [mediaLoaded, setMediaLoaded] = useState(false)
   const [mediaError, setMediaError] = useState(false)
+  const [manualIndex, setManualIndex] = useState<number | null>(null)
 
   const checkMobile = useCallback(() => {
     if (typeof window !== 'undefined') {
@@ -25,8 +28,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
     return () => window.removeEventListener('resize', checkMobile)
   }, [checkMobile])
 
-  const selectedMedia = useMemo(() => {
-    const mediaFiles = [
+  const mediaFiles = useMemo(() => [
       // Videos (7 available)
       {
         file: 'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
@@ -62,22 +64,19 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
       { file: 'assets/images/tokyo-panorama.jpg', type: 'image' as const },
       { file: 'assets/images/1-5.jpeg', type: 'image' as const },
       { file: 'forza-color-sheet-preview.jpg', type: 'image' as const },
-    ]
+    ], [])
 
-    const now = new Date()
-    const thirtyMinuteSlots = Math.floor(now.getTime() / (30 * 60 * 1000))
-    const mediaIndex = thirtyMinuteSlots % mediaFiles.length
-    const chosen = mediaFiles[mediaIndex]
+  const selectedMedia = useMemo(() => {
+    const effectiveIndex = externalIndex ?? manualIndex ?? Math.floor(Date.now() / (30 * 60 * 1000)) % mediaFiles.length
+    const chosen = mediaFiles[effectiveIndex % mediaFiles.length]
 
     if (isMobile && chosen.type === 'video') {
-      // On mobile use a real image fallback (first image in the list)
       const imageFiles = mediaFiles.filter(m => m.type === 'image')
-      const imageIndex = thirtyMinuteSlots % imageFiles.length
-      return imageFiles[imageIndex]
+      return imageFiles[effectiveIndex % imageFiles.length]
     }
 
     return chosen
-  }, [isMobile])
+  }, [isMobile, mediaFiles, externalIndex, manualIndex])
 
   useEffect(() => {
     const mediaSrc = getSecureAssetUrl(`/${selectedMedia.file}`)
@@ -104,20 +103,15 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
       setMediaError(false)
     }
 
-    // Set up 30-minute rotation timer
-    const checkRotation = () => {
-      const now = new Date()
-      const thirtyMinuteSlots = Math.floor(now.getTime() / (30 * 60 * 1000))
-      const nextSlot = (thirtyMinuteSlots + 1) * 30 * 60 * 1000
-      const timeUntilNext = nextSlot - now.getTime()
-
-      setTimeout(() => {
-        window.location.reload()
-      }, timeUntilNext)
-    }
-
-    checkRotation()
   }, [getSecureAssetUrl, selectedMedia])
+
+  // Handle manual rotation
+  useEffect(() => {
+    if (externalIndex !== undefined) {
+      setMediaLoaded(false)
+      setMediaError(false)
+    }
+  }, [externalIndex])
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">

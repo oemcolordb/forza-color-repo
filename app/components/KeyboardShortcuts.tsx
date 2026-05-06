@@ -8,6 +8,7 @@ interface KeyboardShortcutsProps {
   onToggleTheme: () => void
   onToggleSearch: () => void
   onToggleComparison: () => void
+  onRotateBackground?: () => void
   isDarkMode: boolean
 }
 
@@ -15,6 +16,7 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   onToggleTheme,
   onToggleSearch,
   onToggleComparison,
+  onRotateBackground,
   isDarkMode,
 }) => {
   const [showHelp, setShowHelp] = useState(false)
@@ -44,6 +46,10 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
             e.preventDefault()
             setShowHelp(!showHelp)
             break
+          case 'r':
+            e.preventDefault()
+            onRotateBackground?.()
+            break
         }
       }
 
@@ -54,7 +60,7 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onToggleTheme, onToggleSearch, onToggleComparison, showHelp])
+  }, [onToggleTheme, onToggleSearch, onToggleComparison, onRotateBackground, showHelp])
 
   useEffect(() => {
     if (!showHelp) return
@@ -124,6 +130,10 @@ const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
           <div className="flex justify-between">
             <span>Close Dialogs</span>
             <kbd className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">Esc</kbd>
+          </div>
+          <div className="flex justify-between">
+            <span>Rotate Background</span>
+            <kbd className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs">Ctrl+R</kbd>
           </div>
         </div>
       </div>

@@ -68,7 +68,13 @@ export default function HomePage() {
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
+  const [backgroundIndex, setBackgroundIndex] = useState(0)
   const deviceInfo: DeviceInfo = useDeviceDetection()
+
+  // Rotate background on Ctrl+R
+  const rotateBackground = useCallback(() => {
+    setBackgroundIndex(prev => (prev + 1) % 12) // 12 total backgrounds (7 videos + 5 images)
+  }, [])
 
   useAnalytics()
   usePerformance()
@@ -402,7 +408,7 @@ export default function HomePage() {
           />
         )}
 
-        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} backgroundIndex={backgroundIndex} />
         <CreditsBackground isDarkMode={isDarkMode} />
         <ProgressiveLoader
           progress={loadingProgress}
@@ -821,6 +827,7 @@ export default function HomePage() {
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
           onToggleSearch={() => setShowAdvancedSearch(!showAdvancedSearch)}
           onToggleComparison={() => setShowComparison(!showComparison)}
+          onRotateBackground={rotateBackground}
           isDarkMode={isDarkMode}
         />
       </div>
