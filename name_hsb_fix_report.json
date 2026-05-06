@@ -1,0 +1,1809 @@
+{
+  "original_count": 29718,
+  "mismatches_found": 3800,
+  "mismatches_fixed": 3800,
+  "final_count": 29718,
+  "fixes_applied": [
+    {
+      "index": 1,
+      "make": "3M",
+      "name": "Gloss Black Rose",
+      "original": {
+        "h": 0.06,
+        "s": 0.5,
+        "b": 0.23
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.05
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.23"
+      ]
+    },
+    {
+      "index": 14,
+      "make": "Abarth",
+      "name": "Grey",
+      "original": {
+        "h": 0.49,
+        "s": 0.22,
+        "b": 0.77
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.5
+      },
+      "issues": [
+        "Name says 'gray' but saturation is 0.22"
+      ]
+    },
+    {
+      "index": 27,
+      "make": "Abarth",
+      "name": "Sonic Silver",
+      "original": {
+        "h": 0.17,
+        "s": 0.01,
+        "b": 0.53
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.01"
+      ]
+    },
+    {
+      "index": 54,
+      "make": "Acura",
+      "name": "Abyss Blue Pearl",
+      "original": {
+        "h": 0.69,
+        "s": 0.32,
+        "b": 0.07
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.05,
+        "b": 0.92
+      },
+      "issues": [
+        "Name says 'blue' but hue is 0.69"
+      ]
+    },
+    {
+      "index": 57,
+      "make": "Acura",
+      "name": "Alberta White Pearl",
+      "original": {
+        "h": 0.12,
+        "s": 0.08,
+        "b": 0.74
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.74"
+      ]
+    },
+    {
+      "index": 61,
+      "make": "Acura",
+      "name": "Aspen White Pearl",
+      "original": {
+        "h": 0.16,
+        "s": 0.06,
+        "b": 0.73
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.73"
+      ]
+    },
+    {
+      "index": 66,
+      "make": "Acura",
+      "name": "Black Currant Pearl",
+      "original": {
+        "h": 0.9,
+        "s": 0.12,
+        "b": 0.22
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.05
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.22"
+      ]
+    },
+    {
+      "index": 67,
+      "make": "Acura",
+      "name": "Blaze Orange Metallic",
+      "original": {
+        "h": 0.03,
+        "s": 0.71,
+        "b": 0.41
+      },
+      "fixed": {
+        "h": 0.08,
+        "s": 0.9,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.03"
+      ]
+    },
+    {
+      "index": 70,
+      "make": "Acura",
+      "name": "Brooklands Green Pearl",
+      "original": {
+        "h": 0.54,
+        "s": 0.43,
+        "b": 0.11
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.7,
+        "b": 0.5
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.54"
+      ]
+    },
+    {
+      "index": 71,
+      "make": "Acura",
+      "name": "Canterbury Green Metallic",
+      "original": {
+        "h": 0.61,
+        "s": 0.06,
+        "b": 0.21
+      },
+      "fixed": {
+        "h": 0.32,
+        "s": 0.75,
+        "b": 0.55
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.61"
+      ]
+    },
+    {
+      "index": 78,
+      "make": "Acura",
+      "name": "Celestial Silver Metallic",
+      "original": {
+        "h": 0.8,
+        "s": 0.03,
+        "b": 0.57
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 86,
+      "make": "Acura",
+      "name": "Cypress Green Pearl",
+      "original": {
+        "h": 0.5,
+        "s": 0.91,
+        "b": 0.27
+      },
+      "fixed": {
+        "h": 0.31,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.50"
+      ]
+    },
+    {
+      "index": 87,
+      "make": "Acura",
+      "name": "Dark Blue Green Pearl",
+      "original": {
+        "h": 0.58,
+        "s": 0.38,
+        "b": 0.13
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.58"
+      ]
+    },
+    {
+      "index": 91,
+      "make": "Acura",
+      "name": "Deep Green Pearl",
+      "original": {
+        "h": 0.55,
+        "s": 0.24,
+        "b": 0.15
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.55"
+      ]
+    },
+    {
+      "index": 97,
+      "make": "Acura",
+      "name": "Fir Green Mica",
+      "original": {
+        "h": 0.51,
+        "s": 0.44,
+        "b": 0.14
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.51"
+      ]
+    },
+    {
+      "index": 116,
+      "make": "Acura",
+      "name": "Indigo Blue Pearl",
+      "original": {
+        "h": 0.69,
+        "s": 0.35,
+        "b": 0.08
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.05,
+        "b": 0.92
+      },
+      "issues": [
+        "Name says 'blue' but hue is 0.69"
+      ]
+    },
+    {
+      "index": 119,
+      "make": "Acura",
+      "name": "Jade Green Metallic",
+      "original": {
+        "h": 0.56,
+        "s": 0.16,
+        "b": 0.19
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.56"
+      ]
+    },
+    {
+      "index": 120,
+      "make": "Acura",
+      "name": "Juniper Green Pearl",
+      "original": {
+        "h": 0.54,
+        "s": 0.36,
+        "b": 0.09
+      },
+      "fixed": {
+        "h": 0.32,
+        "s": 0.6,
+        "b": 0.55
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.54"
+      ]
+    },
+    {
+      "index": 124,
+      "make": "Acura",
+      "name": "Lakeshore Silver Metallic",
+      "original": {
+        "h": 0.79,
+        "s": 0.04,
+        "b": 0.36
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.04"
+      ]
+    },
+    {
+      "index": 156,
+      "make": "Acura",
+      "name": "Quantum Grey Metallic",
+      "original": {
+        "h": 0.7,
+        "s": 0.24,
+        "b": 0.08
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.5
+      },
+      "issues": [
+        "Name says 'gray' but saturation is 0.24"
+      ]
+    },
+    {
+      "index": 164,
+      "make": "Acura",
+      "name": "Sherwood Green Pearl",
+      "original": {
+        "h": 0.54,
+        "s": 0.53,
+        "b": 0.06
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.54"
+      ]
+    },
+    {
+      "index": 167,
+      "make": "Acura",
+      "name": "Silver Moon Metallic",
+      "original": {
+        "h": 0.61,
+        "s": 0.03,
+        "b": 0.36
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 170,
+      "make": "Acura",
+      "name": "Source Silver Metallic",
+      "original": {
+        "h": 0,
+        "s": 0.01,
+        "b": 0.71
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.01"
+      ]
+    },
+    {
+      "index": 171,
+      "make": "Acura",
+      "name": "Sparkle White Pearl",
+      "original": {
+        "h": 0.2,
+        "s": 0.02,
+        "b": 0.79
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.79"
+      ]
+    },
+    {
+      "index": 180,
+      "make": "Acura",
+      "name": "Twilight Blue Metallic",
+      "original": {
+        "h": 0.7,
+        "s": 0.23,
+        "b": 0.44
+      },
+      "fixed": {
+        "h": 0.6,
+        "s": 0.8,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'blue' but hue is 0.70"
+      ]
+    },
+    {
+      "index": 186,
+      "make": "Acura",
+      "name": "Zinc Silver Metallic",
+      "original": {
+        "h": 0.16,
+        "s": 0.02,
+        "b": 0.38
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.02"
+      ]
+    },
+    {
+      "index": 196,
+      "make": "Alfa Romeo",
+      "name": "Apple Green",
+      "original": {
+        "h": 0.48,
+        "s": 0.72,
+        "b": 0.45
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.48"
+      ]
+    },
+    {
+      "index": 226,
+      "make": "Alfa Romeo",
+      "name": "Bianco Freddo",
+      "original": {
+        "h": 0.59,
+        "s": 0.03,
+        "b": 0.95
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.9,
+        "b": 0.8
+      },
+      "issues": [
+        "Name says 'red' but hue is 0.59"
+      ]
+    },
+    {
+      "index": 307,
+      "make": "Alfa Romeo",
+      "name": "Green",
+      "original": {
+        "h": 0.48,
+        "s": 0.68,
+        "b": 0.46
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.48"
+      ]
+    },
+    {
+      "index": 355,
+      "make": "Alfa Romeo",
+      "name": "Midnight Jade Green",
+      "original": {
+        "h": 0.53,
+        "s": 0.55,
+        "b": 0.3
+      },
+      "fixed": {
+        "h": 0.65,
+        "s": 0.8,
+        "b": 0.25
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.53"
+      ]
+    },
+    {
+      "index": 362,
+      "make": "Alfa Romeo",
+      "name": "Montreal Green",
+      "original": {
+        "h": 0.5,
+        "s": 1,
+        "b": 0.22
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.50"
+      ]
+    },
+    {
+      "index": 418,
+      "make": "Alfa Romeo",
+      "name": "Silver Gray Metallic",
+      "original": {
+        "h": 0,
+        "s": 0,
+        "b": 0.56
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.00"
+      ]
+    },
+    {
+      "index": 419,
+      "make": "Alfa Romeo",
+      "name": "Silver White",
+      "original": {
+        "h": 0.03,
+        "s": 0.01,
+        "b": 0.76
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.76",
+        "Name says 'silver' but saturation is 0.01"
+      ]
+    },
+    {
+      "index": 459,
+      "make": "Alpina",
+      "name": "Alpina Green Metallic",
+      "original": {
+        "h": 0.56,
+        "s": 0.94,
+        "b": 0.19
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.56"
+      ]
+    },
+    {
+      "index": 478,
+      "make": "Alpine",
+      "name": "Ceramic Black",
+      "original": {
+        "h": 0.42,
+        "s": 0.03,
+        "b": 0.23
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.05
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.23"
+      ]
+    },
+    {
+      "index": 514,
+      "make": "AMC",
+      "name": "Bittersweet Orange",
+      "original": {
+        "h": 0.04,
+        "s": 0.86,
+        "b": 0.66
+      },
+      "fixed": {
+        "h": 0.08,
+        "s": 0.9,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.04"
+      ]
+    },
+    {
+      "index": 539,
+      "make": "AMC",
+      "name": "Dark Green",
+      "original": {
+        "h": 0.47,
+        "s": 0.8,
+        "b": 0.21
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.47"
+      ]
+    },
+    {
+      "index": 554,
+      "make": "AMC",
+      "name": "Hunter Green",
+      "original": {
+        "h": 0.45,
+        "s": 0.31,
+        "b": 0.22
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.45"
+      ]
+    },
+    {
+      "index": 558,
+      "make": "AMC",
+      "name": "Laredo Tan",
+      "original": {
+        "h": 0.08,
+        "s": 0.37,
+        "b": 0.62
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.9,
+        "b": 0.8
+      },
+      "issues": [
+        "Name says 'red' but hue is 0.08"
+      ]
+    },
+    {
+      "index": 559,
+      "make": "AMC",
+      "name": "Laurel Green",
+      "original": {
+        "h": 0.18,
+        "s": 0.29,
+        "b": 0.55
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.18"
+      ]
+    },
+    {
+      "index": 567,
+      "make": "AMC",
+      "name": "Mellow Yellow",
+      "original": {
+        "h": 0.11,
+        "s": 0.6,
+        "b": 0.88
+      },
+      "fixed": {
+        "h": 0.15,
+        "s": 0.9,
+        "b": 0.9
+      },
+      "issues": [
+        "Name says 'yellow' but hue is 0.11"
+      ]
+    },
+    {
+      "index": 578,
+      "make": "AMC",
+      "name": "Pewter Silver",
+      "original": {
+        "h": 0.35,
+        "s": 0.03,
+        "b": 0.44
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 583,
+      "make": "AMC",
+      "name": "Rally Green",
+      "original": {
+        "h": 0.47,
+        "s": 0.64,
+        "b": 0.18
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.47"
+      ]
+    },
+    {
+      "index": 593,
+      "make": "AMC",
+      "name": "Sienna Orange",
+      "original": {
+        "h": 0.03,
+        "s": 0.77,
+        "b": 0.62
+      },
+      "fixed": {
+        "h": 0.06,
+        "s": 0.5,
+        "b": 0.4
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.03"
+      ]
+    },
+    {
+      "index": 594,
+      "make": "AMC",
+      "name": "Silver Green",
+      "original": {
+        "h": 0.47,
+        "s": 0.18,
+        "b": 0.59
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.47"
+      ]
+    },
+    {
+      "index": 601,
+      "make": "AMC",
+      "name": "Sun Orange",
+      "original": {
+        "h": 0.03,
+        "s": 0.84,
+        "b": 0.93
+      },
+      "fixed": {
+        "h": 0.08,
+        "s": 0.9,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.03"
+      ]
+    },
+    {
+      "index": 613,
+      "make": "AMC",
+      "name": "Willow Green",
+      "original": {
+        "h": 0.23,
+        "s": 0.28,
+        "b": 0.35
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.23"
+      ]
+    },
+    {
+      "index": 616,
+      "make": "Amphicar",
+      "name": "Green",
+      "original": {
+        "h": 0.49,
+        "s": 0.48,
+        "b": 0.82
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.49"
+      ]
+    },
+    {
+      "index": 621,
+      "make": "Amuse",
+      "name": "Lime Green Metallic",
+      "original": {
+        "h": 0.23,
+        "s": 0.56,
+        "b": 0.38
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.23"
+      ]
+    },
+    {
+      "index": 628,
+      "make": "Amuse",
+      "name": "Platinum White Pearl",
+      "original": {
+        "h": 0.22,
+        "s": 0.03,
+        "b": 0.71
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.71"
+      ]
+    },
+    {
+      "index": 631,
+      "make": "Amuse",
+      "name": "Silverstone Metallic",
+      "original": {
+        "h": 0.61,
+        "s": 0.04,
+        "b": 0.48
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.04"
+      ]
+    },
+    {
+      "index": 632,
+      "make": "Amuse",
+      "name": "White Pearl (3P)",
+      "original": {
+        "h": 0.15,
+        "s": 0.02,
+        "b": 0.78
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.78"
+      ]
+    },
+    {
+      "index": 636,
+      "make": "Apollo",
+      "name": "Red Dragon",
+      "original": {
+        "h": 0.1,
+        "s": 1,
+        "b": 0.97
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.9,
+        "b": 0.8
+      },
+      "issues": [
+        "Name says 'red' but hue is 0.10"
+      ]
+    },
+    {
+      "index": 651,
+      "make": "Arrinera",
+      "name": "Purple",
+      "original": {
+        "h": 0.85,
+        "s": 0.68,
+        "b": 0.49
+      },
+      "fixed": {
+        "h": 0.75,
+        "s": 0.7,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'purple' but hue is 0.85"
+      ]
+    },
+    {
+      "index": 654,
+      "make": "Arrinera",
+      "name": "White",
+      "original": {
+        "h": 0.42,
+        "s": 0.01,
+        "b": 0.75
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.75"
+      ]
+    },
+    {
+      "index": 663,
+      "make": "Ascari",
+      "name": "Silver",
+      "original": {
+        "h": 0.6,
+        "s": 0.03,
+        "b": 0.59
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 666,
+      "make": "Aspark",
+      "name": "Carbon Fiber Black",
+      "original": {
+        "h": 0,
+        "s": 0,
+        "b": 0.33
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.07
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.33"
+      ]
+    },
+    {
+      "index": 670,
+      "make": "Aston Martin",
+      "name": "Alloro Green",
+      "original": {
+        "h": 0.54,
+        "s": 0.25,
+        "b": 0.4
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.54"
+      ]
+    },
+    {
+      "index": 672,
+      "make": "Aston Martin",
+      "name": "AM Hertiage Racing Green",
+      "original": {
+        "h": 0.47,
+        "s": 0.52,
+        "b": 0.26
+      },
+      "fixed": {
+        "h": 0.58,
+        "s": 0.9,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.47"
+      ]
+    },
+    {
+      "index": 674,
+      "make": "Aston Martin",
+      "name": "Arden Green",
+      "original": {
+        "h": 0.24,
+        "s": 0.11,
+        "b": 0.25
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.24"
+      ]
+    },
+    {
+      "index": 676,
+      "make": "Aston Martin",
+      "name": "Aston Martin Racing Green",
+      "original": {
+        "h": 0.46,
+        "s": 0.35,
+        "b": 0.41
+      },
+      "fixed": {
+        "h": 0.58,
+        "s": 0.9,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.46"
+      ]
+    },
+    {
+      "index": 679,
+      "make": "Aston Martin",
+      "name": "Black",
+      "original": {
+        "h": 0,
+        "s": 0,
+        "b": 0.16
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.05
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.16"
+      ]
+    },
+    {
+      "index": 689,
+      "make": "Aston Martin",
+      "name": "Bright Green",
+      "original": {
+        "h": 0.45,
+        "s": 0.92,
+        "b": 0.38
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.45"
+      ]
+    },
+    {
+      "index": 693,
+      "make": "Aston Martin",
+      "name": "Buckinghamshire Green",
+      "original": {
+        "h": 0.52,
+        "s": 0.74,
+        "b": 0.11
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.52"
+      ]
+    },
+    {
+      "index": 708,
+      "make": "Aston Martin",
+      "name": "Cosmos Orange",
+      "original": {
+        "h": 0.01,
+        "s": 0.76,
+        "b": 1
+      },
+      "fixed": {
+        "h": 0.08,
+        "s": 0.9,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.01"
+      ]
+    },
+    {
+      "index": 710,
+      "make": "Aston Martin",
+      "name": "Cumberland Grey",
+      "original": {
+        "h": 0.6,
+        "s": 0.59,
+        "b": 0.11
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.5
+      },
+      "issues": [
+        "Name says 'gray' but saturation is 0.59"
+      ]
+    },
+    {
+      "index": 719,
+      "make": "Aston Martin",
+      "name": "Duxford Green",
+      "original": {
+        "h": 0.49,
+        "s": 0.36,
+        "b": 0.16
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.49"
+      ]
+    },
+    {
+      "index": 728,
+      "make": "Aston Martin",
+      "name": "Ghillies Green",
+      "original": {
+        "h": 0.48,
+        "s": 0.59,
+        "b": 0.2
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.48"
+      ]
+    },
+    {
+      "index": 737,
+      "make": "Aston Martin",
+      "name": "Hammerhead Silver",
+      "original": {
+        "h": 0.6,
+        "s": 0.04,
+        "b": 0.52
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.04"
+      ]
+    },
+    {
+      "index": 738,
+      "make": "Aston Martin",
+      "name": "Hardly Green",
+      "original": {
+        "h": 0.52,
+        "s": 0.17,
+        "b": 0.68
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.52"
+      ]
+    },
+    {
+      "index": 740,
+      "make": "Aston Martin",
+      "name": "Hong Kong Pink",
+      "original": {
+        "h": 0.94,
+        "s": 0.57,
+        "b": 0.78
+      },
+      "fixed": {
+        "h": 0.85,
+        "s": 0.6,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'pink' but hue is 0.94"
+      ]
+    },
+    {
+      "index": 751,
+      "make": "Aston Martin",
+      "name": "Lennox Green",
+      "original": {
+        "h": 0.48,
+        "s": 0.98,
+        "b": 0.3
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.48"
+      ]
+    },
+    {
+      "index": 756,
+      "make": "Aston Martin",
+      "name": "Liquid Silver",
+      "original": {
+        "h": 0.56,
+        "s": 0.02,
+        "b": 0.58
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.02"
+      ]
+    },
+    {
+      "index": 764,
+      "make": "Aston Martin",
+      "name": "Marron Black",
+      "original": {
+        "h": 0.08,
+        "s": 0.17,
+        "b": 0.18
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.05
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.18"
+      ]
+    },
+    {
+      "index": 765,
+      "make": "Aston Martin",
+      "name": "Maximum Orange",
+      "original": {
+        "h": 0.03,
+        "s": 0.9,
+        "b": 0.98
+      },
+      "fixed": {
+        "h": 0.08,
+        "s": 0.9,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.03"
+      ]
+    },
+    {
+      "index": 768,
+      "make": "Aston Martin",
+      "name": "Meteorite Silver",
+      "original": {
+        "h": 0.92,
+        "s": 0.04,
+        "b": 0.2
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.04"
+      ]
+    },
+    {
+      "index": 772,
+      "make": "Aston Martin",
+      "name": "Minotaur Green",
+      "original": {
+        "h": 0.19,
+        "s": 0.3,
+        "b": 0.16
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.19"
+      ]
+    },
+    {
+      "index": 773,
+      "make": "Aston Martin",
+      "name": "Monaco Black",
+      "original": {
+        "h": 0.72,
+        "s": 0.17,
+        "b": 0.2
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.05
+      },
+      "issues": [
+        "Name says 'black' but brightness is 0.20"
+      ]
+    },
+    {
+      "index": 777,
+      "make": "Aston Martin",
+      "name": "Olive Green",
+      "original": {
+        "h": 0.13,
+        "s": 0.4,
+        "b": 0.24
+      },
+      "fixed": {
+        "h": 0.22,
+        "s": 0.6,
+        "b": 0.5
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.13"
+      ]
+    },
+    {
+      "index": 782,
+      "make": "Aston Martin",
+      "name": "Oyster Silver",
+      "original": {
+        "h": 0,
+        "s": 0.01,
+        "b": 0.48
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.01"
+      ]
+    },
+    {
+      "index": 798,
+      "make": "Aston Martin",
+      "name": "Satin Aston Martin Racing Green",
+      "original": {
+        "h": 0.49,
+        "s": 0.79,
+        "b": 0.77
+      },
+      "fixed": {
+        "h": 0.58,
+        "s": 0.9,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.49"
+      ]
+    },
+    {
+      "index": 808,
+      "make": "Aston Martin",
+      "name": "Satin Titanium Silver",
+      "original": {
+        "h": 0.64,
+        "s": 0.03,
+        "b": 0.8
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.02,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 810,
+      "make": "Aston Martin",
+      "name": "Scintilla Silver",
+      "original": {
+        "h": 0.67,
+        "s": 0.03,
+        "b": 0.3
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 816,
+      "make": "Aston Martin",
+      "name": "Silver",
+      "original": {
+        "h": 0,
+        "s": 0,
+        "b": 0.63
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.00"
+      ]
+    },
+    {
+      "index": 817,
+      "make": "Aston Martin",
+      "name": "Silver Birch Provenance",
+      "original": {
+        "h": 0.29,
+        "s": 0.02,
+        "b": 0.57
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.02"
+      ]
+    },
+    {
+      "index": 820,
+      "make": "Aston Martin",
+      "name": "Silver Jubilee",
+      "original": {
+        "h": 0.69,
+        "s": 0.03,
+        "b": 0.84
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 830,
+      "make": "Aston Martin",
+      "name": "Spirit Silver",
+      "original": {
+        "h": 0.67,
+        "s": 0.01,
+        "b": 0.54
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.01"
+      ]
+    },
+    {
+      "index": 831,
+      "make": "Aston Martin",
+      "name": "Stirling Green",
+      "original": {
+        "h": 0.53,
+        "s": 0.15,
+        "b": 0.35
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.53"
+      ]
+    },
+    {
+      "index": 839,
+      "make": "Aston Martin",
+      "name": "Titanium Silver",
+      "original": {
+        "h": 0.5,
+        "s": 0.03,
+        "b": 0.69
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.02,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.03"
+      ]
+    },
+    {
+      "index": 842,
+      "make": "Aston Martin",
+      "name": "Tungsten Silver",
+      "original": {
+        "h": 0.5,
+        "s": 0.01,
+        "b": 0.43
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.01"
+      ]
+    },
+    {
+      "index": 846,
+      "make": "Aston Martin",
+      "name": "Viridian Green",
+      "original": {
+        "h": 0.47,
+        "s": 1,
+        "b": 0.38
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.47"
+      ]
+    },
+    {
+      "index": 849,
+      "make": "Aston Martin",
+      "name": "White",
+      "original": {
+        "h": 0.33,
+        "s": 0.04,
+        "b": 0.78
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0,
+        "b": 0.95
+      },
+      "issues": [
+        "Name says 'white' but brightness is 0.78"
+      ]
+    },
+    {
+      "index": 860,
+      "make": "Auburn",
+      "name": "Nassau Orange",
+      "original": {
+        "h": 0.04,
+        "s": 0.96,
+        "b": 1
+      },
+      "fixed": {
+        "h": 0.08,
+        "s": 0.9,
+        "b": 0.85
+      },
+      "issues": [
+        "Name says 'orange' but hue is 0.04"
+      ]
+    },
+    {
+      "index": 861,
+      "make": "Auburn",
+      "name": "Orchard Green",
+      "original": {
+        "h": 0.52,
+        "s": 0.59,
+        "b": 0.59
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.52"
+      ]
+    },
+    {
+      "index": 875,
+      "make": "Audi",
+      "name": "Amazon Green Pearl Effect",
+      "original": {
+        "h": 0.46,
+        "s": 0.56,
+        "b": 0.28
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.46"
+      ]
+    },
+    {
+      "index": 876,
+      "make": "Audi",
+      "name": "Amethyst Grey Pearl Effect",
+      "original": {
+        "h": 0,
+        "s": 0.21,
+        "b": 0.07
+      },
+      "fixed": {
+        "h": 0.74,
+        "s": 0.6,
+        "b": 0.5
+      },
+      "issues": [
+        "Name says 'gray' but saturation is 0.21"
+      ]
+    },
+    {
+      "index": 882,
+      "make": "Audi",
+      "name": "Apollo Silver Metallic",
+      "original": {
+        "h": 0.58,
+        "s": 0.02,
+        "b": 0.35
+      },
+      "fixed": {
+        "h": 0,
+        "s": 0.1,
+        "b": 0.7
+      },
+      "issues": [
+        "Name says 'silver' but saturation is 0.02"
+      ]
+    },
+    {
+      "index": 883,
+      "make": "Audi",
+      "name": "Apple Green Metallic",
+      "original": {
+        "h": 0.21,
+        "s": 0.24,
+        "b": 0.47
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.21"
+      ]
+    },
+    {
+      "index": 884,
+      "make": "Audi",
+      "name": "Aqua Green Metallic",
+      "original": {
+        "h": 0.5,
+        "s": 0.92,
+        "b": 0.37
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.50"
+      ]
+    },
+    {
+      "index": 898,
+      "make": "Audi",
+      "name": "Avalon Green Metallic",
+      "original": {
+        "h": 0.52,
+        "s": 0.48,
+        "b": 0.21
+      },
+      "fixed": {
+        "h": 0.33,
+        "s": 0.8,
+        "b": 0.6
+      },
+      "issues": [
+        "Name says 'green' but hue is 0.52"
+      ]
+    }
+  ]
+}
