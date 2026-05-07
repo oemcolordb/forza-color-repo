@@ -1,3 +1,11 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'TuneForge | Forza Color Universe',
+  description: 'Create, share, and discover community tunes for Forza Horizon 5 and Motorsport. Tuning calculator with optimized settings for every track and car class.',
+  keywords: ['Forza tuning', 'FH5 tunes', 'Forza car tuning', 'community tunes', 'tuning calculator', 'Forza setup', 'FH5 car setup', 'race tuning'],
+}
+
 'use client'
 
 export const dynamic = 'force-dynamic'

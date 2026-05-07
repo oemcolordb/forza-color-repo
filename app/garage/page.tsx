@@ -1,3 +1,11 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Garage | Forza Color Universe',
+  description: 'Browse the complete Forza Horizon 5 and Motorsport car database. Search by manufacturer, PI class, rarity, and performance stats.',
+  keywords: ['Forza car database', 'FH5 garage', 'Forza vehicle list', 'Forza car stats', 'PI class cars', 'rarity cars Forza'],
+}
+
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
