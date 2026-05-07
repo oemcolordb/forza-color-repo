@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useCallback, useRef, useEffect } from 'react'
+import { logger } from '../lib/logger'
 import {
   ImageColorExtractorProps,
   ExtractedColor,
@@ -302,7 +303,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
           // if the server does not respond with enhancements.
           return colors
         } catch (e) {
-          console.warn('python service call failed, falling back to local enhancement', e)
+          logger.warn('python service call failed, falling back to local enhancement', e)
         }
       }
 
@@ -315,14 +316,14 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         })
 
         if (!response.ok) {
-          console.warn('ML service unavailable, using basic extraction')
+          logger.warn('ML service unavailable, using basic extraction')
           return colors
         }
 
         const enhanced = await response.json()
         return enhanced.colors || colors
       } catch (error) {
-        console.warn('ML enhancement failed:', error)
+        logger.warn('ML enhancement failed:', error)
         return colors
       }
     },
@@ -358,7 +359,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
             return
           } else {
             // fall through to local extraction if python service returned error
-            console.warn('python service processing failed, falling back to canvas pipeline')
+            logger.warn('python service processing failed, falling back to canvas pipeline')
           }
         }
 

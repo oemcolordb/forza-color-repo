@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getDb, ensureTables } from '../../../lib/db'
 import bcrypt from 'bcryptjs'
+import { logger } from '../../../lib/logger'
 
 export const POST = async (request: Request) => {
   try {
@@ -68,8 +69,7 @@ export const POST = async (request: Request) => {
       message: 'Password has been reset successfully.',
     })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Reset Password] Error:', error)
+    logger.error('[Reset Password] Error:', error)
     return NextResponse.json(
       { error: 'An error occurred. Please try again later.' },
       { status: 500 }
@@ -111,8 +111,7 @@ export const GET = async (request: Request) => {
       email: tokenResult.rows[0].email,
     })
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('[Validate Token] Error:', error)
+    logger.error('[Validate Token] Error:', error)
     return NextResponse.json(
       { error: 'An error occurred' },
       { status: 500 }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
 import Head from 'next/head';
+import GamingErrorBoundary from '../components/GamingErrorBoundary';
 
 export default function SignupPage() {
   return (
@@ -14,7 +15,9 @@ export default function SignupPage() {
         <meta name="description" content="Create a new Forza Color Universe account to save favorites and access personalized features." />
         <meta name="robots" content="noindex, nofollow" />
       </Head>
-      <SignupForm />
+      <GamingErrorBoundary>
+        <SignupForm />
+      </GamingErrorBoundary>
     </>
   );
 }

@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import { logger } from '../lib/logger'
 
 interface TokyoBackgroundProps {
   isDarkMode: boolean
@@ -29,40 +30,10 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
   }, [checkMobile])
 
   const mediaFiles = useMemo(() => [
-      // Videos (7 available)
-      {
-        file: 'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 C Baj X 2 Z 9 R 9 E Fr 1 Gh W Ai RTFM 6 Xbt BSZ 76 N 6 Ywb BAE Dic 4 R.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 Szq 5 E KT 7 Ee 1 C A Vh 3 C KR Vdnf L 9 S 52 V 6 GG 2 R Md Ll V 2 Qx Y Cc.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 U Rk Qu 5 Hjg Vq B 14 A V 582 Kiio P 3 Db Lnqmo L 5 Z WZBEM Az 5 Z 5.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 Uw 0 WJIUIA Uq 31 Fa H Pqs T Zh Kewnh 32 BCLPE Fhxml I 4 ZV 5 Q.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 Yq 68 Y FSH 7 L G 3 Xq O 4 Vv IA 6 F Ud IEJIB 01 Qeq N 1 T Sur DR 5 T I.mp4',
-        type: 'video' as const,
-      },
-      // Images
-      { file: 'manuel-velasquez-ssfp9okORYs-unsplash-1200x801.jpg', type: 'image' as const },
+      // Images (Videos removed due to missing assets)
+      { file: 'assets/images/manuel-velasquez-ssfp9okORYs-unsplash-1200x801.jpg', type: 'image' as const },
       { file: 'assets/images/neon-shibuya-crossing-tokyo-japan-1140x760.jpg', type: 'image' as const },
       { file: 'assets/images/tokyo-panorama.jpg', type: 'image' as const },
-      { file: 'assets/images/1-5.jpeg', type: 'image' as const },
       { file: 'forza-color-sheet-preview.jpg', type: 'image' as const },
     ], [])
 
@@ -90,7 +61,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
         setMediaError(false)
       }
       img.onerror = () => {
-        console.warn('Background image failed to load:', mediaSrc)
+        logger.warn('Background image failed to load:', mediaSrc)
         setMediaError(true)
         setMediaLoaded(true)
       }
@@ -137,7 +108,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
             loop
             playsInline
             onError={() => {
-              console.warn('Background video failed to load:', backgroundMedia)
+              logger.warn('Background video failed to load:', backgroundMedia)
               setMediaError(true)
             }}
             style={{

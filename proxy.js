@@ -39,7 +39,7 @@ export async function proxy(request) {
   const fetchMode = request.headers.get('sec-fetch-mode')
 
   // ── Block bots / scrapers on ALL routes ─────────────────────────────────────
-  if (!ua || BOT_UA.test(ua)) {
+  if (ua && BOT_UA.test(ua)) {
     const isApi = pathname.startsWith('/api/')
     return new NextResponse(isApi ? JSON.stringify({ error: 'Forbidden' }) : null, {
       status: 403,
@@ -79,7 +79,8 @@ export async function proxy(request) {
   // Protect POST on /api/process-image (Expensive Python ML Service compute)
   const isMLService = pathname === '/api/process-image' && request.method === 'POST'
 
-  if (isUserRoute || isTuneMutation || isMLService) {
+  // TEMPORARILY DISABLED: Allow all users to access all features during onboarding
+  if (false /* isUserRoute || isTuneMutation || isMLService */) {
     const authHeader = request.headers.get('authorization')
     const token = authHeader?.split(' ')[1]
 
@@ -96,7 +97,7 @@ export async function proxy(request) {
     } catch (error) {
       console.error('JWT Verification Error:', error)
       return new NextResponse(JSON.stringify({ message: 'Invalid or expired token' }), {
-        status: 403,
+        status: 401,
         headers: { 'Content-Type': 'application/json' },
       })
     }

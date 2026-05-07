@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { logger } from '@/app/lib/logger'
 
 const SYSTEM_PROMPT = `You are an expert Forza Horizon 5 tuning engineer. You give specific, numeric tune setups based on the car and the player's goal. You know every tuning parameter in FH5 inside out.
 
@@ -265,7 +266,7 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('Gemini API error:', response.status, errorText)
+      logger.error('Gemini API error:', response.status, errorText)
 
       if (response.status === 400) {
         return NextResponse.json({ error: 'Invalid request to AI service' }, { status: 400 })
@@ -298,7 +299,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ response: text })
   } catch (err) {
-    console.error('Error calling Gemini:', err)
+    logger.error('Error calling Gemini:', err)
     return NextResponse.json({ error: 'Failed to connect to AI service' }, { status: 500 })
   }
 }

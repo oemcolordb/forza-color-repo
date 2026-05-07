@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { logger } from '../lib/logger';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { useAuth } from '../components/AuthProvider';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import GamingErrorBoundary from '../components/GamingErrorBoundary';
 
 interface FavoriteColor {
   colorId: string;
@@ -40,7 +42,7 @@ function FavoritesContent() {
         setFavorites(data.favorites || []);
       } catch (err) {
         setError('Could not load your favorites');
-        console.error(err);
+        logger.error(err);
       } finally {
         setLoading(false);
       }
@@ -63,7 +65,7 @@ function FavoritesContent() {
         setFavorites(favorites.filter(f => f.colorId !== colorId));
       }
     } catch (err) {
-      console.error('Failed to remove favorite:', err);
+      logger.error('Failed to remove favorite:', err);
     }
   };
 
@@ -166,7 +168,9 @@ function FavoritesContent() {
 export default function FavoritesPage() {
   return (
     <ProtectedRoute>
-      <FavoritesContent />
+      <GamingErrorBoundary>
+        <FavoritesContent />
+      </GamingErrorBoundary>
     </ProtectedRoute>
   );
 }

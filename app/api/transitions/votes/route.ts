@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getDb, ensureTables } from '../../../lib/db'
 import { cookies } from 'next/headers'
 import { TransitionType, TRANSITION_METADATA } from '../../../components/transitions/PageTransitions'
+import { logger } from '@/app/lib/logger'
 
 // Generate a simple user ID from cookies or create new one
 async function getUserId(): Promise<string> {
@@ -97,7 +98,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error fetching transition votes:', error)
+    logger.error('Error fetching transition votes:', error)
     return NextResponse.json(
       { error: 'Failed to fetch votes' },
       { status: 500 }
@@ -149,7 +150,7 @@ export async function POST(request: NextRequest) {
         // Just return current count. Log other unexpected errors.
         const errorMessage = (error as Error).message || ''
         if (!errorMessage.includes('UNIQUE') && !errorMessage.includes('unique')) {
-          console.warn('Unexpected error during vote insert:', error)
+          logger.warn('Unexpected error during vote insert:', error)
         }
       }
 
@@ -190,7 +191,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error handling vote:', error)
+    logger.error('Error handling vote:', error)
     return NextResponse.json(
       { error: 'Failed to process vote' },
       { status: 500 }

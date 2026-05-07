@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { logger } from '@/app/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,7 +12,7 @@ export async function GET() {
     const data = JSON.parse(raw)
     return NextResponse.json(data)
   } catch (err) {
-    console.error('[fh5-locations] Failed to read locations file:', err)
+    logger.error('[fh5-locations] Failed to read locations file:', err)
     return NextResponse.json(
       { error: 'Failed to load location data' },
       { status: 500 }

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { logger } from '@/app/lib/logger'
 import fs from 'fs'
 import path from 'path'
 import { createClient } from '@libsql/client'
@@ -36,7 +37,7 @@ export async function GET() {
       )
     )
   } catch (error) {
-    console.error('Error loading car data:', error)
+    logger.error('Error loading car data:', error)
     return NextResponse.json({ error: 'Failed to load car data' }, { status: 500 })
   }
 }

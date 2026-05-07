@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getDb, ensureTables } from '../../../lib/db'
+import { logger } from '../../../lib/logger'
 import { randomBytes } from 'crypto'
 
 // Generate a secure random token
@@ -55,14 +56,10 @@ async function sendResetEmail(email: string, token: string): Promise<boolean> {
 
   // Development fallback: log to console
   if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
-    console.log('\n========== PASSWORD RESET EMAIL ==========')
-    // eslint-disable-next-line no-console
-    console.log(`To: ${email}`)
-    // eslint-disable-next-line no-console
-    console.log(`Reset URL: ${resetUrl}`)
-    // eslint-disable-next-line no-console
-    console.log('==========================================\n')
+    logger.log('\n========== PASSWORD RESET EMAIL ==========')
+    logger.log(`To: ${email}`)
+    logger.log(`Reset URL: ${resetUrl}`)
+    logger.log('==========================================\n')
     return true
   }
 
@@ -120,7 +117,7 @@ export const POST = async (request: Request) => {
     })
   } catch (error) {
      
-    console.error('[Forgot Password] Error:', error)
+    logger.error('[Forgot Password] Error:', error)
     return NextResponse.json(
       { error: 'An error occurred. Please try again later.' },
       { status: 500 }

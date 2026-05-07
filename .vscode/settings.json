@@ -150,5 +150,6 @@
   "vscode-kubernetes.log-viewer.follow": true,
   "vscode-kubernetes.log-viewer.timestamp": true,
   "vscode-kubernetes.log-viewer.wrap": true,
-  "azureResourceGroups.enableChatStandIn": false
+  "azureResourceGroups.enableChatStandIn": false,
+  "editor.codeActions.triggerOnFocusChange": true
 }

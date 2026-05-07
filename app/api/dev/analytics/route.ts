@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
+import { logger } from '../../../lib/logger'
 
 const client =
   process.env.TURSO_DATABASE_URL &&
@@ -103,7 +104,7 @@ export async function GET(request: Request) {
       },
     })
   } catch (error) {
-    console.error('Analytics error:', error)
+    logger.error('Analytics error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

@@ -9,6 +9,7 @@
 
 import fs from 'fs'
 import path from 'path'
+import { logger } from './logger'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -71,7 +72,7 @@ function getMaps(): { yearMap: Map<string, CarSpec>; nameMap: Map<string, CarSpe
       if (!_nameMap.has(fuzzyKey)) _nameMap.set(fuzzyKey, spec)
     }
   } catch (err) {
-    console.error('[car-specs] Failed to load master_database.json:', err)
+    logger.error('[car-specs] Failed to load master_database.json:', err)
   }
 
   return { yearMap: _yearMap, nameMap: _nameMap }
