@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Head from 'next/head';
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +39,13 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8">
+    <>
+      <Head>
+        <title>Forgot Password | Forza Color Universe</title>
+        <meta name="description" content="Reset your Forza Color Universe account password." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
@@ -108,7 +115,8 @@ export default function ForgotPasswordPage() {
             </div>
           </form>
         )}
-      </div>
+        </div>
     </div>
+    </>
   );
 }

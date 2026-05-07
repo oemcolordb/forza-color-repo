@@ -3,8 +3,22 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import Head from 'next/head';
 
 function ResetPasswordForm() {
+  return (
+    <>
+      <Head>
+        <title>Reset Password | Forza Color Universe</title>
+        <meta name="description" content="Reset your Forza Color Universe account password." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+      <ResetPasswordFormContent />
+    </>
+  );
+}
+
+function ResetPasswordFormContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 

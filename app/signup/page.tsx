@@ -4,8 +4,22 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
+import Head from 'next/head';
 
 export default function SignupPage() {
+  return (
+    <>
+      <Head>
+        <title>Create Account | Forza Color Universe</title>
+        <meta name="description" content="Create a new Forza Color Universe account to save favorites and access personalized features." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+      <SignupForm />
+    </>
+  );
+}
+
+function SignupForm() {
   const router = useRouter();
   const { signup } = useAuth();
   const [name, setName] = useState('');

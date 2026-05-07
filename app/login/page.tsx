@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '../components/AuthProvider';
+import Head from 'next/head';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,8 +31,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800">
+    <>
+      <Head>
+        <title>Sign In | Forza Color Universe</title>
+        <meta name="description" content="Sign in to your Forza Color Universe account to save favorites and access personalized features." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
             Sign in to your account
@@ -127,5 +134,6 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+    </>
   );
 }
