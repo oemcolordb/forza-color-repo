@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { logger } from '../lib/logger'
 
 interface User {
   id: string
@@ -64,7 +65,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       // Sync data from cloud
       await syncFromCloud(userData.id)
     } catch (error) {
-      console.error('Sign in error:', error)
+      logger.error('Sign in error:', error)
       throw error
     }
   }
@@ -83,7 +84,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
       setUser(userData)
       localStorage.setItem('forza-user', JSON.stringify(userData))
     } catch (error) {
-      console.error('Sign up error:', error)
+      logger.error('Sign up error:', error)
       throw error
     }
   }
@@ -99,7 +100,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       window.location.href = authUrl
     } catch (error) {
-      console.error('Discord sign in error:', error)
+      logger.error('Discord sign in error:', error)
       throw error
     }
   }
@@ -114,7 +115,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       window.location.href = authUrl
     } catch (error) {
-      console.error('Xbox sign in error:', error)
+      logger.error('Xbox sign in error:', error)
       throw error
     }
   }
@@ -136,7 +137,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       setUser({ ...user, favorites })
     } catch (error) {
-      console.error('Sync favorites error:', error)
+      logger.error('Sync favorites error:', error)
     }
   }
 
@@ -152,7 +153,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       setUser({ ...user, tuningPresets: presets })
     } catch (error) {
-      console.error('Sync presets error:', error)
+      logger.error('Sync presets error:', error)
     }
   }
 
@@ -168,7 +169,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
 
       setUser({ ...user, colorSets: sets })
     } catch (error) {
-      console.error('Sync color sets error:', error)
+      logger.error('Sync color sets error:', error)
     }
   }
 
@@ -187,7 +188,7 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
         localStorage.setItem('forza-colorsets', JSON.stringify(data.colorSets))
       }
     } catch (error) {
-      console.error('Sync from cloud error:', error)
+      logger.error('Sync from cloud error:', error)
     }
   }
 

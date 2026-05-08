@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDb, ensureTables } from '../../../lib/db'
+import { logger } from '../../../lib/logger'
 import { SignJWT } from 'jose'
 import { scryptSync, timingSafeEqual } from 'crypto'
 
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error: any) {
-    console.error('Login error:', error)
+    logger.error('Login error:', error)
     return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 })
   }
 }

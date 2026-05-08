@@ -12,6 +12,8 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Car } from '../types/car'
 import { countryFlags } from '../lib/countryFlags'
 import Breadcrumbs from '../components/Breadcrumbs'
+import GamingErrorBoundary from '../components/GamingErrorBoundary'
+import LoadingSpinner from '../components/ui/LoadingSpinner'
 
 const PI_CLASS_COLORS: Record<string, string> = {
   D: 'bg-gray-500 text-white',
@@ -188,110 +190,139 @@ export default function GaragePage() {
   }`
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'}`}>
-      {/* Header */}
-      <div className={`sticky top-0 z-10 border-b px-4 py-3 flex items-center gap-3 ${
-        isDarkMode ? 'bg-gray-900/95 backdrop-blur border-gray-700' : 'bg-white/95 backdrop-blur border-gray-200'
-      }`}>
-        <a href="/" className="text-gray-400 hover:text-white transition-colors shrink-0">← Back</a>
-        <span className="text-2xl">🏎️</span>
-        <div>
-          <h1 className="font-bold text-lg leading-tight">FH5 Car Database</h1>
-          <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            {loading ? 'Loading…' : `${filtered.length} of ${cars.length} cars`}
-          </p>
-        </div>
-        <a
-          href="/tuneforge"
-          className="ml-auto shrink-0 bamboo-button text-sm px-3 py-1.5 rounded-lg font-semibold"
-        >
-          🔧 Open TuneForge
-        </a>
-      </div>
-
-      <div className="max-w-screen-2xl mx-auto px-4 py-4">
-        <Breadcrumbs isDarkMode={isDarkMode} />
-
-        {/* Filters */}
-        <div className={`rounded-xl border p-4 mb-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 ${
-          isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-200'
+    <GamingErrorBoundary>
+      <div className={`min-h-screen ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'}`}>
+        {/* Header */}
+        <div className={`sticky top-0 z-10 border-b px-4 py-3 flex items-center gap-3 ${
+          isDarkMode ? 'bg-gray-900/95 backdrop-blur border-gray-700' : 'bg-white/95 backdrop-blur border-gray-200'
         }`}>
-          <input
-            type="text"
-            placeholder="Search make or model…"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className={`${inputCls} col-span-2 sm:col-span-3 lg:col-span-2`}
-          />
-          <select value={filterManufacturer} onChange={e => setFilterManufacturer(e.target.value)} className={selectCls}>
-            <option value="">All Manufacturers</option>
-            {manufacturers.map(m => <option key={m} value={m}>{m}</option>)}
-          </select>
-          <select value={filterPIClass} onChange={e => setFilterPIClass(e.target.value)} className={selectCls}>
-            <option value="">All PI Classes</option>
-            {['D','C','B','A','S1','S2','X'].map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
-          <select value={filterType} onChange={e => setFilterType(e.target.value)} className={selectCls}>
-            <option value="">All Types</option>
-            {types.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-          <select value={filterRarity} onChange={e => setFilterRarity(e.target.value)} className={selectCls}>
-            <option value="">All Rarities</option>
-            {['Common','Rare','Epic','Legendary'].map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
-          <div className="col-span-2 sm:col-span-3 lg:col-span-5 flex items-center gap-3">
-            <label className={`text-xs font-medium shrink-0 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Sort:</label>
-            <select value={sortBy} onChange={e => setSortBy(e.target.value)} className={`${selectCls} flex-1`}>
-              <option value="manufacturer">Manufacturer A–Z</option>
-              <option value="pi">PI Value (high first)</option>
-              <option value="speed">Top Speed (high first)</option>
-              <option value="handling">Handling (high first)</option>
-              <option value="price">Price (high first)</option>
-            </select>
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="shrink-0 text-xs px-3 py-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/30 transition-colors"
-              >
-                Clear filters
-              </button>
-            )}
+          <a href="/" className="text-gray-400 hover:text-white transition-colors shrink-0">← Back</a>
+          <span className="text-2xl">🏎️</span>
+          <div>
+            <h1 className="font-bold text-lg leading-tight">FH5 Car Database</h1>
+            <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              {loading ? 'Loading…' : `${filtered.length} of ${cars.length} cars`}
+            </p>
           </div>
+          <a
+            href="/tuneforge"
+            className="ml-auto shrink-0 bamboo-button text-sm px-3 py-1.5 rounded-lg font-semibold"
+          >
+            🔧 Open TuneForge
+          </a>
         </div>
 
-        {/* Error */}
-        {error && (
-          <div className="rounded-xl border border-red-500/40 bg-red-900/20 p-4 mb-4 text-red-400 text-sm">
-            Failed to load car database: {error}
-          </div>
-        )}
+        <div className="max-w-screen-2xl mx-auto px-4 py-4">
+          <Breadcrumbs isDarkMode={isDarkMode} />
 
-        {/* Loading */}
-        {loading && (
-          <div className="flex items-center justify-center py-20 gap-3 text-gray-400">
-            <span className="animate-spin text-2xl">⟳</span>
-            <span>Loading car database…</span>
+          {/* Filters */}
+          <div className={`rounded-xl border p-4 mb-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 ${
+            isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-200'
+          }`}>
+            <input
+              type="text"
+              placeholder="Search make or model…"
+              aria-label="Search make or model"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className={`${inputCls} col-span-2 sm:col-span-3 lg:col-span-2`}
+            />
+            <select
+              value={filterManufacturer}
+              onChange={e => setFilterManufacturer(e.target.value)}
+              aria-label="Filter by Manufacturer"
+              className={selectCls}
+            >
+              <option value="">All Manufacturers</option>
+              {manufacturers.map(m => <option key={m} value={m}>{m}</option>)}
+            </select>
+            <select
+              value={filterPIClass}
+              onChange={e => setFilterPIClass(e.target.value)}
+              aria-label="Filter by PI Class"
+              className={selectCls}
+            >
+              <option value="">All PI Classes</option>
+              {['D','C','B','A','S1','S2','X'].map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <select
+              value={filterType}
+              onChange={e => setFilterType(e.target.value)}
+              aria-label="Filter by Vehicle Type"
+              className={selectCls}
+            >
+              <option value="">All Types</option>
+              {types.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+            <select
+              value={filterRarity}
+              onChange={e => setFilterRarity(e.target.value)}
+              aria-label="Filter by Rarity"
+              className={selectCls}
+            >
+              <option value="">All Rarities</option>
+              {['Common','Rare','Epic','Legendary'].map(r => <option key={r} value={r}>{r}</option>)}
+            </select>
+            <div className="col-span-2 sm:col-span-3 lg:col-span-5 flex items-center gap-3">
+              <label htmlFor="sort-select" className={`text-xs font-medium shrink-0 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Sort:</label>
+              <select
+                id="sort-select"
+                value={sortBy}
+                onChange={e => setSortBy(e.target.value)}
+                aria-label="Sort cars by"
+                className={`${selectCls} flex-1`}
+              >
+                <option value="manufacturer">Manufacturer A–Z</option>
+                <option value="pi">PI Value (high first)</option>
+                <option value="speed">Top Speed (high first)</option>
+                <option value="handling">Handling (high first)</option>
+                <option value="price">Price (high first)</option>
+              </select>
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="shrink-0 text-xs px-3 py-2 rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/30 transition-colors"
+                >
+                  Clear filters
+                </button>
+              )}
+            </div>
           </div>
-        )}
 
-        {/* Grid */}
-        {!loading && !error && (
-          <>
-            {filtered.length === 0 ? (
-              <div className="text-center py-16 text-gray-500">
-                No cars match your filters.{' '}
-                <button onClick={clearFilters} className="underline text-blue-400">Clear filters</button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3">
-                {filtered.map((car, i) => (
-                  <CarCard key={`${car.manufacturer}-${car.model}-${car.year}-${i}`} car={car} isDarkMode={isDarkMode} />
-                ))}
-              </div>
-            )}
-          </>
-        )}
+          {/* Error */}
+          {error && (
+            <div className="rounded-xl border border-red-500/40 bg-red-900/20 p-4 mb-4 text-red-400 text-sm">
+              Failed to load car database: {error}
+            </div>
+          )}
+
+          {/* Loading */}
+          {loading && (
+            <div className="flex flex-col items-center justify-center py-24 gap-4" aria-live="polite">
+              <LoadingSpinner size="lg" color="teal" />
+              <span className="text-gray-400 font-medium animate-pulse">Initializing car database…</span>
+            </div>
+          )}
+
+          {/* Grid */}
+          {!loading && !error && (
+            <>
+              {filtered.length === 0 ? (
+                <div className="text-center py-16 text-gray-500">
+                  No cars match your filters.{' '}
+                  <button onClick={clearFilters} className="underline text-blue-400">Clear filters</button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3">
+                  {filtered.map((car, i) => (
+                    <CarCard key={`${car.manufacturer}-${car.model}-${car.year}-${i}`} car={car} isDarkMode={isDarkMode} />
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </GamingErrorBoundary>
   )
 }

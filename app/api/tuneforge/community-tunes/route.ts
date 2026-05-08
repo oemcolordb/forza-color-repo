@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { logger } from '@/app/lib/logger'
 import { getDb, ensureTables } from '@/app/lib/db'
 
 // GET /api/tuneforge/community-tunes?make=Ford&model=Mustang
@@ -34,7 +35,7 @@ export const GET = async (request: Request) => {
         })
         return NextResponse.json(result.rows)
       } catch (dbErr) {
-        console.warn('community-tunes query failed, returning empty list:', dbErr)
+        logger.warn('community-tunes query failed, returning empty list:', dbErr)
         return NextResponse.json([])
       }
     }
@@ -46,7 +47,7 @@ export const GET = async (request: Request) => {
       )
       return NextResponse.json(result.rows)
     } catch (dbErr) {
-      console.warn('community-tunes fallback query failed, returning empty list:', dbErr)
+      logger.warn('community-tunes fallback query failed, returning empty list:', dbErr)
       return NextResponse.json([])
     }
   } catch {

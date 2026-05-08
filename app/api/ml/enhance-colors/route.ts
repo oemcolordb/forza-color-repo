@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkBotId } from 'botid/server'
+import { logger } from '@/app/lib/logger'
 
 interface ExtractedColor {
   rgb: [number, number, number]
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ colors: enhancedColors })
   } catch (error) {
-    console.error('Color enhancement error:', error)
+    logger.error('Color enhancement error:', error)
     return NextResponse.json({ error: 'Enhancement failed' }, { status: 500 })
   }
 }

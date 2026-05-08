@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect, useRef } from 'react'
+import { logger } from '../lib/logger'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
 import Breadcrumbs from '../components/Breadcrumbs'
@@ -87,6 +88,7 @@ export default function TuneForge() {
   const router = useRouter()
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('quick')
@@ -214,6 +216,7 @@ export default function TuneForge() {
   }, [])
 
   const loadSampleCars = async () => {
+    setIsLoading(true)
     setLoadingStatus('Loading car database...')
 
     try {
@@ -266,9 +269,11 @@ export default function TuneForge() {
         setLoadingStatus(`${processedCars.length} cars loaded`)
       }
     } catch (error) {
-      console.error('TuneForge: Failed to load car database:', error)
+      logger.error('TuneForge: Failed to load car database:', error)
       setLoadingStatus('Loading fallback cars...')
       loadFallbackCars()
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -601,7 +606,7 @@ export default function TuneForge() {
       }, 200)
       setLoadingStatus('Calculation complete!')
     } catch (error) {
-      console.error('Calculation error:', error)
+      logger.error('Calculation error:', error)
       setLoadingStatus('Calculation failed')
     } finally {
       setTimeout(() => {
@@ -733,7 +738,7 @@ export default function TuneForge() {
         }),
       })
     } catch (error) {
-      console.error('Failed to save to database:', error)
+      logger.error('Failed to save to database:', error)
     }
 
     const updatedTunes = [...savedTunes, newTune]
@@ -1028,48 +1033,57 @@ export default function TuneForge() {
             isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
           }`}
         >
-          <ul className="list-none">
-            {filteredCars.slice(0, displayCount).map((car, index) => (
-              <li
-                key={index}
-                onClick={() => router.push(`/tuneforge/car/${encodeURIComponent(`${car.manufacturer} ${car.model}`)}`)}
-                className={`p-4 border-b cursor-pointer transition-colors ${
-                  selectedCar === car ? 'bamboo-button text-white' : 'hover:opacity-90'
-                } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
-              >
-                <div className="font-bold mb-2 flex items-center gap-2">
-                  <span>{getCountryFlag(car.country)}</span>
-                  <span>
-                    {car.year} {car.manufacturer} {car.model}
-                  </span>
-                </div>
-                <div className="flex gap-4 text-sm opacity-80">
-                  <span>
-                    PI: {car.pi.class} {car.pi.value}
-                  </span>
-                  <span
-                    className={`px-2 py-1 rounded text-xs ${
-                      car.rarity === 'Legendary'
-                        ? 'bg-yellow-500 text-black'
-                        : car.rarity === 'Epic'
-                          ? 'bg-purple-500 text-white'
-                          : car.rarity === 'Rare'
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-500 text-white'
-                    }`}
-                  >
-                    {car.rarity}
-                  </span>
-                  <span>{formatPrice(car.price)}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          {displayCount < filteredCars.length && (
-            <div ref={loadMoreRef} className="p-4 text-center text-sm opacity-50">
-              Loading more cars...
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-gray-400 py-20">
+              <div className="animate-spin text-4xl">⟳</div>
+              <p className="text-sm font-medium animate-pulse">{loadingStatus}</p>
             </div>
+          ) : (
+            <>
+              <ul className="list-none">
+                {filteredCars.slice(0, displayCount).map((car, index) => (
+                  <li
+                    key={index}
+                    onClick={() => router.push(`/tuneforge/car/${encodeURIComponent(`${car.manufacturer} ${car.model}`)}`)}
+                    className={`p-4 border-b cursor-pointer transition-colors ${
+                      selectedCar === car ? 'bamboo-button text-white' : 'hover:opacity-90'
+                    } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
+                  >
+                    <div className="font-bold mb-2 flex items-center gap-2">
+                      <span>{getCountryFlag(car.country)}</span>
+                      <span>
+                        {car.year} {car.manufacturer} {car.model}
+                      </span>
+                    </div>
+                    <div className="flex gap-4 text-sm opacity-80">
+                      <span>
+                        PI: {car.pi.class} {car.pi.value}
+                      </span>
+                      <span
+                        className={`px-2 py-1 rounded text-xs ${
+                          car.rarity === 'Legendary'
+                            ? 'bg-yellow-500 text-black'
+                            : car.rarity === 'Epic'
+                              ? 'bg-purple-500 text-white'
+                              : car.rarity === 'Rare'
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-500 text-white'
+                        }`}
+                      >
+                        {car.rarity}
+                      </span>
+                      <span>{formatPrice(car.price)}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {displayCount < filteredCars.length && (
+                <div ref={loadMoreRef} className="p-4 text-center text-sm opacity-50">
+                  Loading more cars...
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -3252,7 +3266,6 @@ export default function TuneForge() {
         )}
         </div>
       )}
-      </div>
       </div>
     </div>
   )

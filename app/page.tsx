@@ -30,8 +30,6 @@ import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import OfflineIndicator from './components/OfflineIndicator'
-import OptimizedStatsBar from './components/OptimizedStatsBar'
-import ExportButton from './components/ExportButton'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
 const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })

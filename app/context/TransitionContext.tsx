@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react'
 import { TransitionType, getRandomTransition } from '../components/transitions/PageTransitions'
+import { logger } from '../lib/logger'
 
 type TransitionMode = 'random' | 'fixed'
 
@@ -107,7 +108,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
           setUserVotes(data.userVotes || {})
         }
       } catch (error) {
-        console.error('Failed to load votes:', error)
+        logger.error('Failed to load votes:', error)
       }
     }
     loadVotes()
@@ -192,7 +193,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         setUserVotes(prev => ({ ...prev, [transition]: true }))
       }
     } catch (error) {
-      console.error('Failed to vote:', error)
+      logger.error('Failed to vote:', error)
     } finally {
       setIsLoadingVotes(false)
     }
@@ -215,7 +216,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
         setUserVotes(prev => ({ ...prev, [transition]: false }))
       }
     } catch (error) {
-      console.error('Failed to remove vote:', error)
+      logger.error('Failed to remove vote:', error)
     } finally {
       setIsLoadingVotes(false)
     }

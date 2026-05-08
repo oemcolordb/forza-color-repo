@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
 import { getDb, ensureTables } from '../../../lib/db'
+import { logger } from '../../../lib/logger'
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'forza-color-universe-super-secret-key-123'
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Auth check error:', error)
+    logger.error('Auth check error:', error)
     return NextResponse.json({ user: null }, { status: 401 })
   }
 }
