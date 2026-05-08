@@ -72,6 +72,14 @@ export default function TuneCalcClient({ car }: { car: Car }) {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMessages, setAiMessages] = useState<{role: 'user'|'assistant'; content: string}[]>([])
 
+  // Community tune submission states
+  const [showTuneSubmit, setShowTuneSubmit] = useState(false)
+  const [submitTuneName, setSubmitTuneName] = useState('')
+  const [submitTuner, setSubmitTuner] = useState('')
+  const [submitCode, setSubmitCode] = useState('')
+  const [submitDiscipline, setSubmitDiscipline] = useState('Road Racing')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   useEffect(() => {
     const saved = localStorage.getItem('theme')
     if (saved) setIsDarkMode(saved === 'dark')
@@ -141,6 +149,55 @@ export default function TuneCalcClient({ car }: { car: Car }) {
 
   const applyAiAdjustment = (adjustments: Record<string, number>) => {
     setTuneData(prev => ({ ...prev, ...adjustments }))
+  }
+
+  const submitCommunityTune = async () => {
+    if (!submitTuneName.trim()) return
+    if (Object.keys(tuneData).length === 0) {
+      alert('Please calculate a tune before submitting')
+      return
+    }
+    if (submitCode && submitCode.length !== 9) {
+      alert('Share code must be exactly 9 digits')
+      return
+    }
+
+    setIsSubmitting(true)
+    const id = `ct-${Date.now()}-${crypto.randomUUID().slice(0, 8)}`
+    const payload = {
+      id,
+      car_make: car.manufacturer,
+      car_model: car.model,
+      tune_name: submitTuneName.trim(),
+      tuner_name: submitTuner.trim() || 'Anonymous',
+      share_code: submitCode.trim() || null,
+      discipline: submitDiscipline,
+      pi_class: car.pi?.class ?? null,
+      pi_value: car.pi?.value ?? null,
+      tune_data: JSON.stringify(tuneData),
+    }
+    try {
+      const res = await fetch('/api/tuneforge/community-tunes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setShowTuneSubmit(false)
+        setSubmitCode('')
+        setSubmitTuner('')
+        setSubmitTuneName('')
+        setSubmitDiscipline('Road Racing')
+        alert('Tune submitted to community database successfully!')
+      } else {
+        alert(`Failed to submit tune: ${data.error || 'Unknown error'}`)
+      }
+    } catch {
+      alert('Failed to submit tune: Network error')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -322,7 +379,62 @@ export default function TuneCalcClient({ car }: { car: Car }) {
 
               {Object.keys(tuneData).length > 0 && (
                 <div className="mt-8">
-                  <h3 className="text-xl font-bold mb-4">Tune Results</h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold">📋 Your Tune Results</h3>
+                    <button
+                      onClick={() => setShowTuneSubmit(s => !s)}
+                      className="text-sm bamboo-button-ghost px-3 py-1 rounded"
+                    >
+                      {showTuneSubmit ? 'Cancel' : '+ Migrate to Community Database'}
+                    </button>
+                  </div>
+                  {showTuneSubmit && (
+                    <div className={`mb-4 p-4 rounded border ${isDarkMode ? 'bamboo-surface-dark border-yellow-600/30' : 'bamboo-surface border-yellow-500/30'}`}>
+                      <h4 className="text-sm font-bold text-yellow-400 mb-3">Submit Tune to Community Database</h4>
+                      <div className="space-y-2">
+                        <input
+                          placeholder="Tune name *"
+                          value={submitTuneName}
+                          onChange={e => setSubmitTuneName(e.target.value)}
+                          className="w-full text-sm bamboo-input rounded px-2 py-1"
+                        />
+                        <input
+                          placeholder="Your name (optional)"
+                          value={submitTuner}
+                          onChange={e => setSubmitTuner(e.target.value)}
+                          className="w-full text-sm bamboo-input rounded px-2 py-1"
+                        />
+                        <input
+                          placeholder="Share code (9 digits, optional)"
+                          value={submitCode}
+                          onChange={e => setSubmitCode(e.target.value.replace(/\D/g, '').slice(0, 9))}
+                          className="w-full text-sm bamboo-input rounded px-2 py-1"
+                          maxLength={9}
+                        />
+                        {submitCode && submitCode.length !== 9 && (
+                          <p className="text-xs text-yellow-400">Share code must be exactly 9 digits</p>
+                        )}
+                        <label htmlFor="discipline" className="sr-only">Discipline</label>
+                        <select
+                          id="discipline"
+                          value={submitDiscipline}
+                          onChange={e => setSubmitDiscipline(e.target.value)}
+                          className="w-full text-sm bamboo-input rounded px-2 py-1"
+                        >
+                          {['Road Racing','Dirt Racing','Cross Country','Drag Racing','Street Racing','Drift','Rally'].map(d => (
+                            <option key={d} value={d}>{d}</option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={submitCommunityTune}
+                          disabled={!submitTuneName.trim() || isSubmitting}
+                          className="w-full text-sm bamboo-button rounded px-2 py-1 disabled:opacity-40"
+                        >
+                          {isSubmitting ? 'Submitting...' : 'Submit tune'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                   <div className={`p-4 rounded ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
