@@ -1,3 +1,5 @@
+'use client'
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -6,11 +8,10 @@ export const metadata: Metadata = {
   keywords: ['Forza tuning', 'FH5 tunes', 'Forza car tuning', 'community tunes', 'tuning calculator', 'Forza setup', 'FH5 car setup', 'race tuning'],
 }
 
-'use client'
-
 export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect, useRef } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
 import Breadcrumbs from '../components/Breadcrumbs'
 import { getCountryFlag, formatPrice } from '../lib/countryFlags'
@@ -82,6 +83,8 @@ interface CommunityTune {
 }
 
 export default function TuneForge() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
@@ -242,8 +245,26 @@ export default function TuneForge() {
       }))
 
       setCars(processedCars)
-      setSelectedCar(processedCars[0])
-      setLoadingStatus(`${processedCars.length} cars loaded`)
+
+      // Check for car parameter in URL from garage page
+      const carParam = searchParams.get('car')
+      if (carParam) {
+        // Parse "manufacturer model" format from URL
+        const decodedCar = decodeURIComponent(carParam)
+        const foundCar = processedCars.find(car =>
+          `${car.manufacturer} ${car.model}`.toLowerCase() === decodedCar.toLowerCase()
+        )
+        if (foundCar) {
+          setSelectedCar(foundCar)
+          setLoadingStatus(`${processedCars.length} cars loaded - "${decodedCar}" selected`)
+        } else {
+          setSelectedCar(processedCars[0])
+          setLoadingStatus(`${processedCars.length} cars loaded (car "${decodedCar}" not found)`)
+        }
+      } else {
+        setSelectedCar(processedCars[0])
+        setLoadingStatus(`${processedCars.length} cars loaded`)
+      }
     } catch (error) {
       console.error('TuneForge: Failed to load car database:', error)
       setLoadingStatus('Loading fallback cars...')
@@ -1011,7 +1032,7 @@ export default function TuneForge() {
             {filteredCars.slice(0, displayCount).map((car, index) => (
               <li
                 key={index}
-                onClick={() => setSelectedCar(car)}
+                onClick={() => router.push(`/tuneforge/car/${encodeURIComponent(`${car.manufacturer} ${car.model}`)}`)}
                 className={`p-4 border-b cursor-pointer transition-colors ${
                   selectedCar === car ? 'bamboo-button text-white' : 'hover:opacity-90'
                 } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
