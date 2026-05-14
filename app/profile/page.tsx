@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import { logger } from '../lib/logger';
 import Link from 'next/link';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { useAuth } from '../components/AuthProvider';
+import { AuthProvider, useAuth } from '../components/AuthProvider';
 import GamingErrorBoundary from '../components/GamingErrorBoundary';
 
-export default function ProfilePage() {
+function ProfileContent() {
   const { user, logout } = useAuth();
   const [favorites, setFavorites] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -250,5 +250,13 @@ export default function ProfilePage() {
         </div>
       </GamingErrorBoundary>
     </ProtectedRoute>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <AuthProvider>
+      <ProfileContent />
+    </AuthProvider>
   );
 }

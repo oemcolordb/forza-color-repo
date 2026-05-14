@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { logger } from '../lib/logger';
 import ProtectedRoute from '../components/ProtectedRoute';
-import { useAuth } from '../components/AuthProvider';
+import { AuthProvider, useAuth } from '../components/AuthProvider';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import GamingErrorBoundary from '../components/GamingErrorBoundary';
 
@@ -167,10 +167,12 @@ function FavoritesContent() {
 
 export default function FavoritesPage() {
   return (
-    <ProtectedRoute>
-      <GamingErrorBoundary>
-        <FavoritesContent />
-      </GamingErrorBoundary>
-    </ProtectedRoute>
+    <AuthProvider>
+      <ProtectedRoute>
+        <GamingErrorBoundary>
+          <FavoritesContent />
+        </GamingErrorBoundary>
+      </ProtectedRoute>
+    </AuthProvider>
   );
 }

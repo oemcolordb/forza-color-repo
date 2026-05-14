@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useCallback } from 'react'
-import { logger } from '../lib/logger'
 
 const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated, isMobile = false }) => {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -149,7 +148,7 @@ const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated, isMobile = fals
         setGeneratedCount(prev => prev + newColors.length)
         onColorsGenerated(newColors)
       } catch (error) {
-        logger.error('Generation error:', error)
+        console.error('Generation error:', error)
       }
 
       setIsGenerating(false)
@@ -187,7 +186,7 @@ const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated, isMobile = fals
         onColorsGenerated(allVariants)
       }
     } catch (error) {
-      logger.error('Massive generation error:', error)
+      console.error('Massive generation error:', error)
     }
 
     setIsGenerating(false)

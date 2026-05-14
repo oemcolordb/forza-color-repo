@@ -1,5 +1,4 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react'
-import { logger } from '../lib/logger'
 
 interface Props {
   children: ReactNode
@@ -26,7 +25,7 @@ export default class GamingErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    logger.error('Gaming component error:', error, errorInfo)
+    console.error('Gaming component error:', error, errorInfo)
 
     // Track gaming-specific errors
     if (typeof window !== 'undefined' && (window as any).gtag) {

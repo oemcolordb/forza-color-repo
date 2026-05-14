@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { logger } from '../lib/logger'
 import { LocationType } from '../location-finder/types'
 
 interface MapProgress {
@@ -80,7 +79,7 @@ export function useMapPersistence() {
           }
         }
       } catch (error) {
-        logger.error('Failed to load map progress:', error)
+        console.error('Failed to load map progress:', error)
       } finally {
         setIsLoading(false)
       }
@@ -138,7 +137,7 @@ export function useMapPersistence() {
         throw new Error('Sync failed')
       }
     } catch (error) {
-      logger.error('Cloud sync failed:', error)
+      console.error('Cloud sync failed:', error)
       setSyncError('Failed to sync to cloud')
     }
   }, [])

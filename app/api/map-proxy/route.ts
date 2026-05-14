@@ -15,7 +15,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import PROXY_LIST from './proxy-list.json'
-import { logger } from '@/app/lib/logger'
 
 // ---------------------------------------------------------------------------
 // Config
@@ -62,7 +61,7 @@ async function proxyFetch(url: string, init: RequestInit = {}): Promise<Response
     try {
       return await fetchViaProxy(url, pinnedProxy, init)
     } catch (err) {
-      logger.warn('[map-proxy] Pinned proxy failed, falling through to pool:', err)
+      console.warn('[map-proxy] Pinned proxy failed, falling through to pool:', err)
     }
   }
 
@@ -76,12 +75,12 @@ async function proxyFetch(url: string, init: RequestInit = {}): Promise<Response
       const result = await fetchViaProxy(url, proxy, init)
       return result
     } catch (err) {
-      logger.warn(`[map-proxy] Proxy ${proxy} attempt ${attempt + 1} failed:`, (err as Error).message)
+      console.warn(`[map-proxy] Proxy ${proxy} attempt ${attempt + 1} failed:`, (err as Error).message)
     }
   }
 
   // All proxies failed — direct fetch fallback.
-  logger.warn('[map-proxy] All proxy attempts exhausted, using direct fetch')
+  console.warn('[map-proxy] All proxy attempts exhausted, using direct fetch')
   return fetch(url, init)
 }
 
@@ -167,7 +166,7 @@ export async function GET(request: NextRequest) {
 
     return new NextResponse(body, { status: upstream.status, headers })
   } catch (err) {
-    logger.error('[map-proxy] Upstream fetch failed:', err)
+    console.error('[map-proxy] Upstream fetch failed:', err)
     return NextResponse.json({ error: 'Upstream fetch failed' }, { status: 502 })
   }
 }

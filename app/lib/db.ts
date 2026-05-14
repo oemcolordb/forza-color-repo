@@ -78,30 +78,36 @@ export async function ensureTables(): Promise<void> {
       car_id       TEXT    NOT NULL,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
-    `CREATE TABLE IF NOT EXISTS users (
-      id           TEXT    PRIMARY KEY,
-      email        TEXT    NOT NULL UNIQUE,
-      password     TEXT    NOT NULL,
-      name         TEXT,
-      role         TEXT    DEFAULT 'user',
+    `CREATE TABLE IF NOT EXISTS color_analytics (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      color_id     TEXT    NOT NULL,
+      action       TEXT    NOT NULL,
+      user_id      TEXT,
+      ip_hash      TEXT,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
-    `CREATE INDEX IF NOT EXISTS idx_users_email ON users (email)`,
-    `CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    `CREATE TABLE IF NOT EXISTS aggregated_stats (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      type         TEXT    NOT NULL,
+      data         TEXT    NOT NULL,
+      updated_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS community_posts (
       id           TEXT    PRIMARY KEY,
-      email        TEXT    NOT NULL,
-      token        TEXT    NOT NULL UNIQUE,
-      expires_at   DATETIME NOT NULL,
-      used         INTEGER NOT NULL DEFAULT 0,
+      user_id      TEXT    NOT NULL,
+      username     TEXT    NOT NULL,
+      image_url    TEXT    NOT NULL,
+      caption      TEXT,
+      car_name     TEXT,
+      tune_code    TEXT,
+      likes        INTEGER DEFAULT 0,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
-    `CREATE INDEX IF NOT EXISTS idx_reset_tokens_email ON password_reset_tokens (email)`,
-    `CREATE INDEX IF NOT EXISTS idx_reset_tokens_token ON password_reset_tokens (token)`,
-    `CREATE TABLE IF NOT EXISTS todos (
-      id           TEXT    PRIMARY KEY,
-      description  TEXT    NOT NULL,
-      completed    INTEGER NOT NULL DEFAULT 0,
-      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`,
+    `CREATE TABLE IF NOT EXISTS post_likes (
+      post_id      TEXT    NOT NULL,
+      user_id      TEXT    NOT NULL,
+      PRIMARY KEY (post_id, user_id),
+      FOREIGN KEY (post_id) REFERENCES community_posts(id) ON DELETE CASCADE
+    )`
   ], 'deferred')
 }

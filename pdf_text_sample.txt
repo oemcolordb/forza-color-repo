@@ -1,0 +1,558 @@
+COLOR 1 (X)
+COLOR 2 (Y)
+COMMENTS
+HOW IT WORKS:
+MAKE
+COLOUR NAME
+PAINT TYPE
+HUE
+SATURATION
+BRIGHTNESS
+HUE
+SATURATION
+BRIGHTNESS
+https://www.gtplanet.net/forum/threads/forza-horizon-4-colour
+3M
+Gloss Atomic Teal
+Metal Flake
+0.53 L
+0.99 R
+0.57 L
+0.53 L
+0.98 R
+0.76 L
+3M
+Gloss Black Rose
+Metal Flake
+0.06 L
+0.50 R
+0.23 L
+0.96 L
+0.59 R
+0.90 L
+3M
+Gloss Blue Fire
+Metal Flake
+0.60 L
+0.96 R
+0.78 L
+0.53 L
+1.00 R
+0.95 L
+3M
+Gloss Wicked
+Metal Flake
+0.73 L
+0.35 R
+0.08 L
+0.72 L
+0.29 R
+0.56 L
+3M
+Matte Indigo
+Two-Tone Matte
+0.60 L
+0.53 R
+0.34 L
+0.60 R
+0.53 L
+0.34 R
+3M
+Satin Bitter Yellow
+Two-Tone Matte
+0.15 L
+0.97 R
+0.82 L
+0.15 R
+0.97 L
+0.82 R
+Abarth
+Abarth Red
+Normal
+1.00 R
+0.82 R
+0.84 L
+176/A
+Abarth
+Arancia Veloce
+Metal Flake
+0.12 L
+0.84 L
+1.00 R
+0.12 L
+0.90 R
+0.97 L
+1973 Fiat X1/9 Prototipo
+Abarth
+Bianco 1970
+Normal
+0.13 R
+0.02 L
+0.99 L
+204/B
+Abarth
+Bianco Gara
+Normal
+0.13 L
+0.04 L
+0.92 L
+268/A
+Abarth
+Bianco Iridato
+Metal Flake
+0.13 L
+0.04 L
+0.87 R
+0.13 L
+0.04 L
+0.98 L
+270/A
+Abarth
+Blu Rally
+Metal Flake
+0.58 L
+0.85 L
+0.63 R
+0.57 R
+0.77 L
+1.00 R
+2022 695 Tributo 131 Rally
+Abarth
+Costa Brava 1972 Red
+Normal
+0.00 L
+0.97 R
+0.89 R
+162/C
+Abarth
+Deep Crystal Blue
+Metal Flake
+0.57 L
+0.64 R
+0.26 R
+0.57 R
+0.58 L
+0.45 L
+816/C
+Abarth
+Grey
+Metal Flake
+0.49 R
+0.22 R
+0.77 L
+0.54 L
+0.20 R
+0.90 R
+1952 1500 Biposto Bertone B.A.T 1
+Abarth
+Grigio Campovolo
+Normal
+0.67 R
+0.02 R
+0.59 L
+676/A
+Abarth
+Ice White Tri Coat
+Metal Flake
+0.00 L
+0.00 L
+0.94 L
+0.00 L
+0.00 L
+1.00 R
+227/B
+Abarth
+Modena Yellow
+Normal
+0.13 L
+0.78 L
+0.94 L
+258/A
+Abarth
+Nero Scorpione
+Metal Flake
+0.00 L
+0.00 L
+0.00 L
+0.00 L
+0.00 L
+0.05 R
+876/B
+Abarth
+Performance Grey
+Two-Tone Matte
+0.67 L
+0.02 R
+0.50 L
+0.67 L
+0.02 R
+0.50 L
+695 Biposto
+Abarth
+Pista Grey
+Normal
+0.56 R
+0.14 L
+0.22 R
+735/A
+Abarth
+Podium Blue
+Metal Flake
+0.61 L
+0.96 L
+0.36 R
+0.58 L
+1.00 R
+0.41 R
+369/B
+Abarth
+Rallye Red
+Normal
+0.01 L
+0.81 R
+0.89 L
+171
+Abarth
+Record Grey
+Metal Flake
+0.72 L
+0.03 L
+0.44 L
+0.72 R
+0.02 L
+0.56 L
+695/A
+Abarth
+Rosso Officina
+Normal
+0.99 L
+0.86 R
+0.70 R
+111/A
+Abarth
+San Marino 1972 Black
+Metal Flake
+0.00 L
+0.00 L
+0.00 L
+0.00 L
+0.00 L
+0.06 L
+244/B
+Abarth
+Snowflake White
+Metal Flake
+0.00 L
+0.00 L
+0.94 L
+0.00 L
+0.00 L
+1.00 R
+819/C
+Abarth
+Sonic Silver
+Metal Flake
+0.17 R
+0.01 L
+0.53 L
+0.17 L
+0.01 R
+0.64 R
+807/B
+Abarth
+Trofeo Grey
+Metal Flake
+0.39 R
+0.07 L
+0.31 R
+0.19 L
+0.06 L
+0.42 L
+372/A
+Abarth
+Turini 1975 White
+Normal
+0.00 L
+0.00 L
+0.93 R
+163/C
+Abarth
+Verde Monza 1958
+Normal
+0.44 L
+0.31 L
+0.67 R
+2019 695 70th Anniversario, 745/A
+Abarth
+White
+Normal
+0.16 L
+0.04 L
+0.97 R
+AC Cars
+Beige
+Normal
+0.12 L
+0.52 R
+0.79 L
+AC Cars
+Black
+Normal
+0.67 R
+0.15 L
+0.04 L
+AC Cars
+Canary Yellow
+Normal
+0.14 L
+0.74 R
+0.96 L
+AC Cars
+Charcoal
+Metal Flake
+0.65 L
+0.14 R
+0.25 R
+0.65 L
+0.09 R
+0.36 R
+A1786
+AC Cars
+Cherry Red
+Normal
+1.00 R
+0.95 L
+0.62 R
+AC Cars
+Dark Blue
+Two-Tone Polished
+0.64 R
+0.77 R
+0.24 L
+0.64 L
+0.57 R
+0.48 L
+AC Cars
+Guardsman Blue
+Metal Flake
+0.59 R
+0.71 R
+0.57 L
+0.59 L
+0.54 L
+0.85 R
+A1630
+AC Cars
+Ivy Green
+Normal
+0.33 R
+0.88 R
+0.20 R
+A1738
+AC Cars
+Live Oak
+Metal Flake
+0.46 L
+0.15 L
+0.42 R
+0.46 L
+0.11 R
+0.57 R
+AC Cars
+Mist Silver
+Metal Flake
+0.61 L
+0.11 L
+0.61 R
+0.61 R
+0.09 L
+0.73 R
+AC Cars
+Off White
+Normal
+0.14 R
+0.04 R
+0.82 L
+AC Cars
+Princess Blue
+Metal Flake
+0.52 L
+0.29 L
+0.69 R
+0.55 R
+0.21 R
+0.94 R
+AC Cars
+Rangoon Red
+Normal
+1.00 R
+0.82 L
+0.83 L
+A1440R
+AC Cars
+Raven Black
+Normal
+0.00 L
+0.00 L
+0.03 L
+A946
+AC Cars
+Ruby Red
+Metal Flake
+0.99 R
+0.70 R
+0.35 L
+0.98 L
+0.91 R
+0.55 R
+AC Cars
+Sand
+Metal Flake
+0.09 L
+0.29 R
+0.44 R
+0.09 R
+0.23 L
+0.56 R
+AC Cars
+Silver
+Metal Flake
+0.58 R
+0.06 R
+0.53 L
+0.58 L
+0.05 L
+0.64 R
+A1784
+AC Cars
+Sunset Red
+Normal
+0.99 R
+1.00 L
+0.90 L
+AC Cars
+Vineyard Green
+Two-Tone Polished
+0.38 L
+0.32 R
+0.19 R
+0.38 L
+0.34 R
+0.31 L
+AC Cars
+Wimbledon White
+Normal
+0.17 L
+0.04 L
+0.97 L
+A1633
+AC Schnitzer
+Classic Racing Green
+Normal
+0.34 R
+0.64 L
+0.37 R
+2016 ACL2
+Acura
+130R White
+Normal
+0.25 L
+0.01 R
+0.95 L
+NH854
+Acura
+Abyss Blue Pearl
+Metal Flake
+0.69 L
+0.32 R
+0.07 L
+0.58 L
+0.82 R
+0.53 L
+Acura
+Adriatic Blue Pearl
+Metal Flake
+0.63 L
+0.71 R
+0.22 R
+0.57 L
+0.81 L
+0.40 R
+Acura
+Aegean Blue Pearl
+Metal Flake
+0.61 L
+0.88 R
+0.13 L
+0.58 L
+0.87 R
+0.78 L
+Acura
+Alberta White Pearl
+Metal Flake
+0.12 L
+0.08 R
+0.74 L
+0.00 L
+0.00 R
+0.98 L
+Acura
+Anthracite Metallic
+Metal Flake
+0.63 L
+0.13 L
+0.37 R
+0.63 L
+0.13 L
+0.37 R
+Acura
+Apex Blue Pearl
+Metal Flake
+0.61 L
+0.98 R
+0.26 L
+0.60 L
+0.90 R
+0.86 L
+Acura
+Arctic Blue Pearl
+Metal Flake
+0.58 L
+0.91 R
+0.26 L
+0.55 L
+0.99 R
+0.47 L
+Acura
+Aspen White Pearl
+Metal Flake
+0.16 L
+0.06 R
+0.73 L
+0.00 L
+0.00 R
+0.98 L
+Acura
+Baltic Blue Mica
+Metal Flake
+0.55 L
+0.54 R
+0.18 L
+0.53 L
+0.47 R
+0.40 L
+Acura
+Basque Red Pearl
+Metal Flake
+0.95 R
+0.68 R
+0.21 L
+0.95 R
+0.68 R
+0.21 L
+Acura
+Berlina Black
+Normal
+0.00 L
+0.00 L
+0.00 R

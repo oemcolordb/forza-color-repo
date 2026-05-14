@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { CarStatsRadarChart } from '../../../components/CarStatsRadarChart'
 import { getCountryFlag, formatPrice } from '../../../lib/countryFlags'
 import TokyoBackground from '../../../components/TokyoBackground'
+import { getSecureAssetUrl } from '../../../lib/assetProtection'
 import { TuningCalculator } from '../../../lib/tuning-calculator'
 
 interface Car {
@@ -202,7 +203,7 @@ export default function TuneCalcClient({ car }: { car: Car }) {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
-      <TokyoBackground />
+      <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
       <div className={`relative z-10 min-h-screen p-4 md:p-8 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
         {/* Header */}
         <div className="max-w-7xl mx-auto mb-8">
@@ -236,7 +237,7 @@ export default function TuneCalcClient({ car }: { car: Car }) {
               </div>
 
               <div className="w-48 h-48">
-                <CarStatsRadarChart car={car} size={192} />
+                <CarStatsRadarChart stats={car.stats} size={192} isDarkMode={isDarkMode} />
               </div>
             </div>
 

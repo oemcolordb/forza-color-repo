@@ -22,42 +22,99 @@ out/
 build/
 dist/
 
-# Environment variables
+# Environment variables & Secrets
+.env
 .env.local
+.env*.local
+secret.txt
+client_secret_*.json
+forza-color-repo-*.json
+*.conf
+*.key
+*.pem
 
-# Debug
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+# Debug & Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.log
+*.log
+build-cleanup-check*.txt
+netlify-build-log*.txt
+playwright-*.txt
+audit-after.txt
+audit-fix-output.txt
+dev-err.txt
+dev-out.txt
+dev-server-log.txt
+git-push-output.txt
+analysis_log.txt
+generate_output.txt
+aggressive_output.txt
+.vercel
 
-# IDE
+# IDE & AI Tools
 .vscode/
 .idea/
 .windsurf/
+.claude/
+.qodo/
+.roo/
+.ai-code-review/
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Logs
-.log
-.vercel
-*.txt
+# Data & Extraction Outputs
+*.enc
+data/
+*.db
+*.sqlite
+Designer-30-768x768*.json
+Gemini_Generated_Image_*.json
+Screenshot 2026-04-13*.json
+v2-*.json
+shutterstock_*.json
+article-guide-*.json
+colorful-weed-*.json
+extracted_colors.json
+color_hsb_audit_results.json
+oem-color-validation-report.json
+name_hsb_fix_report.json
+color_fix_report.json
+scripts/raw_extracted_data.json
+scripts/extracted_tunes*.json
+tunes-extracted.json
+manteomax_tunes.json
+scripts/__pycache__/
 
-# Build/Deploy outputs
+# Research & Binary Assets
+"Forza-color-repo Research/"
+*.pdf
+*.docx
+*.xlsx
+"Gengar With Smiley Tongue Sticker"
+botid/
+horizon_databank/
+"Copy of ManteoMax's Forza HORIZON 5 Spreadsheets"
+
+# Build & Deploy
+.next/
+tsconfig.tsbuildinfo
+out/
+build/
+dist/
 .netlify/
+vercel.json
 
-# AI Code Review temporary files
-.ai-code-review/
-!.ai-code-review/prompts/
-!.ai-code-review/prompts/.md
-!.ai-code-review/changes/
-!.ai-code-review/changes/.json
-!.ai-code-review/results/
-
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.venv/
 pnpm-lock.yaml
 package-lock.json
-.claude/CLAUDE.local.md
-.claude/settings.local.json
-.claude/agent-memory/
-.env*.local
+deno.lock
+

@@ -32,17 +32,17 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   // Dynamic grid classes based on zoom level
   const getGridClasses = () => {
     // Use faster transitions on mobile, skip transitions on touch for better performance
-    const transitionClass = zoomInfo.isMobile || zoomInfo.isTouch
-      ? 'transition-none'
+    const transitionClass = zoomInfo.isMobile || zoomInfo.isTouch 
+      ? 'transition-none' 
       : 'transition-all duration-500 ease-out'
-
-    const baseClasses = `grid ${transitionClass}`
-
+    
+    const baseClasses = `grid ${transitionClass} p-2`
+    
     // Mobile-optimized: use simpler grid on touch devices
     if (zoomInfo.isMobile || zoomInfo.isTouch) {
       return `${baseClasses} grid-cols-2 sm:grid-cols-3 gap-3`
     }
-
+    
     // Adjust columns based on zoom scale for desktop — goes to screen edge
     const columnClasses = {
       xs: 'grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 xl:grid-cols-14 2xl:grid-cols-16',

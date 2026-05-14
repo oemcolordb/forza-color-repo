@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '../components/AuthProvider';
+import { AuthProvider, useAuth } from '../components/AuthProvider';
 import Head from 'next/head';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -135,5 +135,13 @@ export default function LoginPage() {
       </div>
     </div>
     </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <AuthProvider>
+      <LoginContent />
+    </AuthProvider>
   );
 }

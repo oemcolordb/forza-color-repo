@@ -1,18 +1,8 @@
 'use client'
 
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'TuneForge | Forza Color Universe',
-  description: 'Create, share, and discover community tunes for Forza Horizon 5 and Motorsport. Tuning calculator with optimized settings for every track and car class.',
-  keywords: ['Forza tuning', 'FH5 tunes', 'Forza car tuning', 'community tunes', 'tuning calculator', 'Forza setup', 'FH5 car setup', 'race tuning'],
-}
-
 export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { logger } from '../lib/logger'
-import { useSearchParams, useRouter } from 'next/navigation'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
 import Breadcrumbs from '../components/Breadcrumbs'
 import { getCountryFlag, formatPrice } from '../lib/countryFlags'
@@ -84,11 +74,8 @@ interface CommunityTune {
 }
 
 export default function TuneForge() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('quick')
@@ -105,6 +92,7 @@ export default function TuneForge() {
   const [weatherCondition, setWeatherCondition] = useState('dry')
   const [trackSurface, setTrackSurface] = useState('tarmac')
   const [lapTimeTarget, setLapTimeTarget] = useState('')
+  const [, setActivePreset] = useState('')
   const [isCalculating, setIsCalculating] = useState(false)
   const [calculationProgress, setCalculationProgress] = useState(0)
   const [loadingStatus, setLoadingStatus] = useState('Initializing...')
@@ -121,9 +109,6 @@ export default function TuneForge() {
   const [springFrequency, setSpringFrequency] = useState(1.5)
   const [rollStiffness, setRollStiffness] = useState(0)
   const [springUnit, setSpringUnit] = useState('lbf/in')
-  const [aeroUnit, setAeroUnit] = useState<'kg'|'lbs'>('kg')
-  const [rideHeightUnit, setRideHeightUnit] = useState<'cm'|'in'>('cm')
-  const [tirePressureUnit, setTirePressureUnit] = useState<'PSI'|'Bar'>('PSI')
   const [showChecklist, setShowChecklist] = useState(false)
   const [advancedCategory, setAdvancedCategory] = useState('')
   const [savedTuneSearch, setSavedTuneSearch] = useState('')
@@ -184,39 +169,7 @@ export default function TuneForge() {
       .finally(() => setCommunityLoading(false))
   }, [selectedCar])
 
-  // Auto-reload to fetch the newest update if the user comes back after 30 mins
-  useEffect(() => {
-    const INACTIVITY_LIMIT = 30 * 60 * 1000 // 30 minutes
-    let lastActive = Date.now()
-
-    const checkInactivity = () => {
-      if (document.visibilityState === 'visible') {
-        if (Date.now() - lastActive > INACTIVITY_LIMIT) {
-          window.location.reload()
-        } else {
-          lastActive = Date.now()
-        }
-      }
-    }
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') lastActive = Date.now()
-      else checkInactivity()
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('focus', checkInactivity)
-    const keepAlive = setInterval(() => { if (document.visibilityState === 'visible') lastActive = Date.now() }, 60000)
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('focus', checkInactivity)
-      clearInterval(keepAlive)
-    }
-  }, [])
-
   const loadSampleCars = async () => {
-    setIsLoading(true)
     setLoadingStatus('Loading car database...')
 
     try {
@@ -248,32 +201,12 @@ export default function TuneForge() {
       }))
 
       setCars(processedCars)
-
-      // Check for car parameter in URL from garage page
-      const carParam = searchParams.get('car')
-      if (carParam) {
-        // Parse "manufacturer model" format from URL
-        const decodedCar = decodeURIComponent(carParam)
-        const foundCar = processedCars.find(car =>
-          `${car.manufacturer} ${car.model}`.toLowerCase() === decodedCar.toLowerCase()
-        )
-        if (foundCar) {
-          setSelectedCar(foundCar)
-          setLoadingStatus(`${processedCars.length} cars loaded - "${decodedCar}" selected`)
-        } else {
-          setSelectedCar(processedCars[0])
-          setLoadingStatus(`${processedCars.length} cars loaded (car "${decodedCar}" not found)`)
-        }
-      } else {
-        setSelectedCar(processedCars[0])
-        setLoadingStatus(`${processedCars.length} cars loaded`)
-      }
+      setSelectedCar(processedCars[0])
+      setLoadingStatus(`${processedCars.length} cars loaded`)
     } catch (error) {
-      logger.error('TuneForge: Failed to load car database:', error)
+      console.error('TuneForge: Failed to load car database:', error)
       setLoadingStatus('Loading fallback cars...')
       loadFallbackCars()
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -606,7 +539,7 @@ export default function TuneForge() {
       }, 200)
       setLoadingStatus('Calculation complete!')
     } catch (error) {
-      logger.error('Calculation error:', error)
+      console.error('Calculation error:', error)
       setLoadingStatus('Calculation failed')
     } finally {
       setTimeout(() => {
@@ -738,7 +671,7 @@ export default function TuneForge() {
         }),
       })
     } catch (error) {
-      logger.error('Failed to save to database:', error)
+      console.error('Failed to save to database:', error)
     }
 
     const updatedTunes = [...savedTunes, newTune]
@@ -892,39 +825,6 @@ export default function TuneForge() {
   }
   const springUnitLabel = springUnit === 'lbf/in' ? ' lb/in' : springUnit === 'N/mm' ? ' N/mm' : ' kgf/mm'
 
-  // Aero unit conversion helpers (internal values always in kg)
-  const displayAero = (kg: number) => {
-    if (aeroUnit === 'lbs') return parseFloat((kg * 2.20462).toFixed(0))
-    return kg
-  }
-  const parseAero = (displayed: number) => {
-    if (aeroUnit === 'lbs') return Math.round(displayed / 2.20462)
-    return Math.round(displayed)
-  }
-  const aeroUnitLabel = aeroUnit === 'kg' ? ' kg' : ' lbs'
-
-  // Ride Height unit conversion helpers (internal values always in cm)
-  const displayRideHeight = (cm: number) => {
-    if (rideHeightUnit === 'in') return parseFloat((cm / 2.54).toFixed(1))
-    return cm
-  }
-  const parseRideHeight = (displayed: number) => {
-    if (rideHeightUnit === 'in') return parseFloat((displayed * 2.54).toFixed(1))
-    return displayed
-  }
-  const rideHeightUnitLabel = rideHeightUnit === 'cm' ? ' cm' : ' in'
-
-  // Tire Pressure unit conversion helpers (internal values always in PSI)
-  const displayTirePressure = (psi: number) => {
-    if (tirePressureUnit === 'Bar') return parseFloat((psi / 14.5038).toFixed(2))
-    return psi
-  }
-  const parseTirePressure = (displayed: number) => {
-    if (tirePressureUnit === 'Bar') return parseFloat((displayed * 14.5038).toFixed(1))
-    return displayed
-  }
-  const tirePressureUnitLabel = tirePressureUnit === 'PSI' ? ' PSI' : ' Bar'
-
   const getTireCompoundName = (value: number) => {
     const compounds = ['', 'Vintage', 'Stock', 'Street', 'Sport', 'Semi-Slick', 'Slick', 'Rally']
     return compounds[value] || 'Unknown'
@@ -1033,57 +933,48 @@ export default function TuneForge() {
             isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
           }`}
         >
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center h-full gap-4 text-gray-400 py-20">
-              <div className="animate-spin text-4xl">⟳</div>
-              <p className="text-sm font-medium animate-pulse">{loadingStatus}</p>
-            </div>
-          ) : (
-            <>
-              <ul className="list-none">
-                {filteredCars.slice(0, displayCount).map((car, index) => (
-                  <li
-                    key={index}
-                    onClick={() => router.push(`/tuneforge/car/${encodeURIComponent(`${car.manufacturer} ${car.model}`)}`)}
-                    className={`p-4 border-b cursor-pointer transition-colors ${
-                      selectedCar === car ? 'bamboo-button text-white' : 'hover:opacity-90'
-                    } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
-                  >
-                    <div className="font-bold mb-2 flex items-center gap-2">
-                      <span>{getCountryFlag(car.country)}</span>
-                      <span>
-                        {car.year} {car.manufacturer} {car.model}
-                      </span>
-                    </div>
-                    <div className="flex gap-4 text-sm opacity-80">
-                      <span>
-                        PI: {car.pi.class} {car.pi.value}
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-xs ${
-                          car.rarity === 'Legendary'
-                            ? 'bg-yellow-500 text-black'
-                            : car.rarity === 'Epic'
-                              ? 'bg-purple-500 text-white'
-                              : car.rarity === 'Rare'
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-500 text-white'
-                        }`}
-                      >
-                        {car.rarity}
-                      </span>
-                      <span>{formatPrice(car.price)}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              {displayCount < filteredCars.length && (
-                <div ref={loadMoreRef} className="p-4 text-center text-sm opacity-50">
-                  Loading more cars...
+          <ul className="list-none">
+            {filteredCars.slice(0, displayCount).map((car, index) => (
+              <li
+                key={index}
+                onClick={() => setSelectedCar(car)}
+                className={`p-4 border-b cursor-pointer transition-colors ${
+                  selectedCar === car ? 'bamboo-button text-white' : 'hover:opacity-90'
+                } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
+              >
+                <div className="font-bold mb-2 flex items-center gap-2">
+                  <span>{getCountryFlag(car.country)}</span>
+                  <span>
+                    {car.year} {car.manufacturer} {car.model}
+                  </span>
                 </div>
-              )}
-            </>
+                <div className="flex gap-4 text-sm opacity-80">
+                  <span>
+                    PI: {car.pi.class} {car.pi.value}
+                  </span>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      car.rarity === 'Legendary'
+                        ? 'bg-yellow-500 text-black'
+                        : car.rarity === 'Epic'
+                          ? 'bg-purple-500 text-white'
+                          : car.rarity === 'Rare'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-500 text-white'
+                    }`}
+                  >
+                    {car.rarity}
+                  </span>
+                  <span>{formatPrice(car.price)}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {displayCount < filteredCars.length && (
+            <div ref={loadMoreRef} className="p-4 text-center text-sm opacity-50">
+              Loading more cars...
+            </div>
           )}
         </div>
 
@@ -1790,8 +1681,8 @@ export default function TuneForge() {
                 </div>
                 {([
                   ['🛞 Tires', [
-                    {k: 'tire-pressure-front', l: 'Front Pres.', u: tirePressureUnitLabel},
-                    {k: 'tire-pressure-rear', l: 'Rear Pres.', u: tirePressureUnitLabel},
+                    {k: 'tire-pressure-front', l: 'Front PSI', u: ' PSI'},
+                    {k: 'tire-pressure-rear', l: 'Rear PSI', u: ' PSI'},
                   ]],
                   ['📐 Alignment', [
                     {k: 'camber-front', l: 'Camber F', u: '°'},
@@ -1801,10 +1692,10 @@ export default function TuneForge() {
                     {k: 'caster', l: 'Caster', u: '°'},
                   ]],
                   ['🔩 Suspension', [
-                    {k: 'ride-height-front', l: 'Height F', u: rideHeightUnitLabel},
-                    {k: 'ride-height-rear', l: 'Height R', u: rideHeightUnitLabel},
-                    {k: 'spring-rate-front', l: 'Spring F', u: springUnitLabel},
-                    {k: 'spring-rate-rear', l: 'Spring R', u: springUnitLabel},
+                    {k: 'ride-height-front', l: 'Height F', u: ' cm'},
+                    {k: 'ride-height-rear', l: 'Height R', u: ' cm'},
+                    {k: 'spring-rate-front', l: 'Spring F', u: ' lb/in'},
+                    {k: 'spring-rate-rear', l: 'Spring R', u: ' lb/in'},
                     {k: 'anti-roll-bar-front', l: 'ARB F', u: ''},
                     {k: 'anti-roll-bar-rear', l: 'ARB R', u: ''},
                   ]],
@@ -1819,8 +1710,8 @@ export default function TuneForge() {
                     {k: 'final-drive', l: 'Final Dr.', u: ''},
                   ]],
                   ['💨 Aero', [
-                    {k: 'aero-front', l: 'Front DF', u: aeroUnitLabel},
-                    {k: 'aero-rear', l: 'Rear DF', u: aeroUnitLabel},
+                    {k: 'aero-front', l: 'Front DF', u: ' kg'},
+                    {k: 'aero-rear', l: 'Rear DF', u: ' kg'},
                   ]],
                   ['🛑 Brakes', [
                     {k: 'brake-balance', l: 'Balance', u: '%'},
@@ -1846,15 +1737,7 @@ export default function TuneForge() {
                           <div key={f.k} className={`p-2 rounded text-center ${isDarkMode ? 'bg-black/30' : 'bg-white/40'}`}>
                             <div className="text-xs opacity-60 truncate">{f.l}</div>
                             <div className="font-bold text-[color:var(--bamboo-stalk)]">
-                              {typeof tuneData[f.k] === 'number'
-                                ? f.k.startsWith('spring-rate')
-                                  ? displaySpringRate(tuneData[f.k] as number).toFixed(springUnit === 'lbf/in' ? 0 : 1)
-                                  : f.k.startsWith('aero-')
-                                    ? displayAero(tuneData[f.k] as number).toFixed(0)
-                                    : f.k.startsWith('ride-height')
-                                      ? displayRideHeight(tuneData[f.k] as number).toFixed(1)
-                                    : (tuneData[f.k] as number).toFixed(f.u === '°' || f.u === '' ? 1 : 0)
-                                : tuneData[f.k]}{f.u}
+                              {typeof tuneData[f.k] === 'number' ? tuneData[f.k].toFixed(f.u === '°' || f.u === '' ? 1 : 0) : tuneData[f.k]}{f.u}
                             </div>
                           </div>
                         ))}
@@ -2120,40 +2003,6 @@ export default function TuneForge() {
                 ))}
               </div>
             )}
-            {/* Aero Units toggle */}
-            {(advancedCategory === 'All' || advancedCategory === 'Aero') && (
-              <div className="flex items-center gap-2 text-xs mt-1">
-                <span className="opacity-60">Aero units:</span>
-                {(['kg', 'lbs'] as const).map(u => (
-                  <button
-                    key={u}
-                    onClick={() => setAeroUnit(u)}
-                    className={`px-2 py-0.5 rounded text-xs ${
-                      aeroUnit === u ? 'bamboo-button font-bold' : 'bamboo-button-ghost opacity-60'
-                    }`}
-                  >
-                    {u}
-                  </button>
-                ))}
-              </div>
-            )}
-            {/* Ride Height Units toggle */}
-            {(advancedCategory === 'All' || advancedCategory === 'Suspension') && (
-              <div className="flex items-center gap-2 text-xs mt-1">
-                <span className="opacity-60">Ride height units:</span>
-                {(['cm', 'in'] as const).map(u => (
-                  <button
-                    key={u}
-                    onClick={() => setRideHeightUnit(u)}
-                    className={`px-2 py-0.5 rounded text-xs ${
-                      rideHeightUnit === u ? 'bamboo-button font-bold' : 'bamboo-button-ghost opacity-60'
-                    }`}
-                  >
-                    {u}
-                  </button>
-                ))}
-              </div>
-            )}
           <div className="space-y-4 max-h-80 overflow-y-auto">
             {Object.entries({
               'tire-pressure-front': {
@@ -2161,18 +2010,16 @@ export default function TuneForge() {
                 max: 50,
                 step: 0.5,
                 label: 'Tire Pressure Front',
-                unit: tirePressureUnitLabel,
+                unit: ' PSI',
                 category: 'Tires',
-                isTirePressure: true,
               },
               'tire-pressure-rear': {
                 min: 15,
                 max: 50,
                 step: 0.5,
                 label: 'Tire Pressure Rear',
-                unit: tirePressureUnitLabel,
+                unit: ' PSI',
                 category: 'Tires',
-                isTirePressure: true,
               },
               'camber-front': {
                 min: -5,
@@ -2253,18 +2100,16 @@ export default function TuneForge() {
                 max: 15.0,
                 step: 0.1,
                 label: 'Ride Height Front',
-                unit: rideHeightUnitLabel,
+                unit: ' cm',
                 category: 'Suspension',
-                isRideHeight: true,
               },
               'ride-height-rear': {
                 min: 4.0,
                 max: 15.0,
                 step: 0.1,
                 label: 'Ride Height Rear',
-                unit: rideHeightUnitLabel,
+                unit: ' cm',
                 category: 'Suspension',
-                isRideHeight: true,
               },
               'damping-rebound-front': {
                 min: 1,
@@ -2506,18 +2351,16 @@ export default function TuneForge() {
                 max: 300,
                 step: 5,
                 label: 'Front Downforce',
-                unit: aeroUnitLabel,
+                unit: ' kg',
                 category: 'Aero',
-                isAero: true,
               },
               'aero-rear': {
                 min: 100,
                 max: 400,
                 step: 5,
                 label: 'Rear Downforce',
-                unit: aeroUnitLabel,
+                unit: ' kg',
                 category: 'Aero',
-                isAero: true,
               },
 
               // Launch Control (FH5 specific)
@@ -2581,22 +2424,16 @@ export default function TuneForge() {
                   />
                   <input
                     type="number"
-                    min={(config as any).isSpring ? displaySpringRate(config.min) : (config as any).isAero ? displayAero(config.min) : (config as any).isRideHeight ? displayRideHeight(config.min) : (config as any).isTirePressure ? displayTirePressure(config.min) : config.min}
-                    max={(config as any).isSpring ? displaySpringRate(config.max) : (config as any).isAero ? displayAero(config.max) : (config as any).isRideHeight ? displayRideHeight(config.max) : (config as any).isTirePressure ? displayTirePressure(config.max) : config.max}
-                    step={(config as any).isSpring ? (springUnit === 'lbf/in' ? 5 : 0.1) : (config as any).isAero ? (aeroUnit === 'kg' ? 5 : 10) : (config as any).isTirePressure ? (tirePressureUnit === 'PSI' ? 0.5 : 0.05) : config.step}
+                    min={(config as any).isSpring ? displaySpringRate(config.min) : config.min}
+                    max={(config as any).isSpring ? displaySpringRate(config.max) : config.max}
+                    step={(config as any).isSpring ? (springUnit === 'lbf/in' ? 5 : 0.1) : config.step}
                     value={(config as any).isSpring
                       ? displaySpringRate(tuneData[key] || config.min)
-                      : (config as any).isAero
-                        ? displayAero(tuneData[key] || config.min)
-                        : (config as any).isRideHeight
-                          ? displayRideHeight(tuneData[key] || config.min)
-                        : (config as any).isTirePressure
-                          ? displayTirePressure(tuneData[key] || config.min)
-                        : (tuneData[key] || config.min)}
+                      : (tuneData[key] || config.min)}
                     onChange={e => {
                       const v = parseFloat(e.target.value)
                       if (!isNaN(v)) {
-                        const raw = (config as any).isSpring ? parseSpringRate(v) : (config as any).isAero ? parseAero(v) : (config as any).isRideHeight ? parseRideHeight(v) : (config as any).isTirePressure ? parseTirePressure(v) : v
+                        const raw = (config as any).isSpring ? parseSpringRate(v) : v
                         updateTuneValue(key, Math.max(config.min, Math.min(config.max, raw)))
                       }
                     }}
@@ -3264,8 +3101,6 @@ export default function TuneForge() {
             ))}
           </div>
         )}
-        </div>
-      )}
       </div>
     </div>
   )

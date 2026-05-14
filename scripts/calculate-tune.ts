@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 /**
  * calculate-tune.ts
- * 
+ *
  * Ported logic for FH5 suspension and aero calculations.
  */
 
@@ -30,7 +30,7 @@ export function calculateTune(input: TuneInput) {
   // For simplicity, we use generic racing spring ranges
   const minSpring = 20
   const maxSpring = 200
-  
+
   const frontSpring = (maxSpring - minSpring) * weightDistFrontPct + minSpring
   const rearSpring  = (maxSpring - minSpring) * (1 - weightDistFrontPct) + minSpring
 
@@ -41,21 +41,26 @@ export function calculateTune(input: TuneInput) {
   // Damping: usually 10% of spring rate for rebound
   const frontRebound = frontSpring * 0.1
   const rearRebound  = rearSpring * 0.1
-  
+
   // Bump: 50-70% of rebound
   const frontBump = frontRebound * 0.6
   const rearBump  = rearRebound * 0.6
+
+  // Tire pressure: base values adjusted by drivetrain
+  const frontTire = buildGoal === 'Drift' ? 30.0 : 32.0
+  const rearTire = buildGoal === 'Drift' ? 22.0 : 30.0
 
   return {
     springs: { front: frontSpring.toFixed(1), rear: rearSpring.toFixed(1) },
     arbs: { front: frontARB.toFixed(1), rear: rearARB.toFixed(1) },
     rebound: { front: frontRebound.toFixed(1), rear: rearRebound.toFixed(1) },
     bump: { front: frontBump.toFixed(1), rear: rearBump.toFixed(1) },
-    alignment: { 
+    alignment: {
       camber: buildGoal === 'Drift' ? { front: -5.0, rear: -1.0 } : { front: -1.5, rear: -1.0 },
       toe: buildGoal === 'Drift' ? { front: 0.5, rear: 0.0 } : { front: 0.0, rear: 0.0 },
       caster: 5.0
-    }
+    },
+    tires: { front: frontTire.toFixed(1), rear: rearTire.toFixed(1) }
   }
 }
 
@@ -68,7 +73,7 @@ if (process.argv.includes('--test')) {
     piValue: 800,
     buildGoal: 'Track'
   }
-  
+
   try {
     const result = calculateTune(testInput)
     console.log('Test Result:', JSON.stringify(result, null, 2))

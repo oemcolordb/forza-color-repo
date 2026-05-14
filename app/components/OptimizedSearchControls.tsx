@@ -44,7 +44,7 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
 
     const inputClasses = React.useMemo(() => {
       return `flex-1 bamboo-input backdrop-blur-sm text-sm ${
-        isDarkMode ? 'placeholder-slate-400' : 'placeholder-contrast-muted'
+        isDarkMode ? 'placeholder-slate-400' : 'placeholder-gray-600'
       } focus-visible:ring-2 focus-visible:ring-[color:var(--bamboo-stalk)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent`
     }, [isDarkMode])
 
@@ -65,7 +65,7 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
             <div className="flex-1">
               <label
                 htmlFor="color-search-input"
-                className={`mb-1 block text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-contrast-primary'}`}
+                className={`mb-1 block text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}
               >
                 Search colors
               </label>
@@ -115,14 +115,14 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
               </span>
             </button>
           </div>
-          <div className={`text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-contrast-primary'}`}>
+          <div className={`text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
             Filter results
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label
                 htmlFor="make-filter"
-                className={`mb-1 block text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-contrast-primary'}`}
+                className={`mb-1 block text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}
               >
                 Manufacturer
               </label>
@@ -144,7 +144,7 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
             <div>
               <label
                 htmlFor="type-filter"
-                className={`mb-1 block text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-contrast-primary'}`}
+                className={`mb-1 block text-xs font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}
               >
                 Paint type
               </label>

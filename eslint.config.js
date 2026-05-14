@@ -25,6 +25,8 @@ module.exports = [
       eqeqeq: ['error', 'always'],
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'react/no-unescaped-entities': 'warn',
     },
   },
 ]
+

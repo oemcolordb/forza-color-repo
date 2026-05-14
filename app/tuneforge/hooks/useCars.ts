@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { logger } from '../../lib/logger'
 import { Car } from '../types'
 import { Car as BaseCar } from '../../types/car'
 
@@ -91,7 +90,7 @@ export function useCars() {
       setSelectedCar(processedCars[0])
       setLoadingStatus(`${processedCars.length} cars loaded`)
     } catch (error) {
-      logger.error('TuneForge: Failed to load car database:', error)
+      console.error('TuneForge: Failed to load car database:', error)
       const fallback: Car[] = [{
         year: '2020', manufacturer: 'Porsche', model: '911 Turbo S', type: 'Sports Car',
         fullName: '2020 Porsche 911 Turbo S', price: 230000, rarity: 'Epic', country: 'Germany',

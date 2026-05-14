@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
 import { checkBotId } from 'botid/server'
-import { logger } from '../../lib/logger'
 
 const client =
   process.env.TURSO_DATABASE_URL &&
@@ -40,7 +39,7 @@ export async function GET(request: Request) {
       lastSynced: row.lastSynced,
     })
   } catch (error) {
-    logger.error('Favorites GET error:', error)
+    console.error('Favorites GET error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
@@ -117,7 +116,7 @@ export async function POST(request: Request) {
       syncedAt: new Date().toISOString(),
     })
   } catch (error) {
-    logger.error('Favorites POST error:', error)
+    console.error('Favorites POST error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
@@ -155,7 +154,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Favorite removed' })
   } catch (error) {
-    logger.error('Favorites DELETE error:', error)
+    console.error('Favorites DELETE error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

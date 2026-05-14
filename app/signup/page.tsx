@@ -3,24 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '../components/AuthProvider';
+import { AuthProvider, useAuth } from '../components/AuthProvider';
 import Head from 'next/head';
 import GamingErrorBoundary from '../components/GamingErrorBoundary';
-
-export default function SignupPage() {
-  return (
-    <>
-      <Head>
-        <title>Create Account | Forza Color Universe</title>
-        <meta name="description" content="Create a new Forza Color Universe account to save favorites and access personalized features." />
-        <meta name="robots" content="noindex, nofollow" />
-      </Head>
-      <GamingErrorBoundary>
-        <SignupForm />
-      </GamingErrorBoundary>
-    </>
-  );
-}
 
 function SignupForm() {
   const router = useRouter();
@@ -157,5 +142,22 @@ function SignupForm() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <>
+      <Head>
+        <title>Create Account | Forza Color Universe</title>
+        <meta name="description" content="Create a new Forza Color Universe account to save favorites and access personalized features." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Head>
+      <AuthProvider>
+        <GamingErrorBoundary>
+          <SignupForm />
+        </GamingErrorBoundary>
+      </AuthProvider>
+    </>
   );
 }

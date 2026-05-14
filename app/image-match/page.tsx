@@ -1,181 +1,322 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import TokyoBackground from '../components/TokyoBackground'
-import { getSecureAssetUrl } from '../lib/assetProtection'
+import React, { useState, useEffect } from 'react'
+import ImageColorExtractor from '../components/ImageColorExtractor'
+import Breadcrumbs from '../components/Breadcrumbs'
+import colorData from '../../services/colorData'
+import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
+import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
 
-export default function PaintScannerPage() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
-  const [image, setImage] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [results, setResults] = useState<any>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isSaved, setIsSaved] = useState(false)
+interface SavedScan {
+  id: string
+  imageName: string
+  extractedColors: ExtractedColor[]
+  matches: ForzaColorMatch[]
+  imageData: string
+  createdAt: string
+}
+
+export default function ImageMatchPage() {
+  return (
+    <EnhancedAuthProvider>
+      <ImageMatchPageInner />
+    </EnhancedAuthProvider>
+  )
+}
+
+function ImageMatchPageInner() {
+  const [matches, setMatches] = useState<ForzaColorMatch[]>([])
+  const [extracted, setExtracted] = useState<ExtractedColor[]>([])
+  const [selected, setSelected] = useState<CarColor | null>(null)
+  const [savedScans, setSavedScans] = useState<SavedScan[]>([])
+  const [currentImageName, setCurrentImageName] = useState('')
+  const [currentImageData, setCurrentImageData] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
+  const { user } = useAuth()
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme')
-    setIsDarkMode(savedTheme !== 'light')
-  }, [])
+    if (user) {
+      loadSavedScans()
+    }
+  }, [user])
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setImage(file)
-      setPreview(URL.createObjectURL(file))
-      setResults(null)
-      setError(null)
-      setIsSaved(false)
+  const loadSavedScans = async () => {
+    if (!user) return
+
+    try {
+      const response = await fetch(`/api/scans?userId=${user.id}`)
+      const data = await response.json()
+      setSavedScans(
+        data.map((scan: Record<string, string>) => ({
+          ...scan,
+          extractedColors: JSON.parse(scan.extractedColors),
+          matches: JSON.parse(scan.matches),
+        }))
+      )
+    } catch (error) {
+      console.error('Failed to load scans:', error)
     }
   }
 
-  const handleScan = async () => {
-    if (!image) return
-    setIsProcessing(true)
-    setError(null)
-    setIsSaved(false)
+  const saveScan = async () => {
+    if (!user || !currentImageName || matches.length === 0) {
+      alert('Please sign in and complete a scan first')
+      return
+    }
 
-    const formData = new FormData()
-    formData.append('image', image)
-
+    setSaving(true)
     try {
-      // Note: Your proxy.js protects this route with JWT validation.
-      // We grab the user's token from localStorage (or use a bypass for local dev).
-      const token = localStorage.getItem('authToken') || 'dev-token'
-
-      const res = await fetch('/api/process-image', {
+      const response = await fetch('/api/scans', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          imageName: currentImageName,
+          extractedColors: extracted,
+          matches,
+          imageData: currentImageData,
+        }),
       })
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || data.message || 'Scan failed to process.')
+      const result = await response.json()
+      if (result.success) {
+        alert('Scan saved successfully!')
+        loadSavedScans()
       }
-
-      const data = await res.json()
-      setResults(data)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (error) {
+      console.error('Failed to save scan:', error)
+      alert('Failed to save scan')
     } finally {
-      setIsProcessing(false)
+      setSaving(false)
     }
+  }
+
+  const loadScan = (scan: SavedScan) => {
+    setExtracted(scan.extractedColors)
+    setMatches(scan.matches)
+    setCurrentImageName(scan.imageName)
+    setCurrentImageData(scan.imageData)
+    setShowHistory(false)
+  }
+
+  const deleteScan = async (scanId: string) => {
+    if (!user || !confirm('Delete this scan?')) return
+
+    try {
+      await fetch(`/api/scans?scanId=${scanId}&userId=${user.id}`, {
+        method: 'DELETE',
+      })
+      loadSavedScans()
+    } catch (error) {
+      console.error('Failed to delete scan:', error)
+    }
+  }
+
+  const handleImageUpload = (file: File, dataUrl: string) => {
+    setCurrentImageName(file.name)
+    setCurrentImageData(dataUrl)
   }
 
   return (
-    <div className={`min-h-screen relative ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>
-      <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
-      <div className="absolute inset-0 bg-black/60 pointer-events-none z-0"></div>
+    <div className="min-h-screen text-white p-6">
+      <div className="max-w-6xl mx-auto">
+        <Breadcrumbs isDarkMode={true} />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-16 space-y-8">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 text-transparent bg-clip-text">
-            📸 Paint Scanner AI
-          </h1>
-          <p className="text-sm opacity-80">
-            Upload a screenshot of any car, and our Python Machine Learning engine will extract the exact Forza HSB values.
-          </p>
-        </header>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">🎨 Image-to-Paint Matcher</h1>
+            <p className="text-gray-300">
+              Upload a photo to extract colors and find matching Forza paints
+            </p>
+          </div>
 
-        <div className={`p-6 rounded-xl border ${isDarkMode ? 'bamboo-surface-dark border-gray-700' : 'bamboo-surface border-gray-300'}`}>
-
-          {error && (
-            <div className="mb-6 p-3 bg-red-900/50 border border-red-500 rounded text-red-200 text-sm">
-              ⚠️ {error}
+          {user && (
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className="px-4 py-2 bamboo-button rounded-lg font-semibold"
+              >
+                📚 History ({savedScans.length})
+              </button>
+              {matches.length > 0 && (
+                <button
+                  onClick={saveScan}
+                  disabled={saving}
+                  className="px-4 py-2 bamboo-button rounded-lg font-semibold disabled:opacity-50"
+                >
+                  {saving ? '💾 Saving...' : '💾 Save Scan'}
+                </button>
+              )}
             </div>
           )}
+        </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Left Column: Upload */}
-            <div className="space-y-4">
-              <div className="relative group">
-                <label className={`block w-full h-64 border-2 border-dashed rounded-xl cursor-pointer transition-colors flex flex-col items-center justify-center text-center p-4 ${isDarkMode ? 'border-gray-600 hover:border-purple-400 bg-black/40' : 'border-gray-400 hover:border-purple-500 bg-white/50'}`}>
-                  {preview ? (
-                    <img src={preview} alt="Preview" className="absolute inset-0 w-full h-full object-cover rounded-xl opacity-50 group-hover:opacity-30 transition-opacity" />
-                  ) : (
-                    <div className="text-4xl mb-2">📥</div>
-                  )}
-                  <span className="relative z-10 font-bold">Click to upload screenshot</span>
-                  <span className="relative z-10 text-xs opacity-60 mt-1">PNG, JPG up to 5MB</span>
-                  <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                </label>
-              </div>
-
-              <button
-                onClick={handleScan}
-                disabled={!image || isProcessing}
-                className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-bold transition-all disabled:opacity-50 flex justify-center items-center gap-2"
-              >
-                {isProcessing ? (
-                  <><div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div> Processing via AI...</>
-                ) : (
-                  '🎯 Extract Colors'
-                )}
-              </button>
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Uploader */}
+          <div className="lg:col-span-2">
+            <div className="rounded-xl p-6 shadow-2xl bamboo-surface-dark">
+              <ImageColorExtractor
+                colors={colorData}
+                onColorsExtracted={setExtracted}
+                onColorsFound={setMatches}
+                onColorSelect={setSelected}
+                isDarkMode={true}
+                showTutorial={false}
+                onImageUpload={handleImageUpload}
+              />
             </div>
 
-            {/* Right Column: Results */}
-            <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-black/30' : 'bg-white/50'}`}>
-              <h3 className="font-bold mb-4 opacity-80 uppercase tracking-wider text-sm">Extraction Results</h3>
-
-              {!results && !isProcessing && (
-                <div className="h-40 flex items-center justify-center text-center opacity-40 text-sm">
-                  Awaiting image upload...
-                </div>
-              )}
-
-              {isProcessing && (
-                <div className="h-40 flex flex-col items-center justify-center gap-3 opacity-60">
-                  <div className="text-2xl animate-pulse">🧠</div>
-                  <div className="text-sm">Analyzing pixel distribution...</div>
-                </div>
-              )}
-
-              {results && (
-                <div className="space-y-4 animate-in fade-in">
-                  {/* Example Result Rendering (Update this mapping based on your Python script's actual JSON output) */}
-                  <div className="p-3 rounded border border-purple-500/30 bg-purple-500/10">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-bold">Primary Match</span>
-                      <span className="text-xs bg-purple-500 text-white px-2 py-0.5 rounded">
-                        {results.confidence ? `${Math.round(results.confidence * 100)}% Confidence` : '98% Confidence'}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2 text-center text-sm font-mono mb-4">
-                      <div className="bg-black/40 p-2 rounded">H: {results.h?.toFixed(2) || '0.14'}</div>
-                      <div className="bg-black/40 p-2 rounded">S: {results.s?.toFixed(2) || '0.85'}</div>
-                      <div className="bg-black/40 p-2 rounded">B: {results.b?.toFixed(2) || '0.92'}</div>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        const newColor = {
-                          id: `scanned-${Date.now()}`,
-                          make: 'Custom',
-                          model: 'Scanned Match',
-                          colorName: 'AI Paint Match',
-                          colorType: 'Normal',
-                          color1: { h: results.h || 0.14, s: results.s || 0.85, b: results.b || 0.92 },
-                          color2: { h: results.h || 0.14, s: results.s || 0.85, b: results.b || 0.92 },
-                        }
-
-                        const existingFavorites = JSON.parse(localStorage.getItem('favorites') || '[]')
-                        localStorage.setItem('favorites', JSON.stringify([...existingFavorites, newColor]))
-                        setIsSaved(true)
-                      }}
-                      disabled={isSaved}
-                      className={`w-full py-2 rounded text-sm font-bold transition-all flex items-center justify-center gap-2 ${
-                        isSaved ? 'bg-green-600/50 text-white cursor-not-allowed border border-green-500/50' : 'bg-purple-600 hover:bg-purple-500 text-white'
-                      }`}
+            {/* Matches */}
+            {matches.length > 0 && (
+              <div className="mt-6 rounded-xl p-6 shadow-2xl bamboo-surface-dark">
+                <h2 className="text-2xl font-bold mb-4">🎯 Suggested Paints</h2>
+                <div className="space-y-3">
+                  {matches.slice(0, 10).map((m, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-4 p-3 rounded-lg transition-colors cursor-pointer bamboo-surface-dark hover:opacity-95"
+                      onClick={() => setSelected(m.forza)}
                     >
-                      {isSaved ? '❤️ Saved to Favorites' : '🤍 Save to Favorites'}
-                    </button>
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center font-bold">
+                        {idx + 1}
+                      </div>
+                      <div
+                        className="w-16 h-16 rounded border-2 border-gray-600"
+                        style={{
+                          background: `hsl(${m.forza.color1.h * 360}, ${m.forza.color1.s * 100}%, ${m.forza.color1.b * 100}%)`,
+                        }}
+                      />
+                      <div className="flex-1">
+                        <div className="font-semibold">{m.forza.colorName}</div>
+                        <div className="text-sm text-gray-400">{m.forza.make}</div>
+                        <div className="text-xs text-gray-500">{m.forza.colorType}</div>
+                      </div>
+                      <div className="text-right">
+                        <div
+                          className={`text-2xl font-bold ${
+                            m.similarity >= 90
+                              ? 'text-green-400'
+                              : m.similarity >= 80
+                                ? 'text-blue-400'
+                                : m.similarity >= 70
+                                  ? 'text-yellow-400'
+                                  : 'text-orange-400'
+                          }`}
+                        >
+                          {m.similarity.toFixed(0)}%
+                        </div>
+                        <div className="text-xs text-gray-500">Match</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right Column - Selected/History */}
+          <div className="space-y-6">
+            {/* Selected Color */}
+            {selected && (
+              <div className="rounded-xl p-6 shadow-2xl bamboo-surface-dark">
+                <h3 className="text-xl font-bold mb-4">Selected Color</h3>
+                <div
+                  className="w-full h-32 rounded-lg mb-4"
+                  style={{
+                    background: `hsl(${selected.color1.h * 360}, ${selected.color1.s * 100}%, ${selected.color1.b * 100}%)`,
+                  }}
+                />
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Name:</span>
+                    <span className="font-semibold">{selected.colorName}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Make:</span>
+                    <span>{selected.make}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Type:</span>
+                    <span>{selected.colorType}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">HSB:</span>
+                    <span className="font-mono text-xs">
+                      {Math.round(selected.color1.h * 360)}°{Math.round(selected.color1.s * 100)}%
+                      {Math.round(selected.color1.b * 100)}%
+                    </span>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
+
+            {/* History Panel */}
+            {showHistory && user && (
+              <div className="bg-slate-800 rounded-xl p-6 shadow-2xl">
+                <h3 className="text-xl font-bold mb-4">Scan History</h3>
+                {savedScans.length === 0 ? (
+                  <p className="text-gray-400 text-sm">No saved scans yet</p>
+                ) : (
+                  <div className="space-y-3 max-h-96 overflow-y-auto">
+                    {savedScans.map(scan => (
+                      <div
+                        key={scan.id}
+                        className="p-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-semibold text-sm truncate flex-1">
+                            {scan.imageName}
+                          </span>
+                          <button
+                            onClick={() => deleteScan(scan.id)}
+                            className="text-red-400 hover:text-red-300 ml-2"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                        <div className="flex gap-1 mb-2">
+                          {scan.extractedColors.slice(0, 5).map((c: ExtractedColor, i: number) => (
+                            <div
+                              key={i}
+                              className="w-6 h-6 rounded"
+                              style={{ background: `rgb(${c.rgb[0]}, ${c.rgb[1]}, ${c.rgb[2]})` }}
+                            />
+                          ))}
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => loadScan(scan)}
+                            className="flex-1 px-3 py-1 bg-blue-600 rounded text-xs hover:bg-blue-700"
+                          >
+                            Load
+                          </button>
+                          <span className="text-xs text-gray-400 self-center">
+                            {new Date(scan.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Info Panel */}
+            <div className="bg-slate-800 rounded-xl p-6 shadow-2xl">
+              <h3 className="text-lg font-bold mb-3">💡 Tips</h3>
+              <ul className="text-sm space-y-2 text-gray-300">
+                <li>• Upload clear, well-lit photos</li>
+                <li>• System extracts dominant colors</li>
+                <li>• Matches show similarity percentage</li>
+                {user ? (
+                  <li>• ✅ Signed in - scans auto-save</li>
+                ) : (
+                  <li>• 🔒 Sign in to save scans</li>
+                )}
+              </ul>
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
 import { checkBotId } from 'botid/server'
-import { logger } from '@/app/lib/logger'
 
 const client =
   process.env.TURSO_DATABASE_URL &&
@@ -61,7 +60,7 @@ export async function GET(request: Request) {
       lastUpdated: row.lastUpdated,
     })
   } catch (error) {
-    logger.error('Map progress GET error:', error)
+    console.error('Map progress GET error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }
@@ -117,7 +116,7 @@ export async function POST(request: Request) {
       savedAt: new Date().toISOString(),
     })
   } catch (error) {
-    logger.error('Map progress POST error:', error)
+    console.error('Map progress POST error:', error)
     return NextResponse.json({ error: (error as Error).message }, { status: 500 })
   }
 }

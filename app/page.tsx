@@ -30,6 +30,8 @@ import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import OfflineIndicator from './components/OfflineIndicator'
+import OptimizedStatsBar from './components/OptimizedStatsBar'
+import ExportButton from './components/ExportButton'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
 const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })
@@ -66,13 +68,7 @@ export default function HomePage() {
   const [compareSelectedColors, setCompareSelectedColors] = useState<CarColor[]>([])
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
-  const [backgroundIndex, setBackgroundIndex] = useState(0)
   const deviceInfo: DeviceInfo = useDeviceDetection()
-
-  // Rotate background on Ctrl+R
-  const rotateBackground = useCallback(() => {
-    setBackgroundIndex(prev => (prev + 1) % 12) // 12 total backgrounds (7 videos + 5 images)
-  }, [])
 
   useAnalytics()
   usePerformance()
@@ -406,7 +402,7 @@ export default function HomePage() {
           />
         )}
 
-        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} backgroundIndex={backgroundIndex} />
+        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
         <CreditsBackground isDarkMode={isDarkMode} />
         <ProgressiveLoader
           progress={loadingProgress}
@@ -488,14 +484,16 @@ export default function HomePage() {
                 isDarkMode={isDarkMode}
               />
             ) : (
-              <SimpleColorGrid
-                colors={filteredColors}
-                onColorSelect={handleColorSelect}
-                onShowInfo={showColorHSB}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-                isDarkMode={isDarkMode}
-              />
+              <div className="p-1">
+                <SimpleColorGrid
+                  colors={filteredColors}
+                  onColorSelect={handleColorSelect}
+                  onShowInfo={showColorHSB}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                />
+              </div>
             )}
           </div>
 
@@ -825,7 +823,6 @@ export default function HomePage() {
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
           onToggleSearch={() => setShowAdvancedSearch(!showAdvancedSearch)}
           onToggleComparison={() => setShowComparison(!showComparison)}
-          onRotateBackground={rotateBackground}
           isDarkMode={isDarkMode}
         />
       </div>

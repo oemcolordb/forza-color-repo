@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { logger } from '../lib/logger';
 // Lightweight: avoid adding new runtime deps. Use inline glyphs instead of external icon libs / motion.
 
 function cn(...classes: Array<string | false | null | undefined>) {
@@ -81,7 +80,7 @@ export function ScenicFinder() {
         ]);
       }
     } catch (error) {
-      logger.error("Search failed:", error);
+      console.error("Search failed:", error);
       setSpots([{ name: 'SwissGameGuides FH5 Map', description: 'Interactive FH5 map', url: mainMapUrl }]);
     } finally {
       setIsSearching(false);

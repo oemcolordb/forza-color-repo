@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { logger } from '../../lib/logger'
 
 export async function GET() {
   try {
@@ -57,7 +56,7 @@ export async function GET() {
       },
     })
   } catch (error) {
-    logger.error('Color sitemap generation error:', error)
+    console.error('Color sitemap generation error:', error)
     return new NextResponse('Error generating sitemap', { status: 500 })
   }
 }

@@ -33,5 +33,11 @@
       "destination": "https://forza-color-repo.vercel.app/:path*",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/analytics/daily-aggregate",
+      "schedule": "0 0 * * *"
+    }
   ]
 }
