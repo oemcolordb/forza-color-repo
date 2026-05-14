@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { useChat } from 'ai/react'
+import { useChat } from '@ai-sdk/react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface Post {
