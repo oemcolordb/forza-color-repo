@@ -1,24 +1,26 @@
 /**
  * services/colorDataLazy.ts
  *
- * This service provides a unified way to access the 10,000+ color database
- * across both Client Components (via fetch) and Server Components/Route Handlers (via fs).
+ * This service provides a unified way to access the color databases
+ * across both Client Components (via fetch) and Server Components (via fs).
  */
 
 import { CarColor } from '../app/types';
 
 /**
- * Loads color data. 
- * On the server: reads from the filesystem.
- * On the client: fetches via the public API.
+ * Loads color data from all available database sources.
  */
 export async function getColorData(): Promise<CarColor[]> {
-  // Check if we are in a browser environment
+  // Client-side (Browser)
   if (typeof window !== 'undefined') {
     try {
-      const response = await fetch('/data/colors.json');
-      if (!response.ok) throw new Error('Failed to fetch colors');
-      return await response.json();
+      // In a real app, we might have an API endpoint that aggregates these,
+      // but for now, we'll fetch them individually if they are in public/
+      const sources = ['/data/colors.json', '/data/wheel-colors.json', '/data/manufacturer-colors.json'];
+      const results = await Promise.all(
+        sources.map(src => fetch(src).then(res => res.ok ? res.json() : []).catch(() => []))
+      );
+      return results.flat();
     } catch (error) {
       console.error('Client-side color fetch failed:', error);
       return [];
@@ -30,18 +32,26 @@ export async function getColorData(): Promise<CarColor[]> {
     const fs = await import('fs');
     const path = await import('path');
     
+    const dataFiles = [
+      path.join(process.cwd(), 'extracted_colors.json'),
+      path.join(process.cwd(), 'app/data/wheel-colors.json'),
+      path.join(process.cwd(), 'app/data/manufacturer-colors.json')
+    ];
+    
     const results: CarColor[] = [];
 
-    // 1. Load Main Body Colors
-    const bodyPath = path.join(process.cwd(), 'extracted_colors.json');
-    if (fs.existsSync(bodyPath)) {
-      results.push(...JSON.parse(fs.readFileSync(bodyPath, 'utf8')));
-    }
-    
-    // 2. Load Community Wheel Colors
-    const wheelPath = path.join(process.cwd(), 'app', 'data', 'wheel-colors.json');
-    if (fs.existsSync(wheelPath)) {
-      results.push(...JSON.parse(fs.readFileSync(wheelPath, 'utf8')));
+    for (const filePath of dataFiles) {
+      if (fs.existsSync(filePath)) {
+        try {
+          const content = fs.readFileSync(filePath, 'utf8');
+          const data = JSON.parse(content);
+          if (Array.isArray(data)) {
+            results.push(...data);
+          }
+        } catch (e) {
+          console.error(`Failed to parse ${filePath}:`, e);
+        }
+      }
     }
 
     return results;
