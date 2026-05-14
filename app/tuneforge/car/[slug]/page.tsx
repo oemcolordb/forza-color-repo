@@ -3,13 +3,13 @@ import { notFound } from 'next/navigation'
 import TuneCalcClient from './client'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = params
+  const { slug } = await params
   const decoded = decodeURIComponent(slug)
   
   return {
@@ -35,7 +35,7 @@ async function getCarBySlug(slug: string) {
 }
 
 export default async function CarTunePage({ params }: PageProps) {
-  const { slug } = params
+  const { slug } = await params
   const car = await getCarBySlug(slug)
   
   if (!car) {
