@@ -11,8 +11,6 @@ if (typeof self === 'undefined' && typeof window === 'undefined') {
 }
 
 const nextConfig = {
-  output: 'standalone',
-  outputFileTracingRoot: path.join(__dirname),
   trailingSlash: true,
   images: {
     unoptimized: true,
