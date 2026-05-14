@@ -12,6 +12,8 @@ interface SimpleColorGridProps {
   onShowInfo?: (color: CarColor) => void
   onToggleFavorite: (colorId: string) => void
   isDarkMode: boolean
+  trendingIds?: Set<string>
+  communityChoiceIds?: Set<string>
   zoomInfo?: ZoomLevel & { isTransitioning: boolean }
 }
 
@@ -22,6 +24,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   onShowInfo,
   onToggleFavorite,
   isDarkMode,
+  trendingIds,
+  communityChoiceIds,
   zoomInfo: externalZoomInfo,
 }) => {
   const [displayCount, setDisplayCount] = useState(100)
@@ -119,6 +123,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
               onShowInfo={onShowInfo}
               isFavorite={isFavorite}
               onToggleFavorite={() => onToggleFavorite(colorId)}
+              isTrending={trendingIds?.has(colorId)}
+              isCommunityChoice={communityChoiceIds?.has(colorId)}
               isDarkMode={isDarkMode}
             />
           )

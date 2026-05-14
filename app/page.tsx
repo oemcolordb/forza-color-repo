@@ -43,9 +43,12 @@ const HarmonyVisualizer = dynamic(() => import('./components/HarmonyVisualizer')
 const ColorGenerator = dynamic(() => import('./components/ColorGenerator'), { ssr: false })
 const PerformanceMonitor = dynamic(() => import('./components/PerformanceMonitor'), { ssr: false })
 const ColorAnalyticsDashboard = dynamic(() => import('./components/ColorAnalyticsDashboard'), { ssr: false })
+const CommunityTrends = dynamic(() => import('./components/CommunityTrends'), { ssr: false })
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
+  const [trendingIds, setTrendingIds] = useState<Set<string>>(new Set())
+  const [communityChoiceIds, setCommunityChoiceIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -251,6 +254,31 @@ export default function HomePage() {
     loadFavorites()
   }, [])
 
+  // Load Community Trends
+  useEffect(() => {
+    const fetchTrends = async () => {
+      try {
+        const res = await fetch('/api/analytics/community-trends')
+        const data = await res.json()
+        if (data.trends) {
+          const trending = new Set<string>()
+          const communityChoice = new Set<string>()
+          
+          data.trends.forEach((t: { color_id: string, score: number }) => {
+            if (t.score > 50) communityChoice.add(t.color_id)
+            else trending.add(t.color_id)
+          })
+          
+          setTrendingIds(trending)
+          setCommunityChoiceIds(communityChoice)
+        }
+      } catch (err) {
+        console.error('Failed to fetch trends', err)
+      }
+    }
+    fetchTrends()
+  }, [])
+
   // Save favorites to IndexedDB and localStorage
   useEffect(() => {
     const saveFavorites = async () => {
@@ -452,6 +480,12 @@ export default function HomePage() {
               showFavoritesOnly={showFavoritesOnly}
               onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
             />
+
+            <CommunityTrends 
+              allColors={allColors} 
+              isDarkMode={isDarkMode} 
+              onColorSelect={showColorHSB} 
+            />
           </ResponsiveLayout>
 
           {/* Full-width Color Gallery — immediately after search */}
@@ -492,6 +526,8 @@ export default function HomePage() {
                   favorites={favorites}
                   onToggleFavorite={toggleFavorite}
                   isDarkMode={isDarkMode}
+                  trendingIds={trendingIds}
+                  communityChoiceIds={communityChoiceIds}
                 />
               </div>
             )}

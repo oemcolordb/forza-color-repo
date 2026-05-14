@@ -38,6 +38,8 @@ interface ColorCardProps {
   onShowInfo?: (_color: CarColor) => void
   isFavorite?: boolean
   onToggleFavorite?: () => void
+  isTrending?: boolean
+  isCommunityChoice?: boolean
   isDarkMode?: boolean
 }
 
@@ -119,6 +121,18 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
               title={color.colorName}
             >
               {color.colorName}
+            </div>
+            <div className="flex gap-1 mt-1">
+              {isTrending && (
+                <span className="bg-red-600 text-[8px] font-black px-1.5 py-0.5 rounded text-white italic tracking-tighter">
+                  TRENDING 🔥
+                </span>
+              )}
+              {isCommunityChoice && (
+                <span className="bg-blue-600 text-[8px] font-black px-1.5 py-0.5 rounded text-white italic tracking-tighter">
+                  COMMUNITY CHOICE 🏆
+                </span>
+              )}
             </div>
           </div>
           <button

@@ -11,19 +11,32 @@ interface AnalyticsEvent {
 export const useAnalytics = () => {
   const track = useCallback(async (event: AnalyticsEvent) => {
     try {
+      // 1. Local Storage Tracking (Offline/Legacy)
       const analytics: AnalyticsEvent[] = JSON.parse(localStorage.getItem('forza-analytics') || '[]')
-      analytics.push({
-        ...event,
-        timestamp: event.timestamp || new Date().toISOString(),
-      })
+      const timestamp = event.timestamp || new Date().toISOString()
+      analytics.push({ ...event, timestamp })
 
       if (analytics.length > 1000) {
         analytics.splice(0, analytics.length - 1000)
       }
-
       localStorage.setItem('forza-analytics', JSON.stringify(analytics))
+
+      // 2. Remote Tracking (New Community Analytics)
+      // Derive color_id if present
+      if (event.colorName && event.make) {
+        const color_id = `${event.make}-${event.colorName}-${event.year || 'unknown'}`
+        fetch('/api/analytics/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            color_id,
+            action: event.action || 'view',
+            user_id: localStorage.getItem('forza-user-id') || null
+          })
+        }).catch(() => {}) // Silent fail for analytics
+      }
     } catch {
-      // Fail silently — analytics should never break the app
+      // Fail silently
     }
   }, [])
 

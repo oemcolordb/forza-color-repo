@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useChat } from 'ai/react'
@@ -22,7 +22,15 @@ export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState<'feed' | 'tunebot'>('tunebot')
   const [posts, setPosts] = useState<Post[]>([])
   const [isUploading, setIsUploading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   
+  const fetchPosts = useCallback(() => {
+    fetch('/api/community/posts')
+      .then(res => res.json())
+      .then(data => setPosts(data))
+      .catch(err => console.error('Fetch posts error:', err))
+  }, [])
+
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
     api: '/api/chat',
     initialMessages: [
@@ -42,12 +50,9 @@ export default function CommunityPage() {
 
   useEffect(() => {
     if (activeTab === 'feed') {
-      fetch('/api/community/posts')
-        .then(res => res.json())
-        .then(data => setPosts(data))
-        .catch(err => console.error('Fetch posts error:', err))
+      fetchPosts()
     }
-  }, [activeTab])
+  }, [activeTab, fetchPosts])
 
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-500 ${isDarkMode ? 'bg-[#050a06] text-white' : 'bg-gray-50 text-gray-900'}`}>
@@ -237,7 +242,7 @@ export default function CommunityPage() {
                   <h2 className="text-xl font-black italic tracking-tighter">COMMUNITY <span className="text-blue-500">SHOWCASE</span></h2>
                   <button 
                     className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-6 py-2.5 text-xs font-bold shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2"
-                    onClick={() => alert('Vercel Blob Storage configuration required for live uploads.')}
+                    onClick={() => setIsModalOpen(true)}
                   >
                     <span>+</span> NEW POST
                   </button>
@@ -301,6 +306,13 @@ export default function CommunityPage() {
       </main>
       
       <Footer isDarkMode={isDarkMode} />
+      
+      <PostModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onPostSuccess={fetchPosts}
+        isDarkMode={isDarkMode}
+      />
     </div>
   )
 }
