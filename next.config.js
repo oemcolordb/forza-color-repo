@@ -61,7 +61,6 @@ const nextConfig = {
 
   experimental: {
     optimizeCss: true,
-    gzipSize: true,
   },
 
   turbopack: {},
