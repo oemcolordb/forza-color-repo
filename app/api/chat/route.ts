@@ -52,6 +52,7 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const result = await streamText({
+      // @ts-expect-error - AI SDK version mismatch between 'ai' and '@ai-sdk/google'
       model: google('gemini-1.5-flash'),
       system: `You are TuneBot, a world-class, professional car tuning expert for the Forza Horizon and Forza Motorsport games.
 Your goal is to help players optimize their car setups, choose the best paint colors, understand telemetry, and navigate the competitive meta.
