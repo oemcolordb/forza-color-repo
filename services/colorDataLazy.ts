@@ -20,11 +20,11 @@ function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
   const model = raw.model != null ? String(raw.model) : ''
   const year = raw.year != null ? raw.year : null
 
-  // Accept both nested object { h, s, b } and flat { h1, s1, b1 }
   let c1 = raw.color1 as Record<string, number> | null
   let c2 = (raw.color2 ?? raw.color1) as Record<string, number> | null
 
   if (!c1 || typeof c1.h !== 'number') return null
+  if (colorName === '--' || colorName.trim() === '') return null
 
   return {
     make,

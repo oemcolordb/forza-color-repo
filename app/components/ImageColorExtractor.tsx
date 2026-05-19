@@ -30,6 +30,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   const [showRegionSelect, setShowRegionSelect] = useState(false)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const [matchedForzaColors, setMatchedForzaColors] = useState<ForzaColorMatch[]>([])
+  const [processingStage, setProcessingStage] = useState<string>('')
   const [usePythonService, setUsePythonService] = useState(false)
   const [pythonAvailable, setPythonAvailable] = useState(false)
 
@@ -332,9 +333,13 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
   const handleImageUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0]
-      if (!file) return
+      if (!file) {
+        setError('No image selected. Please choose a file to extract colors.')
+        return
+      }
 
       setIsProcessing(true)
+      setProcessingStage('Validating image file...')
       setError(null)
 
       try {
@@ -344,9 +349,12 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         // if python service is enabled, send the entire image rather than
         // doing canvas extraction locally
         if (usePythonService && pythonAvailable) {
+          setProcessingStage('Encoding image for AI service...')
           const base64 = await fileToBase64(file)
+          setProcessingStage('Analyzing colors with Python ML backend...')
           const result = await processImageWithML(base64 as string, colors)
           if (result.success) {
+            setProcessingStage('Mapping to Forza color database...')
             const { extracted_colors, matches } = result
             setUploadedImage(base64 as string)
             onImageUpload?.(file, base64 as string)
@@ -369,6 +377,7 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         }
 
         const imageUrl = URL.createObjectURL(file)
+        setProcessingStage('Drawing image to internal canvas...')
 
         await new Promise<void>((resolve, reject) => {
           img.onload = async () => {
@@ -404,8 +413,11 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
                 }
               }
 
+              setProcessingStage('Extracting dominant pixels...')
               const basicColors = extractColorsFromCanvas(canvas)
+              setProcessingStage('Running local ML enhancement pipeline...')
               const enhancedColors = await processWithPythonML(basicColors)
+              setProcessingStage('Finding closest Forza matching paints...')
               const forzaMatches = findClosestForzaColors(enhancedColors)
 
               onColorsExtracted?.(enhancedColors)
@@ -520,13 +532,17 @@ const ImageColorExtractor: React.FC<ImageColorExtractorProps> = ({
         </div>
 
         {isProcessing && (
-          <div className="flex items-center space-x-2 text-[color:var(--bamboo-stalk)]">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[color:var(--bamboo-stalk)]"></div>
-            <span className="text-sm">
-              {extractionMode === 'advanced'
-                ? '🧠 AI clustering colors...'
-                : '⚡ Fast extracting...'}
-            </span>
+          <div className="flex flex-col items-center justify-center p-6 space-y-4 rounded-lg bg-gray-50/5 border border-gray-500/20">
+            <div className="flex items-center space-x-3 text-[color:var(--bamboo-stalk)]">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-t-2 border-[color:var(--bamboo-stalk)]"></div>
+              <span className="font-semibold">Processing Image</span>
+            </div>
+            <div className="text-sm font-mono opacity-80 text-center animate-pulse">
+              {processingStage || 'Initializing...'}
+            </div>
+            <div className="w-full bg-gray-200/20 rounded-full h-1.5 mt-2 overflow-hidden">
+               <div className="bg-[color:var(--bamboo-stalk)] h-1.5 rounded-full animate-[progress_2s_ease-in-out_infinite]" style={{ width: '60%' }}></div>
+            </div>
           </div>
         )}
 

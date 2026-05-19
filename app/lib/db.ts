@@ -23,10 +23,14 @@ function makeClient(): Client {
   }
 
   // Local SQLite fallback — ensure the data directory exists
-  const dataDir = path.join(process.cwd(), 'data')
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true })
-
-  return createClient({ url: 'file:./data/local.db' })
+  try {
+    const dataDir = path.join(process.cwd(), 'data')
+    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true })
+    return createClient({ url: 'file:./data/local.db' })
+  } catch (error) {
+    console.warn('Could not create local SQLite file. Falling back to in-memory database.', error)
+    return createClient({ url: 'file::memory:?cache=shared' })
+  }
 }
 
 // Module-level singleton so the file handle is reused across requests

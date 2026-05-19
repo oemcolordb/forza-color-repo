@@ -165,6 +165,10 @@ body {
 
 /* Utility classes */
 @layer utilities {
+  .font-emoji {
+    font-family: "Twemoji Mozilla", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+  }
+
   .text-balance {
     text-wrap: balance;
   }

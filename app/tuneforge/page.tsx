@@ -125,6 +125,7 @@ export default function TuneForge() {
   const [submitTuner, setSubmitTuner] = useState('')
   const [submitDiscipline, setSubmitDiscipline] = useState('General')
   const [submitTuneName, setSubmitTuneName] = useState('')
+  const [submitFeedback, setSubmitFeedback] = useState<{message: string, isError: boolean} | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('theme')
@@ -160,6 +161,11 @@ export default function TuneForge() {
     if (!selectedCar) { setCommunityTunes([]); return }
     setCommunityLoading(true)
     setSelectedCommunityId('')
+    setShowTuneSubmit(false)
+    setSubmitCode('')
+    setSubmitTuner('')
+    setSubmitTuneName('')
+    setSubmitFeedback(null)
     fetch(`/api/tuneforge/community-tunes?make=${encodeURIComponent(selectedCar.manufacturer)}&model=${encodeURIComponent(selectedCar.model)}`)
       .then(r => r.json())
       .then(data => setCommunityTunes(Array.isArray(data) ? data : []))
@@ -801,8 +807,9 @@ export default function TuneForge() {
       setSubmitTuner('')
       setSubmitTuneName('')
       setSubmitDiscipline('General')
+      setSubmitFeedback(null)
     } else {
-      alert('Failed to submit tune')
+      setSubmitFeedback({ message: 'Failed to submit tune. Please try again.', isError: true })
     }
   }
 
@@ -927,7 +934,7 @@ export default function TuneForge() {
 
       <div className="relative z-10 grid gap-0 lg:grid-cols-2 min-h-[calc(100vh-220px)] lg:h-[calc(100vh-220px)]">
         <div
-          className={`overflow-y-auto backdrop-blur-sm lg:border-r ${
+          className={`overflow-y-auto backdrop-blur-sm lg:border-r ${selectedCar ? 'hidden lg:block' : ''} ${
             isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
           }`}
         >
@@ -941,7 +948,7 @@ export default function TuneForge() {
                 } ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}
               >
                 <div className="font-bold mb-2 flex items-center gap-2">
-                  <span>{getCountryFlag(car.country)}</span>
+                  <span className="font-emoji">{getCountryFlag(car.country)}</span>
                   <span>
                     {car.year} {car.manufacturer} {car.model}
                   </span>
@@ -977,15 +984,21 @@ export default function TuneForge() {
         </div>
 
         <div
-          className={`p-4 overflow-y-auto backdrop-blur-sm ${
+          className={`p-4 overflow-y-auto backdrop-blur-sm ${!selectedCar ? 'hidden lg:block' : ''} ${
             isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
           }`}
         >
           {selectedCar ? (
             <div className="space-y-4">
               <div>
+                <button 
+                  onClick={() => setSelectedCar(null)}
+                  className="mb-4 text-sm bamboo-button px-3 py-1 rounded lg:hidden"
+                >
+                  ← Back to List
+                </button>
                 <h3 className="font-bold text-lg flex items-center gap-2">
-                  <span>{getCountryFlag(selectedCar.country)}</span>
+                  <span className="font-emoji">{getCountryFlag(selectedCar.country)}</span>
                   <span>
                     {selectedCar.year} {selectedCar.manufacturer} {selectedCar.model}
                   </span>
@@ -993,7 +1006,7 @@ export default function TuneForge() {
                 <p className="text-sm opacity-75 flex items-center gap-2">
                   <span>{selectedCar.type}</span>
                   <span>•</span>
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1 font-emoji">
                     {getCountryFlag(selectedCar.country)} {selectedCar.country}
                   </span>
                   <span>•</span>
@@ -1099,6 +1112,11 @@ export default function TuneForge() {
 
                 {showTuneSubmit && (
                   <div className="mt-3 space-y-2 border-t border-yellow-600/20 pt-3">
+                    {submitFeedback && (
+                      <div className={`text-xs p-2 rounded ${submitFeedback.isError ? 'bg-red-500/20 text-red-200 border border-red-500/30' : 'bg-green-500/20 text-green-200 border border-green-500/30'}`}>
+                        {submitFeedback.message}
+                      </div>
+                    )}
                     <input
                       placeholder="Tune name *"
                       value={submitTuneName}
