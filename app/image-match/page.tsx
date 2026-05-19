@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import ImageColorExtractor from '../components/ImageColorExtractor'
 import Breadcrumbs from '../components/Breadcrumbs'
-import colorData from '../../services/colorData'
+import { getColorData } from '../../services/colorDataLazy'
 import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
 import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
 
@@ -25,6 +25,7 @@ export default function ImageMatchPage() {
 }
 
 function ImageMatchPageInner() {
+  const [colors, setColors] = useState<CarColor[]>([])
   const [matches, setMatches] = useState<ForzaColorMatch[]>([])
   const [extracted, setExtracted] = useState<ExtractedColor[]>([])
   const [selected, setSelected] = useState<CarColor | null>(null)
@@ -34,6 +35,11 @@ function ImageMatchPageInner() {
   const [saving, setSaving] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const { user } = useAuth()
+
+  // Load color database
+  useEffect(() => {
+    getColorData().then(setColors).catch(() => setColors([]))
+  }, [])
 
   useEffect(() => {
     if (user) {
@@ -159,7 +165,7 @@ function ImageMatchPageInner() {
           <div className="lg:col-span-2">
             <div className="rounded-xl p-6 shadow-2xl bamboo-surface-dark">
               <ImageColorExtractor
-                colors={colorData}
+                colors={colors}
                 onColorsExtracted={setExtracted}
                 onColorsFound={setMatches}
                 onColorSelect={setSelected}

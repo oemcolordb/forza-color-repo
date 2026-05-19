@@ -26,12 +26,14 @@
         "name": "next"
       }
     ],
+    "paths": {
       "@/*": [
         "./*"
       ],
       "botid/*": [
         "./botid/*"
       ]
+    },
     "target": "ES2017",
     "allowImportingTsExtensions": true
   },

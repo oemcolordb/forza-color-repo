@@ -12,7 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { safeScrape, FH5_SOURCES, SourceKey } from '../../../src/lib/firecrawl'
+import { safeScrape, FH5_SOURCES, SourceKey } from '../../lib/firecrawl'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'

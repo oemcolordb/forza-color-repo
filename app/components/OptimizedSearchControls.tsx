@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback } from 'react'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 interface OptimizedSearchControlsProps {
   searchQuery: string
@@ -130,7 +130,7 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
                 id="make-filter"
                 value={selectedMake}
                 onChange={e => onMakeChange(e.target.value)}
-                className={selectClasses}
+                className={`${selectClasses} w-full max-w-full overflow-hidden text-ellipsis`}
                 aria-label="Filter by manufacturer"
               >
                 <option value="">All Makes</option>
@@ -152,7 +152,7 @@ const OptimizedSearchControls: React.FC<OptimizedSearchControlsProps> = React.me
                 id="type-filter"
                 value={selectedColorType}
                 onChange={e => onColorTypeChange(e.target.value)}
-                className={selectClasses}
+                className={`${selectClasses} w-full max-w-full overflow-hidden text-ellipsis`}
                 aria-label="Filter by color type"
               >
                 <option value="">All Types</option>

@@ -10,13 +10,13 @@ from pathlib import Path
 
 def run_command(command, description):
     """Run a command and handle errors"""
-    print(f"🔄 {description}...")
+    print(f"[*] {description}...")
     try:
         result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
-        print(f"✅ {description} completed")
+        print(f"[OK] {description} completed")
         return result.stdout
     except subprocess.CalledProcessError as e:
-        print(f"❌ {description} failed: {e}")
+        print(f"[ERROR] {description} failed: {e}")
         print(f"Error output: {e.stderr}")
         return None
 
@@ -24,16 +24,16 @@ def check_python_version():
     """Check if Python version is compatible"""
     version = sys.version_info
     if version.major < 3 or (version.major == 3 and version.minor < 8):
-        print("❌ Python 3.8 or higher is required")
+        print("[ERROR] Python 3.8 or higher is required")
         sys.exit(1)
-    print(f"✅ Python {version.major}.{version.minor}.{version.micro} detected")
+    print(f"[OK] Python {version.major}.{version.minor}.{version.micro} detected")
 
 def install_requirements():
     """Install Python requirements"""
     requirements_file = Path(__file__).parent / "requirements.txt"
     
     if not requirements_file.exists():
-        print("❌ requirements.txt not found")
+        print("[ERROR] requirements.txt not found")
         return False
     
     # Upgrade pip first
@@ -49,19 +49,19 @@ def install_requirements():
 
 def setup_redis():
     """Setup Redis (optional)"""
-    print("🔄 Checking Redis availability...")
+    print("[*] Checking Redis availability...")
     
     try:
         import redis
         client = redis.Redis(host='localhost', port=6379, db=0)
         client.ping()
-        print("✅ Redis is available and running")
+        print("[OK] Redis is available and running")
         return True
     except ImportError:
-        print("⚠️ Redis Python client not installed")
+        print("[WARN] Redis Python client not installed")
         return False
     except Exception:
-        print("⚠️ Redis server not running (optional - caching will be disabled)")
+        print("[WARN] Redis server not running (optional - caching will be disabled)")
         return False
 
 def create_directories():
@@ -76,21 +76,21 @@ def create_directories():
     
     for directory in directories:
         directory.mkdir(exist_ok=True)
-        print(f"📁 Created directory: {directory}")
+        print(f"[DIR] Created directory: {directory}")
 
 def test_services():
     """Test that all services can be imported"""
-    print("🧪 Testing service imports...")
+    print("[TEST] Testing service imports...")
     
     try:
         from color_analysis.analyzer import AdvancedColorAnalyzer
-        print("✅ Color analyzer import successful")
+        print("[OK] Color analyzer import successful")
         
         from ml_services.color_matcher import AdvancedColorMatcher
-        print("✅ Color matcher import successful")
+        print("[OK] Color matcher import successful")
         
         from ml_services.image_processor import AdvancedImageProcessor
-        print("✅ Image processor import successful")
+        print("[OK] Image processor import successful")
         
         # Test basic functionality
         analyzer = AdvancedColorAnalyzer()
@@ -106,17 +106,17 @@ def test_services():
         
         result = analyzer.analyze_color_distribution(test_colors)
         if result and 'total_colors' in result:
-            print("✅ Color analysis test successful")
+            print("[OK] Color analysis test successful")
         else:
-            print("⚠️ Color analysis test returned unexpected result")
+            print("[WARN] Color analysis test returned unexpected result")
         
         return True
         
     except ImportError as e:
-        print(f"❌ Import failed: {e}")
+        print(f"[ERROR] Import failed: {e}")
         return False
     except Exception as e:
-        print(f"❌ Service test failed: {e}")
+        print(f"[ERROR] Service test failed: {e}")
         return False
 
 def create_startup_scripts():
@@ -135,7 +135,7 @@ pause
     with open(batch_file, 'w') as f:
         f.write(batch_content)
     
-    print(f"📝 Created startup script: {batch_file}")
+    print(f"[INFO] Created startup script: {batch_file}")
     
     # Shell script for Unix systems
     shell_content = f"""#!/bin/bash
@@ -154,7 +154,7 @@ python -m uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
     except:
         pass
     
-    print(f"📝 Created startup script: {shell_file}")
+    print(f"[INFO] Created startup script: {shell_file}")
 
 def create_config_file():
     """Create configuration file"""
@@ -186,11 +186,11 @@ def create_config_file():
     if not config_file.exists():
         with open(config_file, 'w') as f:
             f.write(config_content)
-        print(f"📝 Created configuration file: {config_file}")
+        print(f"[INFO] Created configuration file: {config_file}")
 
 def main():
     """Main setup function"""
-    print("🚀 Setting up Forza Color Universe Python Services")
+    print("--- Setting up Forza Color Universe Python Services ---")
     print("=" * 50)
     
     # Check Python version
@@ -198,7 +198,7 @@ def main():
     
     # Install requirements
     if not install_requirements():
-        print("❌ Failed to install requirements")
+        print("[ERROR] Failed to install requirements")
         sys.exit(1)
     
     # Create directories
@@ -209,7 +209,7 @@ def main():
     
     # Test services
     if not test_services():
-        print("❌ Service tests failed")
+        print("[ERROR] Service tests failed")
         sys.exit(1)
     
     # Create startup scripts
@@ -219,7 +219,7 @@ def main():
     create_config_file()
     
     print("\n" + "=" * 50)
-    print("🎉 Setup completed successfully!")
+    print("Setup completed successfully!")
     print("\nNext steps:")
     print("1. Start the API server:")
     print("   - Windows: double-click start_api.bat")
@@ -233,7 +233,7 @@ def main():
     print("   - See integration examples in the documentation")
     
     if not setup_redis():
-        print("\n⚠️ Note: Redis is not available. Caching will be disabled.")
+        print("\n[WARN] Note: Redis is not available. Caching will be disabled.")
         print("   To enable caching, install and start Redis server.")
 
 if __name__ == "__main__":

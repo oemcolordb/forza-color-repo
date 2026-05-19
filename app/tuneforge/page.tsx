@@ -1,7 +1,5 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
-
 import React, { useState, useEffect, useRef } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
 import Breadcrumbs from '../components/Breadcrumbs'

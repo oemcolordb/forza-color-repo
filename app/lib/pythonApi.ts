@@ -74,7 +74,7 @@ export async function isPythonApiAvailable(): Promise<boolean> {
     }
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 1500)
-    const response = await fetch(`${PYTHON_API_BASE}/health`, {
+    const response = await fetch(`${PYTHON_API_BASE.replace('/api', '')}/`, {
       method: 'GET',
       signal: controller.signal,
     })
