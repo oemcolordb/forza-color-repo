@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { checkBotId } from 'botid/server'
+import { checkBotId } from '@/botid/server'
 
 interface ExtractedColor {
   rgb: [number, number, number]

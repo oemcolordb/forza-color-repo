@@ -1,7 +1,7 @@
 import { streamText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
-import tuningMeta from '../../data/tuning-meta.json';
+import tuningMeta from '@/app/data/tuning-meta.json';
 
 // Ensure you have GEMINI_API_KEY set in your environment variables
 const google = createGoogleGenerativeAI({
