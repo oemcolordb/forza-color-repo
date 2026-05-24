@@ -94,6 +94,20 @@
 .animate-blaze-pulse    { animation: blaze-pulse    2s   ease-in-out  infinite; }
 .animate-420-slide-in   { animation: blaze-slide-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 
+.animate-wizard-bob     { animation: wizard-bob    3s   ease-in-out  infinite; }
+.animate-wizard-inhale  { animation: wizard-inhale 4s   ease-in-out  infinite; }
+
+@keyframes wizard-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes wizard-inhale {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  25%      { transform: scale(1.03); opacity: 0.9; }
+  50%      { transform: scale(0.97); opacity: 1; }
+}
+
 /* End 420 easter egg animations */
 
 @keyframes rainbow {
