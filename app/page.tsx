@@ -14,13 +14,12 @@ import VirtualColorGrid from './components/VirtualColorGrid'
 import { indexedDBManager } from './lib/indexedDB'
 import OptimizedSearchControls from './components/OptimizedSearchControls'
 import ResponsiveLayout from './components/ResponsiveLayout'
-import TokyoBackground from './components/TokyoBackground'
 import CreditsBackground from './components/CreditsBackground'
 import { useAnalytics } from './hooks/useAnalytics'
 import { usePerformance } from './hooks/usePerformance'
 import { useOfflineStorage } from './hooks/useOfflineStorage'
 import { useDeviceDetection } from './hooks/useDeviceDetection'
-import { getSecureAssetUrl } from './lib/assetProtection'
+
 
 import ProgressiveLoader from './components/ProgressiveLoader'
 import GamingErrorBoundary from './components/GamingErrorBoundary'
@@ -44,6 +43,7 @@ const ColorGenerator = dynamic(() => import('./components/ColorGenerator'), { ss
 const PerformanceMonitor = dynamic(() => import('./components/PerformanceMonitor'), { ssr: false })
 const ColorAnalyticsDashboard = dynamic(() => import('./components/ColorAnalyticsDashboard'), { ssr: false })
 const CommunityTrends = dynamic(() => import('./components/CommunityTrends'), { ssr: false })
+const LowPolyGlitchBackground = dynamic(() => import('./components/LowPolyGlitchBackground'), { ssr: false })
 
 export default function HomePage() {
   const [colors, setColors] = useState<CarColor[]>([])
@@ -493,7 +493,7 @@ export default function HomePage() {
           />
         )}
 
-        <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
+        <LowPolyGlitchBackground isDarkMode={isDarkMode} />
         <CreditsBackground isDarkMode={isDarkMode} />
         <ProgressiveLoader
           progress={loadingProgress}
