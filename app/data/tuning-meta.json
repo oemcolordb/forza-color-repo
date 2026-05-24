@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "tiers": {
+    "meta": [
+      {
+        "manufacturer": "Ferrari",
+        "car": "599XX Evolution",
+        "driveMethod": "RWD",
+        "briefReview": "Dominant S2 pick with incredible top speed and handling.",
+        "adjusters": ["Don Joewon Song", "nalak28"]
+      },
+      {
+        "manufacturer": "Koenigsegg",
+        "car": "Jesko",
+        "driveMethod": "RWD",
+        "briefReview": "Top-tier speed demon, hard to beat on straights.",
+        "adjusters": ["Rocklxd", "KenBlocksSohn"]
+      }
+    ],
+    "sub_meta": [
+      {
+        "manufacturer": "Pagani",
+        "car": "Zonda R",
+        "driveMethod": "RWD",
+        "briefReview": "Excellent balance of speed and cornering grip.",
+        "adjusters": ["nyasmowisher", "ugrundy"]
+      },
+      {
+        "manufacturer": "Lamborghini",
+        "car": "Sesto Elemento FE",
+        "driveMethod": "AWD",
+        "briefReview": "Strong all-rounder with forgiving AWD handling.",
+        "adjusters": ["Papa Fernando", "saeenu"]
+      }
+    ],
+    "competitive": [
+      {
+        "manufacturer": "McLaren",
+        "car": "F1 GT",
+        "driveMethod": "RWD",
+        "briefReview": "Classic choice, rewards skilled drivers.",
+        "adjusters": ["Scaans", "nalak28"]
+      },
+      {
+        "manufacturer": "Rimac",
+        "car": "Nevera",
+        "driveMethod": "AWD",
+        "briefReview": "Electric powerhouse with instant torque.",
+        "adjusters": ["Rocklxd"]
+      }
+    ]
+  },
+  "notableTuners": [
+    { "name": "Don Joewon Song", "specialty": "All-around competitive tunes" },
+    { "name": "nyasmowisher", "specialty": "Handling-focused builds" },
+    { "name": "nalak28", "specialty": "S2/X-class meta tunes" },
+    { "name": "Rocklxd", "specialty": "Speed-focused drag and road tunes" },
+    { "name": "KenBlocksSohn", "specialty": "Rally and drift setups" },
+    { "name": "ugrundy", "specialty": "Balanced race tunes" }
+  ]
+}

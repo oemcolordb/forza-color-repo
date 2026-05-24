@@ -66,7 +66,7 @@ function getFinishFromColorType(colorType?: string): PaintFinish {
 }
 
 const ColorCard: React.FC<ColorCardProps> = React.memo(
-  ({ color, onSelect, onShowInfo, isFavorite = false, onToggleFavorite, isDarkMode = true }) => {
+  ({ color, onSelect, onShowInfo, isFavorite = false, onToggleFavorite, isTrending, isCommunityChoice, isDarkMode = true }) => {
     const finish = React.useMemo(() => getFinishFromColorType(color.colorType), [color.colorType])
     const [noteAnim, setNoteAnim] = useState<{
       id: number
