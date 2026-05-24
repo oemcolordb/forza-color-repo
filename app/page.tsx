@@ -488,52 +488,7 @@ export default function HomePage() {
             />
           </ResponsiveLayout>
 
-          {/* Full-width Color Gallery — immediately after search */}
-          <div className={`w-full ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
-            {/* Gallery header bar */}
-            <div className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
-              <span className="text-xl">🏆</span>
-              <span className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                COLOR GALLERY
-              </span>
-              <div className="ml-auto flex items-center gap-2">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                </div>
-                <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-                  {filteredColors.length} colors
-                </span>
-              </div>
-            </div>
-
-            {filteredColors.length > 1000 ? (
-              <VirtualColorGrid
-                colors={filteredColors}
-                onColorSelect={handleColorSelect}
-                onShowInfo={showColorHSB}
-                favorites={favorites}
-                onToggleFavorite={toggleFavorite}
-                isDarkMode={isDarkMode}
-              />
-            ) : (
-              <div className="p-1">
-                <SimpleColorGrid
-                  colors={filteredColors}
-                  onColorSelect={handleColorSelect}
-                  onShowInfo={showColorHSB}
-                  favorites={favorites}
-                  onToggleFavorite={toggleFavorite}
-                  isDarkMode={isDarkMode}
-                  trendingIds={trendingIds}
-                  communityChoiceIds={communityChoiceIds}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Tools — below gallery for engaged / returning users */}
+          {/* Tools — above gallery for easy access */}
           <ResponsiveLayout>
             {/* Garage Stats */}
             <div
@@ -833,6 +788,51 @@ export default function HomePage() {
             )}
 
           </ResponsiveLayout>
+
+          {/* Full-width Color Gallery — below tools */}
+          <div className={`w-full ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+            {/* Gallery header bar */}
+            <div className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
+              <span className="text-xl">🏆</span>
+              <span className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                COLOR GALLERY
+              </span>
+              <div className="ml-auto flex items-center gap-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                </div>
+                <span className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                  {filteredColors.length} colors
+                </span>
+              </div>
+            </div>
+
+            {filteredColors.length > 1000 ? (
+              <VirtualColorGrid
+                colors={filteredColors}
+                onColorSelect={handleColorSelect}
+                onShowInfo={showColorHSB}
+                favorites={favorites}
+                onToggleFavorite={toggleFavorite}
+                isDarkMode={isDarkMode}
+              />
+            ) : (
+              <div className="p-1">
+                <SimpleColorGrid
+                  colors={filteredColors}
+                  onColorSelect={handleColorSelect}
+                  onShowInfo={showColorHSB}
+                  favorites={favorites}
+                  onToggleFavorite={toggleFavorite}
+                  isDarkMode={isDarkMode}
+                  trendingIds={trendingIds}
+                  communityChoiceIds={communityChoiceIds}
+                />
+              </div>
+            )}
+          </div>
         </ErrorBoundary>
 
         <Footer isDarkMode={isDarkMode} />
