@@ -1,0 +1,34 @@
+﻿Color 1 (Low Light) Color 2 (Highlight) Denoted Comments
+Manufacturer Color Name Paint Type Hue Saturation Brightness Hue Saturation Brightness
+
+BMW
+BMW M Performance Orange Normal 0.09 1.00 0.59 Added by DWRGDarkKing
+BMW M Performance Yellow Normal 0.12 0.65 0.75 Added by DWRGDarkKing
+BMW M Performance Red Normal 0.00 0.88 0.66 Added by DWRGDarkKing
+BMW M Performance Silver Normal
+BMW M Performance Gold Normal
+BMW M Performance Blue Normal
+
+Chevrolet
+Chevrolet Bright Red Painted Caliper (J6F) Normal Suggested to order with Torch Red
+Chevrolet Edge Red Painted Caliper (J6N) Normal Suggested to order with Red Mist Metallic Tintcoat (extra-cost color)
+Chevrolet Edge Yellow Painted Caliper (J6E) Metal Flake 0.15 0.51 0.86 0.16 0.58 0.69
+Chevrolet Orange Painted Caliper (J6L) Normal
+
+Cadillac
+Cadillac Blue Brake Caliper (J61) Metal Flake 0.60 0.63 0.65 0.59 0.61 0.60
+
+Lamborghini
+Lamborghini Silver CCB Gloss
+Lamborghini Black CCB Gloss
+Lamborghini Orange CCB Gloss 0.08 0.96 1.00
+Lamborghini Red CCB Gloss 0.00 0.70 0.82
+Lamborghini Yellow CCB Gloss
+Lamborghini Green CCB Gloss
+Lamborghini Verde Scandal CCB Gloss 0.20 0.88 1.00
+Lamborghini Blue CCB Gloss
+
+Ferrari
+Ferrari Grigio Silverstone Normal Ferrari Standard Colors
+Ferrari Rosso Corsa Normal 0.01 0.81 0.80 Ferrari Standard Colors
+Ferrari Rosso Scuderia Normal Ferrari Standard Colors

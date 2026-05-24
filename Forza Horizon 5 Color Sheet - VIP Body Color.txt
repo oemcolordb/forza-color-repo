@@ -1,0 +1,384 @@
+﻿Expensive Cars Color 1 (Low Light) Color 2 (Highlight) Denoted Comments Source
+Manufacturer Color Name Paint Type Hue Saturation Brightness Hue Saturation Brightness http://chris-hill.co.uk/forzaColor.php
+
+Bugatti
+Bugatti -- Metal Flake 0.17 L 0.02 L 0.40 R 0.17 L 0.02 L 0.67 R Paint Color of first U.S.-bound Divo
+Bugatti ABF Blue Metal Flake 0.67 L 1.00 R 0.70 L 0.67 L 1.00 R 0.97 L
+Bugatti Arancia Mira Normal 0.04 R 0.92 R 0.97 L
+Bugatti Argent Matte Two-Tone Matte 0.61 L 0.13 L 0.67 R 0.62 L 0.12 R 0.53 R
+Bugatti Atlantic Blue Normal 0.61 L 0.79 R 0.43 L
+Bugatti Atlantic Blue Metal Flake 0.60 R 0.59 R 0.29 L 0.60 R 0.62 L 0.32 L
+Bugatti Azure Metal Flake 0.55 L 0.82 R 0.95 R 0.49 R 0.49 R 0.89 L
+Bugatti Beige Gold Metallic Metal Flake 0.07 R 0.20 R 0.72 L 0.09 L 0.21 R 0.85 R
+Bugatti Bianco Monaco Normal 0.00 L 0.00 L 0.91 R Monaco White
+Bugatti Black Normal 0.00 L 0.00 L 0.06 L
+Bugatti Black Blue Metallic Metal Flake 0.60 R 0.16 L 0.20 L 0.60 L 0.48 R 0.34 L
+Bugatti Black Carbon Carbon Fiber Polished 0.00 L 0.00 L 0.33 R 2015 Vision Gran Turismo
+Bugatti Black Metallic Metal Flake 0.00 L 0.00 L 0.01 L 0.67 R 0.14 R 0.18 R
+Bugatti Blanc Normal 0.00 L 0.00 L 0.91 R
+Bugatti Blu Agile Metal Flake 0.55 R 0.77 L 0.76 R 0.57 L 1.00 R 0.71 R
+Bugatti Blu Bugatti Normal 0.58 L 0.98 L 0.95 R Bugatti Blue, EB110 (signature Color)
+Bugatti Blu Francia Normal 0.62 R 0.63 R 0.35 R
+Bugatti Blu Scuro Metal Flake 0.64 L 0.78 R 0.40 R 0.61 L 0.73 L 0.56 R Metallic Dark Blue
+Bugatti Blue Metallic Metal Flake 0.58 R 0.95 L 0.58 R 0.57 L 0.82 L 0.71 R
+Bugatti Bright Silver Metallic Metal Flake 0.53 R 0.07 L 0.68 R 0.55 L 0.09 L 0.84 R
+Bugatti Brise Metal Flake 0.58 L 0.33 R 0.87 R 0.58 L 0.27 R 0.98 L
+Bugatti Bronze Metallic Metal Flake 0.12 L 0.15 R 0.67 R 0.12 L 0.15 R 0.85 L
+Bugatti Brown Metallic Metal Flake 0.04 L 0.86 R 0.17 R 0.03 R 0.78 L 0.26 R
+Bugatti Bugatti Dark Blue Normal 0.58 R 0.83 L 0.50 L
+Bugatti Bugatti Light Blue Normal 0.57 L 0.84 L 0.84 R
+Bugatti Bugatti Light Blue Sport Normal 0.55 L 0.95 R 1.00 R
+Bugatti Calfornia Blue Metal Flake 0.56 L 0.69 L 0.65 R 0.56 L 0.56 R 0.98 L
+Bugatti Carbon Fibre Carbon Fibre Polished 0.00 L 0.00 L 0.35 L Veyron Super Sport
+Bugatti Cast Grey Metal Flake 0.00 L 0.00 L 0.28 R 0.00 L 0.00 L 0.32 R
+Bugatti Chocolate Metallic Metal Flake 0.01 R 0.66 R 0.17 L 0.01 R 0.68 R 0.25 L
+Bugatti Comet Grey Metal Flake 0.25 R 0.03 L 0.53 R 0.22 R 0.03 L 0.84 L
+Bugatti Customer Special Red Metal Flake 0.99 R 0.92 L 0.62 L 0.00 L 0.82 R 0.89 R 2021 Divo Lady Bug
+Bugatti Dark Anthracite Metal Flake 0.57 R 0.10 R 0.27 L 0.00 L 0.00 L 0.60 R
+Bugatti Dark Blue Carbon Carbon Fiber Polished 0.58 L 0.83 L 0.88 R 2015 Vision Gran Turismo
+Bugatti Dark Blue Green Metallic Metal Flake 0.55 L 0.88 R 0.35 L 0.56 R 0.82 R 0.46 R
+Bugatti Dark Blue Metallic Metal Flake 0.57 L 0.85 R 0.31 L 0.57 L 0.81 L 0.33 L
+Bugatti Dark Green Metallic Metal Flake 0.43 R 0.67 R 0.21 R 0.43 L 0.67 R 0.26 L
+Bugatti Dark Red Metallic Metal Flake 0.96 L 0.90 L 0.25 R 0.96 R 0.89 R 0.37 L
+Bugatti Deep Red Metallic Metal Flake 0.00 L 0.85 R 0.32 R 1.00 L 0.89 L 0.51 L
+Bugatti Divo Racing Blue Normal 0.52 R 0.76 R 0.96 L
+Bugatti Ebony Metallic Metal Flake 0.10 R 0.18 L 0.12 R 0.10 R 0.16 R 0.24 L
+Bugatti Exposed Carbon Fiber Carbon Fibre Polished 0.71 R 0.13 R 0.23 L Veyron Super Sport
+Bugatti French Racing Blue Normal 0.56 R 0.84 L 0.97 R
+Bugatti Giallo Bugatti Normal 0.15 R 0.96 L 0.99 R Bugatti Yellow
+Bugatti Glacier Metal Flake 0.22 R 0.03 L 0.89 L 0.00 L 0.00 L 1.00 R
+Bugatti Glossy Light Gray Metal Flake 0.60 L 0.04 R 0.65 R 0.60 R 0.04 L 0.49 R 2015 Vision Gran Turismo
+Bugatti Gold Metallic Metal Flake 0.14 R 0.34 L 0.53 R 0.12 L 0.28 R 0.56 L
+Bugatti Graphite Metal Flake 0.62 R 0.08 L 0.22 R 0.61 R 0.06 R 0.39 L 2021 Divo Lady Bug
+Bugatti Graphite Metallic Metal Flake 0.59 L 0.15 R 0.19 R 0.59 R 0.19 L 0.28 L
+Bugatti Gray Normal 0.12 L 0.06 L 0.40 L
+Bugatti Gray Blue Metallic Metal Flake 0.58 L 0.42 R 0.40 R 0.57 R 0.41 L 0.48 L
+Bugatti Gray Gold Metallic Metal Flake 0.11 R 0.13 R 0.64 R 0.08 L 0.11 L 0.70 R
+Bugatti Gray Green Metallic Metal Flake 0.32 R 0.12 R 0.36 R 0.25 L 0.13 R 0.42 R
+Bugatti Gray Metallic Metal Flake 0.62 L 0.09 R 0.47 L 0.59 R 0.04 R 0.65 L
+Bugatti Gray Silver Metallic Metal Flake 0.09 R 0.06 L 0.67 L 0.12 R 0.07 L 0.80 R
+Bugatti Gray Violet Vetallic Metal Flake 0.77 L 0.21 R 0.48 R 0.79 L 0.22 R 0.60 R
+Bugatti Green Metallic Metal Flake 0.49 R 0.87 L 0.26 R 0.48 L 0.93 R 0.36 L
+Bugatti Grenade Metal Flake 0.00 L 0.69 R 0.49 R 1.00 L 0.67 R 0.52 R
+Bugatti Gun Powder Metal Flake 0.60 L 0.08 R 0.26 R 0.00 L 0.00 L 0.34 R
+Bugatti Grigio Chiaro Metal Flake 0.00 L 0.00 L 0.57 R 0.00 L 0.00 L 0.75 R
+Bugatti Grigio Metallizzato Metal Flake 0.60 L 0.13 R 0.62 L 0.58 R 0.12 R 0.87 L Metallic Medium Grey
+Bugatti Grigio Scuro Metallizzato Metal Flake 0.48 R 0.04 R 0.46 L 0.55 L 0.06 R 0.67 L Metallic Dark Grey
+Bugatti Gris Serpent Two-Tone Semigloss 0.58 L 0.10 R 0.66 L 0.56 L 0.09 R 0.51 L 2021 Chiron Sport “Les Légendes Du Ciel”
+Bugatti Gunmetal Gray Metal Flake 0.63 R 0.09 L 0.18 R 0.63 L 0.08 L 0.38 L
+Bugatti Hazelnut Metallic Metal Flake 0.02 R 0.80 R 0.40 R 0.03 L 0.73 R 0.58 R
+Bugatti Hideto Blue Metal Flake 0.58 R 0.99 L 0.91 R 0.56 R 0.98 R 0.93 L
+Bugatti Italian Red Normal 0.00 L 0.88 R 0.84 L
+Bugatti Jaune Molsheim Normal 0.13 L 0.83 R 0.89 L
+Bugatti Jet Grey Normal 0.62 L 0.07 R 0.47 R
+Bugatti Jet Orange Normal 0.06 L 0.95 L 0.93 R 2022 Chiron Super Sport 300+
+Bugatti Lake Blue Metal Flake 0.64 L 0.64 L 0.30 R 0.58 R 0.68 R 0.68 L
+Bugatti Lemon Normal 0.15 L 0.76 R 0.93 L
+Bugatti Light Blue Green Metallic Metal Flake 0.46 R 0.17 R 0.55 L 0.45 R 0.15 R 0.70 L
+Bugatti Light Blue Metallic Metal Flake 0.55 R 0.23 R 0.64 R 0.56 L 0.21 L 0.85 R
+Bugatti Light Blue Paint Normal 0.55 L 0.99 R 0.72 L 2015 Vision Gran Turismo
+Bugatti Light Gold Metallic Metal Flake 0.10 R 0.24 R 0.72 R 0.11 L 0.21 R 0.82 R
+Bugatti Light Green Metallic Metal Flake 0.22 R 0.25 L 0.68 L 0.21 L 0.29 L 0.85 R
+Bugatti Light Red Metallic Metal Flake 0.99 R 0.91 L 0.70 R 0.00 R 0.91 L 0.78 R
+Bugatti Liquid Silver Metal Flake 0.59 L 0.13 L 0.78 R 0.67 L 0.04 R 0.86 R
+Bugatti Matt Blanc Matte 0.69 L 0.03 R 0.94 R 2021 Chiron Alice
+
+
+
+Expensive Cars Color 1 (Low Light) Color 2 (Highlight) Denoted Comments Source
+Manufacturer Color Name Paint Type Hue Saturation Brightness Hue Saturation Brightness http://chris-hill.co.uk/forzaColor.php
+
+Bugatti Matt Gray Matte 0.60 L 0.03 L 0.29 R 2015 Vision Gran Turismo
+Bugatti Matt Green Matte 0.25 L 0.27 L 0.31 R 2015 Vision Gran Turismo
+Bugatti Matte French Blue Matte 0.57 L 1.00 R 0.87 R
+Bugatti Matte Jet Grey Matte 0.61 R 0.09 L 0.61 R
+Bugatti Metallic Light Grey Metal Flake 0.00 L 0.00 L 0.55 R 0.62 R 0.02 L 0.82 R Grigio Chiaro Metallizzato
+Bugatti Mocca Brown Metallic Metal Flake 0.05 R 0.17 R 0.37 L 0.06 R 0.20 L 0.71 R
+Bugatti Nero Metallizzato Metal Flake 0.60 R 0.14 L 0.11 L 0.62 L 0.13 L 0.20 R Deep Black
+Bugatti Nero Vernice Normal 0.00 L 0.00 L 0.04 L Varnished Black
+Bugatti Nocturne Metal Flake 0.00 L 0.00 L 0.05 R 0.63 R 0.10 L 0.20 R
+Bugatti Nocturne Matte Two-Tone Semigloss 0.00 L 0.00 L 0.23 R 0.00 L 0.00 L 0.08 R
+Bugatti Obsidian Black Normal 0.43 R 0.09 L 0.05 R
+Bugatti Orange Metallic Metal Flake 0.04 L 0.84 R 0.82 L 0.06 R 0.83 L 0.92 L
+Bugatti Pearl Metallic Metal Flake 0.57 R 0.03 L 0.88 L 0.61 L 0.01 L 0.93 R
+Bugatti Polar Metallic Metal Flake 0.57 R 0.31 R 0.82 L 0.58 L 0.34 L 0.87 R
+Bugatti Pearl Night Blue Two-Tone Polished 0.63 R 0.87 L 0.64 L 0.71 R 0.48 L 0.80 R
+Bugatti Quartz White Metal Flake 0.00 L 0.00 L 1.00 R 0.56 R 0.03 R 0.50 L
+Bugatti Quartz White Matte Two-Tone Matte 0.64 L 0.04 R 1.00 R 0.62 L 0.08 L 0.94 R
+Bugatti Red Carbon Carbon Fiber Polished 0.00 L 1.00 R 1.00 R 2015 Vision Gran Turismo
+Bugatti Red Metallic Metal Flake 0.00 R 0.94 L 0.65 L 0.01 L 0.96 R 0.73 L
+Bugatti Rosso Normal 0.99 R 0.88 R 0.85 R Varnished Red
+Bugatti Rosso Scuro Metal Flake 0.00 L 0.91 R 0.39 L 1.00 L 0.83 L 0.55 R Metallic Dark Red
+Bugatti Royal Blue Carbon Carbon Fibre Polished 0.57 R 0.64 R 0.82 L
+Bugatti Ruby Metal Flake 0.99 R 0.77 R 0.51 L 0.00 L 0.94 L 0.87 R
+Bugatti Silk Rosé Metal Flake 0.93 R 0.30 L 0.54 R 0.97 R 0.28 L 0.87 R 2021 Chiron Alice
+Bugatti Silver Gold Metallic Metal Flake 0.08 R 0.16 L 0.60 L 0.08 L 0.10 R 0.69 L
+Bugatti Silver Metallic Metal Flake 0.36 R 0.02 R 0.71 R 0.35 L 0.03 R 0.78 R
+Bugatti Soft Silver Metallic Metal Flake 0.67 L 0.05 L 0.67 R 0.61 R 0.02 L 0.73 R
+Bugatti Sprint Blue Gloss Normal 0.59 L 0.96 R 0.64 R 2010 Veyron Bleu Centenaire
+Bugatti Sprint Blue Matte Matte 0.59 L 0.94 L 0.64 R 2010 Veyron Bleu Centenaire
+Bugatti Steel Blue Matte Two-Tone Semigloss 0.60 L 0.33 R 0.62 L 0.60 R 0.39 R 0.54 L 2020 Chiron Sport 110 ans
+Bugatti Sterling Metallic Metal Flake 0.57 R 0.10 L 0.69 L 0.62 L 0.04 L 0.84 R
+Bugatti Tangerine Normal 0.06 L 1.00 R 1.00 R 2011 Veyron Super Sport accent Color
+Bugatti Tiffany Green Normal 0.49 R 0.99 R 0.86 L
+Bugatti Titanic Blue Normal 0.53 L 1.00 R 0.86 R
+Bugatti Titanium Gray Metallic Metal Flake 0.65 L 0.09 R 0.35 R 0.64 L 0.06 R 0.60 L
+Bugatti Titanium Liquid Silver Two-Tone Matte 0.55 L 0.07 R 0.58 R 0.58 L 0.14 R 0.36 L
+Bugatti Turquoise Carbon Carbon Fiber Polished 0.56 R 0.67 L 1.00 R
+Bugatti Verde Scuro Metal Flake 0.46 L 0.48 R 0.22 L 0.46 L 0.41 L 0.27 R Metallic Dark Green
+Bugatti Violet Metallic Metal Flake 0.68 R 0.44 L 0.25 R 0.70 R 0.51 L 0.34 L
+Bugatti Walnut Metallic Metal Flake 0.04 R 0.52 R 0.13 L 0.06 R 0.52 L 0.19 R
+Bugatti White Normal 0.23 L 0.01 L 0.92 L
+Bugatti White Coffee Normal 0.11 L 0.12 L 0.93 R
+Bugatti White Silver Metallic Metal Flake 0.11 R 0.01 R 0.76 L 0.11 R 0.01 L 0.92 L
+Bugatti Wimille Blue Normal 0.53 L 0.53 L 0.77 R
+Bugatti Yellow Paint Normal 0.13 L 1.00 R 1.00 R 2015 Vision Gran Turismo
+
+McLaren
+McLaren 1K Blue Carbon Fiber Carbon Fiber Polished 0.64 L 0.78 R 1.00 R
+McLaren 1K Chocolate Carbon Fiber Carbon Fiber Polished 0.05 L 0.63 L 1.00 R
+McLaren Abyss Black Metal Flake 0.00 L 0.00 L 0.10 R 0.00 L 0.00 L 0.17 R
+McLaren Accent Red Normal 0.01 L 0.86 R 0.95 R 2022 Senna XP El Triunfo Absoluto
+McLaren Agrian Black Metal Flake 0.98 R 0.82 L 0.04 R 0.00 L 0.88 R 0.07 L McLaren Special Orders
+McLaren Alaskan Diamond White Metal Flake 0.00 L 0.00 L 1.00 R 0.59 R 0.18 L 0.82 R
+McLaren Amaranth Red Metal Flake 0.00 R 1.00 R 0.49 L 0.01 L 0.91 R 1.00 R
+McLaren Amethyst Two-Tone Polished 0.00 L 0.00 L 0.00 L 0.81 L 0.84 R 0.33 L McLaren Special Orders
+McLaren Ambit Blue Normal 0.57 L 0.85 R 0.82 R
+McLaren Anniversary Orange Metal Flake 0.11 R 1.00 L 1.00 R 0.11 L 0.98 L 0.94 R 2019 720S Spa '68 Collection
+McLaren Anniversary White Normal 0.00 L 0.00 L 0.96 R
+McLaren Arbour Green Metal Flake 0.47 R 0.68 L 0.27 L 0.48 L 0.52 L 0.33 R
+McLaren Argentum Silver Metal Flake 0.54 L 0.12 R 0.74 R 0.54 R 0.12 L 0.92 L
+McLaren Atlantic Blue Metal Flake 0.64 R 0.96 L 0.18 R 0.62 L 0.86 L 0.61 R
+McLaren Aubergine Metal Flake 0.95 R 0.59 R 0.28 L 0.95 L 0.34 R 0.38 R 1997 F1 Chassis #061
+McLaren Aurora Blue Metal Flake 0.66 L 0.99 R 0.48 R 0.62 R 0.66 L 0.97 R
+McLaren Azores Orange Metal Flake 0.05 R 0.88 R 0.68 L 0.06 L 0.86 R 0.91 R
+McLaren Aztec Gold Metal Flake 0.13 R 0.81 L 0.84 R 0.11 L 0.78 R 0.96 L
+McLaren Azure Blue Metal Flake 0.61 L 0.97 R 0.69 L 0.57 R 0.91 R 0.96 R
+McLaren Base Silver Metal Flake 0.57 R 0.08 R 0.64 L 0.60 L 0.03 L 0.92 R
+McLaren Belize Blue Metal Flake 0.53 R 0.99 R 0.63 L 0.53 L 0.54 R 0.97 R
+McLaren Blade Silver Metallic Metal Flake 0.13 L 0.03 R 0.51 L 0.06 L 0.01 R 0.71 L
+McLaren Blood Red Metal Flake 0.99 R 0.93 L 0.47 R 0.98 L 0.95 L 0.73 L
+McLaren Blood Red Solid Normal 1.00 L 0.82 L 0.95 R 1994 F1 Chassis #021
+McLaren Blue Alfa Metal Flake 0.61 R 0.81 R 0.35 L 0.67 R 0.72 R 0.21 L
+McLaren Blue Gloss Carbon Fiber Carbon Fiber Polished 0.60 R 0.96 L 1.00 R
+McLaren Blue LH Metal Flake 0.60 L 0.81 L 0.75 R 0.56 L 0.86 R 0.95 R Color of Lewis Hamilton's P1
+McLaren Borealis Black Metal Flake 0.71 L 0.83 L 0.09 R 0.56 L 0.79 R
+McLaren Bourbon Metal Flake 0.00 L 0.51 L 0.28 R 0.99 R 0.39 R 0.42 L
+McLaren Brazil Blue Normal 0.66 L 0.59 R 0.34 L
+McLaren Brilliant Blue Metallic Metal Flake 0.61 L 0.99 R 0.71 L 0.58 R 1.00 R 0.89 L
+McLaren Brilliant Silver Metal Flake 0.33 R 0.01 L 0.72 L 0.33 L 0.00 R 0.84 R
+McLaren Burnished Copper Metal Flake 0.09 L 0.73 L 0.71 R 0.10 L 0.68 L 0.83 R
+McLaren Burton Blue Metal Flake 0.62 L 1.00 R 0.56 L 0.62 R 1.00 R 0.83 L McLaren Special Orders
+McLaren Cadbury Purple Metal Flake 0.78 L 0.85 R 0.43 L 0.79 R 0.81 L 0.95 R McLaren Special Orders
+
+
+
+Expensive Cars Color 1 (Low Light) Color 2 (Highlight) Denoted Comments Source
+Manufacturer Color Name Paint Type Hue Saturation Brightness Hue Saturation Brightness http://chris-hill.co.uk/forzaColor.php
+
+McLaren Calypso Red Pearl Metal Flake 0.00 L 0.68 R 0.58 L 0.98 R 0.76 L 0.78 R 1994 F1 Chassis #017
+McLaren Canepa Blue Normal 0.62 R 0.95 L 0.25 L
+McLaren Canepa Root Beer Metal Flake 0.06 L 0.49 R 0.47 R 0.08 R 0.75 L 0.89 L
+McLaren Ceramic Grey Normal 0.64 L 0.21 R 0.69 L
+McLaren Cerberus Pearl Two-Tone Polished 0.72 L 0.71 L 0.97 R 0.11 L 1.00 R 0.96 R McLaren Special Orders
+McLaren Cerulean Blue Metal Flake 0.58 L 1.00 R 0.64 L 0.52 L 0.98 R 0.99 L McLaren Special Orders
+McLaren Charcoal F1 Grey Metal Flake 0.61 L 0.17 R 0.40 R 0.58 R 0.24 R 0.68 L
+McLaren Cherry Red Normal 0.00 L 0.87 R 0.89 L
+McLaren Chicane Gray Normal 0.62 L 0.13 R 0.37 L
+McLaren Chrome Aluminum Polished 0.55 L 0.02 R 1.00 R 2011 MP4-12C Chrome Edition
+McLaren Cirrus Grey Normal 0.59 L 0.11 L 0.77 L McLaren Special Orders
+McLaren Clyde Blue Metal Flake 0.64 L 0.77 L 0.49 R 0.74 R 0.70 L 0.79 L McLaren Special Orders
+McLaren Cobalt Blue Metal Flake 0.63 L 0.72 L 0.37 R 0.62 L 0.76 L 0.48 R 1994 F1 Chassis #008
+McLaren Colorado Gold Metal Flake 0.10 L 0.42 R 0.69 R 0.11 R 0.35 R 0.79 L
+McLaren Creighton Brown Metal Flake 0.06 R 0.13 R 0.33 L 0.05 R 0.11 R 0.45 L 1994 F1 Chassis #029
+McLaren Crystal Galaxy Black Metal Flake 0.00 L 0.00 L 0.02 R 0.00 L 0.00 L 0.17 R
+McLaren Crystal Laurite Silver Metal Flake 0.62 R 0.03 L 0.53 R 0.67 L 0.00 L 0.85 R
+McLaren Curacao Blue Normal 0.54 L 0.61 R 0.89 R
+McLaren Dark Burgundy Normal 0.96 L 0.86 R 0.21 L
+McLaren Dark Green Metallic Metal Flake 0.46 R 0.60 R 0.21 L 0.47 L 0.74 L 0.27 R 1996 F1 Chassis #051
+McLaren Dark Purple Pearl Metal Flake 0.75 R 0.85 L 0.34 R 0.80 R 0.99 L 0.77 L 1994 F1 Chassis #025 "Hindu Edition" of George Harrison
+McLaren Dark Silver Metal Flake 0.62 L 0.08 R 0.48 R 0.67 L 0.03 R 0.58 R 1995 F1 Chassis #045
+McLaren Delta Red Normal 0.02 L 1.00 R 0.94 R
+McLaren Desert Sand Metal Flake 0.11 L 0.28 R 0.80 R 0.10 L 0.37 L 0.71 R
+McLaren Donohue Blue Normal 0.62 R 0.93 R 0.49 L
+McLaren Electric Blue Metallic Metal Flake 0.62 L 0.99 R 0.73 R 0.55 R 0.84 R 0.95 L
+McLaren Ember Orange Metal Flake 0.03 L 1.00 R 1.00 R 0.10 L 1.00 R 1.00 R
+McLaren F1 Liquid Silver Two-Tone Semigloss 0.13 L 0.07 L 0.84 R 0.06 L 0.05 L 1.00 R
+McLaren Faros Color Metal Flake 0.59 R 0.51 R 0.35 L 0.58 L 0.36 R 0.67 R
+McLaren Fire Black Metal Flake 0.00 L 0.00 L 0.05 R 0.04 L 1.00 R 0.25 L
+McLaren Fire Genesis Blue Exposed Carbon Fiber Carbon Fiber Polished 0.60 R 0.49 L 1.00 R
+McLaren Fistral Blue Normal 0.53 L 1.00 R 0.91 L McLaren Special Orders
+McLaren Fluro Papaya Matte 0.09 L 0.99 R 1.00 R 2022 MCL36 Mercedes
+McLaren Flux Green Metal Flake 0.20 R 0.99 L 0.77 R 0.16 R 0.94 R 0.84 L
+McLaren Frozen Diamond Silver Metal Flake 0.57 L 0.31 L 0.73 R 0.60 L 0.17 L 0.88 R
+McLaren Fusion Green Pearl 3 Metal Flake 0.44 R 0.83 L 0.35 R 0.42 L 0.76 L 0.48 R One-of-one Color
+McLaren Fux Fuchia Metal Flake 0.83 L 1.00 R 0.60 R 0.85 L 0.95 L 0.94 R McLaren Special Orders
+McLaren Fux Green Metal Flake 0.40 R 0.94 L 0.19 R 0.44 L 0.90 L 0.74 R McLaren Special Orders
+McLaren Genesis Blue Metal Flake 0.60 L 1.00 R 0.41 L 0.59 L 1.00 R 0.79 R 2013 P1 Chassis #003
+McLaren Genesis Blue Metallic Metal Flake 0.63 L 0.60 L 0.29 R 0.61 R 0.52 L 0.59 L 1995 F1 Chassis  #046
+McLaren Genesis Dark Green Metal Flake 0.27 R 0.20 L 0.36 R 0.42 L 0.14 L 0.46 R 1994 F1 Chassis #022
+McLaren Grand Prix Red Normal 0.98 R 1.00 R 0.98 L 1995 F1 Chassis #028
+McLaren Graphite Grey Metal Flake 0.64 R 0.27 R 0.33 R 0.64 R 0.20 L 0.68 R
+McLaren Green Two-Tone Polished 0.40 L 0.88 R 0.41 L 0.39 L 0.84 R 0.85 L
+McLaren Helios Orange Metal Flake 0.05 R 0.99 R 0.71 R 0.05 L 0.94 R 1.00 R
+McLaren Heritage Green Metal Flake 0.48 R 0.98 L 0.49 R 0.49 L 0.99 L 0.66 R
+McLaren Hermes Abyss Metal Flake 0.61 R 0.84 L 0.26 R 0.58 L 0.98 L 0.36 R
+McLaren Historic Orange Normal 0.09 L 1.00 R 0.96 L
+McLaren Iris Purple Metal Flake 0.75 L 0.47 R 0.41 L 0.79 R 0.55 R 0.62 L
+McLaren Kandy Orange Metal Flake 0.03 R 0.99 L 0.75 R 0.06 R 1.00 R 0.93 L
+McLaren Kilo Grey Metal Flake 0.20 R 0.01 R 0.43 L 0.00 L 0.00 L 0.66 R McLaren Special Orders
+McLaren Kingfisher Blue Metal Flake 0.55 L 0.88 R 0.92 L 0.54 L 0.85 L 1.00 R
+McLaren Laguna Colorstream Two-Tone Polished 0.70 R 0.89 L 0.96 L 0.85 R 0.54 R 0.96 L
+McLaren Lantana Purple Metal Flake 0.70 L 0.83 R 0.81 L 0.76  L 0.68 R 0.98 L McLaren Special Orders
+McLaren Lio Blue Carbon Carbon Fiber Polished 0.60 R 0.64 L 1.00 R
+McLaren Liquid Silver Metal Flake 0.60 L 0.15 L 0.75 R 0.58 R 0.05 L 0.95 L
+McLaren Ludus Blue Metal Flake 0.57 L 0.70 R 0.56 L 0.51 L 0.81 R 0.97 L
+McLaren Luminaire Green Normal 0.47 R 0.56 L 0.89 R
+McLaren Madeline Metal Flake 0.70 L 0.23 L 0.70 R 0.65 R 0.21 L 0.75 L
+McLaren Magenta Sorbet Metal Flake 0.92 R 0.39 L 0.76 L 0.89 L 0.31 R 0.81 L
+McLaren Magnesium Silver Metal Flake 0.56 L 0.02 L 0.69 R 0.61 R 0.01 R 0.89 L
+McLaren Mantis Green Metal Flake 0.31 L 0.75 L 0.84 R 0.25 R 0.68 L 0.91 R
+McLaren Marlboro White Normal 0.00 L 0.00 L 0.96 R 1995 F1 Chassis #031
+McLaren Mars Red Normal 0.00 L 0.95 R 0.75 R 2016 650S Can-Am
+McLaren Mauritius Blue Metal Flake 0.61 L 0.93 R 0.47 L 0.57 L 1.00 R 0.95 L
+McLaren Mauvine Blue Metal Flake 0.77 L 0.98 R 0.51 L 0.81 L 0.56 R 0.81 L McLaren Special Orders
+McLaren Mayan Spark Metal Flake 0.07 L 0.88 R 0.97 L 0.10 L 0.79 R 0.98 L
+McLaren McLaren Orange Normal 0.08 L 0.97 R 1.00 R
+McLaren Memphis Red Metal Flake 0.98 L 0.88 R 0.60 L 0.98 L 0.80 R 0.84 L
+McLaren Meteor Gray Metallic Metal Flake 0.16 L 0.04 R 0.18 L 0.10 L 0.05 R 0.81 L
+McLaren Mexican Green Normal 0.46 L 0.99 R 0.72 R 2022 Senna XP El Triunfo Absoluto
+McLaren Mira Orange Metal Flake 0.05 R 1.00 R 1.00 R 0.06 R 1.00 R 1.00 R
+McLaren Modica Blue Carbon Fiber Carbon Fiber Polished 0.63 L 0.57 L 1.00 R 2021 Sabre
+McLaren Muriwai White Normal 0.56 L 0.12 R 0.89 R
+McLaren Musgravite Black Metal Flake 0.72 R 0.63 R 0.13 L 0.76 L 0.41 R 0.39 R
+McLaren Myan Orange Normal 0.08 L 0.96 R 1.00 L
+McLaren Napier Green Metal Flake 0.20 L 0.66 R 0.81 L 0.20 L 0.66 R 0.81 L
+McLaren Nardò Orange Metal Flake 0.02 L 0.75 R 0.78 R 0.03 R 0.61 R 0.96 L
+McLaren Nerello Red Metal Flake 0.98 L 0.78 R 0.20 R 0.98 R 0.38 L 0.34 R
+McLaren Neptune Blue Metal Flake 0.57 R 0.36 L 0.62 R 0.55 R 0.32 L 0.75 L 2014 P1 Chassis #316
+McLaren Onyx Black Normal 0.71 L 0.18 L 0.04 R
+
+
+
+Expensive Cars Color 1 (Low Light) Color 2 (Highlight) Denoted Comments Source
+Manufacturer Color Name Paint Type Hue Saturation Brightness Hue Saturation Brightness http://chris-hill.co.uk/forzaColor.php
+
+McLaren Orion Purple Metal Flake 0.72 L 0.68 R 0.45 R 0.71 R 0.63 L 0.61 L McLaren Special Orders
+McLaren Pacific Blue Metal Flake 0.56 L 1.00 R 0.71 L 0.53 R 1.00 R 0.88 L McLaren Special Orders
+McLaren Pacific Blue Pearlescent Two-Tone Polished 0.55 R 0.66 R 0.90 L 0.92 L 0.55 R 1.00 R McLaren Special Orders
+McLaren Pale Blue Metallic Metal Flake 0.58 L 0.36 R 0.79 L 0.57 R 0.23 L 0.93 L 2013 P1 Chassis #100
+McLaren Papaya Spark Normal 0.08 L 0.99 R 1.00 R
+McLaren Paris Blue Normal 0.60 L 0.82 L 0.79 R
+McLaren Pearl White Metal Flake 0.27 L 0.02 L 0.85 R 0.27 L 0.01 R 0.97 R
+McLaren Peredisio Blue Metal Flake 0.59 L 0.90 R 0.48 R 0.58 R 0.90 L 0.73 R
+McLaren Platinum Jubilee Metal Flake 0.63 L 0.03 L 0.65 L 0.00 L 0.00 L 0.90 R 2022 Artura Platinum Jubilee
+McLaren Pink Magic Metal Flake 0.89 L 1.00 R 0.93 L 0.74 L 0.57 R 0.94 R McLaren Special Orders
+McLaren Polaris Blue Metal Flake 0.61 L 0.33 R 0.56 R 0.61 R 0.29 R 0.74 L
+McLaren Professor 2 Blue Normal 0.57 L 1.00 R 0.99 L
+McLaren R Singh Purple Metal Flake 0.73 L 1.00 R 0.62 L 0.75 L 0.82 R 0.98 L
+McLaren Rocket Red Metal Flake 0.04 L 1.00 R 1.00 R 0.05 R 0.85 L 0.95 R
+McLaren Sangrian Quartz Metal Flake 0.11 L 0.09 L 0.48 R 0.11 R 0.06 L 0.79 L
+McLaren Saros Grey Metal Flake 0.69 L 0.09 R 0.32 R 0.00 L 0.00 L 0.49 R
+McLaren Sarthe Grey Metal Flake 0.60 L 0.19 R 0.35 L 0.57 R 0.08 L 0.67 R
+McLaren Satin Cerulean Blue Two-Tone Matte 0.60 L 0.76 L 0.81 R 0.60 L 0.68 R 0.95 R
+McLaren Satin Napier Green Two-Tone Matte 0.19 R 0.96 L 0.95 R 0.21 L 0.98 R 0.85 R
+McLaren Satin Ice Silver Two-Tone Matte 0.55 R 0.10 L 0.65 L 0.54 R 0.02 R 0.84 L McLaren Special Orders
+McLaren Seca Blue Metal Flake 0.54 L 1.00 R 0.86 R 0.55 L 0.99 R 0.66 R
+McLaren Serpentine Metal Flake 0.53 R 0.87 R 0.37 L 0.51 L 0.90 R 0.69 R
+McLaren Silica White Metal Flake 0.00 L 0.00 L 1.00 R 0.62 L 0.01 R 0.92 R
+McLaren Sicilian Yellow Normal 0.16 L 0.71 R 0.89 L
+McLaren Silverstone Green Metal Flake 0.47 R 0.74 L 0.23 R 0.51 L 0.83 L 0.32 R F1 GT
+McLaren SLR Blue Metal Flake 0.58 L 0.83 L 0.90 R 0.53 L 0.51 R 1.00 L
+McLaren Solar Yellow Normal 0.13 L 0.99 R 0.98 R McLaren Special Orders
+McLaren Solis Yellow Metal Flake 0.14 L 0.92 R 0.68 R 0.13 L 0.86 R 0.99 R
+McLaren Stealth Cosmos Black Normal 0.64 R 0.06 L 0.08 R Senna (Main Body)
+McLaren Steel Blue Metal Flake 0.57 R 0.43 R 0.76 L 0.58 R 0.33 L 0.86 R
+McLaren Stoltz Blue Normal 0.67 R 0.81 R 0.49 L
+McLaren Storm Grey Metal Flake 0.60 R 0.10 L 0.32 L 0.60 L 0.07 R 0.44 R
+McLaren Supernova Silver Metal Flake 0.57 R 0.07 R 0.71 L 0.60 R 0.08 R 0.88 L
+McLaren Synergy Green Metal Flake 0.31 L 0.70 R 0.67 R 0.23 R 0.62 R 0.92 R McLaren Special Orders
+McLaren Tarocco Orange Metal Flake 0.07 L 0.96 R 0.97 L 0.09 L 0.94 R 0.97 L
+McLaren Tiffany Blue Normal 0.48 R 0.44 L 0.86 R
+McLaren Tokyo Cyan Normal 0.51 L 0.90 R 0.81 L
+McLaren Trophy Kyanos Blue Metal Flake 0.64 L 0.99 R 0.53 R 0.61 L 1.00 L 0.98 R Senna (Main Body)
+McLaren Trophy Mira Orange Normal 0.05 L 0.94 R 0.99 R Senna (Main Body)
+McLaren Ueno Clinic Grey Metal Flake 0.58 R 0.07 L 0.23 R 0.58 R 0.05 R 0.47 L
+McLaren Vega Blue Metal Flake 0.63 L 0.99 R 0.51 L 0.61 L 0.99 R 0.80 R
+McLaren Velocity Red Metal Flake 0.99 L 0.93 L 0.60 R 1.00 R 0.99 R 0.95 R
+McLaren Ventura Orange Normal 0.08 L 0.95 R 0.98 L
+McLaren Verdant Theme Two-Tone Semigloss 0.31 R 0.48 R 0.56 L 0.55 L 0.71 R 0.34 R 2020 Verdant Theme GT by MSO
+McLaren Vermillion Red Metal Flake 0.00 L 1.00 R 0.91 L 0.00 L 1.00 R 1.00 R
+McLaren Vermillion Red Normal 0.00 L 1.00 R 1.00 R
+McLaren Vision Pure White Normal 0.35 R 0.01 L 0.94 R Senna (Main Body)
+McLaren Vision Victory Grey Metal Flake 0.59 L 0.30 R 0.68 L 0.57 L 0.46 L 0.44 L Senna (Main Body)
+McLaren Volcanic Orange Coarse Metal Flake 0.07 L 1.00 R 1.00 R 0.10 L 0.99 R 1.00 R
+McLaren Volcano Blue Metal Flake 0.63 R 0.95 L 0.20 R 0.62 R 0.94 L 0.73 L
+McLaren Volcano Orange Metal Flake 0.00 R 1.00 R 0.91 L 0.08 L 0.96 R 1.00 R
+McLaren Volcano Red Metal Flake 0.99 R 0.96 R 0.19 L 0.00 L 0.95 R 0.74 L
+McLaren Volcano Yellow Metal Flake 0.12 L 0.99 R 1.00 R 0.14 R 1.00 R 0.98 L
+McLaren XP Green Metal Flake 0.49 L 0.53 R 0.29 L 0.48 L 0.47 R 0.42 L
+McLaren Yquem Metal Flake 0.08 L 1.00 R 0.91 L 0.13 L 1.00 R 1.00 R McLaren Special Orders, F1 #075
+McLaren Zenith Black Two-Tone Semigloss 0.62 R 0.09 R 0.45 L 0.62 L 0.07 R 0.45 R McLaren Special Orders
+
+Rimac
+Rimac Carbon Black Metal Flake 0.73 L 0.16 R 0.19 R 0.69 R 0.12 L 0.26 R
+Rimac Electric Blue Metal Flake 0.62 R 0.25 L 0.36 R 0.61 R 0.18 R 0.48 L
+Rimac Flamenco Red Normal 0.99 R 0.97 L 0.78 R
+Rimac Forerunner Silver Metal Flake 0.59 L 0.10 R 0.53 R 0.59 R 0.05 L 0.71 L
+Rimac Glacier White Normal 0.56 L 0.04 L 0.81 R
+Rimac Mexican Blue Metal Flake 0.55 R 0.89 R 0.75 L 0.54 L 0.61 R 0.85 L
+Rimac Riviera Blue Normal 0.58 L 0.98 R 0.88 R
+Rimac Sea Blue Metal Flake 0.63 L 0.84 L 0.76 R 0.54 R 1.00 R 0.93 L
+Rimac Sunburst Yellow Normal 0.12 R 0.91 L 0.88 L
+Rimac Titanium Grey Metal Flake 0.00 L 0.00 L 0.49 R 0.61 L 0.02 R 0.62 R
+Rimac Wolf White Metal Flake 0.13 L 0.01 L 0.89 R 0.00 L 0.00 L 0.98 R
+
+Trion
+Trion Liquid Black Normal 0.00 L 0.00 L 0.00 L
+Trion Poison Yellow Normal 0.13 R 0.85 L 0.99 R
+Trion Lightning White Metal Flake 0.00 L 0.00 L 0.86 R 0.00 L 0.00 L 1.00
+
+W Motors
+W Motors Arabian Pearl Metal Flake 0.00 L 0.00 L 0.85 R 0.15 R 0.05 L 0.97 R
+W Motors Desert Orange Normal 0.07 R 1.00 L 0.89 R
+W Motors Lux Black Normal 0.00 L 0.00 L 0.07 R
+W Motors Lykan White Normal 0.00 L 0.00 L 0.92 R
+W Motors Royal Blue Metal Flake 0.63 L 0.83 R 0.51 L 0.54 R 0.75 L 1.00 R
+W Motors Royal Red Metal Flake 0.98 L 1.00 R 0.61 R 0.00 L 1.00 R 0.64 L
+W Motors Ruby Red Metal Flake 0.97 R 0.96 L 0.38 R 0.98 R 0.78 R 0.77 L
+W Motors Sapphire Blue Metal Flake 0.55 L 0.29 R 0.91 L 0.51 L 0.14 L 0.96 L
+
+
+
+Expensive Cars Color 1 (Low Light) Color 2 (Highlight) Denoted Comments Source
+Manufacturer Color Name Paint Type Hue Saturation Brightness Hue Saturation Brightness http://chris-hill.co.uk/forzaColor.php
+
+W Motors Wolf Gray Metal Flake 0.00 L 0.00 L 0.28 R 0.00 L 0.00 L 0.40 L
+Zenvo
+
+Zenvo Acid Green Metal Flake 0.19 L 0.70 R 0.97 R 0.18 R 0.95 L 0.90 R
+Zenvo Appelsin Orange Normal 0.11 L 0.98 R 0.86 L Orange
+Zenvo Baltisk Blå Metal Flake 0.61 R 0.98 R 0.55 R 0.58 R 0.95 L 0.92 R Baltic Blue
+Zenvo Black Diamond Metal Flake 0.00 L 0.00 L 0.08 R 0.00 L 0.00 L 0.25 R
+Zenvo Citrongul Normal 0.13 L 0.97 L 0.91 L Lemon Yellow
+Zenvo Crystal White Metal Flake 0.00 L 0.00 L 0.99 R 0.13 R 0.03 L 0.94 R
+Zenvo Dansk Rød Normal 1.00 L 0.98 L 0.81 R Danish Red
+Zenvo Fjord Blue Normal 0.54 R 0.89 R 0.91 L 2017 TS1 GT 10th Anniversary Edition
+Zenvo Gletsjer Blå Metal Flake 0.53 L 0.96 L 0.54 R 0.53 L 0.74 L 0.86 R Glacier Blue
+Zenvo Granitgrå Normal 0.58 R 0.01 L 0.38 R Granite Gray
+Zenvo Grotta Azzurra Metal Flake 0.67 L 0.85 R 0.70 R 0.66 L 1.00 R 1.00 R
+Zenvo Grus Grå Metal Flake 0.50 R 0.01 R 0.30 L 0.58 R 0.01 L 0.47 L Gravel Gray
+Zenvo Hvid Perlemor Metal Flake 0.67 L 0.00 R 0.85 R 0.67 L 0.00 R 1.00 R Mother of Pearl White
+Zenvo Intense Red Metal Flake 1.00 L 1.00 L 0.83 R 0.00 L 1.00 R 0.96 R
+Zenvo Kulsort Metal Flake 0.58 R 0.09 L 0.04 L 0.50 R 0.02 R 0.08 L Pitch Black
+Zenvo Mediterranean Blue Metal Flake 0.57 L 0.96 L 0.75 R 0.53 R 0.99 L 0.89 L
+Zenvo Lilla Dis Metal Flake 0.78 L 0.98 R 0.40 R 0.76 L 0.54 R 0.56 L Purple Haze
+Zenvo Lilla Perlemor Metal Flake 0.74 R 0.91 R 0.64 L 0.80 R 0.95 L 0.88 R
+Zenvo Lime Grøn Normal 0.19 R 0.96 L 1.00 R
+Zenvo Løvgrøn Metal Flake 0.23 R 0.96 L 0.65 L 0.23 R 0.77 R 0.88 R Leaf Green
+Zenvo Lys Grøn Normal 0.19 L 0.99 R 0.86 R Light Green
+Zenvo Rød Orange Normal 0.04 L 0.99 L 0.93 R Red Orange
+Zenvo Skøvgrøn Normal 0.33 L 0.98 R 0.54 L Forest Green
+Zenvo Svaerd Sølv Metal Flake 0.00 L 0.00 L 0.65 L 0.67 L 0.00 R 0.92 L Sword Silver
+Zenvo Sunset Orange Metal Flake 0.06 L 0.95 L 1.00 R 0.07 L 0.95 R 1.00 R
+Zenvo Yellow Diamonds Metal Flake 0.12 R 1.00 R 0.95 L 0.13 R 0.93 L 1.00 R

@@ -1,0 +1,175 @@
+﻿COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+5ZIGEN Black Normal 0.20 R 0.28 L 0.11 L
+5ZIGEN Ceramic Bronze Aluminum Semigloss 0.08 L 0.30 L 0.47 R
+5ZIGEN Chrome Silver Aluminum Polished 0.33 R 0.01 L 0.93 R
+5ZIGEN Hyper Black Aluminum Semigloss 0.13 R 0.06 L 0.42 R
+5ZIGEN Hyper Gunmetal Two-Tone Polished 0.33 R 0.02 R 0.49 L 0.33 R 0.02 R 0.49 L
+5ZIGEN Mat Black Matte 0.61 R 0.42 R 0.09 L
+5ZIGEN Mat Bronze Aluminum Brushed 0.08 R 0.32 L 0.67 R
+5ZIGEN Mat Silver Aluminum Brushed 0.09 R 0.04 R 0.60 R
+5ZIGEN Polished Lip Two-Tone Polished 0.50 L 0.03 L 0.75 R 0.50 L 0.02 L 1.00 R
+5ZIGEN Titanium Aluminum Semigloss 0.10 L 0.32 L 0.62 L
+ADV.1 Wheels Bronze Metal Flake 0.09 L 0.54 R 0.44 L 0.07 R 0.49 L 0.62 L
+ADV.1 Wheels Polished Aluminium Two-Tone Polished 0.00 L 0.00 L 0.85 R 0.00 L 0.00 L 0.95 R
+ADV.1 Wheels Brushed Red Two-Tone Semigloss 0.00 L 1.00 L 0.88 R 0.99 L 0.99 R 0.91 R
+Advan Wheels Blue Metallic Metal Flake 0.61 R 0.68 R 0.62 L 0.61 L 0.59 R 0.72 R
+Advan Wheels Bright Chrome Chrome 0.69 R 0.02 L 0.91 R
+Advan Wheels Bronze Metal Flake 0.13 L 0.15 R 0.45 L 0.09 R 0.20 R 0.58 L
+Advan Wheels Dark Gun Metallic Metal Flake 0.61 R 0.06 R 0.20 L 0.63 L 0.04 L 0.37 R
+Advan Wheels Gold Two-Tone Semigloss 0.10 R 0.47 L 0.67 L 0.12 R 0.36 L 0.77 R
+Advan Wheels Red Metallic Metal Flake 0.99 R 0.89 L 0.72 R 1.00 L 0.82 R 0.80 R
+Advan Wheels Silver Two-Tone Semigloss 0.64 L 0.03 L 0.60 R 0.63 L 0.02 R 0.98 R
+Advan Wheels Silver Metallic Metal Flake 0.61 R 0.06 L 0.62 L 0.60 L 0.07 R 0.90 R
+Advan Wheels Titanium Gold Two-Tone Semigloss 0.11 L 0.47 R 0.62 R 0.13 L 0.35 R 0.81 L
+Advan Wheels White Normal 0.59 R 0.04 L 0.93 R
+Alpine Gloss Black Normal 0.62 R 0.08 R 0.09 L Atelier Alpine
+Alpine Gloss White Normal 0.00 L 0.00 L 0.97 L Atelier Alpine
+Alpine Vibrant Gold Aluminum Semigloss 0.11 L 0.33 L 0.74 R Atelier Alpine
+Apollo Gold Semigloss 0.11 L 1.00 R 0.83 R 2019 Inteza Emozione rim color
+BBS Diamond Black Aluminum Semigloss 0.46 L 0.04 R 0.22 R
+BBS Diamond Silver Aluminum Semigloss 0.28 L 0.02 R 0.70 L
+BBS Gold Aluminum Semigloss 0.11 R 0.28 R 0.70 L
+BBS Le Mans Grey Metal Flake 0.63 L 0.07 L 0.22 R 0.60 R 0.08 L 0.71 L
+BBS Platinum Silver Aluminum Semigloss 0.60 L 0.06 L 0.78 R
+BMW Acid Orange Metal Flake 0.09 L 0.88 R 0.74 R 0.10 R 0.81 L 1.00 R 2016 M4 (F22) GTS rim color
+BMW Gold Bronze Two-Tone Semigloss 0.09 L 0.28 L 0.87 R 0.09 L 0.38 L 0.77 R 2022 M5 (F90) CS
+Buddy Club Gloss White Normal 0.60 R 0.02 L 0.90 L
+Buddy Club Matt Black Matte 0.62 L 0.14 L 0.06 R
+Bugatti Tangerine Normal 0.06 L 1.00 R 1.00 R 2011 Veyron Super Sport accent color
+Dodge Brass Monkey Metal Flake 0.08 R 0.29 R 0.40 L 0.08 L 0.35 L 0.72 L
+Ferrari Glossy Brilliant Silver Aluminium Semigloss 0.00 L 0.00 L 0.78 L 2019 488 Pista
+Ferrari Gold Aluminium Semigloss 0.09 R 0.40 R 0.65 R 2019 488 Pista
+Ferrari Matt Grigio Corsa Matte 0.00 L 0.00 L 0.13 R 2019 488 Pista
+Ferrari Uber Rose Gold Two-Tone Semigloss 0.08 R 0.46 L 0.75 R 0.10 L 0.38 L 0.95 R
+Ford Rado Gray Two-Tone Semigloss 0.00 L 0.00 L 0.83 R 0.00 L 0.00 L 0.53 R Focus and Fiesta ST rim color
+Ford Rock Metallic Metal Flake 0.60 R 0.04 L 0.51 R 0.61 L 0.02 R 0.71 R
+HRE Wheels Stone Blue Two-Tone Polished 0.62 R 0.95 L 0.24 R 0.59 L 0.95 R 0.69 R
+HRE Wheels Satin Bronze Two-Tone Semigloss 0.07 L 0.35 R 0.25 L 0.06 R 0.29 L 0.39 R
+HRE Wheels Stone Bronze Two-Tone Polished 0.08 L 0.60 R 0.21 L 0.07 L 0.62 R 0.35 R
+HRE Wheels Stone Champagne Two-Tone Polished 0.09 L 0.52 R 0.28 L 0.09 R 0.26 L 0.78 R
+HRE Wheels Stone Copper Two-Tone Polished 0.02 R 1.00 R 0.26 L 0.06 L 0.79 R 0.60 R
+HRE Wheels Stone iLectric Blue Two-Tone Polished 0.53 R 1.00 R 0.41 L 0.51 L 0.80 R 0.95 L
+HRE Wheels Stone Gold Two-Tone Polished 0.12 R 0.40 L 0.27 R 0.11 R 0.26 R 0.70 L
+HRE Wheels Stone Orange Two-Tone Polished 0.04 L 0.91 R 0.71 L 0.05 R 0.93 L 0.84 L
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+HRE Wheels Stone Purple Two-Tone Polished 0.73 R 0.77 L 0.24 R 0.72 L 0.65 R 0.64 L
+HRE Wheels Stone Red Two-Tone Polished 1.00 R 0.93 R 0.46 L 0.99 L 1.00 R 0.50 L
+Jaguar Champagne Gold Satin Two-Tone Matte 0.10 L 0.17 R 0.75 R 0.09 R 0.29 R 0.52 L 2022 F-Pace SVR Edition 1988 rim color
+Lamborghini Bianco Asopo Matte 0.00 L 0.00 L 0.94 R
+Lamborghini Imola Bronze Aluminium Semigloss 0.10 L 0.32 L 0.95 R
+OZ Rims Matte Black Matte 0.61 L 0.19 R 0.06 L
+Porsche Satin Aurum Gold Two-Tone Matte 0.08 R 0.28 L 0.87 R 0.08 R 0.41 L 0.68 R
+Porsche Weissach White Gold Aluminum Semigloss 0.11 R 0.18 L 0.80 L 991.2 GT2 RS wheel colour
+Subaru Gold Metal Flake 0.09 L 0.40 R 0.50 R 0.11 L 0.41 R 1.00 L
+Ultima Black Two-Tone Matte 0.00 L 0.00L 0.09 R 0.00 L 0.00L 0.00 L
+Ultima Gold Two-Tone Semigloss 0.11 L 0.49 R 0.83 R 0.12 R 0.48 L 0.62 R
+Ultima Grey Two-Tone Matte 0.00 L 0.00 L 0.43 R 0.00 L 0.00 L 0.28 R
+Ultima Silver Two-Tone Matte 0.00 L 0.00 L 0.67 R 0.00 L 0.00 L 0.53 R
+Volk Racing Magnesium Blue Two-Tone Polished 0.64 L 0.64 R 0.33 L 0.62 L 0.49 R 0.67 R
+Volvo Anthracite Two-Tone Matte 0.00 L 0.00 L 0.56 R 0.67 L 0.01 R 0.32 R
+Zenvo Svaerd Sølv Metal Flake 0.00 L 0.00 L 0.65 L 0.67 L 0.00 R 0.92 L Sword Silver
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
+
+
+
+COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
+MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
