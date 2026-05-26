@@ -33,6 +33,7 @@
     "@vercel/toolbar": "^0.1.32",
     "ai": "^4.0.0",
     "bcryptjs": "^2.4.3",
+    "botid": "^1.5.11",
     "cheerio": "^1.2.0",
     "critters": "^0.0.23",
     "fast-xml-parser": "^5.5.10",

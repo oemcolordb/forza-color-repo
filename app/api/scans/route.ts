@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@libsql/client'
-import { checkBotId } from '@/botid/server'
+import { checkBotId } from 'botid/server'
 
 const client =
   process.env.TURSO_DATABASE_URL &&
