@@ -41,6 +41,7 @@ export interface DeviceInfo {
   isDesktop: boolean
   screenWidth: number
   screenHeight: number
+  screenSize?: string
 }
 
 export interface User {

@@ -111,10 +111,13 @@ const nextConfig = {
     }
 
     // Force single React instance to prevent duplicate React issues in CI workers
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      react: path.resolve('./node_modules/react'),
-      'react-dom': path.resolve('./node_modules/react-dom'),
+    // Only apply on client to avoid breaking server-side prerendering
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        react: path.resolve('./node_modules/react'),
+        'react-dom': path.resolve('./node_modules/react-dom'),
+      }
     }
 
     return config

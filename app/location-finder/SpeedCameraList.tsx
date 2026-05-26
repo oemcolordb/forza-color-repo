@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { parseMarkdown } from "../../src/lib/parsers/fh5";
-import type { FH5Location } from "../../src/types/fh5";
+import { parseMarkdown } from "../lib/parsers/fh5";
+import type { FH5Location } from "../types/fh5";
 
 // Source keys — kept here so the API key in firecrawl.ts is never bundled client-side.
 const SOURCES = ["IGN", "G4G"] as const;

@@ -96,7 +96,9 @@ scripts/__pycache__/
 *.docx
 *.xlsx
 "Gengar With Smiley Tongue Sticker"
-botid/
+# botid/ — now tracked as botid/server.ts
+!botid/
+!botid/server.ts
 horizon_databank/
 "Copy of ManteoMax's Forza HORIZON 5 Spreadsheets"
 
