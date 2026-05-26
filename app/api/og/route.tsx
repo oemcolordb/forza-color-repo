@@ -1,8 +1,5 @@
-import { ImageResponse } from '@vercel/og'
+import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
-import { logger } from '@/app/lib/logger'
-
-export const runtime = 'edge'
 
 export async function GET(request: NextRequest) {
   try {
@@ -228,7 +225,7 @@ export async function GET(request: NextRequest) {
       }
     )
   } catch (error) {
-    logger.error('Error generating OG image:', error)
+    console.error('Error generating OG image:', error)
     return new Response('Failed to generate image', { status: 500 })
   }
 }

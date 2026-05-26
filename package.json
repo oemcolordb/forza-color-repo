@@ -50,7 +50,6 @@
     "react-window": "^1.8.11",
     "react-window-infinite-loader": "^2.0.0",
     "socks-proxy-agent": "^10.0.0",
-    "three": "^0.171.0",
     "three-mesh-bvh": "^0.8.0",
     "ts-node": "^10.9.2",
     "uuid": "^10.0.0",

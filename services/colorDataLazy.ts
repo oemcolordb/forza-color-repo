@@ -14,7 +14,7 @@ function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
   const colorName = String(raw.colorName ?? raw.color_name ?? 'Unnamed')
   const colorType = String(raw.colorType ?? raw.paintType ?? raw.paint_type ?? 'Normal')
   const model = raw.model != null ? String(raw.model) : ''
-  const year = raw.year != null ? raw.year : null
+  const year = raw.year != null ? Number(raw.year) : null
 
   let c1 = raw.color1 as Record<string, number> | null
   let c2 = (raw.color2 ?? raw.color1) as Record<string, number> | null
