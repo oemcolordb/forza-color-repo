@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import PostModal from '../components/PostModal'
 import { useChat } from '@ai-sdk/react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -21,9 +22,9 @@ export default function CommunityPage() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [activeTab, setActiveTab] = useState<'feed' | 'tunebot'>('tunebot')
   const [posts, setPosts] = useState<Post[]>([])
-  const [isUploading, setIsUploading] = useState(false)
+  const [_isUploading, _setIsUploading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  
+
   const fetchPosts = useCallback(() => {
     fetch('/api/community/posts')
       .then(res => res.json())
@@ -57,7 +58,7 @@ export default function CommunityPage() {
   return (
     <div className={`min-h-screen flex flex-col font-sans transition-colors duration-500 ${isDarkMode ? 'bg-[#050a06] text-white' : 'bg-gray-50 text-gray-900'}`}>
       <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
-      
+
       {/* Dynamic Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600 rounded-full blur-[120px] animate-pulse" />
@@ -65,10 +66,10 @@ export default function CommunityPage() {
       </div>
 
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6 mt-6 relative z-10">
-        
+
         {/* Left Sidebar - Navigation */}
         <aside className="w-full md:w-72 flex-shrink-0">
-          <motion.div 
+          <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             className={`p-1 rounded-2xl shadow-2xl backdrop-blur-xl border ${isDarkMode ? 'bg-white/5 border-white/10' : 'bg-white/80 border-gray-200'}`}
@@ -79,11 +80,11 @@ export default function CommunityPage() {
                 THE PIT STOP
               </h2>
               <nav className="flex flex-col gap-3">
-                <button 
+                <button
                   onClick={() => setActiveTab('tunebot')}
                   className={`group relative text-left px-5 py-4 rounded-xl font-bold transition-all overflow-hidden ${
-                    activeTab === 'tunebot' 
-                    ? 'text-white' 
+                    activeTab === 'tunebot'
+                    ? 'text-white'
                     : isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'
                   }`}
                 >
@@ -95,11 +96,11 @@ export default function CommunityPage() {
                     AI TuneBot
                   </span>
                 </button>
-                <button 
+                <button
                   onClick={() => setActiveTab('feed')}
                   className={`group relative text-left px-5 py-4 rounded-xl font-bold transition-all overflow-hidden ${
-                    activeTab === 'feed' 
-                    ? 'text-white' 
+                    activeTab === 'feed'
+                    ? 'text-white'
                     : isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-black'
                   }`}
                 >
@@ -114,8 +115,8 @@ export default function CommunityPage() {
               </nav>
             </div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -142,7 +143,7 @@ export default function CommunityPage() {
         <section className="flex-1 min-h-[600px] flex flex-col relative">
           <AnimatePresence mode="wait">
             {activeTab === 'tunebot' ? (
-              <motion.div 
+              <motion.div
                 key="tunebot"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -172,18 +173,18 @@ export default function CommunityPage() {
                 {/* Chat Messages */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
                   {messages.map((m) => (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      key={m.id} 
+                      key={m.id}
                       className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                       <div className={`max-w-[85%] relative group ${m.role === 'user' ? 'text-right' : 'text-left'}`}>
                         <div className={`inline-block px-6 py-4 rounded-3xl shadow-lg transition-all duration-300 ${
-                          m.role === 'user' 
-                            ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-tr-none hover:shadow-blue-500/20' 
-                            : isDarkMode 
-                              ? 'bg-white/10 text-gray-100 rounded-tl-none border border-white/10 hover:bg-white/15' 
+                          m.role === 'user'
+                            ? 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-tr-none hover:shadow-blue-500/20'
+                            : isDarkMode
+                              ? 'bg-white/10 text-gray-100 rounded-tl-none border border-white/10 hover:bg-white/15'
                               : 'bg-white text-gray-800 rounded-tl-none border border-gray-200 hover:shadow-xl'
                         }`}>
                           <div className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{m.content}</div>
@@ -219,8 +220,8 @@ export default function CommunityPage() {
                         isDarkMode ? 'bg-black/60 border border-white/10 text-white placeholder-gray-600' : 'bg-white border border-gray-200 text-gray-900'
                       }`}
                     />
-                    <button 
-                      type="submit" 
+                    <button
+                      type="submit"
                       disabled={isLoading || !input.trim()}
                       className="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-50 hover:to-indigo-500 text-white rounded-xl px-8 font-black italic tracking-tighter text-sm transition-all shadow-xl shadow-blue-600/30 disabled:opacity-30 disabled:cursor-not-allowed group"
                     >
@@ -230,7 +231,7 @@ export default function CommunityPage() {
                 </div>
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key="feed"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -240,7 +241,7 @@ export default function CommunityPage() {
                 {/* Feed Controls */}
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-black italic tracking-tighter">COMMUNITY <span className="text-blue-500">SHOWCASE</span></h2>
-                  <button 
+                  <button
                     className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-6 py-2.5 text-xs font-bold shadow-lg shadow-blue-600/20 transition-all flex items-center gap-2"
                     onClick={() => setIsModalOpen(true)}
                   >
@@ -251,7 +252,7 @@ export default function CommunityPage() {
                 {/* Posts Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
                   {posts.length > 0 ? posts.map((post, idx) => (
-                    <motion.div 
+                    <motion.div
                       key={post.id}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -304,12 +305,12 @@ export default function CommunityPage() {
           </AnimatePresence>
         </section>
       </main>
-      
+
       <Footer isDarkMode={isDarkMode} />
-      
-      <PostModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+
+      <PostModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         onPostSuccess={fetchPosts}
         isDarkMode={isDarkMode}
       />

@@ -19,7 +19,7 @@
         .container {
             text-align: center;
             padding: 2rem;
-            max-width: 500px;
+            max-width: 600px;
         }
         .icon {
             font-size: 4rem;
@@ -38,32 +38,90 @@
             opacity: 0.9;
             margin-bottom: 2rem;
         }
-        .retry-btn {
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .btn {
             border: none;
             color: white;
-            padding: 12px 24px;
-            font-size: 1rem;
+            padding: 10px 20px;
+            font-size: 0.95rem;
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
         }
-        .retry-btn:hover {
+        .btn:hover {
             transform: scale(1.05);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+        }
+        .btn-secondary {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+        .tip {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            text-align: left;
+            border-radius: 4px;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+        }
+        .tip strong {
+            color: #60a5fa;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="icon">🏁</div>
-        <h1>You're Offline</h1>
+        <div class="icon">📡</div>
+        <h1>Connection Issue Detected</h1>
         <p>
-            No internet connection detected. Some features may be limited, 
-            but you can still browse your cached colors and favorites.
+            We're having trouble reaching the server. You can still access cached content
+            and use many features offline.
         </p>
-        <button class="retry-btn" onclick="window.location.reload()">
-            Try Again
-        </button>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="window.location.href='/'">
+                ← Go to Home
+            </button>
+            <button class="btn btn-secondary" onclick="window.location.reload()">
+                🔄 Try Again
+            </button>
+        </div>
+
+        <div class="tip">
+            <strong>💡 What works offline:</strong><br>
+            • Browse cached car colors and favorites<br>
+            • View saved tunes (TuneForge)<br>
+            • Search your color library<br>
+            <br>
+            <strong>What needs internet:</strong><br>
+            • Fetching new car data<br>
+            • Community features<br>
+            • Real-time location map
+        </div>
     </div>
+
+    <script>
+        // Try to reconnect every 5 seconds when on the offline page
+        setInterval(function() {
+            fetch('/api/health', { method: 'HEAD', cache: 'no-store' })
+                .then(() => {
+                    // Connection restored, reload
+                    window.location.reload()
+                })
+                .catch(() => {
+                    // Still offline
+                })
+        }, 5000)
+    </script>
 </body>
 </html>

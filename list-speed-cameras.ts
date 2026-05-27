@@ -1,5 +1,5 @@
-import { FH5_SOURCES, safeScrape } from "./src/lib/firecrawl.js";
-import { parseMarkdown } from "./src/lib/parsers/fh5.js";
+import { FH5_SOURCES, safeScrape } from "./app/lib/firecrawl.js";
+import { parseMarkdown } from "./app/lib/parsers/fh5.js";
 
 (async () => {
   for (const src of Object.keys(FH5_SOURCES) as (keyof typeof FH5_SOURCES)[]) {

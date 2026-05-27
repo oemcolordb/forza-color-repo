@@ -14,7 +14,11 @@ function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
   const colorName = String(raw.colorName ?? raw.color_name ?? 'Unnamed')
   const colorType = String(raw.colorType ?? raw.paintType ?? raw.paint_type ?? 'Normal')
   const model = raw.model != null ? String(raw.model) : ''
-  const year = raw.year != null ? raw.year : null
+  let year: number | null = null
+  if (raw.year != null) {
+    const parsedYear = Number(raw.year)
+    year = Number.isFinite(parsedYear) ? parsedYear : null
+  }
 
   let c1 = raw.color1 as Record<string, number> | null
   let c2 = (raw.color2 ?? raw.color1) as Record<string, number> | null
@@ -62,7 +66,7 @@ export async function getColorData(): Promise<CarColor[]> {
 
     // Load from extracted_colors.json at project root
     const dataPath = path.join(process.cwd(), 'extracted_colors.json')
-    
+
     if (fs.existsSync(dataPath)) {
       try {
         const content = fs.readFileSync(dataPath, 'utf8')
