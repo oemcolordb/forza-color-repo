@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDb, ensureTables } from '../../../lib/db'
 import { cookies } from 'next/headers'
-import { TransitionType, TRANSITION_METADATA } from '../../../components/transitions/PageTransitions'
+import { TRANSITION_METADATA } from '../../../components/transitions/PageTransitions'
 import { logger } from '@/app/lib/logger'
 
 // Generate a simple user ID from cookies or create new one
@@ -36,7 +36,7 @@ function getClientIp(request: NextRequest): string {
 }
 
 // GET - Retrieve all votes and user's vote status
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     await ensureTables()
     const db = getDb()

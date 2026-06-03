@@ -1,0 +1,329 @@
+
+> forza-color-repo@1.0.0 build
+> next build
+
+ ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\xxx\Documents\GitHub\forza-color-repo\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\Users\xxx\Documents\GitHub\forza-color-repo\forza-color-repo-1\package-lock.json
+
+   Γû▓ Next.js 15.5.18
+   - Experiments (use with caution):
+     Γ£ô optimizeCss
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 29.4s
+   Linting and checking validity of types ...
+
+ ΓÜá The Next.js plugin was not detected in your ESLint configuration. See https://nextjs.org/docs/app/api-reference/config/eslint#migrating-existing-config
+
+./app/components/CommunityTrends.tsx
+15:19  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/components/EnhancedAuthProvider.tsx
+19:12  Warning: 'email' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+19:27  Warning: 'password' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+20:12  Warning: 'email' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+20:27  Warning: 'password' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+20:45  Warning: 'username' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+24:19  Warning: 'favorites' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+25:23  Warning: 'presets' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+26:19  Warning: 'sets' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/components/ForzaColorSheetSEO.tsx
+18:3  Warning: 'isDarkMode' is assigned a value but never used. Allowed unused args must match /^_/u.  no-unused-vars
+18:3  Warning: 'isDarkMode' is assigned a value but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/OptimizedStatsBar.js
+57:29  Warning: 'index' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+57:29  Warning: 'index' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/PaintEffect3D.js
+3:26  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+3:26  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/SimpleColorGrid.tsx
+11:19  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+12:17  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+13:22  Warning: 'colorId' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/components/SoundtrackPlayer.tsx
+17:62  Warning: 'isDarkMode' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+17:62  Warning: 'isDarkMode' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/TelemetryDashboard.js
+2:48  Warning: 'useMemo' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+2:48  Warning: 'useMemo' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/transitions/TransitionGallery.tsx
+3:27  Warning: 'useEffect' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:27  Warning: 'useEffect' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'getRandomTransition' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+10:3  Warning: 'getRandomTransition' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+18:15  Warning: 'id' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+41:9  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+41:9  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+113:15  Warning: 'id' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+226:5  Warning: 'userVotes' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+226:5  Warning: 'userVotes' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/ui/AnimatedBackgrounds.tsx
+3:28  Warning: 'useRef' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:28  Warning: 'useRef' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+4:45  Warning: 'useTransform' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+4:45  Warning: 'useTransform' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/components/ui/Neumorphic.tsx
+87:14  Warning: 'checked' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+156:14  Warning: 'value' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+329:14  Warning: 'value' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/components/VirtualColorGrid.tsx
+11:19  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+12:17  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+13:22  Warning: 'colorId' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/components/WindSystem.js
+3:23  Warning: 'isDarkMode' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+3:23  Warning: 'isDarkMode' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+3:35  Warning: 'intensity' is assigned a value but never used. Allowed unused args must match /^_/u.  no-unused-vars
+3:35  Warning: 'intensity' is assigned a value but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/context/CarContext.tsx
+43:20  Warning: 'car' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/context/TransitionContext.tsx
+16:23  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+17:24  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+19:26  Warning: 'enabled' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+24:20  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+25:16  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+30:23  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+31:16  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+32:14  Warning: 'transition' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+39:7  Warning: 'VOTES_STORAGE_KEY' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+39:7  Warning: 'VOTES_STORAGE_KEY' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/garage/GarageClient.tsx
+3:47  Warning: 'useCallback' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:47  Warning: 'useCallback' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+32:22  Warning: 'setIsDarkMode' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+32:22  Warning: 'setIsDarkMode' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/global-error.tsx
+6:3  Warning: 'error' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+6:3  Warning: 'error' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/lib/encryption.ts
+17:12  Warning: 'e' is defined but never used.  no-unused-vars
+17:12  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/lib/errorBoundary.tsx
+7:14  Warning: 'error' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/lib/firecrawl.ts
+40:12  Warning: '_' is defined but never used.  no-unused-vars
+40:12  Warning: '_' is defined but never used.  @typescript-eslint/no-unused-vars
+66:3  Warning: Unexpected console statement. Only these console methods are allowed: warn, error.  no-console
+87:7  Warning: Unexpected console statement. Only these console methods are allowed: warn, error.  no-console
+
+./app/lib/tuning-calculator.js
+78:11  Warning: 'weightFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+78:11  Warning: 'weightFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+79:11  Warning: 'powerToWeight' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+79:11  Warning: 'powerToWeight' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+80:11  Warning: 'handlingFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+80:11  Warning: 'handlingFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+81:11  Warning: 'speedFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+81:11  Warning: 'speedFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+82:11  Warning: 'accelFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+82:11  Warning: 'accelFactor' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+303:16  Warning: 'position' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+303:16  Warning: 'position' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/lib/validation.ts
+6:12  Warning: 'field' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/livery-hub/page.tsx
+7:10  Warning: 'CarColor' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+7:10  Warning: 'CarColor' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+21:22  Warning: 'setIsDarkMode' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+21:22  Warning: 'setIsDarkMode' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+38:16  Warning: 'err' is defined but never used.  no-unused-vars
+38:16  Warning: 'err' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./app/location-finder/NeonRoadMap.tsx
+15:22  Warning: 'location' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+339:9  Warning: 'activeTypes' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+339:9  Warning: 'activeTypes' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+540:59  Warning: 'index' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+540:59  Warning: 'index' is defined but never used. Allowed unused args must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/location-finder/page.tsx
+3:17  Warning: 'useState' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:17  Warning: 'useState' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+3:27  Warning: 'useEffect' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:27  Warning: 'useEffect' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+3:38  Warning: 'useCallback' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:38  Warning: 'useCallback' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+4:8  Warning: 'Breadcrumbs' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+4:8  Warning: 'Breadcrumbs' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+5:8  Warning: 'MapDisplay' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+5:8  Warning: 'MapDisplay' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+6:8  Warning: 'LocationCard' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+6:8  Warning: 'LocationCard' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+7:10  Warning: 'useMapPersistence' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+7:10  Warning: 'useMapPersistence' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+8:10  Warning: 'Location' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+8:10  Warning: 'Location' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+8:34  Warning: 'LocationCategory' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+8:34  Warning: 'LocationCategory' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+10:7  Warning: 'ALL_FILTER_TYPES' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+10:7  Warning: 'ALL_FILTER_TYPES' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+12:7  Warning: 'CATEGORY_TYPES' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+12:7  Warning: 'CATEGORY_TYPES' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/location-finder/ScenicFinder.tsx
+17:10  Warning: 'query' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+17:10  Warning: 'query' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/location-finder/types.ts
+2:3  Warning: 'Locations' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+3:3  Warning: 'Collectibles' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+4:3  Warning: 'RaceEvents' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+5:3  Warning: 'HorizonStories' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+6:3  Warning: 'PRStunts' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+7:3  Warning: 'Other' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+12:3  Warning: 'Expedition' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+13:3  Warning: 'FestivalSite' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+14:3  Warning: 'Landmark' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+15:3  Warning: 'PlayerHouse' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+16:3  Warning: 'PlaygroundGame' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+17:3  Warning: 'Showcase' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+20:3  Warning: 'BarnFind' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+21:3  Warning: 'FastTravelBoard' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+22:3  Warning: 'Treasure' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+23:3  Warning: 'XPBoard' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+26:3  Warning: 'CrossCountryEvent' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+27:3  Warning: 'DirtRacingEvent' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+28:3  Warning: 'DragRacingEvent' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+29:3  Warning: 'RoadRacingEvent' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+30:3  Warning: 'StreetRacingEvent' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+33:3  Warning: 'BornFast' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+34:3  Warning: 'ElCamino' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+35:3  Warning: 'LuchaDeCarreteras' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+36:3  Warning: 'TestDriver' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+37:3  Warning: 'V10' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+38:3  Warning: 'Vocho' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+41:3  Warning: 'DangerSign' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+42:3  Warning: 'DriftZone' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+43:3  Warning: 'SpeedTrap' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+44:3  Warning: 'SpeedZone' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+45:3  Warning: 'Trailblazer' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+48:3  Warning: 'ExpeditionAccolade' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+49:3  Warning: 'Miscellaneous' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+50:3  Warning: 'TrailblazerFinish' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+51:3  Warning: 'Vehicle' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+
+./app/page.tsx
+33:8  Warning: 'OptimizedStatsBar' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+33:8  Warning: 'OptimizedStatsBar' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+34:8  Warning: 'ExportButton' is defined but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+34:8  Warning: 'ExportButton' is defined but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+59:10  Warning: 'colorHistory' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+59:10  Warning: 'colorHistory' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/tuneforge/car/[slug]/client.tsx
+58:27  Warning: 'setHandlingBalance' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+58:27  Warning: 'setHandlingBalance' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+59:25  Warning: 'setBumpStiffness' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+59:25  Warning: 'setBumpStiffness' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+60:27  Warning: 'setSpringFrequency' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+60:27  Warning: 'setSpringFrequency' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+61:10  Warning: 'rollStiffness' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+61:10  Warning: 'rollStiffness' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+61:25  Warning: 'setRollStiffness' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+61:25  Warning: 'setRollStiffness' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+66:10  Warning: 'drivetrain' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+66:10  Warning: 'drivetrain' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+66:22  Warning: 'setDrivetrain' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+66:22  Warning: 'setDrivetrain' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+67:21  Warning: 'setGearCount' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+67:21  Warning: 'setGearCount' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+68:10  Warning: 'hpOverride' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+68:10  Warning: 'hpOverride' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+68:22  Warning: 'setHpOverride' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+68:22  Warning: 'setHpOverride' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+72:10  Warning: 'aiResponse' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+72:10  Warning: 'aiResponse' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+144:14  Warning: 'error' is defined but never used.  no-unused-vars
+144:14  Warning: 'error' is defined but never used.  @typescript-eslint/no-unused-vars
+151:9  Warning: 'applyAiAdjustment' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+151:9  Warning: 'applyAiAdjustment' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/tuneforge/page.tsx
+84:10  Warning: 'aiResponse' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+84:10  Warning: 'aiResponse' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+93:12  Warning: 'setActivePreset' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+93:12  Warning: 'setActivePreset' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+833:9  Warning: 'getTireCompoundName' is assigned a value but never used. Allowed unused vars must match /^_/u.  no-unused-vars
+833:9  Warning: 'getTireCompoundName' is assigned a value but never used. Allowed unused vars must match /^_/u.  @typescript-eslint/no-unused-vars
+
+./app/tuneforge/types.ts
+71:17  Warning: 'data' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+72:21  Warning: 'key' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+72:34  Warning: 'value' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+78:17  Warning: 'upgrades' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+81:16  Warning: 'event' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+83:16  Warning: 'id' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+84:14  Warning: 'tune' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+86:24  Warning: 'q' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+90:22  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+92:21  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+94:25  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+96:21  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+98:22  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+100:17  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+102:19  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+104:18  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+106:26  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+108:19  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+110:18  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+112:19  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+114:24  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+116:22  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+118:24  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+120:22  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+122:19  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+124:22  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+127:19  Warning: 'v' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+128:23  Warning: 'lbfIn' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+129:21  Warning: 'displayed' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+131:25  Warning: 'value' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+./app/types/index.ts
+60:24  Warning: 'colors' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+61:20  Warning: 'matches' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+62:20  Warning: 'color' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+66:20  Warning: 'file' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+66:32  Warning: 'dataUrl' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+84:10  Warning: 'key' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+85:10  Warning: 'key' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+85:23  Warning: 'data' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+85:32  Warning: 'ttl' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+86:9  Warning: 'key' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+87:7  Warning: 'key' is defined but never used. Allowed unused args must match /^_/u.  no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/59) ...
+Error occurred prerendering page "/dev/analytics". Read more: https://nextjs.org/docs/messages/prerender-error
+TypeError: Cannot read properties of null (reading 'useEffect')
+    at b.useEffect (C:\Users\xxx\Documents\GitHub\forza-color-repo\forza-color-repo-1\.next\server\chunks\6718.js:1:6724)
+    at e (C:\Users\xxx\Documents\GitHub\forza-color-repo\forza-color-repo-1\.next\server\chunks\7211.js:1:906) {
+  digest: '4167963031'
+}
+Export encountered an error on /dev/analytics/page: /dev/analytics, exiting the build.
+ Γ¿» Next.js build worker exited with code: 1 and signal: null

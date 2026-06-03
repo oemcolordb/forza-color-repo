@@ -6,6 +6,7 @@ import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
 import EasterEgg420 from './components/EasterEgg420'
+import ServiceWorkerStatus from './components/ServiceWorkerStatus'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -85,7 +86,7 @@ export const metadata = {
     siteName: 'Forza Color Sheet',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Forza Color Universe - FH5 Paint Colors & Livery Creator',
@@ -98,7 +99,7 @@ export const metadata = {
     description:
       'Complete Forza Color Sheet with 10,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
     creator: '@ResinRonin',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   alternates: {
     canonical: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
@@ -170,8 +171,10 @@ export default function RootLayout({ children }) {
           content="vG2Z9j6nstH8oDSGfxfICIrbefBCUu0cIttuSxMIiOk"
         />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="icon" href="/icon-192.png" type="image/png" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <link rel="icon" href="/favicon.png" sizes="64x64" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <script
           type="application/ld+json"
@@ -182,14 +185,36 @@ export default function RootLayout({ children }) {
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                  // Only register service worker in production
-                  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-                    navigator.serviceWorker.register('/sw.js')
-                      .catch(() => {})
+                  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                  const devSwEnabled = localStorage.getItem('DEV_SW_ENABLED') === 'true'
+
+                  // Register in production or if explicitly enabled in dev
+                  if (!isDev || devSwEnabled) {
+                    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                      .then(registration => {
+                        window.__SW_REGISTERED__ = true
+                        if (isDev) console.log('[SW] Registered (dev mode enabled)')
+
+                        // Listen for updates
+                        registration.addEventListener('updatefound', () => {
+                          const newWorker = registration.installing
+                          newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                              window.__SW_UPDATE_AVAILABLE__ = true
+                              if (isDev) console.log('[SW] Update available')
+                            }
+                          })
+                        })
+                      })
+                      .catch(err => {
+                        window.__SW_REGISTERED__ = false
+                        console.error('[SW] Registration failed:', err.message)
+                      })
                   } else {
-                    // Unregister any existing service workers in development
+                    // Unregister in development (unless explicitly enabled)
                     navigator.serviceWorker.getRegistrations().then(registrations => {
                       registrations.forEach(registration => registration.unregister())
+                      window.__SW_REGISTERED__ = false
                     })
                   }
                 })
@@ -206,6 +231,7 @@ export default function RootLayout({ children }) {
         <ErrorBoundary>{children}</ErrorBoundary>
         {/* 🌿 hidden easter eggs — global */}
         <EasterEgg420 />
+        <ServiceWorkerStatus />
         <Analytics />
         <SpeedInsights />
       </body>

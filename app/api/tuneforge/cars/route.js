@@ -1,20 +1,7 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { createClient } from '@libsql/client'
 import { enrichCarWithSpecs } from '../../../lib/car-specs'
-
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
-
-// Aggressive normalization: only alphanumeric lowercase for fuzzy matching
-const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, '')
 
 export async function GET() {
   try {
@@ -40,6 +27,3 @@ export async function GET() {
     return NextResponse.json({ error: 'Failed to load car data' }, { status: 500 })
   }
 }
-
-
-

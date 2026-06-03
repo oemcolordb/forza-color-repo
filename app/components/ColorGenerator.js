@@ -192,7 +192,7 @@ const ColorGenerator = ({ colors, isDarkMode, onColorsGenerated, isMobile = fals
     setIsGenerating(false)
   }, [colors, generateSystematicVariants, onColorsGenerated])
 
-  const getVariantCount = type => {
+  const getVariantCount = _type => {
     // Limited to 2000 colors per generation
     return 2000
   }

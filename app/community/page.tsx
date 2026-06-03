@@ -22,7 +22,7 @@ export default function CommunityPage() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [activeTab, setActiveTab] = useState<'feed' | 'tunebot'>('tunebot')
   const [posts, setPosts] = useState<Post[]>([])
-  const [isUploading, setIsUploading] = useState(false)
+  const [_isUploading, _setIsUploading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const fetchPosts = useCallback(() => {

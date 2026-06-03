@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
-import { getDb, ensureTables } from '../../../lib/db'
+import { getDb } from '../../../lib/db'
 import { logger } from '../../../lib/logger'
 
 const JWT_SECRET = new TextEncoder().encode(
