@@ -312,16 +312,11 @@ export default function HomePage() {
         <div className="flex flex-col items-center gap-4 text-center px-4">
           <h1 className="text-2xl font-bold text-green-300">🌿 Loading Paint Codes…</h1>
           
-          {/* Simple loading bar */}
-          <div className="w-56 h-2 rounded-full bg-gray-800 overflow-hidden">
-            <div
-              className="h-full bg-green-500 transition-all duration-300"
-              style={{ width: `${loadingProgress}%` }}
-            />
-          </div>
+          {/* Simple indeterminate spinner */}
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
 
           <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-            Loading colors. Progress {Math.round(loadingProgress)} percent.
+            Loading colors. Please wait.
           </div>
         </div>
       </div>
