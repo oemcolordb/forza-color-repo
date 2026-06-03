@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "tiers": {
+    "meta": [
+      {
+        "manufacturer": "Ferrari",
+        "car": "F40",
+        "driveMethod": "RWD",
+        "briefReview": "Exceptional handling and acceleration",
+        "adjusters": ["tuner1", "tuner2"]
+      }
+    ],
+    "sub_meta": [
+      {
+        "manufacturer": "Lamborghini",
+        "car": "Countach",
+        "driveMethod": "RWD",
+        "briefReview": "Strong performance",
+        "adjusters": ["tuner3"]
+      }
+    ],
+    "competitive": [
+      {
+        "manufacturer": "Porsche",
+        "car": "911",
+        "driveMethod": "RWD",
+        "briefReview": "Good all-rounder",
+        "adjusters": ["tuner4"]
+      }
+    ]
+  },
+  "notableTuners": [
+    {
+      "name": "nyasmowisher",
+      "specialty": "Handling-focused builds"
+    },
+    {
+      "name": "ProTuner",
+      "specialty": "Speed and acceleration"
+    }
+  ]
+}
