@@ -27,7 +27,7 @@ interface VersionInfo {
 
 export default function SWDiagnosticsPage() {
   const [swDiagnostics, setSwDiagnostics] = useState<SwDiagnostics | null>(null)
-  const [caches, setCaches] = useState<CacheInfo[]>([])
+  const [cacheList, setCacheList] = useState<CacheInfo[]>([])
   const [version, setVersion] = useState<VersionInfo | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -65,11 +65,11 @@ export default function SWDiagnosticsPage() {
 
         // Check Caches
         if ('caches' in window) {
-          const cacheNames = await caches.keys()
+          const cacheNames = await window.caches.keys()
           const cacheInfo: CacheInfo[] = []
 
           for (const name of cacheNames) {
-            const cache = await caches.open(name)
+            const cache = await window.caches.open(name)
             const requests = await cache.keys()
             cacheInfo.push({
               name,
@@ -78,7 +78,7 @@ export default function SWDiagnosticsPage() {
             })
           }
 
-          setCaches(cacheInfo)
+          setCacheList(cacheInfo)
         }
 
         // Fetch version info
@@ -98,8 +98,8 @@ export default function SWDiagnosticsPage() {
 
   const handleClearCaches = async () => {
     try {
-      const names = await caches.keys()
-      await Promise.all(names.map(name => caches.delete(name)))
+      const names = await window.caches.keys()
+      await Promise.all(names.map(name => window.caches.delete(name)))
       alert('All caches cleared')
       window.location.reload()
     } catch (err) {
@@ -238,11 +238,11 @@ export default function SWDiagnosticsPage() {
         )}
 
         {/* Caches */}
-        {caches.length > 0 && (
+        {cacheList.length > 0 && (
           <div className="bg-gray-800 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-bold mb-4">💾 Cache Storage</h2>
             <div className="space-y-2">
-              {caches.map(cache => (
+              {cacheList.map(cache => (
                 <div key={cache.name} className="flex justify-between items-center p-3 bg-gray-700 rounded">
                   <div>
                     <p className="font-mono text-sm text-blue-400">{cache.name}</p>

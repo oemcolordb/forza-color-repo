@@ -4,9 +4,9 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import './wrench-scrollbar.css'
 import ErrorBoundary from './components/ErrorBoundary'
-import { ThirdPartyErrorBoundary } from './components/ThirdPartyErrorBoundary'
-import EasterEgg420 from './components/EasterEgg420'
-import ServiceWorkerStatus from './components/ServiceWorkerStatus'
+import ClientOnlyScripts from './components/ClientOnlyScripts'
+
+export const dynamic = 'force-dynamic'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -23,7 +23,6 @@ export const metadata = {
   description:
     'Official Forza Color Sheet with 10,000+ paint colors from Forza Horizon 5, Forza Motorsport 2019-2024. Complete Forza color database, paint codes, and livery creator tools for all Forza games.',
   keywords: [
-    // Primary target keywords
     'Forza Color Sheet',
     'forza color sheet 2019',
     'Forza color sheet 2020',
@@ -35,7 +34,6 @@ export const metadata = {
     'Forza paint color sheet',
     'Forza Horizon color sheet',
     'Forza Motorsport color sheet',
-    // Secondary variations
     'Forza colors database',
     'Forza paint codes sheet',
     'Forza color list',
@@ -46,14 +44,12 @@ export const metadata = {
     'complete Forza color sheet',
     'all Forza colors',
     'Forza paint database',
-    // Long-tail keywords
     'Forza Horizon 5 official colors',
     'Forza paint color reference',
     'Forza livery colors',
     'Forza car paint colors',
     'Forza custom paint colors',
     'Forza color picker tool',
-    // Gaming community terms
     'Forza community colors',
     'racing game paint jobs',
     'car game customization',
@@ -108,7 +104,6 @@ export const metadata = {
     'application-name': 'Forza Color Sheet',
     'apple-mobile-web-app-title': 'Forza Color Sheet',
     'msapplication-TileColor': '#0f172a',
-    // Gaming-specific meta tags
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-status-bar-style': 'black-translucent',
@@ -188,14 +183,12 @@ export default function RootLayout({ children }) {
                   const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                   const devSwEnabled = localStorage.getItem('DEV_SW_ENABLED') === 'true'
 
-                  // Register in production or if explicitly enabled in dev
                   if (!isDev || devSwEnabled) {
                     navigator.serviceWorker.register('/sw.js', { scope: '/' })
                       .then(registration => {
                         window.__SW_REGISTERED__ = true
                         if (isDev) console.log('[SW] Registered (dev mode enabled)')
 
-                        // Listen for updates
                         registration.addEventListener('updatefound', () => {
                           const newWorker = registration.installing
                           newWorker.addEventListener('statechange', () => {
@@ -211,7 +204,6 @@ export default function RootLayout({ children }) {
                         console.error('[SW] Registration failed:', err.message)
                       })
                   } else {
-                    // Unregister in development (unless explicitly enabled)
                     navigator.serviceWorker.getRegistrations().then(registrations => {
                       registrations.forEach(registration => registration.unregister())
                       window.__SW_REGISTERED__ = false
@@ -227,11 +219,8 @@ export default function RootLayout({ children }) {
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <ThirdPartyErrorBoundary />
+        <ClientOnlyScripts />
         <ErrorBoundary>{children}</ErrorBoundary>
-        {/* 🌿 hidden easter eggs — global */}
-        <EasterEgg420 />
-        <ServiceWorkerStatus />
         <Analytics />
         <SpeedInsights />
       </body>
