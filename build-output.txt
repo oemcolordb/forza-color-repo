@@ -1,0 +1,63 @@
+
+> forza-color-repo@1.0.0 build
+> next build
+
+   Γû▓ Next.js 15.5.18
+   - Environments: .env.local
+   - Experiments (use with caution):
+     Γ£ô optimizeCss
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/login/page.tsx
+Error:   x Unterminated string constant
+   ,-[C:\Users\xxx\Documents\GitHub\forza-color-repo\app\login\page.tsx:1:1]
+ 1 | "'use client';
+   : ^^^^^^^^^^^^^^
+ 2 | 
+ 3 | import { useState } from 'react';
+ 4 | import { useRouter } from 'next/navigation';
+   `----
+  x Unterminated string constant
+    ,-[C:\Users\xxx\Documents\GitHub\forza-color-repo\app\login\page.tsx:33:1]
+ 30 |   };
+ 31 | 
+ 32 |   return (
+ 33 |     <div className=\"flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8\">
+    :                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 34 |       <div className=\"w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800\">
+ 35 |         <div>
+ 36 |           <h2 className=\"mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white\">
+    `----
+  x Expected unicode escape
+    ,-[C:\Users\xxx\Documents\GitHub\forza-color-repo\app\login\page.tsx:33:1]
+ 30 |   };
+ 31 | 
+ 32 |   return (
+ 33 |     <div className=\"flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8\">
+    :                    ^
+ 34 |       <div className=\"w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800\">
+ 35 |         <div>
+ 36 |           <h2 className=\"mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white\">
+    `----
+  x JSX value should be either an expression or a quoted JSX text
+    ,-[C:\Users\xxx\Documents\GitHub\forza-color-repo\app\login\page.tsx:33:1]
+ 30 |   };
+ 31 | 
+ 32 |   return (
+ 33 |     <div className=\"flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900 sm:px-6 lg:px-8\">
+    :                    ^
+ 34 |       <div className=\"w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg dark:bg-gray-800\">
+ 35 |         <div>
+ 36 |           <h2 className=\"mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white\">
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/login/page.tsx
+
+
+> Build failed because of webpack errors

@@ -1,17 +1,16 @@
 import { ImageResponse } from '@vercel/og'
 import { NextRequest } from 'next/server'
-import { logger } from '@/app/lib/logger'
 
-export const runtime = 'edge'
+
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    
+
     const title = searchParams.get('title') || 'Forza Color Universe'
     const subtitle = searchParams.get('subtitle') || 'Official Paint Colors Database'
     const stats = searchParams.get('stats') || '10,000+ Colors'
-    
+
     return new ImageResponse(
       (
         <div
@@ -27,7 +26,6 @@ export async function GET(request: NextRequest) {
             overflow: 'hidden',
           }}
         >
-          {/* Background glow effects */}
           <div
             style={{
               position: 'absolute',
@@ -50,21 +48,14 @@ export async function GET(request: NextRequest) {
               right: '-150px',
             }}
           />
-          
-          {/* Grid pattern */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-              `,
+              backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
               backgroundSize: '50px 50px',
             }}
           />
-          
-          {/* Main content container */}
           <div
             style={{
               display: 'flex',
@@ -75,7 +66,6 @@ export async function GET(request: NextRequest) {
               padding: '40px',
             }}
           >
-            {/* Logo/Icon area */}
             <div
               style={{
                 display: 'flex',
@@ -112,8 +102,6 @@ export async function GET(request: NextRequest) {
                 </svg>
               </div>
             </div>
-            
-            {/* Title */}
             <h1
               style={{
                 fontSize: '60px',
@@ -128,8 +116,6 @@ export async function GET(request: NextRequest) {
             >
               {title}
             </h1>
-            
-            {/* Subtitle */}
             <p
               style={{
                 fontSize: '32px',
@@ -141,8 +127,6 @@ export async function GET(request: NextRequest) {
             >
               {subtitle}
             </p>
-            
-            {/* Stats badge */}
             <div
               style={{
                 display: 'flex',
@@ -173,8 +157,6 @@ export async function GET(request: NextRequest) {
                 {stats}
               </span>
             </div>
-            
-            {/* Bottom feature tags */}
             <div
               style={{
                 display: 'flex',
@@ -182,7 +164,7 @@ export async function GET(request: NextRequest) {
                 marginTop: '40px',
               }}
             >
-              {['FH5 Colors', 'TuneForge', 'Location Finder', 'Image Match'].map((tag, i) => (
+              {['FH5 Colors', 'TuneForge', 'Location Finder', 'Image Match'].map((tag) => (
                 <span
                   key={tag}
                   style={{
@@ -199,8 +181,6 @@ export async function GET(request: NextRequest) {
               ))}
             </div>
           </div>
-          
-          {/* Bottom URL */}
           <div
             style={{
               position: 'absolute',
@@ -228,7 +208,7 @@ export async function GET(request: NextRequest) {
       }
     )
   } catch (error) {
-    logger.error('Error generating OG image:', error)
+    console.error('Error generating OG image:', error)
     return new Response('Failed to generate image', { status: 500 })
   }
 }
