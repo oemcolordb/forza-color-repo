@@ -263,12 +263,12 @@ export default function HomePage() {
         if (data.trends) {
           const trending = new Set<string>()
           const communityChoice = new Set<string>()
-          
+
           data.trends.forEach((t: { color_id: string, score: number }) => {
             if (t.score > 50) communityChoice.add(t.color_id)
             else trending.add(t.color_id)
           })
-          
+
           setTrendingIds(trending)
           setCommunityChoiceIds(communityChoice)
         }
@@ -389,7 +389,10 @@ export default function HomePage() {
             {loadingProgress >= 90 && 'Almost ready…'}
           </p>
 
-          <p className="text-xs text-white/30 mt-1">Rolling something special…</p>
+          <p className="text-xs text-white/30 mt-4">Rolling something special…</p>
+          <p className="text-xs text-yellow-500/60 mt-2">
+            💡 Tip: Press <kbd className="px-1 py-0.5 bg-gray-900 border border-gray-600 rounded text-xs">Ctrl+Shift+R</kbd> (PC) or <kbd className="px-1 py-0.5 bg-gray-900 border border-gray-600 rounded text-xs">Cmd+Shift+R</kbd> (Mac) for a hard refresh
+          </p>
         </div>
       </div>
     )
@@ -481,10 +484,10 @@ export default function HomePage() {
               onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
             />
 
-            <CommunityTrends 
-              allColors={allColors} 
-              isDarkMode={isDarkMode} 
-              onColorSelect={showColorHSB} 
+            <CommunityTrends
+              allColors={allColors}
+              isDarkMode={isDarkMode}
+              onColorSelect={showColorHSB}
             />
           </ResponsiveLayout>
 
