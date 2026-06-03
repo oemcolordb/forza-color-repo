@@ -22,14 +22,10 @@ import { useOfflineStorage } from './hooks/useOfflineStorage'
 import { useDeviceDetection } from './hooks/useDeviceDetection'
 import { getSecureAssetUrl } from './lib/assetProtection'
 
-import ProgressiveLoader from './components/ProgressiveLoader'
 import GamingErrorBoundary from './components/GamingErrorBoundary'
 import GamingSEO from './components/GamingSEO'
 import MobileGamingOptimizer from './components/MobileGamingOptimizer'
 import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
-import StatusAlert from './components/StatusAlert'
-import KeyboardShortcuts from './components/KeyboardShortcuts'
-import OfflineIndicator from './components/OfflineIndicator'
 import OptimizedStatsBar from './components/OptimizedStatsBar'
 import ExportButton from './components/ExportButton'
 
@@ -58,13 +54,11 @@ export default function HomePage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [colorHistory, setColorHistory] = useState<string[]>([])
   const [selectedHSBColor, setSelectedHSBColor] = useState<CarColor | null>(null)
-  const [isOnline, setIsOnline] = useState(true)
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([])
   const [harmonyColors, setHarmonyColors] = useState<CarColor[]>([])
   const [harmonyMode, setHarmonyMode] = useState('')
   const [allColors, setAllColors] = useState<CarColor[]>([]) // Original + Generated
-  const [loadingProgress, setLoadingProgress] = useState<number>(0)
   const [showManufacturerBorders, setShowManufacturerBorders] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showComparison, setShowComparison] = useState(false)
@@ -76,19 +70,6 @@ export default function HomePage() {
   useAnalytics()
   usePerformance()
   useOfflineStorage()
-
-  // Track online/offline status
-  useEffect(() => {
-    setIsOnline(navigator.onLine)
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
 
   // Create favorites set for O(1) lookup
   const favoritesSet = useMemo(() => new Set(favorites), [favorites])
@@ -156,7 +137,6 @@ export default function HomePage() {
         if (cachedColors) {
           setColors(cachedColors)
           setAllColors(cachedColors)
-          setLoadingProgress(100)
           setLoading(false)
           setIsInitialLoad(false)
           return
@@ -184,7 +164,6 @@ export default function HomePage() {
         setColors(originalColors)
         setAllColors(originalColors)
         cache.set('color-data', originalColors, 10 * 60 * 1000) // Cache for 10 minutes
-        setLoadingProgress(100)
         setLoading(false)
         setIsInitialLoad(false)
       } catch (err) {
@@ -329,70 +308,21 @@ export default function HomePage() {
 
   if (isInitialLoad) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center relative overflow-hidden text-white">
-        {/* Subtle green ambient glow */}
-        <div className="absolute inset-0 bg-gradient-radial from-green-900/20 via-transparent to-transparent" />
-
-        <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
-          {/* Burning joint + smoke */}
-          <div className="relative flex flex-col items-center" style={{ height: 96 }}>
-            {/* Smoke puffs */}
-            <span
-              className="absolute text-white/60 text-xl select-none animate-smoke"
-              style={{ top: -8, left: '48%', animationDelay: '0s' }}
-              aria-hidden
-            >○</span>
-            <span
-              className="absolute text-white/40 text-sm select-none animate-smoke-2"
-              style={{ top: -4, left: '44%', animationDelay: '0.7s' }}
-              aria-hidden
-            >○</span>
-            <span
-              className="absolute text-white/30 text-xs select-none animate-smoke"
-              style={{ top: -2, left: '52%', animationDelay: '1.4s' }}
-              aria-hidden
-            >○</span>
-
-            {/* The joint */}
-            <svg width="24" height="72" viewBox="0 0 24 72" aria-hidden className="mt-4">
-              <polygon points="12,0 10,8 14,8" fill="#d4c5a9" />
-              <rect x="6" y="8" width="12" height="50" rx="4" fill="#f5f0e8" />
-              <line x1="6" y1="22" x2="18" y2="22" stroke="#e0d8cc" strokeWidth="0.8" />
-              <line x1="6" y1="36" x2="18" y2="36" stroke="#e0d8cc" strokeWidth="0.8" />
-              <line x1="6" y1="50" x2="18" y2="50" stroke="#e0d8cc" strokeWidth="0.8" />
-              <rect x="6" y="58" width="12" height="14" rx="3" fill="#c8a96a" />
-              <circle cx="12" cy="8" r="4" fill="#ff4500" className="animate-ember-glow" />
-              <circle cx="12" cy="8" r="2" fill="#ff8c00" />
-            </svg>
-          </div>
-
-          <h1 className="text-2xl font-bold tracking-wide text-green-300">
-            🌿 Loading Paint Codes…
-          </h1>
-
-          <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-            Loading colors. Progress {Math.round(loadingProgress)} percent.
-          </div>
-
-          {/* Loading bar */}
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">
+        <div className="flex flex-col items-center gap-4 text-center px-4">
+          <h1 className="text-2xl font-bold text-green-300">🌿 Loading Paint Codes…</h1>
+          
+          {/* Simple loading bar */}
           <div className="w-56 h-2 rounded-full bg-gray-800 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all duration-300"
+              className="h-full bg-green-500 transition-all duration-300"
               style={{ width: `${loadingProgress}%` }}
             />
           </div>
 
-          <p className="text-sm text-green-400/70">
-            {loadingProgress < 30 && 'Sorting paint codes…'}
-            {loadingProgress >= 30 && loadingProgress < 60 && 'Loading manufacturers…'}
-            {loadingProgress >= 60 && loadingProgress < 90 && 'Filtering colors…'}
-            {loadingProgress >= 90 && 'Almost ready…'}
-          </p>
-
-          <p className="text-xs text-white/30 mt-4">Rolling something special…</p>
-          <p className="text-xs text-yellow-500/60 mt-2">
-            💡 Tip: Press <kbd className="px-1 py-0.5 bg-gray-900 border border-gray-600 rounded text-xs">Ctrl+Shift+R</kbd> (PC) or <kbd className="px-1 py-0.5 bg-gray-900 border border-gray-600 rounded text-xs">Cmd+Shift+R</kbd> (Mac) for a hard refresh
-          </p>
+          <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+            Loading colors. Progress {Math.round(loadingProgress)} percent.
+          </div>
         </div>
       </div>
     )
@@ -419,27 +349,8 @@ export default function HomePage() {
           onToggleTheme={() => setIsDarkMode(!isDarkMode)}
         />
 
-        <OfflineIndicator isOnline={isOnline} />
-
-        {/* Error Display */}
-        {error && (
-          <StatusAlert
-            title="Unable to load colors"
-            message={error}
-            variant="error"
-            isDarkMode={isDarkMode}
-            onDismiss={() => setError(null)}
-            onRetry={() => window.location.reload()}
-          />
-        )}
-
         <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
         <CreditsBackground isDarkMode={isDarkMode} />
-        <ProgressiveLoader
-          progress={loadingProgress}
-          isDarkMode={isDarkMode}
-          deviceInfo={deviceInfo}
-        />
 
         <ErrorBoundary
           onError={error => {
