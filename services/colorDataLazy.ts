@@ -42,23 +42,60 @@ function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
 // ─── Data Loading ──────────────────────────────────────────────────────────────
 
 /**
- * Loads color data. Returns a flat array of CarColor entries.
+ * Deduplicate color entries by make + colorName + year, preferring entries with
+ * richer data (e.g. model info) or simply the first seen.
+ */
+function dedupeColors(colors: CarColor[]): CarColor[] {
+  const seen = new Map<string, CarColor>()
+  for (const c of colors) {
+    const key = `${c.make}||${c.colorName}||${c.year ?? ''}`
+    if (!seen.has(key)) {
+      seen.set(key, c)
+    }
+  }
+  return Array.from(seen.values())
+}
+
+/**
+ * Loads color data from all available sources and merges them.
+ * Returns a flat array of unique CarColor entries.
  */
 export async function getColorData(): Promise<CarColor[]> {
   // ── Client-side (Browser) ──────────────────────────────────────────────────
   if (typeof window !== 'undefined') {
+    const allColors: CarColor[] = []
+
+    // Primary source: carColors.json in public/ (22k+ entries)
     try {
-      // Load from the main extracted_colors.json at root
-      const response = await fetch('/extracted_colors.json')
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      const data = await response.json()
-      return Array.isArray(data)
-        ? data.map(entry => normalizeEntry(entry as Record<string, unknown>)).filter((c): c is CarColor => c !== null)
-        : []
+      const response = await fetch('/carColors.json')
+      if (response.ok) {
+        const data = await response.json()
+        if (Array.isArray(data)) {
+          allColors.push(
+            ...data.map(entry => normalizeEntry(entry as Record<string, unknown>)).filter((c): c is CarColor => c !== null)
+          )
+        }
+      }
     } catch (error) {
-      console.error('Client-side color fetch failed:', error)
-      return []
+      console.error('Client-side carColors.json fetch failed:', error)
     }
+
+    // Secondary source: extracted_colors.json (may have additional entries)
+    try {
+      const response = await fetch('/extracted_colors.json')
+      if (response.ok) {
+        const data = await response.json()
+        if (Array.isArray(data)) {
+          allColors.push(
+            ...data.map(entry => normalizeEntry(entry as Record<string, unknown>)).filter((c): c is CarColor => c !== null)
+          )
+        }
+      }
+    } catch (error) {
+      console.error('Client-side extracted_colors.json fetch failed:', error)
+    }
+
+    return dedupeColors(allColors)
   }
 
   // ── Server-side (Node.js) ──────────────────────────────────────────────────
@@ -66,23 +103,41 @@ export async function getColorData(): Promise<CarColor[]> {
     const fs = await import('fs')
     const path = await import('path')
 
-    // Load from extracted_colors.json at project root
-    const dataPath = path.join(process.cwd(), 'extracted_colors.json')
+    const allColors: CarColor[] = []
 
-    if (fs.existsSync(dataPath)) {
+    // Primary source: carColors.json in public/
+    const carColorsPath = path.join(process.cwd(), 'public', 'carColors.json')
+    if (fs.existsSync(carColorsPath)) {
       try {
-        const content = fs.readFileSync(dataPath, 'utf8')
+        const content = fs.readFileSync(carColorsPath, 'utf8')
         const data = JSON.parse(content)
-        const entries = Array.isArray(data) ? data : []
-        return entries
-          .map(entry => normalizeEntry(entry))
-          .filter((c): c is CarColor => c !== null)
+        if (Array.isArray(data)) {
+          allColors.push(
+            ...data.map(entry => normalizeEntry(entry)).filter((c): c is CarColor => c !== null)
+          )
+        }
       } catch (e) {
-        console.error(`Failed to parse ${dataPath}:`, e)
+        console.error(`Failed to parse ${carColorsPath}:`, e)
       }
     }
 
-    return []
+    // Secondary source: extracted_colors.json at project root
+    const extractedPath = path.join(process.cwd(), 'extracted_colors.json')
+    if (fs.existsSync(extractedPath)) {
+      try {
+        const content = fs.readFileSync(extractedPath, 'utf8')
+        const data = JSON.parse(content)
+        if (Array.isArray(data)) {
+          allColors.push(
+            ...data.map(entry => normalizeEntry(entry)).filter((c): c is CarColor => c !== null)
+          )
+        }
+      } catch (e) {
+        console.error(`Failed to parse ${extractedPath}:`, e)
+      }
+    }
+
+    return dedupeColors(allColors)
   } catch (error) {
     console.error('Server-side color load failed:', error)
     return []

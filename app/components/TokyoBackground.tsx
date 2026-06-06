@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 
 interface TokyoBackgroundProps {
   isDarkMode: boolean
@@ -7,61 +7,20 @@ interface TokyoBackgroundProps {
 }
 
 const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl }) => {
-  const [isMobile, setIsMobile] = useState(false)
   const [backgroundMedia, setBackgroundMedia] = useState('')
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image')
   const [mediaLoaded, setMediaLoaded] = useState(false)
   const [mediaError, setMediaError] = useState(false)
 
-  const checkMobile = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      setIsMobile(window.innerWidth < 768)
-    }
-  }, [])
-
-  useEffect(() => {
-    checkMobile()
-    window.addEventListener('resize', checkMobile, { passive: true })
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [checkMobile])
-
   const selectedMedia = useMemo(() => {
     const mediaFiles = [
-      // Videos (7 available)
-      {
-        file: 'Mp 4 H 280 3 Q Nlf 3 J O Aem 8 Kv Cu Uuya AN Cr O Du C Qs 63 S Vq Z Rad 6 O 11 BZ.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 C Baj X 2 Z 9 R 9 E Fr 1 Gh W Ai RTFM 6 Xbt BSZ 76 N 6 Ywb BAE Dic 4 R.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 J 9 IY 9 U GBZ Mp Lle M Zd 6 S Zybj Yh 3 F 6 G VI 46 Cr Uf 0 PN 3 Dq TU.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 Szq 5 E KT 7 Ee 1 C A Vh 3 C KR Vdnf L 9 S 52 V 6 GG 2 R Md Ll V 2 Qx Y Cc.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 U Rk Qu 5 Hjg Vq B 14 A V 582 Kiio P 3 Db Lnqmo L 5 Z WZBEM Az 5 Z 5.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 Uw 0 WJIUIA Uq 31 Fa H Pqs T Zh Kewnh 32 BCLPE Fhxml I 4 ZV 5 Q.mp4',
-        type: 'video' as const,
-      },
-      {
-        file: 'Mp 4 H 280 Yq 68 Y FSH 7 L G 3 Xq O 4 Vv IA 6 F Ud IEJIB 01 Qeq N 1 T Sur DR 5 T I.mp4',
-        type: 'video' as const,
-      },
-      // Images
-      { file: 'manuel-velasquez-ssfp9okORYs-unsplash-1200x801.jpg', type: 'image' as const },
-      { file: 'assets/images/neon-shibuya-crossing-tokyo-japan-1140x760.jpg', type: 'image' as const },
-      { file: 'assets/images/tokyo-panorama.jpg', type: 'image' as const },
-      { file: 'assets/images/1-5.jpeg', type: 'image' as const },
-      { file: 'forza-color-sheet-preview.jpg', type: 'image' as const },
+      // Images (all exist in public/assets/images/backrounds/)
+      { file: 'assets/images/backrounds/neon-shibuya-crossing-tokyo-japan-1140x760.jpg', type: 'image' as const },
+      { file: 'assets/images/backrounds/tokyo-panorama.jpg', type: 'image' as const },
+      { file: 'assets/images/backrounds/Gemini_Generated_Image_zatbflzatbflzatb.png', type: 'image' as const },
+      { file: 'assets/images/backrounds/Screenshot 2026-04-13 032903.png', type: 'image' as const },
+      { file: 'assets/images/backrounds/Screenshot 2026-04-13 032927.png', type: 'image' as const },
+      { file: 'assets/images/backrounds/v2-jbps6-5b1bc-1-1024x590.png', type: 'image' as const },
     ]
 
     const now = new Date()
@@ -69,15 +28,8 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
     const mediaIndex = thirtyMinuteSlots % mediaFiles.length
     const chosen = mediaFiles[mediaIndex]
 
-    if (isMobile && chosen.type === 'video') {
-      // On mobile use a real image fallback (first image in the list)
-      const imageFiles = mediaFiles.filter(m => m.type === 'image')
-      const imageIndex = thirtyMinuteSlots % imageFiles.length
-      return imageFiles[imageIndex]
-    }
-
     return chosen
-  }, [isMobile])
+  }, [])
 
   useEffect(() => {
     const mediaSrc = getSecureAssetUrl(`/${selectedMedia.file}`)

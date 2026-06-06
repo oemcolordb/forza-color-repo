@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import { CarColor, DeviceInfo, ExtractedColor } from './types'
 import { ErrorBoundary } from './lib/errorBoundary'
@@ -30,15 +30,13 @@ import ForzaColorSheetSEO from './components/ForzaColorSheetSEO'
 import StatusAlert from './components/StatusAlert'
 import KeyboardShortcuts from './components/KeyboardShortcuts'
 import OfflineIndicator from './components/OfflineIndicator'
-import OptimizedStatsBar from './components/OptimizedStatsBar'
-import ExportButton from './components/ExportButton'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
 const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })
 const AdvancedTools = dynamic(() => import('./components/AdvancedTools'), { ssr: false })
-  const ColorComparison = dynamic(() => import('./components/ColorComparison'), { ssr: false })
-  const HSBPopup = dynamic(() => import('./components/HSBPopup'), { ssr: false })
-  const ColorRouletteHarmony = dynamic(() => import('./components/ColorRouletteHarmony'), { ssr: false })
+const ColorComparison = dynamic(() => import('./components/ColorComparison'), { ssr: false })
+const HSBPopup = dynamic(() => import('./components/HSBPopup'), { ssr: false })
+const ColorRouletteHarmony = dynamic(() => import('./components/ColorRouletteHarmony'), { ssr: false })
 const HarmonyVisualizer = dynamic(() => import('./components/HarmonyVisualizer'), { ssr: false })
 const ColorGenerator = dynamic(() => import('./components/ColorGenerator'), { ssr: false })
 const PerformanceMonitor = dynamic(() => import('./components/PerformanceMonitor'), { ssr: false })
@@ -197,19 +195,25 @@ export default function HomePage() {
       }
     }
 
-    // Fallback timeout
+    loadColors()
+  }, []) // Run only on mount
+
+  // Fallback timeout — uses ref to avoid stale closure re-runs
+  const hasLoadedRef = useRef(false)
+  useEffect(() => {
     const timeout = setTimeout(() => {
-      if (loading) {
+      if (!hasLoadedRef.current && allColors.length === 0) {
         setError('Loading timeout - please refresh the page')
         setLoading(false)
         setIsInitialLoad(false)
       }
     }, 15000)
-
-    loadColors()
-
     return () => clearTimeout(timeout)
-  }, [loading])
+  }, [allColors.length])
+
+  useEffect(() => {
+    if (allColors.length > 0) hasLoadedRef.current = true
+  }, [allColors.length])
 
   // Memoized data for performance
   const makes = useMemo(() => {
@@ -263,12 +267,12 @@ export default function HomePage() {
         if (data.trends) {
           const trending = new Set<string>()
           const communityChoice = new Set<string>()
-          
+
           data.trends.forEach((t: { color_id: string, score: number }) => {
             if (t.score > 50) communityChoice.add(t.color_id)
             else trending.add(t.color_id)
           })
-          
+
           setTrendingIds(trending)
           setCommunityChoiceIds(communityChoice)
         }
@@ -320,6 +324,20 @@ export default function HomePage() {
     },
     []
   )
+
+  // Resolve recently viewed colors from history IDs
+  const recentColors = useMemo(() => {
+    if (colorHistory.length === 0 || allColors.length === 0) return []
+    return colorHistory
+      .map(id => {
+        const match = allColors.find(
+          c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === id
+        )
+        return match || null
+      })
+      .filter(Boolean)
+      .slice(0, 8)
+  }, [colorHistory, allColors])
 
   // Show color HSB/details (used by child components)
   const showColorHSB = useCallback((color: CarColor) => {
@@ -481,10 +499,10 @@ export default function HomePage() {
               onToggleShowFavoritesOnly={() => setShowFavoritesOnly(prev => !prev)}
             />
 
-            <CommunityTrends 
-              allColors={allColors} 
-              isDarkMode={isDarkMode} 
-              onColorSelect={showColorHSB} 
+            <CommunityTrends
+              allColors={allColors}
+              isDarkMode={isDarkMode}
+              onColorSelect={showColorHSB}
             />
           </ResponsiveLayout>
 
@@ -552,6 +570,49 @@ export default function HomePage() {
                 favorites
               </div>
             </div>
+
+            {/* Recently Viewed */}
+            {recentColors.length > 0 && (
+              <div
+                className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+                  isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+                }`}
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-2xl">🕐</span>
+                  <span className="font-bold" style={{color: "var(--bamboo-stalk)"}}>
+                    RECENTLY VIEWED
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {recentColors.map((color) => {
+                    if (!color) return null
+                    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+                    return (
+                      <button
+                        key={colorId}
+                        onClick={() => showColorHSB(color)}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors ${
+                          isDarkMode
+                            ? 'border-gray-700 hover:border-green-500/50 bg-gray-800/50'
+                            : 'border-gray-300 hover:border-green-400 bg-gray-100'
+                        }`}
+                      >
+                        <span
+                          className="w-4 h-4 rounded-full border border-gray-600 shrink-0"
+                          style={{
+                            background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
+                          }}
+                        />
+                        <span className="text-xs truncate max-w-[120px]">
+                          {color.colorName}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Tuning Tools */}
             <div

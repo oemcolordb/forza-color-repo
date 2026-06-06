@@ -1,7 +1,9 @@
-export const dynamic = 'force-dynamic'
-
-import DevAnalyticsClient from './DevAnalyticsClient'
+export const runtime = 'nodejs'
 
 export default function DevAnalyticsPage() {
-  return <DevAnalyticsClient />
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      <p>Loading analytics...</p>
+    </div>
+  )
 }

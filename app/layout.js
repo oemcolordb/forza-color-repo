@@ -166,7 +166,6 @@ export default function RootLayout({ children }) {
           content="vG2Z9j6nstH8oDSGfxfICIrbefBCUu0cIttuSxMIiOk"
         />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/icon.png" type="image/png" />
         <link rel="icon" href="/favicon.png" sizes="64x64" type="image/png" />
         <link rel="shortcut icon" href="/favicon.png" />
