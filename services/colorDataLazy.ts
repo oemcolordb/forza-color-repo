@@ -13,8 +13,8 @@ function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
   const make = String(raw.make ?? raw.manufacturer ?? 'Unknown')
   const colorName = String(raw.colorName ?? raw.color_name ?? 'Unnamed')
   const colorType = String(raw.colorType ?? raw.paintType ?? raw.paint_type ?? 'Normal')
-  const model = raw.model != null ? String(raw.model) : ''
-  const year = raw.year != null
+  const model = raw.model === null || raw.model === undefined ? '' : String(raw.model)
+  const year = raw.year !== null && raw.year !== undefined
     ? typeof raw.year === 'number'
       ? raw.year
       : typeof raw.year === 'string' && raw.year.trim() !== '' && !Number.isNaN(Number(raw.year))
@@ -22,8 +22,8 @@ function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
       : null
     : null
 
-  let c1 = raw.color1 as Record<string, number> | null
-  let c2 = (raw.color2 ?? raw.color1) as Record<string, number> | null
+  const c1 = raw.color1 as Record<string, number> | null
+  const c2 = (raw.color2 ?? raw.color1) as Record<string, number> | null
 
   if (!c1 || typeof c1.h !== 'number') return null
   if (colorName === '--' || colorName.trim() === '') return null

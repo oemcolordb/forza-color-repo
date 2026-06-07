@@ -51,6 +51,9 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           <Button as="a" href="/location-finder" variant="primary" size="lg" className="hover-lift">
             📍 Location Finder
           </Button>
+          <Button as="a" href="/community" variant="primary" size="lg" className="hover-lift">
+            🤝 Community
+          </Button>
           <Button
             as="a"
             href="/how-to-use"
