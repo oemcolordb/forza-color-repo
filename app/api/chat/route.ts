@@ -1,11 +1,11 @@
 import { streamText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
-import tuningMeta from '../../data/tuning-meta.json';
+import tuningMeta from '../data/tuning-meta.json';
 
 // Ensure you have GEMINI_API_KEY set in your environment variables
 const google = createGoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY || '',
+  apiKey: process.env.GEMINI_API_KEY || 'AIzaSyDvmU-Dgt2K9-6rxb-9z7K4ssxVXM87obc',
 });
 
 // Build a concise meta knowledge string from the structured data

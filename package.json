@@ -15,16 +15,14 @@
     "fix-store": "node scripts/fix-microsoft-store.js"
   },
   "overrides": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "zustand": "^5.0.0"
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.73",
     "@ai-sdk/react": "^1.0.0",
     "@libsql/client": "^0.15.15",
-    "@react-three/drei": "^9.122.0",
-    "@react-three/fiber": "^8.18.0",
     "@sentry/nextjs": "^10.52.0",
     "@swc/helpers": "0.5.15",
     "@vercel/analytics": "^1.6.1",
@@ -46,8 +44,8 @@
     "next": "^15.5.18",
     "node-fetch": "^2.7.0",
     "p-limit": "^7.3.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-window": "^1.8.11",
     "react-window-infinite-loader": "^2.0.0",
     "socks-proxy-agent": "^10.0.0",

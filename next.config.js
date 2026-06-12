@@ -4,7 +4,11 @@ const path = require('path')
 // Polyfill 'self' for Node.js environments (replaces scripts/self-polyfill.js NODE_OPTIONS approach)
 if (typeof self === 'undefined' && typeof window === 'undefined') {
   try {
-    Object.defineProperty(globalThis, 'self', { value: globalThis, configurable: true, writable: true })
+    Object.defineProperty(globalThis, 'self', {
+      value: globalThis,
+      configurable: true,
+      writable: true,
+    })
   } catch {
     globalThis.self = globalThis
   }
@@ -57,6 +61,8 @@ const nextConfig = {
     NEXT_TELEMETRY_DISABLED: '1',
     INLINE_RUNTIME_CHUNK: 'false',
   },
+
+  devIndicators: false,
 
   experimental: {
     optimizeCss: true,

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface PostModalProps {
@@ -16,6 +17,7 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
   const [caption, setCaption] = useState('')
   const [carName, setCarName] = useState('')
   const [tuneCode, setTuneCode] = useState('')
+  const [posterName, setPosterName] = useState('')
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +77,19 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
       }
 
       // 2. Save to Database
+      // Generate a persistent guest user ID so the API can accept the post
+      let guestId = localStorage.getItem('guest_user_id')
+      if (!guestId) {
+        guestId = 'guest-' + crypto.randomUUID()
+        localStorage.setItem('guest_user_id', guestId)
+      }
+
       await fetch('/api/community/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: 'Guest Driver', // In a real app, this would be from Auth
+          user_id: guestId,
+          username: posterName || 'Guest Driver',
           image_url: imageUrl,
           caption,
           car_name: carName,
@@ -90,10 +100,13 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
       onPostSuccess()
       onClose()
       // Reset form
-      setFile(null)
+    } catch (error) {
       setPreview(null)
       setCaption('')
-    } catch (error) {
+      setCarName('')
+      setTuneCode('')
+      setPosterName('')
+
       console.error('Upload failed:', error)
       alert('Upload failed. Please try again.')
     } finally {
@@ -191,6 +204,22 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
                     }`}
                   />
                 </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] font-black uppercase tracking-widest opacity-50">
+                  Your Name (credits)
+                </label>
+                <input
+                  value={posterName}
+                  onChange={e => setPosterName(e.target.value)}
+                  placeholder="e.g. stonyearth"
+                  className={`w-full px-4 py-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${
+                    isDarkMode
+                      ? 'bg-white/5 border border-white/10 text-white'
+                      : 'bg-gray-50 border border-gray-100'
+                  }`}
+                />
               </div>
 
               <div className="space-y-1">

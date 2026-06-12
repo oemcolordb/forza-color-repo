@@ -6,26 +6,6 @@ export function middleware(request: NextRequest) {
 
   // Cache-control headers are managed by Next.js and next.config.js
 
-  // Add app version to cookies for tracking
-  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0'
-  const existingVersion = request.cookies.get('app_version')?.value
-
-  // If version changed, set new cookie and add header to trigger client refresh
-  if (existingVersion !== appVersion) {
-    response.cookies.set('app_version', appVersion, {
-      path: '/',
-      maxAge: 86400, // 24 hours
-      sameSite: 'lax',
-      httpOnly: false,
-    })
-    // Add header to signal version change to client
-    response.headers.set('X-App-Version-Changed', 'true')
-    response.headers.set('X-App-Version', appVersion)
-  }
-
-  // Always add current version header
-  response.headers.set('X-App-Version', appVersion)
-
   // Add security headers
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-Frame-Options', 'DENY')
