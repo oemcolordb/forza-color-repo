@@ -17,38 +17,72 @@ if (typeof self === 'undefined' && typeof window === 'undefined') {
 const nextConfig = {
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    // Enable Next.js Image Optimization for WebP/AVIF conversion
+    // Uses the default built-in image loader
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 768, 1024, 1280, 1536],
   },
   compress: true,
   poweredByHeader: false,
-  generateEtags: false,
+  generateEtags: true,
 
-  // Ensure fresh content delivery on every request
+  // Selective caching strategy:
+  // - Static assets and immutable content: long cache (1 year)
+  // - Dynamic pages: short cache or no cache
+  // - API responses: no cache
   headers: async () => {
     return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'Expires',
-            value: '0',
-          },
-        ],
-      },
+      // Static assets in _next/static: immutable, long cache
       {
         source: '/_next/:path*',
         headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Public static files (images, fonts, etc): cache with revalidation
+      {
+        source: '/:all*(svg|png|jpg|jpeg|gif|webp|avif|ico|woff|woff2|ttf|eot)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      // Color data JSON: cache with revalidation
+      {
+        source: '/carColors.json',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      // Dynamic pages: short CDN cache with no browser cache
+      {
+        source: '/:path((?!api/|_next/|uploads/).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, s-maxage=60, stale-while-revalidate=300',
+          },
+        ],
+      },
+      // API routes: no caching
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, no-cache, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
           },
         ],
       },
@@ -63,12 +97,6 @@ const nextConfig = {
   },
 
   devIndicators: false,
-
-  experimental: {
-    optimizeCss: true,
-  },
-
-  turbopack: {},
 
   webpack: (config, { dev, isServer }) => {
     if (isServer) {

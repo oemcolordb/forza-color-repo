@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
+import os from 'os';
+import { withRateLimit } from '@/app/lib/rateLimit';
 
 function normalizeUrlFromBlobResponse(blob: any): string {
   return blob?.url ?? blob?.publicUrl ?? blob?.pathname ?? blob?.key ?? '';
 }
 
-export async function POST(request: Request): Promise<NextResponse> {
+async function handler(request: Request): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get('filename');
 
@@ -57,9 +59,9 @@ export async function POST(request: Request): Promise<NextResponse> {
     console.log('BLOB_READ_WRITE_TOKEN not set; using local upload fallback:', { filename });
   }
 
-  // Local fallback: save to public/uploads/
+  // Local fallback: save to /tmp/uploads/ (writable on Vercel)
   try {
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
+    const uploadsDir = path.join(os.tmpdir(), 'uploads');
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true });
     }
@@ -71,11 +73,13 @@ export async function POST(request: Request): Promise<NextResponse> {
     await writeFile(filePath, buffer);
 
     return NextResponse.json({
-      url: `/uploads/${safeFilename}`,
-      pathname: `public/uploads/${safeFilename}`,
+      url: `/api/community/uploads/${safeFilename}`,
+      pathname: `/tmp/uploads/${safeFilename}`,
     });
   } catch (error) {
-    console.error('Local upload failed:', error);
+    console.error('Local upload fallback failed:', error);
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
   }
 }
+
+export const POST = withRateLimit(handler, { max: 10, windowMs: 60 * 1000 });

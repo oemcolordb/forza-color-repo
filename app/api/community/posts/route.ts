@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getDb, ensureTables } from '@/app/lib/db';
 import { v4 as uuidv4 } from 'uuid';
+import { withRateLimit } from '@/app/lib/rateLimit';
 
-export async function GET() {
+export const GET = withRateLimit(async function () {
   try {
     await ensureTables();
     const db = getDb();
@@ -18,9 +19,9 @@ export async function GET() {
     console.error('Community posts fetch failed:', error);
     return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
   }
-}
+}, { max: 60, windowMs: 60 * 1000 });
 
-export async function POST(req: Request) {
+const postHandler = async function (req: Request) {
   try {
     await ensureTables();
     const db = getDb();
@@ -42,4 +43,6 @@ export async function POST(req: Request) {
     console.error('Post creation failed:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-}
+};
+
+export const POST = withRateLimit(postHandler, { max: 10, windowMs: 60 * 1000 });

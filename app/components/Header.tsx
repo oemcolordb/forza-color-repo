@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           <span className="text-[color:var(--bamboo-stalk)] neon-text">Forza-Color-Repo</span>
         </h1>
         <p className="mt-2 text-sm font-medium text-[#00ff00] drop-shadow-md">
-          Made with love by AltF4ToQu1t with credits to the legends at GTPLANET
+          Made with love by ResiRonin with credits to the legends at GTPLANET
         </p>
 
         {/* Primary nav — always visible */}

@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getDb, ensureTables } from '../../../lib/db'
 import { logger } from '../../../lib/logger'
+import { withRateLimit } from '../../../lib/rateLimit'
 import { SignJWT } from 'jose'
 import { scryptSync, timingSafeEqual } from 'crypto'
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'forza-color-universe-super-secret-key-123'
-)
+const JWT_SECRET_ENV = process.env.JWT_SECRET
+if (!JWT_SECRET_ENV) {
+  throw new Error('JWT_SECRET environment variable is required but not set')
+}
+const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_ENV)
 
 function verifyPassword(password: string, hash: string) {
   const [salt, key] = hash.split(':')
@@ -15,7 +18,7 @@ function verifyPassword(password: string, hash: string) {
   return timingSafeEqual(keyBuffer, derivedKey)
 }
 
-export async function POST(request: NextRequest) {
+const loginHandler = async (request: Request) => {
   try {
     await ensureTables()
     const db = getDb()
@@ -84,3 +87,5 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: error.message || 'Internal server error' }, { status: 500 })
   }
 }
+
+export const POST = withRateLimit(loginHandler, { max: 5, windowMs: 60 * 1000 });
