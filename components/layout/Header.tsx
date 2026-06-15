@@ -53,6 +53,9 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
           <Button as="a" href="https://mapgenie.io/" target="_blank" rel="noopener noreferrer" variant="primary" size="lg" className="hover-lift">
             📍 Location Finder
           </Button>
+          <Button as="a" href="/palettes" variant="primary" size="lg" className="hover-lift">
+            🎨 Palettes
+          </Button>
           <Button as="a" href="/community" variant="primary" size="lg" className="hover-lift">
             🤝 Community
           </Button>

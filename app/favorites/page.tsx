@@ -9,6 +9,8 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { AuthProvider, useAuth } from '@/components/auth/AuthProvider';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import GamingErrorBoundary from '@/components/error/GamingErrorBoundary';
+import CreatePaletteModal from '@/components/palettes/CreatePaletteModal';
+import PaletteCard from '@/components/palettes/PaletteCard';
 
 interface FavoriteColor {
   colorId: string;
@@ -23,9 +25,12 @@ interface FavoriteColor {
 function FavoritesContent() {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState<FavoriteColor[]>([]);
+  const [myPalettes, setMyPalettes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'favorites' | 'palettes'>('favorites');
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
@@ -43,6 +48,13 @@ function FavoritesContent() {
 
         const data = await response.json();
         setFavorites(data.favorites || []);
+
+        // Also fetch user's palettes
+        const palettesResponse = await fetch(`/api/palettes?authorId=${sessionId}`);
+        if (palettesResponse.ok) {
+          const palettesData = await palettesResponse.json();
+          setMyPalettes(palettesData.palettes || []);
+        }
       } catch (err) {
         setError('Could not load your favorites');
         logger.error(err);
@@ -51,10 +63,19 @@ function FavoritesContent() {
       }
     };
 
-    if (user) {
+    if (user || !user) { // Always fetch using sessionId even if no user
       fetchFavorites();
     }
   }, [user]);
+
+  const refreshPalettes = async () => {
+    const sessionId = localStorage.getItem('forza-session-id') || 'anonymous';
+    const res = await fetch(`/api/palettes?authorId=${sessionId}`);
+    if (res.ok) {
+      const data = await res.json();
+      setMyPalettes(data.palettes || []);
+    }
+  };
 
   const removeFavorite = async (colorId: string) => {
     try {
@@ -106,9 +127,45 @@ function FavoritesContent() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <h1 className="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
-          My Favorite Colors
-        </h1>
+        <div className="mb-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            My Garage
+          </h1>
+          
+          <div className="flex gap-2">
+            <button
+              onClick={() => setActiveTab('favorites')}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === 'favorites'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
+                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+              }`}
+            >
+              Saved Colors
+            </button>
+            <button
+              onClick={() => setActiveTab('palettes')}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === 'palettes'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
+                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+              }`}
+            >
+              My Palettes
+            </button>
+          </div>
+        </div>
+
+        {activeTab === 'favorites' && (
+          <div className="mb-6 flex justify-end">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 shadow-sm transition-colors"
+            >
+              + Create Palette
+            </button>
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 rounded-md bg-red-50 p-4 text-red-700 dark:bg-red-900/50 dark:text-red-200">
@@ -157,6 +214,48 @@ function FavoritesContent() {
             ))}
           </div>
         )}
+
+        {activeTab === 'palettes' && (
+          <div className="mt-4">
+            {myPalettes.length === 0 ? (
+              <div className="rounded-lg bg-white p-8 text-center shadow dark:bg-gray-800">
+                <p className="text-gray-600 dark:text-gray-400">
+                  You haven&apos;t created any palettes yet.
+                </p>
+                <button
+                  onClick={() => {
+                    setActiveTab('favorites');
+                    setIsModalOpen(true);
+                  }}
+                  className="mt-4 inline-block rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                >
+                  Create Your First Palette
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {myPalettes.map(palette => (
+                  <PaletteCard 
+                    key={palette.id} 
+                    palette={palette} 
+                    sessionId={localStorage.getItem('forza-session-id') || 'anonymous'}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        <CreatePaletteModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          favorites={favorites}
+          sessionId={localStorage.getItem('forza-session-id') || 'anonymous'}
+          onSuccess={() => {
+            setActiveTab('palettes');
+            refreshPalettes();
+          }}
+        />
       </main>
 
       <footer className="border-t border-gray-200 bg-white px-4 py-6 dark:border-gray-700 dark:bg-gray-800">
