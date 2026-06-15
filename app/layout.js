@@ -112,6 +112,8 @@ export const viewport = {
   themeColor: '#0f172a',
 }
 
+import { Analytics } from '@vercel/analytics/react'
+
 export default function RootLayout({ children }) {
   const structuredData = {
     '@context': 'https://schema.org',
@@ -215,6 +217,7 @@ export default function RootLayout({ children }) {
           Skip to main content
         </a>
         <ErrorBoundary>{children}</ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   )
