@@ -9,11 +9,41 @@ import { ArrowLeft, Moon, Sun, MonitorSmartphone, Share2 } from 'lucide-react'
 interface CompanionViewProps {
   color: CarColor | null
   error?: string
+  onNext?: () => void
+  onPrev?: () => void
 }
 
-export default function CompanionView({ color, error }: CompanionViewProps) {
+export default function CompanionView({ color, error, onNext, onPrev }: CompanionViewProps) {
   const { isSupported, isLocked, requestWakeLock, releaseWakeLock } = useWakeLock()
   const [copied, setCopied] = useState(false)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+
+  // Minimum swipe distance
+  const minSwipeDistance = 50
+
+  const onTouchStartEvent = (e: React.TouchEvent) => {
+    setTouchEnd(null)
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const onTouchMoveEvent = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const onTouchEndEvent = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe && onNext) {
+      onNext()
+    }
+    if (isRightSwipe && onPrev) {
+      onPrev()
+    }
+  }
 
   useEffect(() => {
     // Request wake lock when the component mounts
@@ -59,7 +89,12 @@ ${color.color2 ? `Flake: H: ${Math.round(color.color2.h * 100) / 100}, S: ${Math
   const isDualTone = color.color2 !== undefined && color.color2 !== null
 
   return (
-    <div className="fixed inset-0 bg-black text-white overflow-y-auto overflow-x-hidden safe-area-pt pb-8">
+    <div 
+      className="fixed inset-0 bg-black text-white overflow-y-auto overflow-x-hidden safe-area-pt pb-8 select-none"
+      onTouchStart={onTouchStartEvent}
+      onTouchMove={onTouchMoveEvent}
+      onTouchEnd={onTouchEndEvent}
+    >
       {/* Header Bar */}
       <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 flex items-center justify-between">
         <button 
@@ -101,12 +136,43 @@ ${color.color2 ? `Flake: H: ${Math.round(color.color2.h * 100) / 100}, S: ${Math
       </AnimatePresence>
 
       <div className="px-6 pt-6 pb-12 max-w-lg mx-auto">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 relative">
           <p className="text-gray-400 font-medium tracking-widest uppercase text-sm mb-2">{color.make}</p>
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-3 tracking-tight">{color.colorName}</h1>
+          
+          <div className="flex items-center justify-center gap-4 mb-3">
+            <button 
+              onClick={onPrev}
+              disabled={!onPrev}
+              className={`p-2 rounded-full transition-colors ${onPrev ? 'hover:bg-gray-800 text-gray-400 hover:text-white' : 'text-gray-800 cursor-not-allowed'}`}
+              aria-label="Previous color"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            
+            <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight flex-1">
+              {color.colorName}
+            </h1>
+
+            <button 
+              onClick={onNext}
+              disabled={!onNext}
+              className={`p-2 rounded-full transition-colors ${onNext ? 'hover:bg-gray-800 text-gray-400 hover:text-white' : 'text-gray-800 cursor-not-allowed'}`}
+              aria-label="Next color"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+          
           <div className="inline-block bg-gray-800 text-gray-300 px-4 py-1.5 rounded-full text-sm font-medium border border-gray-700">
             {color.colorType}
           </div>
+          
+          {/* Swipe Hint */}
+          {(onNext || onPrev) && (
+            <div className="text-xs text-gray-500 mt-3 font-medium opacity-70">
+              Swipe to browse more {color.make} colors
+            </div>
+          )}
         </div>
 
         <div className="space-y-6">

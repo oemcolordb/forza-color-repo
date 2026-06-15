@@ -1,16 +1,18 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import React, { useEffect, useState, useMemo } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { CarColor } from '@/types'
 import { cache } from '@/lib/utils/cache'
 import CompanionView from '@/components/companion/CompanionView'
 
 export default function CompanionClient() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const colorId = searchParams.get('id')
   
   const [color, setColor] = useState<CarColor | null>(null)
+  const [allColors, setAllColors] = useState<CarColor[]>([])
   const [error, setError] = useState<string>('')
   const [loading, setLoading] = useState(true)
 
@@ -23,26 +25,22 @@ export default function CompanionClient() {
 
     const loadColor = async () => {
       try {
-        // Try to find the color in the cache first (it's very likely there if they navigated from the gallery)
         const cachedColors = cache.get<CarColor[]>('color-data')
+        let colorsToSearch = cachedColors
         
-        let foundColor = null
-
-        if (cachedColors) {
-          foundColor = cachedColors.find(c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === colorId)
-        }
-        
-        // If not in cache, we need to fetch it (e.g. they opened a bookmarked link directly)
-        if (!foundColor) {
+        if (!colorsToSearch) {
           const { getColorData } = await import('@/lib/services/colorDataLazy')
-          const rawColors = await getColorData()
-          foundColor = rawColors.find((c: CarColor) => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === colorId)
+          colorsToSearch = await getColorData()
         }
 
-        if (foundColor) {
-          setColor(foundColor)
-        } else {
-          setError('Color not found in the database')
+        if (colorsToSearch) {
+          setAllColors(colorsToSearch)
+          const foundColor = colorsToSearch.find(c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === colorId)
+          if (foundColor) {
+            setColor(foundColor)
+          } else {
+            setError('Color not found in the database')
+          }
         }
       } catch (err) {
         console.error(err)
@@ -55,9 +53,48 @@ export default function CompanionClient() {
     loadColor()
   }, [colorId])
 
+  // Context: swipe cycles through other colors of the SAME manufacturer
+  const makeColors = useMemo(() => {
+    if (!color || !allColors.length) return []
+    return allColors.filter(c => c.make === color.make)
+  }, [color, allColors])
+
+  const { nextColor, prevColor } = useMemo(() => {
+    if (!color || !makeColors.length) return { nextColor: null, prevColor: null }
+    const currentIndex = makeColors.findIndex(c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === colorId)
+    if (currentIndex === -1) return { nextColor: null, prevColor: null }
+    
+    const nextIdx = (currentIndex + 1) % makeColors.length
+    const prevIdx = (currentIndex - 1 + makeColors.length) % makeColors.length
+    
+    return {
+      nextColor: makeColors[nextIdx],
+      prevColor: makeColors[prevIdx]
+    }
+  }, [color, makeColors, colorId])
+
+  const handleNext = () => {
+    if (nextColor) {
+      router.replace(`/companion?id=${encodeURIComponent(`${nextColor.make}-${nextColor.colorName}-${nextColor.year || 'unknown'}`)}`)
+    }
+  }
+
+  const handlePrev = () => {
+    if (prevColor) {
+      router.replace(`/companion?id=${encodeURIComponent(`${prevColor.make}-${prevColor.colorName}-${prevColor.year || 'unknown'}`)}`)
+    }
+  }
+
   if (loading) {
     return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading Paint Values...</div>
   }
 
-  return <CompanionView color={color} error={error} />
+  return (
+    <CompanionView 
+      color={color} 
+      error={error} 
+      onNext={nextColor ? handleNext : undefined} 
+      onPrev={prevColor ? handlePrev : undefined} 
+    />
+  )
 }
