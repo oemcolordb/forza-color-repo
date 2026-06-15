@@ -126,6 +126,20 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
               </>
             )}
           </div>
+          
+          {/* Companion Mode Button (Mobile/Tablet Only) */}
+          <div className="mt-6 pt-4 border-t border-gray-700/50 flex lg:hidden">
+            <a
+              href={`/companion?id=${encodeURIComponent(`${color.make}-${color.colorName}-${color.year || 'unknown'}`)}`}
+              className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white py-3 px-4 rounded-xl font-medium transition-colors"
+              onClick={(e) => {
+                // Let the native navigation happen
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2"/><path d="M2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6"/><path d="M12 16v-4"/><path d="M8 16h8"/><path d="M10 22h4"/></svg>
+              Enter Companion Mode
+            </a>
+          </div>
         </div>
       </div>
     </DialogShell>
