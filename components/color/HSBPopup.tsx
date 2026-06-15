@@ -37,8 +37,11 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
 
   if (!isOpen || !color) return null
 
-  const hsb1 = { h: color.color1.h.toFixed(2), s: color.color1.s.toFixed(2), b: color.color1.b.toFixed(2) }
-  const hsb2 = { h: color.color2.h.toFixed(2), s: color.color2.s.toFixed(2), b: color.color2.b.toFixed(2) }
+  const c1 = color.color1 || { h: 0, s: 0, b: 0 }
+  const c2 = color.color2 || color.color1 || { h: 0, s: 0, b: 0 }
+
+  const hsb1 = { h: (c1.h || 0).toFixed(2), s: (c1.s || 0).toFixed(2), b: (c1.b || 0).toFixed(2) }
+  const hsb2 = { h: (c2.h || 0).toFixed(2), s: (c2.s || 0).toFixed(2), b: (c2.b || 0).toFixed(2) }
 
   const showSingle = hsb1.h === hsb2.h && hsb1.s === hsb2.s && hsb1.b === hsb2.b && !isDualToneFinish(color.colorType);
 
@@ -91,7 +94,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
                 <div className="text-sm font-medium mb-2">Color</div>
                 <div
                   className="w-full h-8 rounded border mb-2"
-                  style={{ backgroundColor: hsbToRgbStr(color.color1.h, color.color1.s, color.color1.b) }}
+                  style={{ backgroundColor: hsbToRgbStr(c1.h || 0, c1.s || 0, c1.b || 0) }}
                 />
                 <div className="text-sm font-mono">
                   {hsb1.h} {hsb1.s} {hsb1.b}
@@ -103,7 +106,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
                   <div className="text-sm font-medium mb-2">Color 1</div>
                   <div
                     className="w-full h-8 rounded border mb-2"
-                    style={{ backgroundColor: hsbToRgbStr(color.color1.h, color.color1.s, color.color1.b) }}
+                    style={{ backgroundColor: hsbToRgbStr(c1.h || 0, c1.s || 0, c1.b || 0) }}
                   />
                   <div className="text-sm font-mono">
                     {hsb1.h} {hsb1.s} {hsb1.b}
@@ -114,7 +117,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
                   <div className="text-sm font-medium mb-2">Color 2</div>
                   <div
                     className="w-full h-8 rounded border mb-2"
-                    style={{ backgroundColor: hsbToRgbStr(color.color2.h, color.color2.s, color.color2.b) }}
+                    style={{ backgroundColor: hsbToRgbStr(c2.h || 0, c2.s || 0, c2.b || 0) }}
                   />
                   <div className="text-sm font-mono">
                     {hsb2.h} {hsb2.s} {hsb2.b}
