@@ -270,11 +270,9 @@ function FavoritesContent() {
 function FavoritesPageInner() {
   return (
     <AuthProvider>
-      <ProtectedRoute>
-        <GamingErrorBoundary>
-          <FavoritesContent />
-        </GamingErrorBoundary>
-      </ProtectedRoute>
+      <GamingErrorBoundary>
+        <FavoritesContent />
+      </GamingErrorBoundary>
     </AuthProvider>
   );
 }
