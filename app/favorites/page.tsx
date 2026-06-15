@@ -56,8 +56,8 @@ function FavoritesContent() {
           setMyPalettes(palettesData.palettes || []);
         }
       } catch (err) {
-        setError('Could not load your favorites');
-        logger.error(err);
+        // Gracefully degrade to local storage if API is unavailable
+        logger.warn('Could not sync favorites with cloud, relying on local storage:', err);
       } finally {
         setLoading(false);
       }
