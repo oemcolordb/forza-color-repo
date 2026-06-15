@@ -26,6 +26,12 @@ function hsbToRgbStr(h: number, s: number, b: number): string {
   return `rgb(${Math.round((r + m) * 255)}, ${Math.round((g + m) * 255)}, ${Math.round((bl + m) * 255)})`
 }
 
+const isDualToneFinish = (type?: string) => {
+  if (!type) return false;
+  const t = type.toLowerCase();
+  return t.includes('flake') || t.includes('pearl') || t.includes('two-tone') || t.includes('two tone') || t.includes('carbon') || t.includes('kevlar');
+}
+
 const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode }) => {
   const closeButtonRef = React.useRef<HTMLButtonElement | null>(null)
 
@@ -33,6 +39,8 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
 
   const hsb1 = { h: color.color1.h.toFixed(2), s: color.color1.s.toFixed(2), b: color.color1.b.toFixed(2) }
   const hsb2 = { h: color.color2.h.toFixed(2), s: color.color2.s.toFixed(2), b: color.color2.b.toFixed(2) }
+
+  const showSingle = hsb1.h === hsb2.h && hsb1.s === hsb2.s && hsb1.b === hsb2.b && !isDualToneFinish(color.colorType);
 
   return (
     <DialogShell
@@ -78,7 +86,7 @@ const HSBPopup: React.FC<HSBPopupProps> = ({ color, isOpen, onClose, isDarkMode 
           </div>
 
           <div className="space-y-3">
-            {hsb1.h === hsb2.h && hsb1.s === hsb2.s && hsb1.b === hsb2.b ? (
+            {showSingle ? (
               <div>
                 <div className="text-sm font-medium mb-2">Color</div>
                 <div
