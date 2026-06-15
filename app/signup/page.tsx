@@ -12,7 +12,7 @@ import GamingErrorBoundary from '@/components/error/GamingErrorBoundary';
 function SignupForm() {
   const router = useRouter();
   const { signup } = useAuth();
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,7 +25,7 @@ function SignupForm() {
 
     try {
       // Use the auth context's signup method which handles token storage
-      await signup(email, password, name);
+      await signup(email, password, username);
 
       // Redirect to home page or a protected dashboard
       router.push('/');
@@ -61,10 +61,10 @@ function SignupForm() {
               <input
                 type="text"
                 required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="block w-full rounded-xl bg-white/5 border border-white/10 px-4 py-4 text-white placeholder-gray-600 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 sm:text-sm transition-all"
-                placeholder="Full Name"
+                placeholder="Username"
               />
               <input
                 type="email"
