@@ -15,7 +15,7 @@ exports.handler = async (event, context) => {
     const { q, make, type, limit = 50 } = event.queryStringParameters || {}
 
     // Import color data (you'll need to adjust the path)
-    const colorData = require('../../services/colorData.js')
+    const colorData = require('@/lib/services/colorData')
 
     let results = colorData.default || colorData
 

@@ -11,7 +11,6 @@ const publicPages: { path: string; titlePattern: RegExp; description: string }[]
   { path: "/garage/", titlePattern: /Garage/i, description: "Garage page" },
   { path: "/help/", titlePattern: /Help/i, description: "Help page" },
   { path: "/how-to-use/", titlePattern: /How to use/i, description: "How to use page" },
-  { path: "/location-finder/", titlePattern: /Location/i, description: "Location Finder" },
   { path: "/login/", titlePattern: /Log.?in/i, description: "Login page" },
   { path: "/signup/", titlePattern: /Sign.?up/i, description: "Signup page" },
   { path: "/privacy/", titlePattern: /Privacy/i, description: "Privacy page" },

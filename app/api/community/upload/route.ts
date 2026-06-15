@@ -3,7 +3,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import path from 'path';
 import os from 'os';
-import { withRateLimit } from '@/app/lib/rateLimit';
+import { withRateLimit } from '@/lib/utils/rateLimit';
 
 function normalizeUrlFromBlobResponse(blob: any): string {
   return blob?.url ?? blob?.publicUrl ?? blob?.pathname ?? blob?.key ?? '';
@@ -21,8 +21,8 @@ async function handler(request: Request): Promise<NextResponse> {
   let buffer: Buffer;
   try {
     buffer = Buffer.from(await request.arrayBuffer());
-  } catch (error) {
-    console.error('Failed to read upload body:', error);
+  } catch {
+    // console.log('Parsed community upload form', {error);
     return NextResponse.json({ error: 'Missing or invalid request body' }, { status: 400 });
   }
 
@@ -56,7 +56,7 @@ async function handler(request: Request): Promise<NextResponse> {
       });
     }
   } else {
-    console.log('BLOB_READ_WRITE_TOKEN not set; using local upload fallback:', { filename });
+    console.warn('BLOB_READ_WRITE_TOKEN not set; using local upload fallback:', { filename });
   }
 
   // Local fallback: save to /tmp/uploads/ (writable on Vercel)

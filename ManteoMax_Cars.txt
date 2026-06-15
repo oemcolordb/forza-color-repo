@@ -1,30 +1,4 @@
-﻿c rza
- g's  g's t ut e
-
-Fo
-Special Wt /  Sec 0 S
-
-e
-ile
-
- M 60-0 100-0 ph ph  se
-c
-
-bu eb
- D  gam
-
- m 0m -10
-0
-
-5 D
-e
-
-za tes
-t  to
-
- 
-
-Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
+﻿Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
 0
 
 0-1
@@ -238,13 +212,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top
@@ -291,7 +265,7 @@ e
 za tes
 t  to
 
- 
+
 
 Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
 0
@@ -531,13 +505,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top
@@ -584,7 +558,7 @@ e
 za tes
 t  to
 
- 
+
 
 Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
 0
@@ -814,13 +788,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top
@@ -867,7 +841,7 @@ e
 za tes
 t  to
 
- 
+
 
 Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
 0
@@ -1101,13 +1075,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top
@@ -1154,7 +1128,7 @@ e
 za tes
 t  to
 
- 
+
 
 Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
 0
@@ -1365,7 +1339,7 @@ R19 0R19
 2010 Nissan 370Z Nissan 370Z 1103 2010 Nissan 370Z Autoshow, WS 40,000 Common Modern Sports Cars Factory B 688 6.6 5.7 4.8 4.6 3.9 4.8 332 270 3267 9.84 53 3696 NA V 6 F RWD 275 Both Aftermarket 415, 327, 805 TT, PDS, CS stock Asia Japan Fairlady 2 L 4 5.084 12.781 13.700 180.1 142.8 347.3 0.96 0.99 7.697 11554 05-Nov-21 27-Oct-09 FH5 FM3 FH5 FH4 FM7 FH3 FM6 FH2 FM5 DLC FM4 FM3 10 XBO 1
 2010 Nissan Tsuru Nissan Tsuru '10 3810 2010 Nissan Tsuru Seasonal Series 26 cu 250,000 Legendary Retro Saloons Factory D 444 4.4 3.6 3.5 3.2 2.5 5.8 105 102 2086 19.87 60 1597 NA Inline 4 F FWD 170/7 175/7 Both Taxi roof 212, 250, 415, 327, 300, 505, T, PDS stock Asia Japan 4 L 4 9.319 27.356 123.1 160.2 409.1 0.84 0.83 18.037 13425 12-Oct-23 12-Oct-23 FH5 FH5 cu 1 XBO 1
 
-0R13 0R13 542, 805, 550, 552, 750, 850, 
+0R13 0R13 542, 805, 550, 552, 750, 850,
 2004 Nissan Donut Media 350Z 'Low Car' 350Z Low Car 3743 2004 Nissan Donut Media 350Z 'Low CaAr'ccolade Series 22 cu Story 250,000 Legendary Track Toys Tuner A 733 6.1 6.1 5.6 3.7 4.8 5.3 303 261 3510 11.58 52 3498 T V 6 F RWD 265 none Preset, Hood 639902 none eng Asia Japan 2 L 4 5.780 13.680 167.5 121.8 287.4 1.16 1.22 7.900 13369 22-Jun-23 22-Jun-23 FH5 FH5 cu 1 XBO 1
 2004 Nissan Pickup #23 Rally Raid #23 Nissan RR 2744 2004 Nissan Pickup #23 Rally Raid Autoshow, WS 500,000 Epic Unlimited Offroad Race C 577 4.4 5.5 3.1 4.5 4.8 9.9 268 265 4740 17.69 51 3498 NA V 6 F AWD 280 no Bars 415, 327, 300, 542(3.8L), T, TT, PDS, CS stock Asia Japan 2 L 4 6.300 21.600 122.0 128.6 325.5 0.87 0.87 15.300 13247 05-Nov-21 05-Nov-21 FH5 FH5 FH5 1 XBO 1
 
@@ -1396,13 +1370,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top
@@ -1449,7 +1423,7 @@ e
 za tes
 t  to
 
- 
+
 
 Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
 0
@@ -1737,13 +1711,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top
@@ -1790,10 +1764,10 @@ e
 za tes
 
 t  to
- 
+
 
 Year Makes: 134 Models: 902 Nickname Makes: 134 Models: 902 Special Access DLC Pack Reward/Gift Car Value Rarity FE Boost Car Type Spec [1] PI S H A L B O HP T Wt HP % Aero or kit Options Engine Conversions (hp) Region Country 0-6
-0 
+0
 
 0-1
 00
@@ -1980,7 +1954,7 @@ Seasonal 0R14 0R14
 5R19 5R19
 
 2012 Volkswagen Santana VW Santana '12 2297 2012 Volkswagen Santana DLC Autoshow FH5 Chinese Free w/DLC 20,000 Rare Retro Saloons Factory D 340 3.7 3.9 2.5 2.8 2.6 5.8 94 107 2425 25.80 65 1781 NA Inline 4 F FWD 195/6 195/6 Both Forza 212, 250, 415, 327, 300, 505, T, PDS stock Europe Germany 4 L 4 12.500 50.246 104.200 164.2 405.8 0.83 0.84 37.746 13451 30-Jan-24 30-Jan-24 FH5 FH5 DLC 1 XBO 1
-0R14 0R14 542, 805, 550, 552, 750, 850, 
+0R14 0R14 542, 805, 550, 552, 750, 850,
 
 2011 Volkswagen Scirocco R VW Scirocco '11 1323 2011 Volkswagen Scirocco R Autoshow, WS 45,000 Rare Hot Hatch Factory B 663 5.8 5.5 4.6 4.8 4.0 4.9 261 258 2963 11.35 65 1984 T Inline 4 F FWD 235/3 235/3 no Aftermarket 639000 none eng Europe Germany 3 L 4 DD 6.519 13.718 13.717 161.2 132.8 339.1 0.93 0.97 7.199 11834 05-Nov-21 01-Nov-11 FH5 FM4 FH5 FH4 FM7 FM6 FH2 FM5 FH1 DLC 8 XBO 1
 5R19 5R19
@@ -2088,13 +2062,13 @@ R Tire
 
 Track Width
 
-Aspiration 
+Aspiration
 Options
 
-Naturally 
+Naturally
 Aspirated
 
-Model 
+Model
 Family
 
 Open Top

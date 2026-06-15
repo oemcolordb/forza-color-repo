@@ -13,7 +13,7 @@ test.describe('TuneForge - Critical User Flows', () => {
   test('car selection works', async ({ page }) => {
     await page.waitForSelector('[data-testid="car-select"]', { timeout: 10000 });
     const carSelect = page.locator('[data-testid="car-select"]');
-    await carSelect.selectOption({ label: /Ferrari/i });
+    await carSelect.selectOption({ label: 'Ferrari' });
     
     await expect(carSelect).toHaveValue(/ferrari/i);
   });
@@ -21,7 +21,7 @@ test.describe('TuneForge - Critical User Flows', () => {
   test('track selection works', async ({ page }) => {
     await page.waitForSelector('[data-testid="track-select"]', { timeout: 10000 });
     const trackSelect = page.locator('[data-testid="track-select"]');
-    await trackSelect.selectOption({ label: /Mojave/i });
+    await trackSelect.selectOption({ label: 'Mojave' });
     
     await expect(trackSelect).toHaveValue(/mojave/i);
   });

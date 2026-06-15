@@ -1,9 +1,13 @@
 'use client'
 
+
+
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Car } from '../types/car'
-import { countryFlags } from '../lib/countryFlags'
-import Breadcrumbs from '../components/Breadcrumbs'
+import { Car } from '@/types/car'
+import { countryFlags } from '@/lib/utils/countryFlags'
+import Breadcrumbs from '@/components/layout/Breadcrumbs'
+import GamingErrorBoundary from '@/components/error/GamingErrorBoundary'
 
 const PI_CLASS_COLORS: Record<string, string> = {
   D: 'bg-gray-500 text-white',
@@ -115,7 +119,7 @@ export default function GaragePage() {
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    import('../../services/carDatabase')
+    import('@/lib/services/carDatabase')
       .then(({ carDatabase }) => carDatabase.getAllCars())
       .then(data => {
         if (!cancelled) {
@@ -180,6 +184,7 @@ export default function GaragePage() {
   }`
 
   return (
+    <GamingErrorBoundary>
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-gray-50 text-gray-900'}`}>
       {/* Header */}
       <div className={`sticky top-0 z-10 border-b px-4 py-3 flex items-center gap-3 ${
@@ -285,5 +290,6 @@ export default function GaragePage() {
         )}
       </div>
     </div>
+    </GamingErrorBoundary>
   )
 }

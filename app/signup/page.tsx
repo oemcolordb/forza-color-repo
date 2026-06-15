@@ -1,10 +1,13 @@
-'use client';
+'use client'
+
+
 
 import { useState } from 'react';
+import ClientOnly from '@/components/system/ClientOnly';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AuthProvider, useAuth } from '../components/AuthProvider';
-import GamingErrorBoundary from '../components/GamingErrorBoundary';
+import { AuthProvider, useAuth } from '@/components/auth/AuthProvider';
+import GamingErrorBoundary from '@/components/error/GamingErrorBoundary';
 
 function SignupForm() {
   const router = useRouter();
@@ -146,12 +149,16 @@ function SignupForm() {
   );
 }
 
+;
+
 export default function SignupPage() {
   return (
-    <AuthProvider>
-      <GamingErrorBoundary>
+    <GamingErrorBoundary>
+      <AuthProvider>
+        <ClientOnly>
         <SignupForm />
-      </GamingErrorBoundary>
-    </AuthProvider>
+      </ClientOnly>
+      </AuthProvider>
+    </GamingErrorBoundary>
   );
 }

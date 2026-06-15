@@ -1,14 +1,27 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
+
+
+
+
 import { useState, useEffect } from 'react'
-import TelemetryDashboard from '../components/TelemetryDashboard'
-import TokyoBackground from '../components/TokyoBackground'
-import { getSecureAssetUrl } from '../lib/assetProtection'
+import TelemetryDashboard from '@/components/telemetry/TelemetryDashboard'
+import TokyoBackground from '@/components/backgrounds/TokyoBackground'
+import { getSecureAssetUrl } from '@/lib/utils/assetProtection'
 
 type PortCheckStatus = 'idle' | 'checking' | 'open' | 'closed'
 
+import ClientOnly from '@/components/system/ClientOnly'
+
+
+
 export default function TelemetryPage() {
+  return <ClientOnly>
+        <TelemetryPageInner />
+      </ClientOnly>
+}
+
+function TelemetryPageInner() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [portStatus, setPortStatus] = useState<PortCheckStatus>('idle')
 

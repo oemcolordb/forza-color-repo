@@ -26,6 +26,14 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: true,
 
+  experimental: {
+    // optimizeCss disabled - causes pages-manifest.json ENOENT on Windows with Next.js 15
+    // optimizeCss: true,
+    // Reduce bundle size for commonly used packages
+    optimizePackageImports: ['react-icons', 'lucide-react', 'framer-motion'],
+  },
+  turbopack: {},
+
   // Selective caching strategy:
   // - Static assets and immutable content: long cache (1 year)
   // - Dynamic pages: short cache or no cache
@@ -52,13 +60,13 @@ const nextConfig = {
           },
         ],
       },
-      // Color data JSON: cache with revalidation
+      // Color data JSON: cache with 24h revalidation (rarely changes)
       {
         source: '/carColors.json',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=3600, stale-while-revalidate=86400',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
           },
         ],
       },
@@ -142,13 +150,6 @@ const nextConfig = {
         net: false,
         tls: false,
       }
-    }
-
-    // Force single React instance to prevent duplicate React issues in CI workers
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      react: path.resolve('./node_modules/react'),
-      'react-dom': path.resolve('./node_modules/react-dom'),
     }
 
     return config

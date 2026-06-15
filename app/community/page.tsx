@@ -1,9 +1,12 @@
 'use client'
 
+
+
+
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import PostModal from '../components/PostModal'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
+import PostModal from '@/components/color/PostModal'
 import { useChat } from '@ai-sdk/react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -32,7 +35,17 @@ const SUGGESTED_TAGS = [
 ]
 const PAGE_SIZE = 6
 
+import ClientOnly from '@/components/system/ClientOnly'
+
+
+
 export default function CommunityPage() {
+  return <ClientOnly>
+        <CommunityPageInner />
+      </ClientOnly>
+}
+
+function CommunityPageInner() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [activeTab, setActiveTab] = useState<'feed' | 'tunebot'>('tunebot')
   const [posts, setPosts] = useState<Post[]>([])
@@ -53,17 +66,30 @@ export default function CommunityPage() {
   const [trendsError, setTrendsError] = useState<string | null>(null)
 
   // Chat
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/chat',
-    initialMessages: [
+  const [input, setInput] = useState('');
+  
+  const { messages, sendMessage, status } = useChat({
+    messages: [
       {
         id: 'welcome-msg',
         role: 'assistant',
-        content:
-          'Welcome to The Pit Stop! 🏁 I am TuneBot, your AI racing engineer. Need help fixing understeer, setting up a drift build, or finding the perfect color match? Let me know what you are driving!',
-      },
+        parts: [{ type: 'text', text: 'Welcome to The Pit Stop! 🏁 I am TuneBot, your AI racing engineer. Need help fixing understeer, setting up a drift build, or finding the perfect color match? Let me know what you are driving!' }],
+      } as import('@ai-sdk/react').UIMessage,
     ],
-  })
+  });
+
+  const isLoading = status === 'submitted' || status === 'streaming';
+  const handleInputChange = (e: any) => setInput(e.target.value);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    sendMessage({
+      id: Date.now().toString(),
+      role: 'user',
+      parts: [{ type: 'text', text: input }],
+    } as import('@ai-sdk/react').UIMessage);
+    setInput('');
+  };
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -384,10 +410,12 @@ export default function CommunityPage() {
                     {[1, 2, 3].map(i => (
                       <div
                         key={i}
-                        className={`w-8 h-8 rounded-full border-2 ${isDarkMode ? 'border-gray-900' : 'border-white'} bg-gray-400 overflow-hidden`}
-                      >
-                        <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="user" />
-                      </div>
+                        className={`w-8 h-8 rounded-full border border-white/10 overflow-hidden relative z-10 bg-gradient-to-br ${
+                          i === 0 ? 'from-blue-500 to-purple-600' :
+                          i === 1 ? 'from-emerald-400 to-cyan-500' :
+                          i === 2 ? 'from-orange-500 to-red-500' :
+                          'from-pink-500 to-rose-500'
+                        }`} />
                     ))}
                     <div
                       className={`w-8 h-8 rounded-full border-2 ${isDarkMode ? 'border-gray-900' : 'border-white'} bg-blue-600 flex items-center justify-center text-[10px] font-bold`}
@@ -406,7 +434,13 @@ export default function CommunityPage() {
                   {['Understeer fix', 'Drift build', 'Best gearing', 'Color match'].map(prompt => (
                     <button
                       key={prompt}
-                      onClick={() => handleInputChange({ target: { value: prompt } } as any)}
+                      onClick={() => {
+                        sendMessage({
+                          id: Date.now().toString(),
+                          role: 'user',
+                          parts: [{ type: 'text', text: prompt }],
+                        } as import('@ai-sdk/react').UIMessage);
+                      }}
                       className={`text-[10px] font-bold uppercase tracking-wider whitespace-nowrap px-4 py-2 rounded-full border transition-all hover:bg-blue-500/10 hover:border-blue-500/30 ${
                         isDarkMode
                           ? 'border-white/10 text-gray-400 hover:text-blue-400'
@@ -440,7 +474,7 @@ export default function CommunityPage() {
                           }`}
                         >
                           <div className="text-sm whitespace-pre-wrap leading-relaxed font-medium">
-                            {m.content}
+                            {m.parts?.filter((p: any) => p.type === 'text').map((p: any) => p.text).join('\n')}
                           </div>
                         </div>
                         <div className="text-[9px] mt-2 opacity-30 font-bold uppercase tracking-tighter">

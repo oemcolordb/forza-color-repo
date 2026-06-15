@@ -1,6 +1,7 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../../lib/db'
-import { logger } from '../../../lib/logger'
+import { getDb, ensureTables } from '@/lib/db/db'
+import { logger } from '@/lib/utils/logger'
 import { randomBytes } from 'crypto'
 
 // Generate a secure random token

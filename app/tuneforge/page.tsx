@@ -1,14 +1,17 @@
 'use client'
 
+
+
+
 import React, { useState, useEffect, useRef } from 'react'
 import { CarStatsRadarChart } from '../components/CarStatsRadarChart'
-import Breadcrumbs from '../components/Breadcrumbs'
-import { getCountryFlag, formatPrice } from '../lib/countryFlags'
-import TokyoBackground from '../components/TokyoBackground'
-import { getSecureAssetUrl } from '../lib/assetProtection'
+import Breadcrumbs from '@/components/layout/Breadcrumbs'
+import { getCountryFlag, formatPrice } from '@/lib/utils/countryFlags'
+import TokyoBackground from '@/components/backgrounds/TokyoBackground'
+import { getSecureAssetUrl } from '@/lib/utils/assetProtection'
 
-import { TuningCalculator, TRACKS } from '../lib/tuning-calculator'
-import { Car as BaseCar } from '../types/car'
+import { TuningCalculator, TRACKS } from '@/lib/utils/tuning-calculator'
+import { Car as BaseCar } from '@/types/car'
 
 interface Car {
   year: string
@@ -71,7 +74,17 @@ interface CommunityTune {
   created_at: string
 }
 
-export default function TuneForge() {
+import ClientOnly from '@/components/system/ClientOnly'
+
+
+
+export default function TuneforgePage() {
+  return <ClientOnly>
+        <TuneforgePageInner />
+      </ClientOnly>
+}
+
+function TuneforgePageInner() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [cars, setCars] = useState<Car[]>([])
   const [selectedCar, setSelectedCar] = useState<Car | null>(null)
@@ -81,7 +94,7 @@ export default function TuneForge() {
   const [savedTunes, setSavedTunes] = useState<SavedTune[]>([])
   const [sortBy, setSortBy] = useState('manufacturer-az')
   const [aiQuery, setAiQuery] = useState('')
-  const [aiResponse, setAiResponse] = useState('')
+  const [_aiResponse, setAiResponse] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMessages, setAiMessages] = useState<{role: 'user'|'assistant'; content: string}[]>([])
 
@@ -90,7 +103,7 @@ export default function TuneForge() {
   const [weatherCondition, setWeatherCondition] = useState('dry')
   const [trackSurface, setTrackSurface] = useState('tarmac')
   const [lapTimeTarget, setLapTimeTarget] = useState('')
-  const [, setActivePreset] = useState('')
+  const [, _setActivePreset] = useState('')
   const [isCalculating, setIsCalculating] = useState(false)
   const [calculationProgress, setCalculationProgress] = useState(0)
   const [loadingStatus, setLoadingStatus] = useState('Initializing...')
@@ -126,6 +139,7 @@ export default function TuneForge() {
   const [submitDiscipline, setSubmitDiscipline] = useState('General')
   const [submitTuneName, setSubmitTuneName] = useState('')
   const [submitFeedback, setSubmitFeedback] = useState<{message: string, isError: boolean} | null>(null)
+  const [guideSubTab, setGuideSubTab] = useState<'tuning' | 'painting'>('tuning')
 
   useEffect(() => {
     const saved = localStorage.getItem('theme')
@@ -830,7 +844,7 @@ export default function TuneForge() {
   }
   const springUnitLabel = springUnit === 'lbf/in' ? ' lb/in' : springUnit === 'N/mm' ? ' N/mm' : ' kgf/mm'
 
-  const getTireCompoundName = (value: number) => {
+  const _getTireCompoundName = (value: number) => {
     const compounds = ['', 'Vintage', 'Stock', 'Street', 'Sport', 'Semi-Slick', 'Slick', 'Rally']
     return compounds[value] || 'Unknown'
   }
@@ -2944,177 +2958,294 @@ export default function TuneForge() {
         )}
 
         {activeTab === 'guide' && (
-          <div className="space-y-2">
-            <p className="text-xs opacity-50 pb-1">
-              FH5 tuning reference — tap any section to expand.
-            </p>
-            {[
-              {
-                title: '🌬️ Aerodynamics',
-                items: [
-                  'Mainly affects top speed and high-speed-corner stability',
-                  'More front downforce → snappier turn-in / tendency to oversteer',
-                  'More rear downforce → more understeer, better cornering grip',
-                  'Leave at base values until the rest of the suspension is dialled in',
-                  'Set equal front/rear for balance; only adjust to counter persistent over/understeer',
-                ],
-              },
-              {
-                title: '〰️ Damping',
-                items: [
-                  'Bump = compression (wheel hits bump). Rebound = extension (wheel drops).',
-                  'Start with stock rebound as your base, then adjust bump from there',
-                  'Bump stiffness should be 50–75 % of the corresponding rebound value',
-                  'Start bump low; raise only if the car feels bouncy or unstable',
-                  'Stiffer front bump → more rear grip (takes load off rear). Same logic for rear.',
-                  'Lower bump settings suit off-road; higher suit smooth tarmac/circuit',
-                  'Increase stiffness on the end NOT losing grip; decrease on the end that IS',
-                ],
-              },
-              {
-                title: '🔩 Springs',
-                items: [
-                  'Lower front spring → oversteer. Lower rear spring → understeer.',
-                  'Heavier / lower cars need stiffer springs for proper control',
-                  'Softer springs = more compliance and grip, but body roll and slower response',
-                  'FWD/AWD: start slightly softer front than rear (front-drive prone to understeer)',
-                  'Stiffer rear springs can improve drift initiation on high-power RWD builds',
-                  'Base natural frequency: 1.5 Hz street, 1.7 Hz rally, 2.0 Hz track/race',
-                ],
-              },
-              {
-                title: '📏 Ride Height',
-                items: [
-                  'Lower centre of gravity = better stability and handling',
-                  'Good base tune: set 2 clicks above the minimum',
-                  'Drift builds: minimum ride height for lowest CoG',
-                  'Off-road: raise for ground clearance over rough terrain',
-                  'Changing ride height slightly affects effective spring rate — re-test after',
-                ],
-              },
-              {
-                title: '🔄 Anti-Roll Bars (ARBs)',
-                items: [
-                  'Softer ARB lets suspension travel more, loading the outside tyre in corners',
-                  'Lower front ARB → more oversteer. Lower rear ARB → more understeer.',
-                  'FWD/AWD tuning requires more ARB attention than RWD',
-                  'FWD/AWD base tune front: halfway between minimum and 50 %',
-                  'FWD/AWD base tune rear: set at 50 %',
-                  'RWD base tune: leave ARBs at stock',
-                  'Stiffer rear ARB helps low-power builds initiate drift',
-                  'Drift: lower rear ARB increases rear grip — only go lower with enough power',
-                ],
-              },
-              {
-                title: '📐 Alignment',
-                items: [
-                  'Negative camber: bottom of tyre angled out — maximises contact patch in corners',
-                  'Base tune: start a few clicks below stock; validate with telemetry heat map',
-                  'Too much negative camber wears the inside shoulder and hurts straight-line grip',
-                  'FWD/AWD base: 0.1–0.2 ° front toe-out creates slight oversteer to offset understeer',
-                  'RWD base: 0.1–0.2 ° rear toe-in stabilises the rear in corners',
-                  'Drift: max front negative camber, max caster (≤6 °), front toe-out ~2 °',
-                  'Caster: 4–7 ° is a good base; affects steering feel but not lap times significantly',
-                ],
-              },
-              {
-                title: '⚙️ Gearing',
-                items: [
-                  'Final drive: shift toward speed until the rightmost graph line just touches the right edge',
-                  'High-power RWD: extend 1st and 2nd gear for gradualy power delivery off corners',
-                  'Drift: default final drive works; find your drift gear then close others toward it',
-                  'Drag: close all gears as tight as possible for maximum acceleration',
-                ],
-              },
-              {
-                title: '🛞 Tires',
-                items: [
-                  'No tyre wear in FH5 — optimise grip and temperature management only',
-                  'Higher PSI: more responsive, higher peak grip, but loss is more sudden',
-                  'Lower PSI: heats faster, progressive grip loss (easier to catch slides)',
-                  'Track base: 26–35 PSI. Slightly higher front PSI improves cornering.',
-                  'Drift front: ~30 PSI. Drift rear: ~22 PSI (lower = smoother breakaway).',
-                  'Raise rear PSI only if you need a more abrupt rear breakaway',
-                ],
-              },
-              {
-                title: '📊 Using Telemetry (press T on PC)',
-                items: [
-                  'Suspension bar: should stay 20–80 % during normal cornering',
-                  'Fully compressed (100 % pink) → raise ride height or soften springs/damping',
-                  'Bar barely moving → too stiff; soften springs or damping',
-                  'Tires & Misc: outside-tyre camber should never read positive mid-corner',
-                  'If camber goes neutral or positive in a corner → add more negative camber',
-                  'Heat view: tyres should be mustard/yellow at peak operating temperature',
-                  'Inside tyre = hottest, outside = coolest, middle = in between',
-                  'Inner-to-outer spread > 20 °F → reduce negative camber angle',
-                  'Middle temp lower than inner/outer → increase PSI; middle too high → lower PSI',
-                ],
-              },
-              {
-                title: '⚙️ Differential',
-                items: [
-                  'Higher accel lock → less wheelspin on throttle, more understeer on corner exit',
-                  'Lower accel lock → more wheelspin, easier rotation, better turn-in',
-                  'Higher decel lock → stable trail-braking, but can cause entry understeer',
-                  'Base tune: 50 % accel, 20 % decel for RWD',
-                  'Drift: lower accel to 20–40 % for easier initiation and smoother modulation',
-                  'AWD centre diff: higher front split = more understeer; higher rear = more oversteer',
-                ],
-              },
-              {
-                title: '🛑 Brakes',
-                items: [
-                  'Forward bias (more front braking) → better brake-to-turn-in, risk of front lock-up',
-                  'Rearward bias → rotation aid on entry, risk of instability under heavy braking',
-                  'Base tune: 52–55 % front bias; 90–100 % pressure',
-                  'Drift entries: 48–50 % front (slight rear bias aids rotation)',
-                  '⚠ FH5 slider is INVERTED — display value = 100 − target front%. Lower = more front.',
-                ],
-              },
-              {
-                title: '🔥 Drift-Specific Setup',
-                items: [
-                  'More power makes drifting easier — upgrade engine first',
-                  'Rear tyre compound: 1–2 grades softer than front for controlled breakaway',
-                  'Front ~30 PSI for steering grip; rear ~22 PSI for smooth slides',
-                  'RWD diff: accel 20–40 %, decel 10–20 %',
-                  'Maximum front negative camber for counter-steering grip',
-                  'Max caster (≤6 °) improves self-centering and steering feel during slides',
-                  'Front toe-out ~2 ° for easier entry and more steering angle',
-                  'Rear toe: 0.1–0.2 ° in for base stability; neutral or slight out for initiation',
-                ],
-              },
-              {
-                title: '⚠️ Common Tuning Mistakes',
-                items: [
-                  'Changing too many settings at once — isolate one variable, test, repeat',
-                  'Ignoring telemetry data',
-                  'Copying a tune without understanding the car\'s weight, drivetrain, and PI class',
-                  'Over-tuning a car that is already well-balanced',
-                  'Testing on a single corner type instead of a full circuit',
-                  'Chasing lap times instead of consistency and feel',
-                  'Neglecting tyre temperatures and PSI adjustments',
-                ],
-              },
-            ].map(section => (
-              <details
-                key={section.title}
-                className={`rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setGuideSubTab('tuning')}
+                className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
+                  guideSubTab === 'tuning' ? 'bamboo-button' : 'bamboo-button-ghost opacity-70'
+                }`}
               >
-                <summary className="px-3 py-2 font-bold text-sm cursor-pointer select-none">
-                  {section.title}
-                </summary>
-                <ul className="px-3 pb-3 mt-1 space-y-1">
-                  {section.items.map((item, i) => (
-                    <li key={i} className="text-xs opacity-80 flex gap-1.5">
-                      <span className="shrink-0 opacity-40 mt-0.5">▸</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            ))}
+                🔧 Tuning Guide
+              </button>
+              <button
+                onClick={() => setGuideSubTab('painting')}
+                className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
+                  guideSubTab === 'painting' ? 'bamboo-button' : 'bamboo-button-ghost opacity-70'
+                }`}
+              >
+                🎨 Painting Guide
+              </button>
+            </div>
+
+            {guideSubTab === 'tuning' ? (
+              <div className="space-y-2">
+                <p className="text-xs opacity-50 pb-1">
+                  FH5 tuning reference — tap any section to expand.
+                </p>
+                {[
+                  {
+                    title: '🌬️ Aerodynamics',
+                    items: [
+                      'Mainly affects top speed and high-speed-corner stability',
+                      'More front downforce → snappier turn-in / tendency to oversteer',
+                      'More rear downforce → more understeer, better cornering grip',
+                      'Leave at base values until the rest of the suspension is dialled in',
+                      'Set equal front/rear for balance; only adjust to counter persistent over/understeer',
+                    ],
+                  },
+                  {
+                    title: '〰️ Damping',
+                    items: [
+                      'Bump = compression (wheel hits bump). Rebound = extension (wheel drops).',
+                      'Start with stock rebound as your base, then adjust bump from there',
+                      'Bump stiffness should be 50–75 % of the corresponding rebound value',
+                      'Start bump low; raise only if the car feels bouncy or unstable',
+                      'Stiffer front bump → more rear grip (takes load off rear). Same logic for rear.',
+                      'Lower bump settings suit off-road; higher suit smooth tarmac/circuit',
+                      'Increase stiffness on the end NOT losing grip; decrease on the end that IS',
+                    ],
+                  },
+                  {
+                    title: '🔩 Springs',
+                    items: [
+                      'Lower front spring → oversteer. Lower rear spring → understeer.',
+                      'Heavier / lower cars need stiffer springs for proper control',
+                      'Softer springs = more compliance and grip, but body roll and slower response',
+                      'FWD/AWD: start slightly softer front than rear (front-drive prone to understeer)',
+                      'Stiffer rear springs can improve drift initiation on high-power RWD builds',
+                      'Base natural frequency: 1.5 Hz street, 1.7 Hz rally, 2.0 Hz track/race',
+                    ],
+                  },
+                  {
+                    title: '📏 Ride Height',
+                    items: [
+                      'Lower centre of gravity = better stability and handling',
+                      'Good base tune: set 2 clicks above the minimum',
+                      'Drift builds: minimum ride height for lowest CoG',
+                      'Off-road: raise for ground clearance over rough terrain',
+                      'Changing ride height slightly affects effective spring rate — re-test after',
+                    ],
+                  },
+                  {
+                    title: '🔄 Anti-Roll Bars (ARBs)',
+                    items: [
+                      'Softer ARB lets suspension travel more, loading the outside tyre in corners',
+                      'Lower front ARB → more oversteer. Lower rear ARB → more understeer.',
+                      'FWD/AWD tuning requires more ARB attention than RWD',
+                      'FWD/AWD base tune front: halfway between minimum and 50 %',
+                      'FWD/AWD base tune rear: set at 50 %',
+                      'RWD base tune: leave ARBs at stock',
+                      'Stiffer rear ARB helps low-power builds initiate drift',
+                      'Drift: lower rear ARB increases rear grip — only go lower with enough power',
+                    ],
+                  },
+                  {
+                    title: '📐 Alignment',
+                    items: [
+                      'Negative camber: bottom of tyre angled out — maximises contact patch in corners',
+                      'Base tune: start a few clicks below stock; validate with telemetry heat map',
+                      'Too much negative camber wears the inside shoulder and hurts straight-line grip',
+                      'FWD/AWD base: 0.1–0.2 ° front toe-out creates slight oversteer to offset understeer',
+                      'RWD base: 0.1–0.2 ° rear toe-in stabilises the rear in corners',
+                      'Drift: max front negative camber, max caster (≤6 °), front toe-out ~2 °',
+                      'Caster: 4–7 ° is a good base; affects steering feel but not lap times significantly',
+                    ],
+                  },
+                  {
+                    title: '⚙️ Gearing',
+                    items: [
+                      'Final drive: shift toward speed until the rightmost graph line just touches the right edge',
+                      'High-power RWD: extend 1st and 2nd gear for gradualy power delivery off corners',
+                      'Drift: default final drive works; find your drift gear then close others toward it',
+                      'Drag: close all gears as tight as possible for maximum acceleration',
+                    ],
+                  },
+                  {
+                    title: '🛞 Tires',
+                    items: [
+                      'No tyre wear in FH5 — optimise grip and temperature management only',
+                      'Higher PSI: more responsive, higher peak grip, but loss is more sudden',
+                      'Lower PSI: heats faster, progressive grip loss (easier to catch slides)',
+                      'Track base: 26–35 PSI. Slightly higher front PSI improves cornering.',
+                      'Drift front: ~30 PSI. Drift rear: ~22 PSI (lower = smoother breakaway).',
+                      'Raise rear PSI only if you need a more abrupt rear breakaway',
+                    ],
+                  },
+                  {
+                    title: '📊 Using Telemetry (press T on PC)',
+                    items: [
+                      'Suspension bar: should stay 20–80 % during normal cornering',
+                      'Fully compressed (100 % pink) → raise ride height or soften springs/damping',
+                      'Bar barely moving → too stiff; soften springs or damping',
+                      'Tires & Misc: outside-tyre camber should never read positive mid-corner',
+                      'If camber goes neutral or positive in a corner → add more negative camber',
+                      'Heat view: tyres should be mustard/yellow at peak operating temperature',
+                      'Inside tyre = hottest, outside = coolest, middle = in between',
+                      'Inner-to-outer spread > 20 °F → reduce negative camber angle',
+                      'Middle temp lower than inner/outer → increase PSI; middle too high → lower PSI',
+                    ],
+                  },
+                  {
+                    title: '⚙️ Differential',
+                    items: [
+                      'Higher accel lock → less wheelspin on throttle, more understeer on corner exit',
+                      'Lower accel lock → more wheelspin, easier rotation, better turn-in',
+                      'Higher decel lock → stable trail-braking, but can cause entry understeer',
+                      'Base tune: 50 % accel, 20 % decel for RWD',
+                      'Drift: lower accel to 20–40 % for easier initiation and smoother modulation',
+                      'AWD centre diff: higher front split = more understeer; higher rear = more oversteer',
+                    ],
+                  },
+                  {
+                    title: '🛑 Brakes',
+                    items: [
+                      'Forward bias (more front braking) → better brake-to-turn-in, risk of front lock-up',
+                      'Rearward bias → rotation aid on entry, risk of instability under heavy braking',
+                      'Base tune: 52–55 % front bias; 90–100 % pressure',
+                      'Drift entries: 48–50 % front (slight rear bias aids rotation)',
+                      '⚠ FH5 slider is INVERTED — display value = 100 − target front%. Lower = more front.',
+                    ],
+                  },
+                  {
+                    title: '🔥 Drift-Specific Setup',
+                    items: [
+                      'More power makes drifting easier — upgrade engine first',
+                      'Rear tyre compound: 1–2 grades softer than front for controlled breakaway',
+                      'Front ~30 PSI for steering grip; rear ~22 PSI for smooth slides',
+                      'RWD diff: accel 20–40 %, decel 10–20 %',
+                      'Maximum front negative camber for grip while counter-steering',
+                      'Max caster (≤6 °) improves self-centering and steering feel during slides',
+                      'Front toe-out ~2 ° for easier entry and more steering angle',
+                      'Rear toe: 0.1–0.2 ° in for base stability; neutral or slight out for initiation',
+                    ],
+                  },
+                  {
+                    title: '⚠️ Common Tuning Mistakes',
+                    items: [
+                      'Changing too many settings at once — isolate one variable, test, repeat',
+                      'Ignoring telemetry data',
+                      'Copying a tune without understanding the car\'s weight, drivetrain, and PI class',
+                      'Over-tuning a car that is already well-balanced',
+                      'Testing on a single corner type instead of a full circuit',
+                      'Chasing lap times instead of consistency and feel',
+                      'Neglecting tyre temperatures and PSI adjustments',
+                    ],
+                  },
+                ].map(section => (
+                  <details
+                    key={section.title}
+                    className={`rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
+                  >
+                    <summary className="px-3 py-2 font-bold text-sm cursor-pointer select-none">
+                      {section.title}
+                    </summary>
+                    <ul className="px-3 pb-3 mt-1 space-y-1">
+                      {section.items.map((item, i) => (
+                        <li key={i} className="text-xs opacity-80 flex gap-1.5">
+                          <span className="shrink-0 opacity-40 mt-0.5">▸</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-xs opacity-50 pb-1">
+                  FH5 painting &amp; special colors guide — tap any section to expand.
+                </p>
+                {[
+                  {
+                    title: '🎨 The Basics: Understanding HSB',
+                    items: [
+                      'Forza uses the HSB (Hue, Saturation, Brightness) system on a scale of 0.00 to 1.00.',
+                      'Hue (H): The actual color (0.00 is Red, moving through the rainbow back to 1.00 Red).',
+                      'Saturation (S): How intense the color is (0.00 is grayscale/white, 1.00 is pure color).',
+                      'Brightness (B): How light or dark the color is (0.00 is pitch black, 1.00 is fully bright).',
+                      'Pro-Tip: Press X (on controller) or Space (on keyboard) when hovering over a color to open the Advanced Fine-Tune menu where you can input exact HSB values.',
+                    ],
+                  },
+                  {
+                    title: '🌓 1. Pearlescent & Color-Shift (Two-Tone)',
+                    items: [
+                      'Two-Tone paints transition between two different colors depending on the light/camera angle.',
+                      'Go to Special Colors -> select Two-Tone Polished, and press X to Fine-Tune.',
+                      'Base Color (Lowlight): Set this to a darker, richer color for shadows (e.g. Midnight Purple III base: H:0.65, S:1.00, B:0.25).',
+                      'Highlight Color: Set this to a bright, highly saturated contrasting color for sunlight reflections (e.g. Midnight Purple III highlight: H:0.08, S:0.90, B:0.60).',
+                      'Example (Ford Mystichrome): Base H:0.56 S:1.00 B:0.40 / Highlight H:0.76 S:1.00 B:0.55.',
+                    ],
+                  },
+                  {
+                    title: '✨ 2. Candy Coats & Deep Metallics (Metal Flake)',
+                    items: [
+                      'Consists of a solid base coat with tiny metallic flakes suspended in clear coat.',
+                      'Go to Special Colors -> select Metal Flake, and press X to Fine-Tune.',
+                      'Base Color: The underlying paint. For a "Candy" look, make this very dark (e.g. H:0.00, S:1.00, B:0.20).',
+                      'Flake Color: The metallic sparkle. Make this the same Hue as the base, but with maximum Brightness and Saturation (e.g. H:0.00, S:1.00, B:1.00).',
+                      'Result: A deep Candy Apple Red that looks dark in the shade but sparkles ruby red in direct sunlight.',
+                    ],
+                  },
+                  {
+                    title: '💿 3. Anodized Metals & Colored Chrome',
+                    items: [
+                      'Tint highly reflective metals to create custom anodized aluminum, colored chrome, or brass/copper.',
+                      'Go to Special Colors -> select Chrome, Polished Aluminum, or Brushed Aluminum, and press X to tint.',
+                      'Example (Anodized Blue): Material: Polished Aluminum, Tint: H:0.60 S:0.85 B:0.90.',
+                      'Example (Realistic Bronze/Gold): Material: Semigloss Brass or Brushed Aluminum, Tint: H:0.12 S:0.65 B:0.75.',
+                    ],
+                  },
+                  {
+                    title: '🏁 4. Tinted Carbon Fiber (Transparent Vinyl Method)',
+                    items: [
+                      'Exposed, colored carbon fiber weaves found on Pagani or McLaren cars.',
+                      'Paint the entire car in Carbon Fiber (Polished or Matte) from the Special Colors tab.',
+                      'Go to Apply Decals / Vinyls and add a basic Square vinyl shape.',
+                      'Scale the squares up massively until they completely cover the entire vehicle.',
+                      'Change the color of the vinyls to your desired tint (e.g., Blood Red or Sapphire Blue).',
+                      'The Secret Step: Change the Transparency (Opacity) of the vinyls to around 15% - 30%.',
+                      'Result: Carbon fiber weave shines through the color clear-coat.',
+                    ],
+                  },
+                  {
+                    title: '🖤 5. Faux Custom Decal Finishes (Matte/Gloss Contrast)',
+                    items: [
+                      'Create stealth/ghost patterns with glossy decals on matte paint or vice versa.',
+                      'Paint the car in Matte or Semigloss black.',
+                      'Apply decals in the same black color.',
+                      'While selecting the decals, Toggle Vinyl Material (usually Y on controller).',
+                      'Set the vinyl to be Glossy while the car body remains Matte.',
+                    ],
+                  },
+                  {
+                    title: '🖌️ General Painting Tips',
+                    items: [
+                      'Wheels: Advanced painting allows you to paint Inner Barrel, Spokes, and Lip separately.',
+                      'Brake Calipers: Calipers do not support Special Colors directly, but normal HSB can match your body highlights.',
+                      'Lighting: Always take your car outside to natural daytime sunlight to check paint. Garage lighting is artificial and washes out colors.',
+                    ],
+                  },
+                ].map(section => (
+                  <details
+                    key={section.title}
+                    className={`rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}
+                  >
+                    <summary className="px-3 py-2 font-bold text-sm cursor-pointer select-none">
+                      {section.title}
+                    </summary>
+                    <ul className="px-3 pb-3 mt-1 space-y-1">
+                      {section.items.map((item, i) => (
+                        <li key={i} className="text-xs opacity-80 flex gap-1.5">
+                          <span className="shrink-0 opacity-40 mt-0.5">▸</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

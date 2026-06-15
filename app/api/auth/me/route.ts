@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
-import { getDb } from '../../../lib/db'
-import { logger } from '../../../lib/logger'
+import { getDb } from '@/lib/db/db'
+import { logger } from '@/lib/utils/logger'
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'forza-color-universe-super-secret-key-123'

@@ -7,7 +7,7 @@ const DYNAMIC_CACHE = `forza-dynamic-v${APP_VERSION}`
 // Detect development mode
 const isDev = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1'
 
-const STATIC_ASSETS = ['/manifest.json', '/offline.html', '/tuneforge/', '/location-finder/']
+const STATIC_ASSETS = ['/manifest.json', '/offline.html', '/tuneforge/']
 
 // Install event
 self.addEventListener('install', event => {

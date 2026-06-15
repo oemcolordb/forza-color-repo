@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getDb, ensureTables } from '@/app/lib/db';
+import { getDb, ensureTables } from '@/lib/db/db';
 import { v4 as uuidv4 } from 'uuid';
-import { withRateLimit } from '@/app/lib/rateLimit';
+import { withRateLimit } from '@/lib/utils/rateLimit';
 
 export const GET = withRateLimit(async function () {
   try {

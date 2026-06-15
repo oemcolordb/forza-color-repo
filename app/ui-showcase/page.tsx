@@ -1,26 +1,28 @@
 'use client'
 
+
+
 import React from 'react'
 import { motion } from 'framer-motion'
 import { 
   GlassCard, 
   GlassButton,
   GlassIsland 
-} from '../components/ui/GlassCard'
+} from '@/components/ui/GlassCard'
 import { 
   NeumorphicCard, 
   NeumorphicToggle, 
   NeumorphicSlider,
   NeumorphicButton,
   NeumorphicInput 
-} from '../components/ui/Neumorphic'
+} from '@/components/ui/Neumorphic'
 import { 
   AuroraBackground,
   MeshGradientBackground,
   GridLinesBackground,
   FloatingOrbs,
   RacingStripesBackground
-} from '../components/ui/AnimatedBackgrounds'
+} from '@/components/ui/AnimatedBackgrounds'
 import {
   MagneticButton,
   TextReveal,
@@ -32,7 +34,7 @@ import {
   FadeInItem,
   BounceHover,
   Shimmer
-} from '../components/ui/MicroInteractions'
+} from '@/components/ui/MicroInteractions'
 import { Sparkles, Palette, Zap, Layers, Heart, Star } from 'lucide-react'
 
 export default function UIShowcasePage() {

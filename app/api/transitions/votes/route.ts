@@ -6,10 +6,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../../lib/db'
+import { getDb, ensureTables } from '@/lib/db/db'
 import { cookies } from 'next/headers'
-import { TRANSITION_METADATA } from '../../../components/transitions/PageTransitions'
-import { logger } from '@/app/lib/logger'
+import { TRANSITION_METADATA } from '@/components/transitions/PageTransitions'
+import { logger } from '@/lib/utils/logger'
 
 // Generate a simple user ID from cookies or create new one
 async function getUserId(): Promise<string> {

@@ -1,4 +1,4 @@
-import TransitionGallery from '../components/transitions/TransitionGallery'
+import TransitionGallery from '@/components/transitions/TransitionGallery'
 
 export const metadata = {
   title: 'Transition Gallery | Forza Color Universe',

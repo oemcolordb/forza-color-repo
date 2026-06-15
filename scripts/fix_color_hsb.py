@@ -73,7 +73,6 @@ COLOR_HSB_MAP = {
     'canary': {'h': 0.16, 's': 0.8, 'b': 0.95},
     'lemon': {'h': 0.14, 's': 0.7, 'b': 0.9},
     'mustard': {'h': 0.12, 's': 0.6, 'b': 0.7},
-    'gold': {'h': 0.12, 's': 0.8, 'b': 0.85},
     'dew': {'h': 0.15, 's': 0.3, 'b': 0.9},
     'sunshine': {'h': 0.14, 's': 0.7, 'b': 0.95},
 
@@ -114,7 +113,6 @@ COLOR_HSB_MAP = {
     'racing': {'h': 0.58, 's': 0.9, 'b': 0.7},
     'ultra': {'h': 0.55, 's': 0.8, 'b': 0.8},
     'galaxy': {'h': 0.65, 's': 0.8, 'b': 0.3},
-    'midnight': {'h': 0.65, 's': 0.8, 'b': 0.25},
 
     # Purples
     'purple': {'h': 0.75, 's': 0.7, 'b': 0.6},
@@ -133,7 +131,6 @@ COLOR_HSB_MAP = {
     'salmon': {'h': 0.05, 's': 0.6, 'b': 0.8},
     'coral': {'h': 0.08, 's': 0.7, 'b': 0.85},
     'fuchsia': {'h': 0.83, 's': 0.8, 'b': 0.8},
-    'magenta': {'h': 0.83, 's': 0.8, 'b': 0.7},
     'hot': {'h': 0.87, 's': 0.8, 'b': 0.85},
     'pfister': {'h': 0.82, 's': 0.5, 'b': 0.9},
 
@@ -163,7 +160,7 @@ def load_colors(file_path: str) -> List[Dict]:
         with open(file_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
-        print(f"Error loading {file_path}: {e}")
+        print(f"[ERROR] Error loading {file_path}: {e}")
         return []
 
 def has_invalid_hsb(color: Dict) -> bool:
@@ -237,6 +234,9 @@ def fix_invalid_hsb(colors: List[Dict]) -> Tuple[List[Dict], Dict]:
             # Create fixed color
             fixed_color = color.copy()
             fixed_color['color1'] = new_hsb
+            # If two-tone or metallic, we also copy to color2
+            if 'color2' not in fixed_color or has_invalid_hsb({'color1': fixed_color.get('color2')}):
+                fixed_color['color2'] = new_hsb
             fixed_color['original_hsb'] = hsb  # Keep original for reference
 
             fixed_colors.append(fixed_color)
@@ -313,36 +313,36 @@ def save_colors(colors: List[Dict], output_path: str):
     try:
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(colors, f, indent=2, ensure_ascii=False)
-        print(f"✅ Saved {len(colors)} colors to {output_path}")
+        print(f"[SUCCESS] Saved {len(colors)} colors to {output_path}")
     except Exception as e:
-        print(f"❌ Error saving colors: {e}")
+        print(f"[ERROR] Error saving colors: {e}")
 
 def main():
     """Main fix function"""
-    print("🔧 Starting color HSB fix process...")
+    print("[START] Starting color HSB fix process...")
 
     # Load colors
     colors = load_colors('public/carColors.json')
     if not colors:
-        print("❌ No colors found to fix!")
+        print("[ERROR] No colors found to fix!")
         sys.exit(1)
 
-    print(f"📊 Loaded {len(colors)} colors")
+    print(f"[INFO] Loaded {len(colors)} colors")
 
     # Fix invalid HSB values
-    print("\n🔧 Fixing invalid HSB values...")
+    print("\n[INFO] Fixing invalid HSB values...")
     fixed_colors, fix_stats = fix_invalid_hsb(colors)
 
-    print(f"✅ Fixed {fix_stats['invalid_fixed']} colors with invalid HSB")
+    print(f"[SUCCESS] Fixed {fix_stats['invalid_fixed']} colors with invalid HSB")
 
     # Remove duplicates
-    print("\n🔄 Removing duplicates...")
+    print("\n[INFO] Removing duplicates...")
     unique_colors, duplicate_stats = remove_duplicates(fixed_colors)
 
-    print(f"✅ Removed {duplicate_stats['duplicates_removed']} duplicate colors")
+    print(f"[SUCCESS] Removed {duplicate_stats['duplicates_removed']} duplicate colors")
 
     # Save fixed colors
-    print("\n💾 Saving fixed colors...")
+    print("\n[INFO] Saving fixed colors...")
     save_colors(unique_colors, 'public/carColors_fixed.json')
 
     # Save detailed report
@@ -359,16 +359,16 @@ def main():
     with open('color_fix_report.json', 'w', encoding='utf-8') as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    print(f"\n📋 Fix report saved to: color_fix_report.json")
-    print(f"\n📈 SUMMARY:")
+    print(f"\n[INFO] Fix report saved to: color_fix_report.json")
+    print(f"\n[SUMMARY]:")
     print(f"  Original colors: {report['original_count']:,}")
     print(f"  Invalid HSB fixed: {report['invalid_fixed']:,}")
     print(f"  Duplicates removed: {report['duplicates_removed']:,}")
     print(f"  Final colors: {report['final_count']:,}")
     print(f"  Total improvement: {report['improvement']:,} colors")
 
-    print(f"\n✅ Fixed colors saved to: public/carColors_fixed.json")
-    print(f"🔄 To apply fixes: Replace public/carColors.json with carColors_fixed.json")
+    print(f"\n[SUCCESS] Fixed colors saved to: public/carColors_fixed.json")
+    print(f"[INFO] To apply fixes: Replace public/carColors.json with carColors_fixed.json")
 
 if __name__ == "__main__":
     main()

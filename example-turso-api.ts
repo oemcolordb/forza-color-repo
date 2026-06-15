@@ -1,7 +1,7 @@
 // Example Turso API implementation following the project's patterns
 // This demonstrates the correct way to use the Turso database in this Forza Color Repository
 
-import { getDb, ensureTables } from '@/app/lib/db'
+import { getDb, ensureTables } from '@/lib/db/db'
 import { NextResponse } from 'next/server'
 
 // Example POST endpoint - creates todos table and adds a todo

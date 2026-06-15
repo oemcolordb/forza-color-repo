@@ -1,9 +1,14 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
 
-import MobileTelemetryDash from '../components/MobileTelemetryDash'
+
+import ClientOnly from '@/components/system/ClientOnly'
+import MobileTelemetryDash from '@/components/telemetry/MobileTelemetryDash'
 
 export default function MobileDashPage() {
-  return <MobileTelemetryDash />
+  return (
+    <ClientOnly>
+      <MobileTelemetryDash />
+    </ClientOnly>
+  )
 }

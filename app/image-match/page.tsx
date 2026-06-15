@@ -1,11 +1,14 @@
 'use client'
 
+
+
+
 import React, { useState, useEffect } from 'react'
-import ImageColorExtractor from '../components/ImageColorExtractor'
-import Breadcrumbs from '../components/Breadcrumbs'
-import { getColorData } from '../../services/colorDataLazy'
-import { ForzaColorMatch, CarColor, ExtractedColor } from '../types'
-import { EnhancedAuthProvider, useAuth } from '../components/EnhancedAuthProvider'
+import ImageColorExtractor from '@/components/color/ImageColorExtractor'
+import Breadcrumbs from '@/components/layout/Breadcrumbs'
+import { getColorData } from '@/lib/services/colorDataLazy'
+import { ForzaColorMatch, CarColor, ExtractedColor } from '@/types'
+import { EnhancedAuthProvider, useAuth } from '@/components/auth/EnhancedAuthProvider'
 
 interface SavedScan {
   id: string
@@ -16,10 +19,16 @@ interface SavedScan {
   createdAt: string
 }
 
+import ClientOnly from '@/components/system/ClientOnly'
+
+
+
 export default function ImageMatchPage() {
   return (
     <EnhancedAuthProvider>
-      <ImageMatchPageInner />
+      <ClientOnly>
+        <ImageMatchPageInner />
+      </ClientOnly>
     </EnhancedAuthProvider>
   )
 }

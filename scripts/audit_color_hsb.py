@@ -220,7 +220,7 @@ def print_report(results: Dict[str, Any]):
     print("=" * 80)
     
     summary = results['summary']
-    print(f"\n📊 SUMMARY:")
+    print(f"\n[SUMMARY]:")
     print(f"  Total colors: {summary['total_colors']:,}")
     print(f"  Valid HSB: {results['valid_hsb']:,} ({summary['valid_percentage']:.1f}%)")
     print(f"  Missing HSB: {results['missing_hsb']:,}")
@@ -231,7 +231,7 @@ def print_report(results: Dict[str, Any]):
     
     # Show problematic colors
     if results['problematic_colors']:
-        print(f"\n❌ PROBLEMATIC COLORS (Top 20):")
+        print(f"\n[PROBLEMATIC COLORS] (Top 20):")
         for color in results['problematic_colors'][:20]:
             print(f"  [{color['index']:5d}] {color['make']} - {color['name']}")
             print(f"         Issue: {color['issue']}")
@@ -243,7 +243,7 @@ def print_report(results: Dict[str, Any]):
     
     # Show name-HSB mismatches
     if results['name_hsb_mismatches']:
-        print(f"\n⚠️  NAME-HSB MISMATCHES (Top 15):")
+        print(f"\n[NAME-HSB MISMATCHES] (Top 15):")
         for color in results['name_hsb_mismatches'][:15]:
             print(f"  [{color['index']:5d}] {color['make']} - {color['name']}")
             for issue in color['issues']:
@@ -255,7 +255,7 @@ def print_report(results: Dict[str, Any]):
     
     # Show duplicates
     if results['duplicate_names']:
-        print(f"\n🔄 DUPLICATE NAMES WITH DIFFERENT HSB:")
+        print(f"\n[DUPLICATE NAMES WITH DIFFERENT HSB]:")
         for name_key, entries in list(results['duplicate_names'].items())[:10]:
             print(f"  {name_key}:")
             for entry in entries:
@@ -288,11 +288,11 @@ def main():
         results_copy['duplicate_names'] = dict(results['duplicate_names'])
         json.dump(results_copy, f, indent=2, ensure_ascii=False)
     
-    print(f"\n💾 Detailed results saved to: color_hsb_audit_results.json")
+    print(f"\n[INFO] Detailed results saved to: color_hsb_audit_results.json")
     
     # Exit with error code if many problems found
     if results['summary']['problematic_count'] > results['summary']['total_colors'] * 0.1:
-        print(f"\n⚠️  More than 10% of colors have issues!")
+        print(f"\n[WARNING] More than 10% of colors have issues!")
         sys.exit(1)
 
 if __name__ == "__main__":

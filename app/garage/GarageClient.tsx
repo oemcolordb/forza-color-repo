@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Car } from '../types/car'
-import { countryFlags } from '../lib/countryFlags'
-import Breadcrumbs from '../components/Breadcrumbs'
-import GamingErrorBoundary from '../components/GamingErrorBoundary'
-import LoadingSpinner from '../components/ui/LoadingSpinner'
+import React, { useState, useEffect, useMemo } from 'react'
+import { Car } from '@/types/car'
+import { countryFlags } from '@/lib/utils/countryFlags'
+import Breadcrumbs from '@/components/layout/Breadcrumbs'
+import GamingErrorBoundary from '@/components/error/GamingErrorBoundary'
+import LoadingSpinner from '@/components/ui/LoadingSpinner'
 
 const PI_CLASS_COLORS: Record<string, string> = {
   D: 'bg-gray-500 text-white',
@@ -29,7 +29,7 @@ const RARITY_COLORS: Record<string, string> = {
 export default function GarageClient() {
   const [cars, setCars] = useState<Car[]>([])
   const [loading, setLoading] = useState(true)
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isDarkMode, _setIsDarkMode] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedMake, setSelectedMake] = useState<string>('')
   const [selectedClass, setSelectedClass] = useState<string>('')

@@ -1,11 +1,14 @@
-'use client';
+'use client'
+
+
 
 import { useState, useEffect } from 'react';
-import { logger } from '../lib/logger';
+import ClientOnly from '@/components/system/ClientOnly';
+import { logger } from '@/lib/utils/logger';
 import Link from 'next/link';
-import ProtectedRoute from '../components/ProtectedRoute';
-import { AuthProvider, useAuth } from '../components/AuthProvider';
-import GamingErrorBoundary from '../components/GamingErrorBoundary';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { AuthProvider, useAuth } from '@/components/auth/AuthProvider';
+import GamingErrorBoundary from '@/components/error/GamingErrorBoundary';
 
 function ProfileContent() {
   const { user, logout } = useAuth();
@@ -253,10 +256,20 @@ function ProfileContent() {
   );
 }
 
+
+
+
+
 export default function ProfilePage() {
   return (
-    <AuthProvider>
-      <ProfileContent />
-    </AuthProvider>
+    <GamingErrorBoundary>
+      <AuthProvider>
+        <ProtectedRoute>
+          <ClientOnly>
+        <ProfileContent />
+      </ClientOnly>
+        </ProtectedRoute>
+      </AuthProvider>
+    </GamingErrorBoundary>
   );
 }

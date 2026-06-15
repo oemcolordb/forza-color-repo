@@ -1,44 +1,64 @@
 import { streamText } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NextResponse } from 'next/server';
-import tuningMeta from '../data/tuning-meta.json';
+import tuningMeta from '@/data/tuning-meta.json';
 
 // Ensure you have GEMINI_API_KEY set in your environment variables
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GEMINI_API_KEY || 'AIzaSyDvmU-Dgt2K9-6rxb-9z7K4ssxVXM87obc',
 });
 
+interface TuningMetaCar {
+  manufacturer: string;
+  car: string;
+  driveMethod: string;
+  briefReview: string;
+  adjusters: string[];
+}
+
+interface TuningMetaTuner {
+  name: string;
+  specialty: string;
+}
+
 // Build a concise meta knowledge string from the structured data
 function buildMetaKnowledge(): string {
   const lines: string[] = [];
+
+  const metaTiers = tuningMeta.tiers as {
+    meta: TuningMetaCar[];
+    sub_meta: TuningMetaCar[];
+    competitive: TuningMetaCar[];
+  };
+  const notableTuners = tuningMeta.notableTuners as TuningMetaTuner[];
 
   lines.push('## Current S2/X-Class Competitive Meta (v' + tuningMeta.version + ')');
   lines.push('');
 
   // Meta tier
   lines.push('### META TIER (Best in class)');
-  for (const car of tuningMeta.tiers.meta) {
+  for (const car of metaTiers.meta) {
     lines.push(`- **${car.manufacturer} ${car.car}** (${car.driveMethod}) — ${car.briefReview} Tuners: ${car.adjusters.join(', ') || 'N/A'}`);
   }
 
   // Sub-meta
   lines.push('');
   lines.push('### SUB-META TIER');
-  for (const car of tuningMeta.tiers.sub_meta) {
+  for (const car of metaTiers.sub_meta) {
     lines.push(`- **${car.manufacturer} ${car.car}** (${car.driveMethod}) — ${car.briefReview} Tuners: ${car.adjusters.join(', ') || 'N/A'}`);
   }
 
   // Competitive
   lines.push('');
   lines.push('### COMPETITIVE TIER');
-  for (const car of tuningMeta.tiers.competitive) {
+  for (const car of metaTiers.competitive) {
     lines.push(`- **${car.manufacturer} ${car.car}** (${car.driveMethod}) — ${car.briefReview} Tuners: ${car.adjusters.join(', ') || 'N/A'}`);
   }
 
   // Notable tuners
   lines.push('');
   lines.push('### Notable Community Tuners');
-  for (const tuner of tuningMeta.notableTuners) {
+  for (const tuner of notableTuners) {
     lines.push(`- **${tuner.name}**: ${tuner.specialty}`);
   }
 
@@ -52,7 +72,6 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const result = await streamText({
-      // @ts-expect-error - AI SDK version mismatch between 'ai' and '@ai-sdk/google'
       model: google('gemini-1.5-flash'),
       system: `You are TuneBot, a world-class, professional car tuning expert for the Forza Horizon and Forza Motorsport games.
 Your goal is to help players optimize their car setups, choose the best paint colors, understand telemetry, and navigate the competitive meta.
@@ -73,7 +92,7 @@ GUIDELINES:
       temperature: 0.7,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error) {
     console.error('Chat API Error:', error);
     return NextResponse.json(

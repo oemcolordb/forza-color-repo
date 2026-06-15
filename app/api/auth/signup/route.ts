@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../../lib/db'
-import { logger } from '../../../lib/logger'
+import { getDb, ensureTables } from '@/lib/db/db'
+import { logger } from '@/lib/utils/logger'
 import { SignJWT } from 'jose'
 import { randomUUID, randomBytes, scryptSync } from 'crypto'
 

@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CarStatsRadarChart } from '../../../components/CarStatsRadarChart'
-import { getCountryFlag, formatPrice } from '../../../lib/countryFlags'
-import TokyoBackground from '../../../components/TokyoBackground'
-import { getSecureAssetUrl } from '../../../lib/assetProtection'
-import { TuningCalculator } from '../../../lib/tuning-calculator'
+import { getCountryFlag, formatPrice } from '@/lib/utils/countryFlags'
+import TokyoBackground from '@/components/backgrounds/TokyoBackground'
+import { getSecureAssetUrl } from '@/lib/utils/assetProtection'
+import { TuningCalculator } from '@/lib/utils/tuning-calculator'
 
 interface Car {
   year: string
@@ -55,21 +55,21 @@ export default function TuneCalcClient({ car }: { car: Car }) {
   const [drivingStyle, setDrivingStyle] = useState<'smooth' | 'balanced' | 'aggressive' | 'drift'>('balanced')
   const [weatherCondition, setWeatherCondition] = useState('dry')
   const [trackSurface, setTrackSurface] = useState('tarmac')
-  const [handlingBalance, setHandlingBalance] = useState(0)
-  const [bumpStiffness, setBumpStiffness] = useState(65)
-  const [springFrequency, setSpringFrequency] = useState(1.5)
-  const [rollStiffness, setRollStiffness] = useState(0)
+  const [handlingBalance, _setHandlingBalance] = useState(50) // 0-100 (Understeer to Oversteer)
+  const [bumpStiffness, _setBumpStiffness] = useState(50) // 0-100
+  const [springFrequency, _setSpringFrequency] = useState(2.2) // Hz
+  const [_rollStiffness, _setRollStiffness] = useState(50) // 0-100 
   const [carWeight, setCarWeight] = useState(car.weight || 1500)
   const [frontDistribution, setFrontDistribution] = useState(
     car.drivetrain === 'FWD' ? 62 : car.drivetrain === 'AWD' ? 55 : 52
   )
-  const [drivetrain, setDrivetrain] = useState<'AWD' | 'RWD' | 'FWD'>(car.drivetrain as any || 'RWD')
-  const [gearCount, setGearCount] = useState(6)
-  const [hpOverride, setHpOverride] = useState<number | null>(null)
+  const [_drivetrain, _setDrivetrain] = useState<'AWD' | 'RWD' | 'FWD'>('AWD')
+  const [gearCount, _setGearCount] = useState(6)
+  const [_hpOverride, _setHpOverride] = useState<number | null>(null)
 
   // AI states
   const [aiQuery, setAiQuery] = useState('')
-  const [aiResponse, setAiResponse] = useState('')
+  const [_aiResponse, setAiResponse] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiMessages, setAiMessages] = useState<{role: 'user'|'assistant'; content: string}[]>([])
 
@@ -141,14 +141,14 @@ export default function TuneCalcClient({ car }: { car: Car }) {
         setAiResponse(data.response)
         setAiMessages(prev => [...prev, { role: 'assistant', content: data.response }])
       }
-    } catch (error) {
+    } catch {
       setAiResponse('Failed to get AI response. Please try again.')
     } finally {
       setAiLoading(false)
     }
   }
 
-  const applyAiAdjustment = (adjustments: Record<string, number>) => {
+  const _applyAiAdjustment = (adjustments: Record<string, number>) => {
     setTuneData(prev => ({ ...prev, ...adjustments }))
   }
 

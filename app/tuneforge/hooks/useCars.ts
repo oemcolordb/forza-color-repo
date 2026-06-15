@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { Car } from '../types'
-import { Car as BaseCar } from '../../types/car'
+import { Car } from '@/types'
+import { Car as BaseCar } from '@/types/car'
 
 const estimateWeight = (type: string, piClass: string): number => {
   const typeBase: Record<string, number> = {
@@ -93,11 +93,9 @@ export function useCars() {
       console.error('TuneForge: Failed to load car database:', error)
       const fallback: Car[] = [{
         year: '2020', manufacturer: 'Porsche', model: '911 Turbo S', type: 'Sports Car',
-        fullName: '2020 Porsche 911 Turbo S', price: 230000, rarity: 'Epic', country: 'Germany',
+        price: 230000, rarity: 'Epic', country: 'Germany',
         stats: { speed: 9.2, handling: 8.5, acceleration: 9.0, launch: 8.8, braking: 8.7, offroad: 4.2 },
-        pi: { class: 'S2', value: 998 }, drivetrain: 'AWD', weight: 1640,
-        engine: { displacement: 3.8, cylinders: 6, aspiration: 'Turbo', horsepower: 640 },
-        tags: ['German', 'Turbo', 'AWD'],
+        pi: { class: 'S2', value: 998 }
       }]
       setCars(fallback)
       setSelectedCar(fallback[0])
@@ -110,7 +108,7 @@ export function useCars() {
       .filter(car => {
         const q = searchQuery.toLowerCase()
         return !q ||
-          car.fullName?.toLowerCase().includes(q) ||
+          `${car.year} ${car.manufacturer} ${car.model}`.toLowerCase().includes(q) ||
           car.manufacturer.toLowerCase().includes(q) ||
           car.model.toLowerCase().includes(q)
       })

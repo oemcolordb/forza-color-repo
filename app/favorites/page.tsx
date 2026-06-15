@@ -1,11 +1,14 @@
-'use client';
+'use client'
+
+
 
 import { useState, useEffect } from 'react';
-import { logger } from '../lib/logger';
-import ProtectedRoute from '../components/ProtectedRoute';
-import { AuthProvider, useAuth } from '../components/AuthProvider';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import GamingErrorBoundary from '../components/GamingErrorBoundary';
+import ClientOnly from '@/components/system/ClientOnly';
+import { logger } from '@/lib/utils/logger';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import { AuthProvider, useAuth } from '@/components/auth/AuthProvider';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import GamingErrorBoundary from '@/components/error/GamingErrorBoundary';
 
 interface FavoriteColor {
   colorId: string;
@@ -165,7 +168,7 @@ function FavoritesContent() {
   );
 }
 
-export default function FavoritesPage() {
+function FavoritesPageInner() {
   return (
     <AuthProvider>
       <ProtectedRoute>
@@ -175,4 +178,12 @@ export default function FavoritesPage() {
       </ProtectedRoute>
     </AuthProvider>
   );
+}
+
+;
+
+export default function FavoritesPage() {
+  return <ClientOnly>
+        <FavoritesPageInner />
+      </ClientOnly>;
 }

@@ -1,5 +1,5 @@
 // Inline minimal color data for function
-const colorData = require('./colorData.js')
+const colorData = require('@/lib/services/colorData')
 
 // Color distance calculation for normalized HSB values (0-1)
 const colorDistance = (c1, c2) => {

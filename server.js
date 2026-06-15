@@ -9,7 +9,7 @@
  * @requires ./scripts/fix-microsoft-store.js
  */
 
-import TelemetryBridge from './services/telemetryBridge.js'
+import TelemetryBridge from '@/lib/services/telemetryBridge'
 import MicrosoftStoreFix from './scripts/fix-microsoft-store.js'
 
 /**

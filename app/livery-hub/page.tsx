@@ -1,10 +1,13 @@
 'use client'
 
+
+
+
 import React, { useState, useEffect, useRef } from 'react'
-import TokyoBackground from '../components/TokyoBackground'
-import { getSecureAssetUrl } from '../lib/assetProtection'
-import Breadcrumbs from '../components/Breadcrumbs'
-import { CarColor } from '../types'
+import TokyoBackground from '@/components/backgrounds/TokyoBackground'
+import { getSecureAssetUrl } from '@/lib/utils/assetProtection'
+import Breadcrumbs from '@/components/layout/Breadcrumbs'
+
 
 interface Shape {
   type: number
@@ -17,8 +20,18 @@ interface LiveryData {
   shapes: Shape[]
 }
 
+import ClientOnly from '@/components/system/ClientOnly'
+
+
+
 export default function LiveryHubPage() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
+  return <ClientOnly>
+        <LiveryHubPageInner />
+      </ClientOnly>
+}
+
+function LiveryHubPageInner() {
+  const [isDarkMode, _setIsDarkMode] = useState(true)
   const [liveryData, setLiveryData] = useState<LiveryData | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
@@ -35,7 +48,7 @@ export default function LiveryHubPage() {
         const data = JSON.parse(event.target?.result as string)
         setLiveryData(data)
         setCurrentStep(data.shapes.length)
-      } catch (err) {
+      } catch {
         alert('Invalid JSON file format.')
       } finally {
         setIsLoading(false)

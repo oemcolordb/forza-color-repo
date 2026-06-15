@@ -1,16 +1,12 @@
-import { Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Outfit } from 'next/font/google'
 import './globals.css'
 import './wrench-scrollbar.css'
-import ErrorBoundary from './components/ErrorBoundary'
-import ClientOnlyScripts from './components/ClientOnlyScripts'
+import ErrorBoundary from '@/components/error/ErrorBoundary'
 
-export const dynamic = 'force-dynamic'
-
-const inter = Inter({
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
+  variable: '--font-outfit',
 })
 
 export const metadata = {
@@ -78,7 +74,7 @@ export const metadata = {
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
     title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description:
-      'Complete Forza Color Sheet with 10,000+ official paint colors from Forza Horizon 5 & Motorsport 2019-2024. The ultimate Forza color database and paint codes reference.',
+      'Complete Forza Color Sheet with 24,000+ official paint colors from 228 manufacturers. The ultimate Forza color database and paint codes reference.',
     siteName: 'Forza Color Sheet',
     images: [
       {
@@ -93,7 +89,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description:
-      'Complete Forza Color Sheet with 10,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
+      'Complete Forza Color Sheet with 24,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
     creator: '@ResinRonin',
     images: ['/og-image.png'],
   },
@@ -157,7 +153,7 @@ export default function RootLayout({ children }) {
   }
 
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html lang="en" className={`${outfit.className} ${outfit.variable}`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#0f172a" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -214,14 +210,11 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={`${inter.className} antialiased`} suppressHydrationWarning>
+      <body className={`${outfit.className} antialiased`} suppressHydrationWarning>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <ClientOnlyScripts />
         <ErrorBoundary>{children}</ErrorBoundary>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   )

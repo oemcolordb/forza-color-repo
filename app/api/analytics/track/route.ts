@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getDb, ensureTables } from '@/app/lib/db'
+import { getDb, ensureTables } from '@/lib/db/db'
 import crypto from 'crypto'
 
 export async function POST(request: Request) {

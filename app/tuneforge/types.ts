@@ -68,65 +68,65 @@ export type ActiveTab = 'quick' | 'advanced' | 'fixit' | 'ai' | 'telemetry' | 'g
 
 export interface TuneState {
   tuneData: TuneData
-  setTuneData: (data: TuneData) => void
-  updateTuneValue: (key: string, value: number) => void
+  setTuneData: (_data: TuneData) => void
+  updateTuneValue: (_key: string, _value: number) => void
   isCalculating: boolean
   calculationProgress: number
   loadingStatus: string
   savedTunes: SavedTune[]
   upgrades: Record<string, string>
-  setUpgrades: (upgrades: Record<string, string>) => void
+  setUpgrades: (_upgrades: Record<string, string>) => void
   saveTune: () => Promise<void>
   exportTune: () => void
-  importTune: (event: React.ChangeEvent<HTMLInputElement>) => void
+  importTune: (_event: React.ChangeEvent<HTMLInputElement>) => void
   shareTune: () => void
-  deleteTune: (id: string) => void
-  loadTune: (tune: SavedTune) => void
+  deleteTune: (_id: string) => void
+  loadTune: (_tune: SavedTune) => void
   savedTuneSearch: string
-  setSavedTuneSearch: (q: string) => void
+  setSavedTuneSearch: (_q: string) => void
   calculateBaseTune: () => Promise<void>
   // Quick tab settings
   selectedTrack: string
-  setSelectedTrack: (v: string) => void
+  setSelectedTrack: (_v: string) => void
   drivingStyle: DrivingStyle
-  setDrivingStyle: (v: DrivingStyle) => void
+  setDrivingStyle: (_v: DrivingStyle) => void
   weatherCondition: string
-  setWeatherCondition: (v: string) => void
+  setWeatherCondition: (_v: string) => void
   trackSurface: string
-  setTrackSurface: (v: string) => void
+  setTrackSurface: (_v: string) => void
   lapTimeTarget: string
-  setLapTimeTarget: (v: string) => void
+  setLapTimeTarget: (_v: string) => void
   tuneType: string
-  setTuneType: (v: string) => void
+  setTuneType: (_v: string) => void
   unitSystem: string
-  setUnitSystem: (v: string) => void
+  setUnitSystem: (_v: string) => void
   carWeight: number
-  setCarWeight: (v: number) => void
+  setCarWeight: (_v: number) => void
   frontDistribution: number
-  setFrontDistribution: (v: number) => void
+  setFrontDistribution: (_v: number) => void
   drivetrain: DrivetrainType
-  setDrivetrain: (v: DrivetrainType) => void
+  setDrivetrain: (_v: DrivetrainType) => void
   gearCount: number
-  setGearCount: (v: number) => void
+  setGearCount: (_v: number) => void
   hpOverride: number | null
-  setHpOverride: (v: number | null) => void
+  setHpOverride: (_v: number | null) => void
   handlingBalance: number
-  setHandlingBalance: (v: number) => void
+  setHandlingBalance: (_v: number) => void
   bumpStiffness: number
-  setBumpStiffness: (v: number) => void
+  setBumpStiffness: (_v: number) => void
   springFrequency: number
-  setSpringFrequency: (v: number) => void
+  setSpringFrequency: (_v: number) => void
   rollStiffness: number
-  setRollStiffness: (v: number) => void
+  setRollStiffness: (_v: number) => void
   simpleMode: boolean
-  setSimpleMode: (v: boolean) => void
+  setSimpleMode: (_v: boolean) => void
   showChecklist: boolean
-  setShowChecklist: (v: boolean) => void
+  setShowChecklist: (_v: boolean) => void
   // Spring units for Advanced tab
   springUnit: SpringUnit
-  setSpringUnit: (v: SpringUnit) => void
-  displaySpringRate: (lbfIn: number) => number
-  parseSpringRate: (displayed: number) => number
+  setSpringUnit: (_v: SpringUnit) => void
+  displaySpringRate: (_lbfIn: number) => number
+  parseSpringRate: (_displayed: number) => number
   springUnitLabel: string
-  getTireCompoundName: (value: number) => string
+  getTireCompoundName: (_value: number) => string
 }

@@ -1,9 +1,11 @@
 'use client'
 
-export const dynamic = 'force-dynamic'
+
+
+
 import { useState, useEffect, useRef } from 'react'
-import TokyoBackground from '../components/TokyoBackground'
-import { getSecureAssetUrl } from '../lib/assetProtection'
+import TokyoBackground from '@/components/backgrounds/TokyoBackground'
+import { getSecureAssetUrl } from '@/lib/utils/assetProtection'
 
 export default function About() {
   const [isDarkMode, setIsDarkMode] = useState(true)

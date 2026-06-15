@@ -1,4 +1,4 @@
-const colorData = require('./colorData.js')
+const colorData = require('@/lib/services/colorData')
 
 const PALETTES = {
   ferrari: { makes: ['Ferrari'], colors: ['rosso', 'red'] },

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
     // Import color data
-    const { getColorData } = await import('../../services/colorDataLazy')
+    const { getColorData } = await import('@/lib/services/colorDataLazy')
     const colors = await getColorData()
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app'

@@ -1,19 +1,16 @@
-'use client';
+'use client'
+
+
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-import { useAuth } from '../components/AuthProvider';
-
-const AuthProvider = dynamic(
-  () => import('../components/AuthProvider').then((mod) => mod.AuthProvider),
-  { ssr: false }
-);
+import { EnhancedAuthProvider, useAuth } from '@/components/auth/EnhancedAuthProvider';
+import ClientOnly from '@/components/system/ClientOnly';
 
 function LoginContent() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,7 +22,7 @@ function LoginContent() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      await signIn(email, password);
       router.push('/');
       router.refresh();
     } catch (err: any) {
@@ -138,8 +135,10 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <AuthProvider>
-      <LoginContent />
-    </AuthProvider>
+    <EnhancedAuthProvider>
+      <ClientOnly>
+        <LoginContent />
+      </ClientOnly>
+    </EnhancedAuthProvider>
   );
 }

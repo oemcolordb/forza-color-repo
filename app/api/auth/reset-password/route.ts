@@ -1,7 +1,14 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import { getDb, ensureTables } from '../../../lib/db'
-import bcrypt from 'bcryptjs'
-import { logger } from '../../../lib/logger'
+import { getDb, ensureTables } from '@/lib/db/db'
+import { randomBytes, scryptSync } from 'crypto'
+import { logger } from '@/lib/utils/logger'
+
+function hashPassword(password: string) {
+  const salt = randomBytes(16).toString('hex')
+  const derivedKey = scryptSync(password, salt, 64).toString('hex')
+  return `${salt}:${derivedKey}`
+}
 
 export const POST = async (request: Request) => {
   try {
@@ -43,7 +50,7 @@ export const POST = async (request: Request) => {
     const email = tokenResult.rows[0].email as string
 
     // Hash new password
-    const hashedPassword = await bcrypt.hash(password, 12)
+    const hashedPassword = hashPassword(password)
 
     // Update user password
     // Note: This assumes a 'users' table exists with email and password columns
