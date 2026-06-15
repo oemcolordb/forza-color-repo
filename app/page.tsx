@@ -30,15 +30,21 @@ import OptimizedStatsBar from './components/OptimizedStatsBar'
 import ExportButton from './components/ExportButton'
 
 // Heavy components loaded only when needed (reduces initial JS bundle ~40%)
-const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), { ssr: false })
+const ImageColorExtractor = dynamic(() => import('./components/ImageColorExtractor'), {
+  ssr: false,
+})
 const AdvancedTools = dynamic(() => import('./components/AdvancedTools'), { ssr: false })
-  const ColorComparison = dynamic(() => import('./components/ColorComparison'), { ssr: false })
-  const HSBPopup = dynamic(() => import('./components/HSBPopup'), { ssr: false })
-  const ColorRouletteHarmony = dynamic(() => import('./components/ColorRouletteHarmony'), { ssr: false })
+const ColorComparison = dynamic(() => import('./components/ColorComparison'), { ssr: false })
+const HSBPopup = dynamic(() => import('./components/HSBPopup'), { ssr: false })
+const ColorRouletteHarmony = dynamic(() => import('./components/ColorRouletteHarmony'), {
+  ssr: false,
+})
 const HarmonyVisualizer = dynamic(() => import('./components/HarmonyVisualizer'), { ssr: false })
 const ColorGenerator = dynamic(() => import('./components/ColorGenerator'), { ssr: false })
 const PerformanceMonitor = dynamic(() => import('./components/PerformanceMonitor'), { ssr: false })
-const ColorAnalyticsDashboard = dynamic(() => import('./components/ColorAnalyticsDashboard'), { ssr: false })
+const ColorAnalyticsDashboard = dynamic(() => import('./components/ColorAnalyticsDashboard'), {
+  ssr: false,
+})
 const CommunityTrends = dynamic(() => import('./components/CommunityTrends'), { ssr: false })
 
 export default function HomePage() {
@@ -155,9 +161,15 @@ export default function HomePage() {
           const c1 = c.color1 as { h?: unknown; s?: unknown; b?: unknown } | null
           if (!c1 || typeof c1 !== 'object') return false
           return (
-            typeof c1.h === 'number' && c1.h >= 0 && c1.h <= 1 &&
-            typeof c1.s === 'number' && c1.s >= 0 && c1.s <= 1 &&
-            typeof c1.b === 'number' && c1.b >= 0 && c1.b <= 1
+            typeof c1.h === 'number' &&
+            c1.h >= 0 &&
+            c1.h <= 1 &&
+            typeof c1.s === 'number' &&
+            c1.s >= 0 &&
+            c1.s <= 1 &&
+            typeof c1.b === 'number' &&
+            c1.b >= 0 &&
+            c1.b <= 1
           )
         })
 
@@ -243,7 +255,7 @@ export default function HomePage() {
           const trending = new Set<string>()
           const communityChoice = new Set<string>()
 
-          data.trends.forEach((t: { color_id: string, score: number }) => {
+          data.trends.forEach((t: { color_id: string; score: number }) => {
             if (t.score > 50) communityChoice.add(t.color_id)
             else trending.add(t.color_id)
           })
@@ -289,29 +301,29 @@ export default function HomePage() {
   }, [])
 
   // Handle color selection with history tracking
-  const handleColorSelect = useCallback(
-    (color: CarColor) => {
-      const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-      setColorHistory(prev => {
-        const filtered = prev.filter(id => id !== colorId)
-        return [colorId, ...filtered.slice(0, 49)] // Keep last 50
-      })
-    },
-    []
-  )
+  const handleColorSelect = useCallback((color: CarColor) => {
+    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+    setColorHistory(prev => {
+      const filtered = prev.filter(id => id !== colorId)
+      return [colorId, ...filtered.slice(0, 49)] // Keep last 50
+    })
+  }, [])
 
   // Show color HSB/details (used by child components)
-  const showColorHSB = useCallback((color: CarColor) => {
-    handleColorSelect(color)
-    setSelectedHSBColor(color)
-  }, [handleColorSelect])
+  const showColorHSB = useCallback(
+    (color: CarColor) => {
+      handleColorSelect(color)
+      setSelectedHSBColor(color)
+    },
+    [handleColorSelect]
+  )
 
   if (isInitialLoad) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center text-white">
         <div className="flex flex-col items-center gap-4 text-center px-4">
           <h1 className="text-2xl font-bold text-green-300">🌿 Loading Paint Codes…</h1>
-          
+
           {/* Simple indeterminate spinner */}
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
 
@@ -334,15 +346,8 @@ export default function HomePage() {
         />
         <MobileGamingOptimizer deviceInfo={deviceInfo} />
       </GamingErrorBoundary>
-      <div
-        className={`font-sans min-h-screen ${
-          isDarkMode ? 'text-white' : 'text-gray-900'
-        }`}
-      >
-        <Header
-          isDarkMode={isDarkMode}
-          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
-        />
+      <div className={`font-sans min-h-screen ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+        <Header isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(!isDarkMode)} />
 
         <TokyoBackground isDarkMode={isDarkMode} getSecureAssetUrl={getSecureAssetUrl} />
         <CreditsBackground isDarkMode={isDarkMode} />
@@ -357,15 +362,18 @@ export default function HomePage() {
             <p className={`mb-3 text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
               {allColors.length > 0 ? (
                 <>
-                  <span className="font-bold" style={{color: 'var(--bamboo-stalk)'}}>
+                  <span className="font-bold" style={{ color: 'var(--bamboo-stalk)' }}>
                     {allColors.length.toLocaleString()} Forza paint codes
-                  </span>
-                  {' '}across {makes.length} manufacturers — search, copy HSB values, apply in-game.
+                  </span>{' '}
+                  across {makes.length} manufacturers — search, copy HSB values, apply in-game.
                 </>
               ) : (
-                <>The ultimate{' '}
-                  <span className="font-bold" style={{color: 'var(--bamboo-stalk)'}}>Forza paint color database</span>
-                  {' '}— search, copy HSB values, apply in-game.
+                <>
+                  The ultimate{' '}
+                  <span className="font-bold" style={{ color: 'var(--bamboo-stalk)' }}>
+                    Forza paint color database
+                  </span>{' '}
+                  — search, copy HSB values, apply in-game.
                 </>
               )}
             </p>
@@ -400,9 +408,13 @@ export default function HomePage() {
           {/* Full-width Color Gallery — immediately after search */}
           <div className={`w-full ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
             {/* Gallery header bar */}
-            <div className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}>
+            <div
+              className={`flex items-center gap-2 px-4 py-2 border-b ${isDarkMode ? 'border-gray-700/50' : 'border-gray-200'}`}
+            >
               <span className="text-xl">🏆</span>
-              <span className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+              <span
+                className={`font-bold text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}
+              >
                 COLOR GALLERY
               </span>
               <div className="ml-auto flex items-center gap-2">
@@ -452,7 +464,7 @@ export default function HomePage() {
             >
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-2xl">🏁</span>
-                <span className="font-bold" style={{color: "var(--bamboo-stalk)"}}>
+                <span className="font-bold" style={{ color: 'var(--bamboo-stalk)' }}>
                   FORZA GARAGE
                 </span>
               </div>
@@ -470,7 +482,7 @@ export default function HomePage() {
             >
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-2xl">🔧</span>
-                <span className="font-bold" style={{color: "var(--bamboo-stalk)"}}>
+                <span className="font-bold" style={{ color: 'var(--bamboo-stalk)' }}>
                   TUNING TOOLS
                 </span>
               </div>
@@ -491,7 +503,7 @@ export default function HomePage() {
                       <span className="text-lg">📸</span>
                       <span
                         className="text-sm font-semibold"
-                        style={{color: "var(--bamboo-stalk)"}}
+                        style={{ color: 'var(--bamboo-stalk)' }}
                       >
                         PAINT SCANNER
                       </span>
@@ -504,7 +516,11 @@ export default function HomePage() {
                       isDarkMode={isDarkMode}
                     />
                     <div className="mt-2 text-xs text-center">
-                      <a href="/image-match" className="hover:underline" style={{color: "var(--bamboo-stalk)"}}>
+                      <a
+                        href="/image-match"
+                        className="hover:underline"
+                        style={{ color: 'var(--bamboo-stalk)' }}
+                      >
                         Try standalone image‑to‑paint tool
                       </a>
                     </div>
@@ -517,7 +533,7 @@ export default function HomePage() {
                       <span className="text-lg">🎰</span>
                       <span
                         className="text-sm font-semibold"
-                        style={{color: "var(--bamboo-stalk)"}}
+                        style={{ color: 'var(--bamboo-stalk)' }}
                       >
                         COLOR ROULETTE
                       </span>
@@ -540,7 +556,7 @@ export default function HomePage() {
                       <span className="text-lg">🎨</span>
                       <span
                         className="text-sm font-semibold"
-                        style={{color: "var(--bamboo-stalk)"}}
+                        style={{ color: 'var(--bamboo-stalk)' }}
                       >
                         HARMONY DISPLAY
                       </span>
@@ -590,10 +606,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">🛠️</span>
-                    <span
-                      className="font-bold"
-                      style={{color: "var(--bamboo-stalk)"}}
-                    >
+                    <span className="font-bold" style={{ color: 'var(--bamboo-stalk)' }}>
                       ADVANCED TOOLS & ANALYTICS
                     </span>
                   </div>
@@ -740,7 +753,6 @@ export default function HomePage() {
                 )}
               </div>
             )}
-
           </ResponsiveLayout>
         </ErrorBoundary>
 
