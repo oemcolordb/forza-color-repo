@@ -139,13 +139,6 @@ export default function Help() {
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium mb-2">📁 Can I export color data?</h3>
-                  <p className="leading-relaxed">
-                    Yes, use the export functionality to download color information in various
-                    formats for use in design applications.
-                  </p>
-                </div>
-                <div>
                   <h3 className="text-lg font-medium mb-2">📱 Is the site mobile-friendly?</h3>
                   <p className="leading-relaxed">
                     Absolutely! The site is fully responsive and optimized for mobile devices with

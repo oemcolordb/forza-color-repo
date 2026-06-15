@@ -127,6 +127,7 @@ function TuneforgePageInner() {
   const [fixItProblem, setFixItProblem] = useState('')
   const [fixAppliedIndex, setFixAppliedIndex] = useState<number | null>(null)
   const [simpleMode, setSimpleMode] = useState(true)
+  const [gameVersion, setGameVersion] = useState<'FH5' | 'FH6'>('FH6')
   const tuneResultsRef = useRef<HTMLDivElement>(null)
 
   // Community tunes
@@ -498,6 +499,7 @@ function TuneforgePageInner() {
         handlingBalance: handlingBalance,
         bumpStiffness: bumpStiffness,
         springFrequency: springFrequency,
+        gameVersion: gameVersion,
       })
       let tune = calculator.getTuneTypeRecommendations(tuneType)
 
@@ -1442,6 +1444,19 @@ function TuneforgePageInner() {
                 ))}
               </div>
               )}
+
+              <div className="text-xs font-semibold opacity-50 mt-1 mb-0.5">🎮 Game Version</div>
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <select
+                  value={gameVersion}
+                  onChange={e => setGameVersion(e.target.value as 'FH5' | 'FH6')}
+                  aria-label="Game Version"
+                  className="p-2 bamboo-input text-sm"
+                >
+                  <option value="FH5">Forza Horizon 5</option>
+                  <option value="FH6">Forza Horizon 6</option>
+                </select>
+              </div>
 
               <div className="text-xs font-semibold opacity-50 mt-1 mb-0.5">🏎️ Tune Type &amp; Conditions</div>
               <div className="grid grid-cols-2 gap-2">

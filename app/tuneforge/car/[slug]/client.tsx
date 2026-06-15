@@ -58,6 +58,7 @@ export default function TuneCalcClient({ car }: { car: Car }) {
   const [handlingBalance, _setHandlingBalance] = useState(50) // 0-100 (Understeer to Oversteer)
   const [bumpStiffness, _setBumpStiffness] = useState(50) // 0-100
   const [springFrequency, _setSpringFrequency] = useState(2.2) // Hz
+  const [gameVersion, setGameVersion] = useState<'FH5' | 'FH6'>('FH6')
   const [_rollStiffness, _setRollStiffness] = useState(50) // 0-100 
   const [carWeight, setCarWeight] = useState(car.weight || 1500)
   const [frontDistribution, setFrontDistribution] = useState(
@@ -98,6 +99,7 @@ export default function TuneCalcClient({ car }: { car: Car }) {
           handlingBalance,
           bumpStiffness,
           springFrequency,
+          gameVersion,
         })
 
         const tune = calculator.getTuneTypeRecommendations(tuneType)
@@ -282,6 +284,19 @@ export default function TuneCalcClient({ car }: { car: Car }) {
               <h2 className="text-2xl font-bold mb-6">Quick Tune Calculator</h2>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label htmlFor="game-version" className="block mb-2 font-medium">Game Version</label>
+                  <select
+                    id="game-version"
+                    value={gameVersion}
+                    onChange={(e) => setGameVersion(e.target.value as 'FH5' | 'FH6')}
+                    className={`w-full p-3 rounded ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'} border`}
+                  >
+                    <option value="FH5">Forza Horizon 5</option>
+                    <option value="FH6">Forza Horizon 6</option>
+                  </select>
+                </div>
+
                 <div>
                   <label htmlFor="tune-type" className="block mb-2 font-medium">Tune Type</label>
                   <select

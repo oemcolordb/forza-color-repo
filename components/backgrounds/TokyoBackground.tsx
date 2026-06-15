@@ -11,8 +11,19 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
   const [imageError, setImageError] = useState(false)
   const [imageSrc, setImageSrc] = useState('')
 
-  const selectedMedia = useMemo(() => {
+  const [selectedMedia, setSelectedMedia] = useState('')
+
+  useEffect(() => {
     const mediaFiles = [
+      'assets/images/backrounds/cyberpunk_jdm_highway_1781544037954.png',
+      'assets/images/backrounds/cyberpunk_jdm_garage_1781544024595.png',
+      'assets/images/backrounds/cyberpunk_jdm_street_1781544010932.png',
+      'assets/images/backrounds/jdm_tokyo_street_1781543894124.png',
+      'assets/images/backrounds/jdm_mountain_drift_1781543906338.png',
+      'assets/images/backrounds/jdm_cyberpunk_meet_1781543919984.png',
+      'assets/images/backrounds/tokyo_akihabara_neon_1781543827018.png',
+      'assets/images/backrounds/tokyo_neon_street_1781543800162.png',
+      'assets/images/backrounds/tokyo_sunset_skyline_1781543814077.png',
       'assets/images/backrounds/neon-shibuya-crossing-tokyo-japan-1140x760.jpg',
       'assets/images/backrounds/tokyo-panorama.jpg',
       'assets/images/backrounds/Gemini_Generated_Image_zatbflzatbflzatb.png',
@@ -20,11 +31,24 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
       'assets/images/backrounds/Screenshot 2026-04-13 032927.png',
       'assets/images/backrounds/v2-jbps6-5b1bc-1-1024x590.png',
     ]
-    const thirtyMinuteSlots = Math.floor(Date.now() / (30 * 60 * 1000))
-    return mediaFiles[thirtyMinuteSlots % mediaFiles.length]
+
+    const updateBackground = () => {
+      const fifteenMinuteSlots = Math.floor(Date.now() / (15 * 60 * 1000))
+      setSelectedMedia(mediaFiles[fifteenMinuteSlots % mediaFiles.length])
+    }
+
+    // Set initial background
+    updateBackground()
+
+    // Check every minute if the 15-minute slot has changed
+    const intervalId = setInterval(updateBackground, 60000)
+
+    return () => clearInterval(intervalId)
   }, [])
 
   useEffect(() => {
+    if (!selectedMedia) return
+
     const src = getSecureAssetUrl(`/${selectedMedia}`)
     const img = new Image()
     img.onload = () => {
@@ -51,7 +75,7 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url(${imageSrc})`,
+            backgroundImage: `url('${imageSrc}')`,
             opacity: isDarkMode ? 0.4 : 0.6,
             filter: isDarkMode
               ? 'brightness(0.8) contrast(1.3)'

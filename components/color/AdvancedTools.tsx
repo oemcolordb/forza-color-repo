@@ -17,7 +17,6 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
   onColorSelect,
 }) => {
   const [activeTab, setActiveTab] = useState('analytics')
-  const [exportFormat, setExportFormat] = useState('json')
   const [searchHex, setSearchHex] = useState('')
   const [comparisonColors, setComparisonColors] = useState<CarColor[]>([])
 
@@ -138,61 +137,10 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
     [colors, hexToHsb]
   )
 
-  // Export functions
-  const exportColors = useCallback(
-    (format: string) => {
-      let data: string
-      let filename: string
-      let mimeType: string
-
-      switch (format) {
-        case 'json':
-          data = JSON.stringify(colors, null, 2)
-          filename = 'forza-colors.json'
-          mimeType = 'application/json'
-          break
-        case 'csv':
-          const headers = 'Make,Model,Year,ColorName,ColorType,H1,S1,B1,H2,S2,B2'
-          const rows = colors.map(
-            c =>
-              `"${c.make}","${c.model || ''}","${c.year || ''}","${c.colorName}","${c.colorType || ''}",${c.color1.h},${c.color1.s},${c.color1.b},${c.color2.h},${c.color2.s},${c.color2.b}`
-          )
-          data = [headers, ...rows].join('\n')
-          filename = 'forza-colors.csv'
-          mimeType = 'text/csv'
-          break
-        case 'palette':
-          const palette = colors
-            .slice(0, 100)
-            .map(
-              c =>
-                `${c.colorName}: hsl(${c.color1.h * 360}, ${c.color1.s * 100}%, ${c.color1.b * 100}%)`
-            )
-            .join('\n')
-          data = palette
-          filename = 'forza-palette.txt'
-          mimeType = 'text/plain'
-          break
-        default:
-          return
-      }
-
-      const blob = new Blob([data], { type: mimeType })
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = filename
-      a.click()
-      URL.revokeObjectURL(url)
-    },
-    [colors]
-  )
-
   const tabs = [
     { id: 'analytics', name: '📊 Analytics', icon: '📊' },
     { id: 'search', name: '🔍 HEX Search', icon: '🔍' },
     { id: 'compare', name: '⚖️ Compare', icon: '⚖️' },
-    { id: 'export', name: '💾 Export', icon: '💾' },
   ]
 
   return (
@@ -386,57 +334,6 @@ const AdvancedTools: React.FC<AdvancedToolsProps> = ({
                 Clear All
               </button>
             )}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'export' && (
-        <div className="space-y-4">
-          <h3
-            className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold`}
-          >
-            💾 Export Color Data
-          </h3>
-
-          <div className="space-y-3">
-            <div>
-              <label
-                className="block text-sm font-medium mb-2"
-              >
-                Export Format:
-              </label>
-              <select
-                value={exportFormat}
-                onChange={e => setExportFormat(e.target.value)}
-                aria-label="Export format"
-                className="w-full px-3 py-2 bamboo-input"
-              >
-                <option value="json">JSON (Complete Data)</option>
-                <option value="csv">CSV (Spreadsheet)</option>
-                <option value="palette">Palette (Text)</option>
-              </select>
-            </div>
-
-            <div className={`p-3 rounded ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
-              <div className="text-sm opacity-90 mb-2">
-                Export includes {colors.length.toLocaleString()} colors
-              </div>
-              <div className="text-xs opacity-75">
-                {exportFormat === 'json' &&
-                  'Complete color data with HSB values, manufacturer info, and metadata'}
-                {exportFormat === 'csv' &&
-                  'Spreadsheet format compatible with Excel, Google Sheets'}
-                {exportFormat === 'palette' &&
-                  'Color palette format for design applications (first 100 colors)'}
-              </div>
-            </div>
-
-            <button
-              onClick={() => exportColors(exportFormat)}
-              className="w-full py-3 px-4 rounded font-medium transition-colors bamboo-button"
-            >
-              💾 Export {exportFormat.toUpperCase()}
-            </button>
           </div>
         </div>
       )}
