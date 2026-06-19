@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef, useDeferredValue } from 'react'
 import { motion } from 'framer-motion'
 import nextDynamic from 'next/dynamic'
 import { CarColor, DeviceInfo, ExtractedColor } from '@/types'
@@ -108,9 +108,14 @@ export default function ColorDashboardClient() {
     [colors]
   )
 
+  // ⚡ Bolt Performance Optimization:
+  // We use `useDeferredValue` here so typing in the search bar remains snappy and doesn't block
+  // the main thread, while the heavy filtering of thousands of colors occurs in the background.
+  const deferredSearchQuery = useDeferredValue(searchQuery)
+
   // Filter colors with caching and sanitization
   const filteredColors = useMemo(() => {
-    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}-${showFavoritesOnly ? 'fav' : 'all'}`
+    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${deferredSearchQuery}-${showFavoritesOnly ? 'fav' : 'all'}`
     const cached = cache.get<CarColor[]>(cacheKey)
     if (cached && allColors.length > 0) {
       return cached
@@ -118,10 +123,10 @@ export default function ColorDashboardClient() {
 
     let result: CarColor[]
 
-    if (!searchQuery && !selectedMake && !selectedColorType && !showFavoritesOnly) {
+    if (!deferredSearchQuery && !selectedMake && !selectedColorType && !showFavoritesOnly) {
       result = allColors
     } else {
-      const sanitizedQuery = sanitizeSearchQuery(searchQuery)
+      const sanitizedQuery = sanitizeSearchQuery(deferredSearchQuery)
       const searchLower = sanitizedQuery.toLowerCase()
 
       result = allColors.filter(color => {
@@ -145,7 +150,7 @@ export default function ColorDashboardClient() {
       cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
     }
     return result
-  }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet, showFavoritesOnly])
+  }, [allColors, deferredSearchQuery, selectedMake, selectedColorType, favoritesSet, showFavoritesOnly])
 
   useEffect(() => {
     const loadColors = async () => {
