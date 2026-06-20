@@ -64,6 +64,11 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
     return () => resizeObserver.disconnect()
   }, [])
 
+  const handleToggleFavorite = useCallback((color: CarColor) => {
+    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+    onToggleFavorite(colorId)
+  }, [onToggleFavorite])
+
   // Memoized cell renderer for performance
   const Cell = useCallback(
     ({ columnIndex, rowIndex, style }: { columnIndex: number; rowIndex: number; style: React.CSSProperties }) => {
@@ -83,7 +88,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
               onSelect={onColorSelect}
               onShowInfo={onShowInfo}
               isFavorite={isFavorite}
-              onToggleFavorite={() => onToggleFavorite(colorId)}
+              onToggleFavorite={handleToggleFavorite}
               isTrending={trendingIds?.has(colorId)}
               isCommunityChoice={communityChoiceIds?.has(colorId)}
               isDarkMode={isDarkMode}
@@ -92,7 +97,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
         </div>
       )
     },
-    [colors, favorites, onColorSelect, onShowInfo, onToggleFavorite, isDarkMode, columnsCount, trendingIds, communityChoiceIds]
+    [colors, favorites, onColorSelect, onShowInfo, handleToggleFavorite, isDarkMode, columnsCount, trendingIds, communityChoiceIds]
   )
 
   if (colors.length === 0) {

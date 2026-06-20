@@ -64,7 +64,7 @@ describe('ColorCard', () => {
     const favoriteButton = screen.getByLabelText('Add to favorites')
     fireEvent.click(favoriteButton)
 
-    expect(mockOnToggleFavorite).toHaveBeenCalled()
+    expect(mockOnToggleFavorite).toHaveBeenCalledWith(mockColor)
   })
 
   it('shows correct favorite icon based on isFavorite prop', () => {
