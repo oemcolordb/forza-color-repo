@@ -111,6 +111,7 @@ export default function CreatePaletteModal({ isOpen, onClose, favorites, session
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Palette</h2>
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
           >
             <X className="h-5 w-5" />
@@ -140,6 +141,7 @@ export default function CreatePaletteModal({ isOpen, onClose, favorites, session
                     key={color.colorId}
                     type="button"
                     onClick={() => toggleColor(color)}
+                    aria-pressed={isSelected}
                     className={`relative flex h-20 w-full cursor-pointer flex-col overflow-hidden rounded-lg border-2 transition-all ${
                       isSelected ? 'border-blue-500 scale-95' : 'border-transparent hover:scale-105'
                     }`}
@@ -207,6 +209,7 @@ export default function CreatePaletteModal({ isOpen, onClose, favorites, session
                     key={tag}
                     type="button"
                     onClick={() => toggleTag(tag)}
+                    aria-pressed={tags.includes(tag)}
                     className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                       tags.includes(tag)
                         ? 'bg-blue-600 text-white'
