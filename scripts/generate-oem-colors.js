@@ -5,7 +5,7 @@ const API_KEY = "AIzaSyDvmU-Dgt2K9-6rxb-9z7K4ssxVXM87obc";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${API_KEY}`;
 
 const filePath = path.join(__dirname, '../public/carColors.json');
-const colors = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+let colors = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
 // Tally colors by manufacturer
 const counts = {};

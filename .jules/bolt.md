@@ -1,3 +1,0 @@
-## 2024-05-15 - React.memo and Inline Callbacks
-**Learning:** `ColorCard` component relies heavily on `React.memo` to prevent re-rendering when thousands of color swatches are loaded in `VirtualColorGrid` and `SimpleColorGrid`. However, passing inline functions `() => onToggleFavorite(id)` directly inside map loops or render cells nullifies memoization because the function reference changes every render.
-**Action:** Always verify memoized child components (`React.memo`) aren't receiving inline arrow functions from their parent's render loop. Pass stable callback references created via `useCallback` and change the child to pass required parameters up instead of capturing closure variables in the parent map loop.

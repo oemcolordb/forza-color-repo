@@ -69,11 +69,6 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
     return `${baseClasses} ${columnClasses[zoomInfo.scale]} ${gapClasses[zoomInfo.scale]}`
   }
 
-  const handleToggleFavorite = useCallback((color: CarColor) => {
-    const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-    onToggleFavorite(colorId)
-  }, [onToggleFavorite])
-
   const loadMore = useCallback(() => {
     if (isLoading || displayCount >= colors.length) return
 
@@ -127,7 +122,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
               onSelect={onColorSelect}
               onShowInfo={onShowInfo}
               isFavorite={isFavorite}
-              onToggleFavorite={handleToggleFavorite}
+              onToggleFavorite={() => onToggleFavorite(colorId)}
               isTrending={trendingIds?.has(colorId)}
               isCommunityChoice={communityChoiceIds?.has(colorId)}
               isDarkMode={isDarkMode}

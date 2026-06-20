@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const filePath = path.join(__dirname, '../public/carColors.json');
-const colors = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+let colors = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
 const rareColorsData = [
   // Ferrari
