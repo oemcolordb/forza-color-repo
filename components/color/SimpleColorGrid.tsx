@@ -106,6 +106,8 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
   }
 
   const displayedColors = colors.slice(0, displayCount)
+  // Convert favorites array to a Set for O(1) lookups
+  const favoritesSet = React.useMemo(() => new Set(favorites), [favorites])
 
   return (
     <>
@@ -113,7 +115,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
         {displayedColors.map((color, index) => {
           const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
           const uniqueKey = `${colorId}-${index}`
-          const isFavorite = favorites.includes(colorId)
+          const isFavorite = favoritesSet.has(colorId)
 
           return (
             <ColorCard
@@ -122,7 +124,7 @@ const SimpleColorGrid: React.FC<SimpleColorGridProps> = ({
               onSelect={onColorSelect}
               onShowInfo={onShowInfo}
               isFavorite={isFavorite}
-              onToggleFavorite={() => onToggleFavorite(colorId)}
+              onToggleFavorite={onToggleFavorite}
               isTrending={trendingIds?.has(colorId)}
               isCommunityChoice={communityChoiceIds?.has(colorId)}
               isDarkMode={isDarkMode}
