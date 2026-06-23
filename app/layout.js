@@ -178,7 +178,14 @@ export default function RootLayout({ children }) {
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                  const isDev =
+                    window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.hostname === '[::1]' ||
+                    window.location.hostname.startsWith('192.168.') ||
+                    window.location.hostname.startsWith('10.') ||
+                    window.location.hostname.startsWith('172.') ||
+                    window.location.hostname.endsWith('.local')
                   const devSwEnabled = localStorage.getItem('DEV_SW_ENABLED') === 'true'
 
                   if (!isDev || devSwEnabled) {

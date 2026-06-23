@@ -5,7 +5,14 @@ const STATIC_CACHE = `forza-static-v${APP_VERSION}`
 const DYNAMIC_CACHE = `forza-dynamic-v${APP_VERSION}`
 
 // Detect development mode
-const isDev = self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1'
+const isDev =
+  self.location.hostname === 'localhost' ||
+  self.location.hostname === '127.0.0.1' ||
+  self.location.hostname === '[::1]' ||
+  self.location.hostname.startsWith('192.168.') ||
+  self.location.hostname.startsWith('10.') ||
+  self.location.hostname.startsWith('172.') ||
+  self.location.hostname.endsWith('.local')
 
 const STATIC_ASSETS = ['/manifest.json', '/offline.html', '/tuneforge/']
 
@@ -51,12 +58,18 @@ self.addEventListener('activate', event => {
 
 // Fetch event
 self.addEventListener('fetch', event => {
+  const { request } = event
+
   // Skip service worker in development mode
   if (isDev) {
     return
   }
 
-  const { request } = event
+  // Only handle HTTP/HTTPS requests — skip blob:, data:, etc.
+  if (!request.url.startsWith('http://') && !request.url.startsWith('https://')) {
+    return
+  }
+
   const url = new URL(request.url)
 
   // Let browser handle navigation requests (page loads) normally — never intercept them
