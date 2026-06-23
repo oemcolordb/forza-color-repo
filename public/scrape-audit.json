@@ -1,0 +1,22 @@
+{
+  "lastRun": "2026-06-23T15:14:55.730Z",
+  "entries": [
+    {
+      "source": "local:app/data/carColors.json",
+      "fetchedAt": "2026-06-23T15:14:55.730Z",
+      "fields": [
+        "color1.h",
+        "color1.s",
+        "color1.b",
+        "color2.h",
+        "color2.s",
+        "color2.b",
+        "make",
+        "colorName",
+        "colorType"
+      ],
+      "status": "ok",
+      "notes": "Repair run: 0 hue-range fixes, 675 zero-color1 inferred, 0 null-color2 derived, 250 zero-color2 derived, 200 duplicates removed. 38297 entries remain."
+    }
+  ]
+}

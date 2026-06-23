@@ -8,11 +8,48 @@
 
 import { CarColor } from '@/types'
 
+function cleanColorType(type: string): string {
+  const t = type.trim()
+  if (!t) return 'Normal'
+  
+  const lower = t.toLowerCase()
+  
+  if (lower === 'normal' || lower === 'body') return 'Normal'
+  if (lower === 'gloss') return 'Gloss'
+  if (lower === 'matte') return 'Matte'
+  if (lower === 'semigloss' || lower === 'semi gloss' || lower === 'semi-gloss') return 'Semigloss'
+  if (lower === 'metal flake' || lower === 'metalflake') return 'Metal Flake'
+  if (lower === 'metallic') return 'Metallic'
+  
+  if (lower.includes('two') && lower.includes('tone')) {
+    if (lower.includes('polished')) return 'Two-Tone Polished'
+    if (lower.includes('matte')) return 'Two-Tone Matte'
+    if (lower.includes('semigloss') || lower.includes('semi gloss') || lower.includes('semi-gloss')) return 'Two-Tone Semigloss'
+    return 'Two-Tone'
+  }
+  
+  if (lower.includes('carbon') && (lower.includes('fiber') || lower.includes('fibre'))) {
+    if (lower.includes('polished')) return 'Carbon Fiber Polished'
+    return 'Carbon Fiber'
+  }
+  
+  if (lower.includes('aluminum') || lower.includes('aluminium')) {
+    if (lower.includes('polished')) return 'Aluminum Polished'
+    if (lower.includes('semigloss') || lower.includes('semi gloss') || lower.includes('semi-gloss')) return 'Aluminum Semigloss'
+    if (lower.includes('brushed')) return 'Aluminum Brushed'
+    return 'Aluminum'
+  }
+
+  // Capitalize first letter of each word as fallback
+  return t.replace(/\b\w/g, c => c.toUpperCase())
+}
+
 // ─── Normalizer ────────────────────────────────────────────────────────────────
 function normalizeEntry(raw: Record<string, unknown>): CarColor | null {
   const make = String(raw.make ?? raw.manufacturer ?? 'Unknown')
   const colorName = String(raw.colorName ?? raw.color_name ?? 'Unnamed')
-  const colorType = String(raw.colorType ?? raw.paintType ?? raw.paint_type ?? 'Normal')
+  const rawColorType = String(raw.colorType ?? raw.paintType ?? raw.paint_type ?? 'Normal')
+  const colorType = cleanColorType(rawColorType)
   const model = raw.model === null || raw.model === undefined ? '' : String(raw.model)
   const year = raw.year !== null && raw.year !== undefined
     ? typeof raw.year === 'number'

@@ -26,17 +26,53 @@ class HDRIErrorBoundary extends React.Component<{children: React.ReactNode}, {ha
   }
 }
 
-// ─── Exact mesh-name allowlists from the actual GLB ──────────────────────────
-const BODY_MESHES = new Set([
-  'Body', 'BumperF', 'BumperR', 'FenderL', 'FenderR',
-  'Hood', 'Trunk', 'DoorL', 'DoorR', 'DoorRL', 'DoorRR',
-  'SkirtL', 'SkirtR', 'Spoiler', 'Base', 'MirrorL', 'MirrorR',
-])
+// ─── Model Configurations ────────────────────────────────────────────────────
+interface ModelConfig {
+  id: string
+  name: string
+  path: string
+  bodyMeshes: Set<string>
+  glassMeshes: Set<string>
+  bodyMaterials: Set<string>
+  glassMaterials: Set<string>
+}
 
-const GLASS_MESHES = new Set([
-  'WindF', 'WindR', 'WindFL', 'WindFR', 'WindRL', 'WindRR',
-  'BLightLG', 'BLightRG', 'HLightLG', 'HLightRG',
-])
+const MODEL_CONFIGS: Record<string, ModelConfig> = {
+  lancer: {
+    id: 'lancer',
+    name: 'Lancer Evo X',
+    path: '/models/lancer-evo/lancer-evo.glb',
+    bodyMeshes: new Set([
+      'Body', 'BumperF', 'BumperR', 'FenderL', 'FenderR',
+      'Hood', 'Trunk', 'DoorL', 'DoorR', 'DoorRL', 'DoorRR',
+      'SkirtL', 'SkirtR', 'Spoiler', 'Base', 'MirrorL', 'MirrorR',
+    ]),
+    glassMeshes: new Set([
+      'WindF', 'WindR', 'WindFL', 'WindFR', 'WindRL', 'WindRR',
+      'BLightLG', 'HLightLG', 'HLightRG', 'BLightRG',
+    ]),
+    bodyMaterials: new Set<string>(),
+    glassMaterials: new Set<string>(),
+  },
+  porsche: {
+    id: 'porsche',
+    name: 'Porsche 911 (1975)',
+    path: '/models/free-1975-porsche-911-930-turbo/free_1975_porsche_911_930_turbo.glb',
+    bodyMeshes: new Set<string>(),
+    glassMeshes: new Set<string>(),
+    bodyMaterials: new Set(['paint', 'coat']),
+    glassMaterials: new Set(['glass']),
+  },
+  nissan: {
+    id: 'nissan',
+    name: 'Nissan Sentra (2019)',
+    path: '/models/2019_nissan_sentra_nismo.glb',
+    bodyMeshes: new Set<string>(),
+    glassMeshes: new Set<string>(),
+    bodyMaterials: new Set(['material_4', 'material_5']),
+    glassMaterials: new Set(['material_3']),
+  },
+}
 
 // Tyre primitive material names baked into the GLB
 const TYRE_MATERIAL_NAMES = new Set(['Tire', 'Black'])
@@ -66,17 +102,17 @@ function buildPaintMaterial(paintProps: Record<string, any>): THREE.MeshPhysical
   return mat
 }
 
-function LancerEvoModel({ paintProps }: { paintProps: Record<string, any> }) {
-  const { scene } = useGLTF('/models/lancer-evo/lancer-evo.glb')
+function CarModel({ paintProps, config }: { paintProps: Record<string, any>; config: ModelConfig }) {
+  const { scene } = useGLTF(config.path)
   const paintMatRef = useRef<THREE.MeshPhysicalMaterial | null>(null)
 
-  // Build the scene clone ONCE — then mutate paint material on each color change
+  // Build the scene clone when the model loads or changes
   const cloned = useMemo(() => {
     const clone = scene.clone(true)
     const paint = buildPaintMaterial(paintProps)
     paintMatRef.current = paint
 
-    console.log('[3D] Building scene clone. Paint color:', paintProps.color)
+    console.log('[3D] Building scene clone. Model:', config.name, 'Paint color:', paintProps.color)
 
     const bodyHits: string[] = []
     const allMeshNames: string[] = []
@@ -89,12 +125,21 @@ function LancerEvoModel({ paintProps }: { paintProps: Record<string, any> }) {
         ? (child.material[0]?.name ?? '')
         : (child.material?.name ?? '')
 
-      if (GLASS_MESHES.has(meshName)) {
+      const cleanMeshName = meshName.replace(/_?\d+$/, '')
+      const cleanMatName = origMatName.toLowerCase().trim()
+
+      const isGlass = config.glassMeshes.has(cleanMeshName) || config.glassMaterials.has(cleanMatName)
+      const isBody = config.bodyMeshes.has(cleanMeshName) || config.bodyMeshes.has(meshName) || config.bodyMaterials.has(cleanMatName)
+
+      // Log mesh + material details for debugging/mapping purposes
+      console.log(`[3D Debug] Model: "${config.id}", Mesh: "${meshName}", Material: "${origMatName}" | Body: ${isBody}, Glass: ${isGlass}`)
+
+      if (isGlass) {
         child.material = glassMat
-      } else if (BODY_MESHES.has(meshName)) {
+      } else if (isBody) {
         child.material = paint
         bodyHits.push(meshName)
-      } else if (meshName.startsWith('Tire')) {
+      } else if (meshName.startsWith('Tire') || cleanMeshName.startsWith('Tire')) {
         child.material = TYRE_MATERIAL_NAMES.has(origMatName) ? tyreMat : rimMat
       } else {
         child.material = neutralMat
@@ -107,7 +152,7 @@ function LancerEvoModel({ paintProps }: { paintProps: Record<string, any> }) {
     console.log('[3D] All mesh names in scene:', allMeshNames)
     console.log('[3D] Body meshes painted:', bodyHits)
 
-    // Auto-center
+    // Auto-center & auto-scale based on bounding box
     const box    = new THREE.Box3().setFromObject(clone)
     const size   = box.getSize(new THREE.Vector3())
     const center = box.getCenter(new THREE.Vector3())
@@ -118,7 +163,7 @@ function LancerEvoModel({ paintProps }: { paintProps: Record<string, any> }) {
 
     return clone
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scene]) // only re-clone when the scene asset itself reloads
+  }, [scene, config.id]) // re-clone only when scene changes or model id changes
 
   // Mutate existing paint material when color changes — no re-clone needed
   useEffect(() => {
@@ -137,7 +182,7 @@ function LancerEvoModel({ paintProps }: { paintProps: Record<string, any> }) {
     paint.needsUpdate = true
   }, [paintProps])
 
-  console.log('[3D] LancerEvoModel rendered! Paint props:', paintProps)
+  console.log('[3D] Model rendered! Paint props:', paintProps)
   return <primitive object={cloned} />
 }
 
@@ -150,11 +195,11 @@ function LancerEvoFallback() {
   )
 }
 
-function CarWrapper({ color }: { color: CarColor }) {
+function CarWrapper({ color, modelConfig }: { color: CarColor; modelConfig: ModelConfig }) {
   const carGroupRef = useRef<THREE.Group>(null)
 
   useFrame((_state, delta) => {
-    if (carGroupRef.current) carGroupRef.current.rotation.y += delta * 0.3
+    // Stopped auto-rotation per user request
   })
 
   // Derive THREE.js-ready paint properties from the Forza color
@@ -214,7 +259,7 @@ function CarWrapper({ color }: { color: CarColor }) {
   return (
     <group ref={carGroupRef}>
       <Suspense fallback={<LancerEvoFallback />}>
-        <LancerEvoModel paintProps={paintProps} />
+        <CarModel paintProps={paintProps} config={modelConfig} />
       </Suspense>
     </group>
   )
@@ -226,6 +271,8 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
   const [dirIntensity, setDirIntensity] = useState(1.5)
   const [environment, setEnvironment] = useState('studio_small_03_1k.hdr')
   const [showControls, setShowControls] = useState(false)
+  const [bgType, setBgType] = useState<'black' | 'white'>('black')
+  const [modelId, setModelId] = useState<string>('lancer')
 
   useEffect(() => { setMounted(true) }, [])
 
@@ -237,20 +284,70 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
     )
   }
 
+  const modelConfig = MODEL_CONFIGS[modelId] || MODEL_CONFIGS.lancer
+
   return (
     <div className="w-full rounded-lg bg-gradient-to-b from-gray-800 to-gray-900 relative">
       <div className="h-[20vh] min-h-[110px] max-h-[180px] relative overflow-hidden rounded-lg">
-        <Canvas camera={{ position: [2.8, 1.6, 3.2], fov: 42 }}>
+        {/* Background selector on the top left */}
+        <div className="absolute top-2 left-2 flex gap-1.5 z-20 bg-black/50 backdrop-blur-md p-1 rounded-full border border-white/10">
+          <button
+            onClick={() => setBgType('black')}
+            className={`w-5 h-5 rounded-full transition-all border ${
+              bgType === 'black'
+                ? 'bg-[#0d0d11] border-white scale-110 shadow-lg'
+                : 'bg-[#0d0d11] border-transparent hover:border-white/30'
+            }`}
+            title="Dark Background"
+            aria-label="Set dark background"
+          />
+          <button
+            onClick={() => setBgType('white')}
+            className={`w-5 h-5 rounded-full transition-all border ${
+              bgType === 'white'
+                ? 'bg-[#f3f4f6] border-black scale-110 shadow-lg'
+                : 'bg-[#f3f4f6] border-transparent hover:border-black/30'
+            }`}
+            title="Light Background"
+            aria-label="Set light background"
+          />
+        </div>
+
+        {/* Model selector on the top right, to the left of the Settings button */}
+        <div className="absolute top-2 right-14 z-20">
+          <select
+            value={modelId}
+            onChange={(e) => setModelId(e.target.value)}
+            className="bg-black/60 hover:bg-black/80 text-white text-xs rounded-full px-3 py-1.5 backdrop-blur-md border border-white/10 outline-none focus:border-fuchsia-500 transition-colors shadow-lg cursor-pointer font-medium"
+          >
+            {Object.values(MODEL_CONFIGS).map((m) => (
+              <option key={m.id} value={m.id} className="bg-gray-950 text-white font-medium">
+                {m.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <Canvas camera={{ position: [3.0, 0.35, 0.2], fov: 38 }}>
+          <color attach="background" args={[bgType === 'black' ? '#0d0d11' : '#f3f4f6']} />
           <HDRIErrorBoundary>
             {environment === 'studio_small_03_1k.hdr'
               ? <Environment files="/hdri/studio_small_03_1k.hdr" />
               : <Environment preset={environment as any} />}
           </HDRIErrorBoundary>
 
-          <ambientLight intensity={ambientIntensity} />
-          <directionalLight position={[5, 5, 5]} intensity={dirIntensity} />
+          {/* Upgraded Professional Studio 4-Point Lighting */}
+          <ambientLight intensity={ambientIntensity * 1.15} />
+          {/* Key Light */}
+          <directionalLight position={[5, 6, 5]} intensity={dirIntensity} castShadow />
+          {/* Fill Light (Soft front-left fill) */}
+          <directionalLight position={[-5, 3, 2]} intensity={dirIntensity * 0.45} />
+          {/* Rim Light / Backlight (Accentuates edges from behind) */}
+          <directionalLight position={[0, 4, -6]} intensity={dirIntensity * 0.8} />
+          {/* Top Light (Accentuates roof and hood contours) */}
+          <directionalLight position={[0, 8, 0]} intensity={dirIntensity * 0.25} />
 
-          <CarWrapper color={color} />
+          <CarWrapper color={color} modelConfig={modelConfig} />
 
           <ContactShadows position={[0, -0.42, 0]} opacity={0.65} scale={8} blur={1.5} far={3} />
           <OrbitControls enablePan={false} enableZoom minDistance={2} maxDistance={8} autoRotate={false} />

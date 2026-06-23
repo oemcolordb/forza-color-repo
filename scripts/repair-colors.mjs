@@ -14,8 +14,8 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
-const FILE = path.join(ROOT, 'app', 'data', 'carColors.json')
-const AUDIT_FILE = path.join(ROOT, 'app', 'data', 'scrape-audit.json')
+const FILE = path.join(ROOT, 'public', 'carColors.json')
+const AUDIT_FILE = path.join(ROOT, 'public', 'scrape-audit.json')
 
 const raw = fs.readFileSync(FILE, 'utf8')
 const data = JSON.parse(raw)
@@ -118,14 +118,48 @@ function inferHSBFromName(colorName, colorType) {
   if (/precious/.test(n)) return { h: 0.50, s: 0.02, b: 0.45 }
   if (/^heavy$/.test(n)) return { h: 0.00, s: round3(0.005), b: 0.23 }
 
+  // ── blues ──
+  if (/blue|bleu|blu|blau/.test(n)) {
+    return { h: round3(0.60), s: round3(0.60), b: round3(0.60) }
+  }
+  // ── reds ──
+  if (/red|rouge|rosso|rot|rojo/.test(n)) {
+    return { h: round3(0.0), s: round3(0.80), b: round3(0.70) }
+  }
+  // ── greens ──
+  if (/green|vert|verde|grün|grun/.test(n)) {
+    return { h: round3(0.33), s: round3(0.70), b: round3(0.50) }
+  }
+  // ── whites ──
+  if (/white|blanc|bianco|weiss|weiß|blanco/.test(n)) {
+    return { h: round3(0.0), s: round3(0.0), b: round3(0.95) }
+  }
+  // ── grays/silvers ──
+  if (/silver|argent|plata|silber|grey|gray|grigio|gris|grau/.test(n)) {
+    if (/acier/.test(n)) return { h: 0.60, s: 0.05, b: 0.50 }
+    return { h: round3(0.0), s: round3(0.0), b: round3(0.60) }
+  }
+  // ── yellows/golds ──
+  if (/yellow|jaune|giallo|gelb|amarillo|gold|or|oro/.test(n)) {
+    return { h: round3(0.12), s: round3(0.80), b: round3(0.85) }
+  }
+  // ── orange ──
+  if (/orange|arancio|naranja/.test(n)) {
+    return { h: round3(0.06), s: round3(0.85), b: round3(0.80) }
+  }
+  // ── brown/bronze/beige ──
+  if (/brown|braun|bronze|beige|sable|sand/.test(n)) {
+    return { h: round3(0.08), s: round3(0.30), b: round3(0.60) }
+  }
+
   // fallback for remaining zero-HSB: very dark near-black
   return { h: 0, s: round3(0.03), b: round3(0.04) }
 }
 
 for (const e of data) {
   if (!e.color1) continue
-  const isBuggedMetal = e.colorType === 'Metal' && e.color1.h === 0 && e.color1.s === 0 && e.color1.b === 0.3;
-  if ((e.color1.h === 0 && e.color1.s === 0 && e.color1.b === 0) || isBuggedMetal) {
+  const isBuggedValue = e.color1.h === 0 && e.color1.s === 0 && (e.color1.b === 0 || e.color1.b === 0.3);
+  if (isBuggedValue) {
     const inferred = inferHSBFromName(e.colorName, e.colorType || '')
     log.push(
       `[ZERO-C1] ${e.make} "${e.colorName}" (${e.colorType}) → h:${inferred.h} s:${inferred.s} b:${inferred.b}`
@@ -198,6 +232,15 @@ function completeness(e) {
   if (e.colorType && e.colorType.trim()) score++
   if (e.color1) score += 3
   if (e.color2) score += 2
+  
+  // Heavy penalty for bugged/default zero/grey HSB values unless the name actually implies black/grey
+  if (e.color1 && e.color1.h === 0 && e.color1.s === 0 && (e.color1.b === 0 || e.color1.b === 0.3)) {
+    const n = (e.colorName || '').toLowerCase()
+    const isActuallyBlackOrGrey = /nero|black|schwarz|noir|negro|noire|grey|gray|grigio|gris|charcoal|dark/i.test(n)
+    if (!isActuallyBlackOrGrey) {
+      score -= 20
+    }
+  }
   return score
 }
 
