@@ -9,13 +9,34 @@ const NOTE_EMOJIS = ['♩', '♪', '♫', '♬', '🎵', '🎶', '🎼', '🎹']
 // Corresponding frequencies (C4–C5 pentatonic-ish)
 const NOTE_FREQS = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25]
 
+let globalAudioCtx: AudioContext | null = null
+
+function getAudioContext() {
+  if (typeof window === 'undefined') return null
+
+  if (!globalAudioCtx) {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
+    if (AudioCtx) {
+      globalAudioCtx = new AudioCtx()
+    }
+  }
+
+  // Resume audio context if suspended (browser autoplay policy)
+  if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+    globalAudioCtx.resume()
+  }
+
+  return globalAudioCtx
+}
+
 function playNoteForHue(hue: number) {
   try {
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
-    if (!AudioCtx) return
-    const ctx = new AudioCtx()
+    const ctx = getAudioContext()
+    if (!ctx) return
+
     const idx = Math.floor((hue / 360) * 8) % 8
     const freq = NOTE_FREQS[idx]
+
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.type = 'sine'
@@ -26,7 +47,6 @@ function playNoteForHue(hue: number) {
     gain.connect(ctx.destination)
     osc.start(ctx.currentTime)
     osc.stop(ctx.currentTime + 0.55)
-    osc.onended = () => ctx.close()
   } catch {}
 }
 
