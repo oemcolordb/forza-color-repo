@@ -1,3 +1,0 @@
-## 2024-06-23 - AudioContext Performance Bottleneck
-**Learning:** Instantiating a new `AudioContext` on every function call (e.g., when a user interacts rapidly with UI components to trigger sounds) is a significant performance bottleneck. Browsers also enforce a hard limit on the number of concurrent contexts (often around 6). If a context is created per interaction, and `ctx.close()` is asynchronous, rapid interactions can quickly hit this limit and cause the audio system to crash or drop notes.
-**Action:** Always reuse a single, global instance of `AudioContext` across the application. Ensure you handle the browser's autoplay policy by checking `globalAudioCtx.state === 'suspended'` and calling `globalAudioCtx.resume()` upon user interaction before playing audio.
