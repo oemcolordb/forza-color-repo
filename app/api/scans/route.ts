@@ -1,15 +1,8 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@libsql/client'
+import { getDb } from '@/lib/db/db'
 import { checkBotId } from 'botid/server'
 
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
+const client = getDb()
 
 export async function GET(request: Request) {
   if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })

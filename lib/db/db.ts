@@ -14,8 +14,8 @@ import fs from 'fs'
 import path from 'path'
 
 function makeClient(): Client {
-  const url = process.env.TURSO_DATABASE_URL
-  const token = process.env.TURSO_AUTH_TOKEN || ''
+  const url = process.env.TURSO_DATABASE_URL || process.env.j67j_TURSO_DATABASE_URL
+  const token = process.env.TURSO_AUTH_TOKEN || process.env.j67j_TURSO_AUTH_TOKEN || ''
 
   if (url && url !== 'your_turso_database_url_here' && url !== 'your_turso_database_url') {
     // Cloud Turso (or any remote libsql server)

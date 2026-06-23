@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@libsql/client'
+import { getDb } from '@/lib/db/db'
 
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
+const client = getDb()
 
 // Secret dev-only endpoint for favorites analytics
 // Protected by DEV_ANALYTICS_KEY environment variable
