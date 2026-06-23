@@ -28,7 +28,7 @@ export const hsbToRgb = (h: number, s: number, b: number): { r: number; g: numbe
     r = x
     g = 0
     bl = c
-  } else if (h >= 5 / 6 && h < 1) {
+  } else if (h >= 5 / 6 && h <= 1) {
     r = c
     g = 0
     bl = x
@@ -49,7 +49,7 @@ export const createForzaGradient = (
   const rgb2 = hsbToRgb(color2.h, color2.s, color2.b)
   const css1 = `rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b})`
   const css2 = `rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})`
-  return `linear-gradient(135deg, ${css1} 0%, ${css2} 100%)`
+  return `linear-gradient(135deg in oklab, ${css1} 0%, ${css2} 100%)`
 }
 
 export const hsbToCSS = (color: { h: number; s: number; b: number }): string => {
@@ -60,6 +60,103 @@ export const hsbToCSS = (color: { h: number; s: number; b: number }): string => 
 export const hsbToHex = (h: number, s: number, b: number): string => {
   const rgb = hsbToRgb(h, s, b)
   return `#${rgb.r.toString(16).padStart(2, '0')}${rgb.g.toString(16).padStart(2, '0')}${rgb.b.toString(16).padStart(2, '0')}`
+}
+
+/**
+ * Normalizes variations in color/paint type strings (e.g. space/hyphen differences,
+ * spelling differences like fibre vs fiber, and unrecognized casing).
+ */
+export const normalizeColorType = (type?: string): string => {
+  if (!type) return 'normal'
+  let t = type.toLowerCase().trim()
+  
+  // Normalize spelling: fibre -> fiber
+  t = t.replace(/fibre/g, 'fiber')
+  
+  // Normalize space/hyphen/separators for two-tone
+  t = t.replace(/two\s+tone/g, 'two-tone')
+  t = t.replace(/two-tone\s+/g, 'two-tone-') // e.g. "two-tone polished"
+  
+  // Normalize semi-gloss
+  t = t.replace(/semi\s+gloss/g, 'semigloss')
+  t = t.replace(/semi-gloss/g, 'semigloss')
+
+  // Normalize brushed/brushed aluminum
+  if (t.includes('brushed') || t.includes('aluminum')) {
+    if (t.includes('matte')) return 'matte'
+    if (t.includes('semigloss')) return 'semigloss'
+    return 'metallic'
+  }
+
+  return t
+}
+
+export const getAdvancedMaterialStyle = (
+  color1: { h: number; s: number; b: number },
+  color2?: { h: number; s: number; b: number } | null,
+  colorType?: string
+): { backgroundColor: string; backgroundImage: string } => {
+  const c1 = color1 || { h: 0, s: 0, b: 0 }
+  const hex1 = hsbToHex(c1.h, c1.s, c1.b)
+
+  let hex2 = hex1
+  if (color2) {
+    hex2 = hsbToHex(color2.h, color2.s, color2.b)
+  }
+
+  const type = normalizeColorType(colorType)
+
+  // 1. MATTE & TWO-TONE MATTE
+  if (type.includes('matte')) {
+    return {
+      backgroundColor: hex1,
+      backgroundImage: `radial-gradient(circle at 50% 30%, ${hex2} 0%, transparent 75%), linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.3) 100%)`,
+    }
+  }
+
+  // 2. WEAVES & PATTERNS: CARBON FIBER & KEVLAR
+  else if (type.includes('carbon') || type.includes('kevlar')) {
+    const isGlossy = type.includes('polished') || !type.includes('matte')
+    const highlight = isGlossy ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.05)'
+    return {
+      backgroundColor: hex1,
+      backgroundImage: `radial-gradient(circle at 40% 30%, ${highlight} 0%, transparent 70%), repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.4) 3px, rgba(0,0,0,0.4) 6px), repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(0,0,0,0.4) 3px, rgba(0,0,0,0.4) 6px)`,
+    }
+  }
+
+  // 3. STRUCTURED PATTERNS: DAMASCUS STEEL
+  else if (type.includes('damascus')) {
+    return {
+      backgroundColor: hex1,
+      backgroundImage: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 80%), repeating-linear-gradient(135deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px, transparent 4px, transparent 8px), repeating-linear-gradient(45deg, rgba(0,0,0,0.3) 0px, rgba(0,0,0,0.3) 2px, transparent 2px, transparent 6px)`,
+    }
+  }
+
+  // 4. METAL FLAKE & PEARLESCENT & TWO-TONE POLISHED/SEMIGLOSS & METALLIC & CHROME
+  else if (
+    type.includes('flake') ||
+    type.includes('two-tone') ||
+    type.includes('pearl') ||
+    type.includes('metallic') ||
+    type.includes('chrome') ||
+    type.includes('semigloss') ||
+    type.includes('polished')
+  ) {
+    const isChrome = type.includes('chrome')
+    const specularHighlight = isChrome ? 'rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 8%, transparent 15%' : 'rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 12%, transparent 20%'
+    return {
+      backgroundColor: hex1,
+      backgroundImage: `radial-gradient(ellipse at 40% 35%, ${hex2} 0%, transparent 65%), linear-gradient(105deg, ${specularHighlight}), radial-gradient(circle at 50% 150%, rgba(0,0,0,0.8) 0%, transparent 80%)`,
+    }
+  }
+
+  // 5. NORMAL (Standard Gloss)
+  else {
+    return {
+      backgroundColor: hex1,
+      backgroundImage: `linear-gradient(105deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 15%, transparent 22%), linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.5) 100%)`,
+    }
+  }
 }
 
 export const formatHSBValues = (color: { h: number; s: number; b: number }): string => {

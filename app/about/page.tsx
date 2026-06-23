@@ -149,7 +149,7 @@ export default function About() {
                 ⚡ <span>What We Offer</span>
               </h2>
               <ul className="space-y-3">
-                <li>🎨 10,000+ official automotive paint colors from Forza games</li>
+                <li>🎨 40,000+ official automotive paint colors from Forza games</li>
                 <li>🔍 Advanced search and filtering by manufacturer, model, and year</li>
                 <li>📊 Detailed color analytics with HSB values and color types</li>
                 <li>📸 Image color extraction and matching tools</li>

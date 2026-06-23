@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { CarColor } from '@/types'
+import { getAdvancedMaterialStyle } from '@/lib/utils/colorUtils'
 
 interface TrendItem {
   color_id: string
@@ -62,11 +63,7 @@ const CommunityTrends: React.FC<CommunityTrendsProps> = ({ allColors, isDarkMode
             >
               <div 
                 className="w-full h-16 rounded-lg mb-2 shadow-lg group-hover:scale-105 transition-transform"
-                style={{ 
-                  background: color.color1 && color.color2
-                    ? `linear-gradient(135deg, hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%), hsl(${color.color2.h * 360}, ${color.color2.s * 100}%, ${color.color2.b * 100}%))`
-                    : '#ccc'
-                }}
+                style={getAdvancedMaterialStyle(color.color1, color.color2, color.colorType)}
               />
               <div className="text-[10px] font-bold truncate text-left">{color.colorName}</div>
               <div className="flex justify-between items-center mt-1">

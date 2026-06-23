@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, useCallback } from 'react'
+import SaveGeneratedPaletteModal from '@/components/palettes/SaveGeneratedPaletteModal'
 
 const HARMONY_MODES = {
   Monochromatic: { icon: '🎯', desc: 'Same hue, different saturation/brightness' },
@@ -41,6 +42,7 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
   const [isSpinning, setIsSpinning] = useState(false)
   const [currentHarmony, setCurrentHarmony] = useState([])
   const [animateResultKey, setAnimateResultKey] = useState(0)
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
 
   const filteredColors = useMemo(() => {
     const config = CATEGORIES[category]
@@ -398,12 +400,32 @@ const ColorRouletteHarmony = ({ colors, isDarkMode, onColorSelect, onHarmonyGene
                 />
               ))}
             </div>
-            <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              {HARMONY_MODES[harmonyMode].desc}
-            </p>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setIsSaveModalOpen(true)}
+                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                  isDarkMode
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
+              >
+                💾 Save as Palette
+              </button>
+            </div>
+            
           </div>
         )}
       </div>
+
+      <SaveGeneratedPaletteModal
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        preselectedColors={currentHarmony}
+        sessionId={typeof window !== 'undefined' ? localStorage.getItem('forza-session-id') || 'anonymous' : 'anonymous'}
+        onSuccess={() => {
+          alert('Palette saved successfully!');
+        }}
+      />
     </div>
   )
 }

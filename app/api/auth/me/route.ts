@@ -26,15 +26,27 @@ export async function GET(request: NextRequest) {
     // Fetch fresh user data from database
     const db = getDb()
     const result = await db.execute({
-      sql: 'SELECT id, email, name FROM users WHERE id = ?',
+      sql: 'SELECT id, email, name, discord_id, discord_username, xbox_id, xbox_gamertag FROM users WHERE id = ?',
       args: [userId],
     })
 
-    const user = result.rows[0]
+    const user = result.rows[0] as any
 
     if (!user) {
       return NextResponse.json({ user: null }, { status: 401 })
     }
+
+    // Fetch linked connections
+    const connectionsResult = await db.execute({
+      sql: 'SELECT provider, provider_id, username FROM user_connections WHERE user_id = ?',
+      args: [userId],
+    })
+    
+    const connections = connectionsResult.rows.map(row => ({
+      provider: row.provider as string,
+      providerId: row.provider_id as string,
+      username: row.username as string,
+    }))
 
     return NextResponse.json({
       user: {
@@ -42,6 +54,11 @@ export async function GET(request: NextRequest) {
         email: user.email,
         name: user.name,
         role: 'user',
+        discordId: user.discord_id,
+        discordUsername: user.discord_username,
+        xboxId: user.xbox_id,
+        xboxGamertag: user.xbox_gamertag,
+        connections,
       },
     })
   } catch (error) {

@@ -39,6 +39,9 @@ const nextConfig = {
   // - Dynamic pages: short cache or no cache
   // - API responses: no cache
   headers: async () => {
+    if (process.env.NODE_ENV === 'development') {
+      return []
+    }
     return [
       // Static assets in _next/static: immutable, long cache
       {

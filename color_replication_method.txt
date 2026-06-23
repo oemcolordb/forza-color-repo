@@ -1,0 +1,197 @@
+Methodology Automotive Paint Simulation via CSSStandard web colors use a single flat hex code, but real automotive paint (and Forza's rendering engine) relies on complex light interactions. To accurately display these on forza-color-repo.vercel.app, the team must use layered CSS backgrounds to simulate a 3D environment.Here is the breakdown of the rendering logicThe Base Coat (color1) This is the underlying diffuse color of the car. It is set as the foundational background-color.  The Specular Hit  Flake (color2) For Metal Flake, Pearlescent, and Two-Tone paints, the second color only appears where light directly hits the pigment. This is simulated using an off-center CSS radial-gradient acting as a localized light bounce.  The Clearcoat (Gloss) Glossy paints (Normal, Metal Flake) have a transparent, highly reflective top layer. This is simulated using a sharp, diagonal linear-gradient of semi-transparent white across the top edge.Panel Curvature (Shadow) To prevent the colors from looking flat, a dark radial-gradient or linear-gradient is pushed to the bottom of the swatch, mimicking how a car door curves away from the sun.Carbon Fiber Relies on a micro-texture. This is generated procedurally using crisscrossing repeating-linear-gradient functions to simulate the physical weave.Implementation CodeProvide this single-file HTMLJSCSS solution to Antigravity. They can run it directly in a browser to see the rendering engine in action, complete with sample data from your repository.  HTML!DOCTYPE html
+html lang=en
+head
+    meta charset=UTF-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    titleAdvanced Automotive Paint Renderertitle
+    style
+        body {
+            font-family -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+            background-color #111;
+            color #fff;
+            padding 2rem;
+            display flex;
+            flex-wrap wrap;
+            gap 2rem;
+            justify-content center;
+        }
+
+        .swatch-card {
+            background #222;
+            border-radius 12px;
+            overflow hidden;
+            width 280px;
+            box-shadow 0 10px 30px rgba(0,0,0,0.5);
+            border 1px solid #333;
+        }
+
+        .swatch-display {
+            width 100%;
+            height 180px;
+             The inner shadow gives the panel a slight bevel 
+            box-shadow inset 0 2px 10px rgba(255,255,255,0.1), inset 0 -5px 20px rgba(0,0,0,0.5);
+        }
+
+        .swatch-info {
+            padding 1rem;
+        }
+
+        .swatch-info h3 {
+            margin 0 0 0.25rem 0;
+            font-size 1.1rem;
+        }
+
+        .swatch-info p {
+            margin 0;
+            color #888;
+            font-size 0.85rem;
+            text-transform uppercase;
+            letter-spacing 0.5px;
+        }
+    style
+head
+body
+
+    script
+         Sample data from forza-colors.json 
+        const paintData = [
+            {
+                make 3M,
+                colorName Gloss Atomic Teal,
+                colorType Metal Flake,
+                color1 { h 0.53, s 0.99, b 0.57 },
+                color2 { h 0.53, s 0.98, b 0.76 }
+            },
+            {
+                make Abarth,
+                colorName Abarth Red,
+                colorType Normal,
+                color1 { h 1, s 0.82, b 0.84 }
+            },
+            {
+                make AC Cars,
+                colorName Dark Blue,
+                colorType Two-Tone Polished,
+                color1 { h 0.64, s 0.77, b 0.24 },
+                color2 { h 0.64, s 0.57, b 0.48 }
+            },
+            {
+                make 3M,
+                colorName Matte Indigo,
+                colorType Two-Tone Matte,
+                color1 { h 0.6, s 0.53, b 0.34 },
+                color2 { h 0.6, s 0.53, b 0.34 }
+            },
+            {
+                make Ariel,
+                colorName Carbon Fibre,
+                colorType Carbon Fibre Polished,
+                color1 { h 0.5, s 0.01, b 0.62 },
+                color2 { h 0.5, s 0.01, b 0.62 }
+            }
+        ];
+
+         Core Math Convert Forza 0-1 HSB to Standard RGB
+        function hsvToRgb(h, s, v) {
+            let r, g, b;
+            let i = Math.floor(h  6);
+            let f = h  6 - i;
+            let p = v  (1 - s);
+            let q = v  (1 - f  s);
+            let t = v  (1 - (1 - f)  s);
+            switch (i % 6) {
+                case 0 r = v, g = t, b = p; break;
+                case 1 r = q, g = v, b = p; break;
+                case 2 r = p, g = v, b = t; break;
+                case 3 r = p, g = q, b = v; break;
+                case 4 r = t, g = p, b = v; break;
+                case 5 r = v, g = p, b = q; break;
+            }
+            return { r Math.round(r  255), g Math.round(g  255), b Math.round(b  255) };
+        }
+
+         Convert RGB to HEX
+        function rgbToHex(r, g, b) {
+            return # + (1  24  r  16  g  8  b).toString(16).slice(1).toUpperCase();
+        }
+
+         Advanced Material Shader Generator
+        function getAdvancedMaterialCSS(item) {
+            const hex1 = rgbToHex(hsvToRgb(item.color1.h, item.color1.s, item.color1.b).r, hsvToRgb(item.color1.h, item.color1.s, item.color1.b).g, hsvToRgb(item.color1.h, item.color1.s, item.color1.b).b);
+            
+            let hex2 = hex1;
+            if (item.color2) {
+                const rgb2 = hsvToRgb(item.color2.h, item.color2.s, item.color2.b);
+                hex2 = rgbToHex(rgb2.r, rgb2.g, rgb2.b);
+            }
+            
+            const type = (item.colorType  ).toLowerCase();
+
+             1. MATTE & TWO-TONE MATTE
+            if (type.includes('matte')) {
+                return `
+                    background-color ${hex1};
+                    background-image 
+                        radial-gradient(circle at 50% 30%, ${hex2} 0%, transparent 75%),
+                        linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.3) 100%);
+                `;
+            } 
+            
+             2. METAL FLAKE & PEARLESCENT & TWO-TONE POLISHED
+            else if (type.includes('flake')  type.includes('two-tone')  type.includes('pearl')) {
+                return `
+                    background-color ${hex1};
+                    background-image 
+                        radial-gradient(ellipse at 40% 35%, ${hex2} 0%, transparent 65%),
+                        linear-gradient(105deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 12%, transparent 20%),
+                        radial-gradient(circle at 50% 150%, rgba(0,0,0,0.8) 0%, transparent 80%);
+                `;
+            } 
+            
+             3. CARBON FIBER
+            else if (type.includes('carbon')) {
+                const isGlossy = type.includes('polished');
+                const highlight = isGlossy  'rgba(255,255,255,0.25)'  'rgba(255,255,255,0.05)';
+                return `
+                    background-color ${hex1};
+                    background-image 
+                        radial-gradient(circle at 40% 30%, ${highlight} 0%, transparent 70%),
+                        repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.4) 3px, rgba(0,0,0,0.4) 6px),
+                        repeating-linear-gradient(-45deg, transparent, transparent 3px, rgba(0,0,0,0.4) 3px, rgba(0,0,0,0.4) 6px);
+                `;
+            } 
+            
+             4. NORMAL (Standard Gloss)
+            else {
+                return `
+                    background-color ${hex1};
+                    background-image 
+                        linear-gradient(105deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 15%, transparent 22%),
+                        linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.5) 100%);
+                `;
+            }
+        }
+
+         Render UI
+        paintData.forEach(paint = {
+            const card = document.createElement('div');
+            card.className = 'swatch-card';
+            
+            const display = document.createElement('div');
+            display.className = 'swatch-display';
+            display.style.cssText = getAdvancedMaterialCSS(paint);  Apply the generated shader
+
+            const info = document.createElement('div');
+            info.className = 'swatch-info';
+            info.innerHTML = `
+                h3${paint.colorName}h3
+                p${paint.make} • ${paint.colorType}p
+            `;
+
+            card.appendChild(display);
+            card.appendChild(info);
+            document.body.appendChild(card);
+        });
+    script
+body
+html

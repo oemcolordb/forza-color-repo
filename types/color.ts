@@ -12,4 +12,5 @@ export interface CarColor {
   color1: ColorLayer
   color2: ColorLayer
   colorType?: string
+  original_hex?: string
 }

@@ -7,6 +7,7 @@ import { CarColor, DeviceInfo, ExtractedColor } from '@/types'
 import { ErrorBoundary } from '@/lib/utils/errorBoundary'
 import { cache } from '@/lib/utils/cache'
 import { sanitizeSearchQuery, handleError } from '@/lib/utils/validation'
+import { BadgeCheck } from 'lucide-react'
 
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -39,6 +40,7 @@ const ColorComparison = nextDynamic(() => import('@/components/color/ColorCompar
 const HSBPopup = nextDynamic(() => import('@/components/color/HSBPopup'), { ssr: false })
 const ColorRouletteHarmony = nextDynamic(() => import('@/components/color/ColorRouletteHarmony'), { ssr: false })
 const HarmonyVisualizer = nextDynamic(() => import('@/components/color/HarmonyVisualizer'), { ssr: false })
+const AdvancedColorMatcher = nextDynamic(() => import('@/components/color/AdvancedColorMatcher'), { ssr: false })
 const ColorGenerator = nextDynamic(() => import('@/components/color/ColorGenerator'), { ssr: false })
 const PerformanceMonitor = nextDynamic(() => import('@/components/system/PerformanceMonitor'), { ssr: false })
 const ColorAnalyticsDashboard = nextDynamic(() => import('@/components/color/ColorAnalyticsDashboard'), { ssr: false })
@@ -48,6 +50,7 @@ export default function ColorDashboardClient() {
   const [colors, setColors] = useState<CarColor[]>([])
   const [trendingIds, setTrendingIds] = useState<Set<string>>(new Set())
   const [communityChoiceIds, setCommunityChoiceIds] = useState<Set<string>>(new Set())
+  const [trendScores, setTrendScores] = useState<Map<string, number>>(new Map())
   const [, setLoading] = useState(true)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -72,7 +75,7 @@ export default function ColorDashboardClient() {
   const [showInsightsPanel, setShowInsightsPanel] = useState(false)
   const deviceInfo: DeviceInfo = useDeviceDetection()
 
-  useAnalytics()
+  const { track } = useAnalytics()
   usePerformance()
   useOfflineStorage()
 
@@ -110,7 +113,7 @@ export default function ColorDashboardClient() {
 
   // Filter colors with caching and sanitization
   const filteredColors = useMemo(() => {
-    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}-${showFavoritesOnly ? 'fav' : 'all'}`
+    const cacheKey = `filtered-${selectedMake}-${selectedColorType}-${searchQuery}-${showFavoritesOnly ? 'fav' : 'all'}-${trendScores.size}`
     const cached = cache.get<CarColor[]>(cacheKey)
     if (cached && allColors.length > 0) {
       return cached
@@ -119,7 +122,13 @@ export default function ColorDashboardClient() {
     let result: CarColor[]
 
     if (!searchQuery && !selectedMake && !selectedColorType && !showFavoritesOnly) {
-      result = allColors
+      result = [...allColors].sort((a, b) => {
+        const idA = `${a.make}-${a.colorName}-${a.year || 'unknown'}`
+        const idB = `${b.make}-${b.colorName}-${b.year || 'unknown'}`
+        const scoreA = trendScores.get(idA) || 0
+        const scoreB = trendScores.get(idB) || 0
+        return scoreB - scoreA
+      }).slice(0, 250)
     } else {
       const sanitizedQuery = sanitizeSearchQuery(searchQuery)
       const searchLower = sanitizedQuery.toLowerCase()
@@ -145,7 +154,7 @@ export default function ColorDashboardClient() {
       cache.set(cacheKey, result, 2 * 60 * 1000) // Cache for 2 minutes
     }
     return result
-  }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet, showFavoritesOnly])
+  }, [allColors, searchQuery, selectedMake, selectedColorType, favoritesSet, showFavoritesOnly, trendScores])
 
   useEffect(() => {
     const loadColors = async () => {
@@ -268,14 +277,17 @@ export default function ColorDashboardClient() {
         if (data.trends) {
           const trending = new Set<string>()
           const communityChoice = new Set<string>()
+          const scores = new Map<string, number>()
 
           data.trends.forEach((t: { color_id: string, score: number }) => {
+            scores.set(t.color_id, t.score)
             if (t.score > 50) communityChoice.add(t.color_id)
             else trending.add(t.color_id)
           })
 
           setTrendingIds(trending)
           setCommunityChoiceIds(communityChoice)
+          setTrendScores(scores)
         }
       } catch (err) {
         console.error('Failed to fetch trends', err)
@@ -309,21 +321,30 @@ export default function ColorDashboardClient() {
       if (prev.includes(colorId)) {
         return prev.filter(id => id !== colorId)
       } else {
+        // Track the favorite action
+        const color = allColors.find(c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === colorId)
+        if (color) {
+          track({ action: 'favorite', colorName: color.colorName, make: color.make, year: color.year })
+        }
         return [...prev, colorId]
       }
     })
-  }, [])
+  }, [allColors, track])
 
   // Handle color selection with history tracking
   const handleColorSelect = useCallback(
     (color: CarColor) => {
       const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+      
+      // Track view action
+      track({ action: 'view', colorName: color.colorName, make: color.make, year: color.year })
+
       setColorHistory(prev => {
         const filtered = prev.filter(id => id !== colorId)
         return [colorId, ...filtered.slice(0, 49)] // Keep last 50
       })
     },
-    []
+    [track]
   )
 
   // Resolve recently viewed colors from history IDs
@@ -443,6 +464,7 @@ export default function ColorDashboardClient() {
 
         <OfflineIndicator isOnline={isOnline} />
 
+        <main id="main-content" tabIndex={-1} className="outline-none">
         {/* Error Display */}
         {error && (
           <StatusAlert
@@ -482,6 +504,19 @@ export default function ColorDashboardClient() {
                 </>
               )}
             </p>
+
+            {/* Updates Banner */}
+            <div className={`mb-6 p-3 rounded-xl border ${isDarkMode ? 'border-green-500/30 bg-green-900/20' : 'border-green-400 bg-green-50'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">✨</span>
+                <span className="font-bold text-sm text-green-500">NEW 40K DATABASE UPDATE</span>
+              </div>
+              <ul className={`text-sm list-disc list-inside ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                <li><strong className={isDarkMode ? 'text-white' : 'text-black'}>Massive Expansion:</strong> Added 13,406 brand new real-world OEM paints!</li>
+                <li><strong className={isDarkMode ? 'text-white' : 'text-black'}>Improved Accuracy:</strong> Over 2,900 existing paint colors have been strictly verified and mathematically corrected using true Hex-to-HSB conversion algorithms.</li>
+                <li><strong className={isDarkMode ? 'text-white' : 'text-black'}>Offline Validation:</strong> Verified against the Paintlib master repository, including new colors added for 53 different manufacturers!</li>
+              </ul>
+            </div>
 
             {/* Search Controls — primary action */}
             <OptimizedSearchControls
@@ -619,8 +654,13 @@ export default function ColorDashboardClient() {
                             background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
                           }}
                         />
-                        <span className="text-xs truncate max-w-[120px]">
+                        <span className="text-xs truncate max-w-[120px] flex items-center">
                           {color.colorName}
+                          {color.original_hex && (
+                            <span title={`Validated against Paintlib (${color.original_hex})`} className="ml-1 shrink-0 inline-flex items-center align-text-bottom">
+                              <BadgeCheck className="w-3.5 h-3.5 text-green-500" />
+                            </span>
+                          )}
                         </span>
                       </button>
                     )
@@ -720,6 +760,21 @@ export default function ColorDashboardClient() {
                     />
                   </div>
                 </div>
+              </GamingErrorBoundary>
+            </div>
+
+            {/* Advanced Color Matching */}
+            <div
+              className={`relative mb-6 rounded-xl overflow-hidden p-4 ${
+                isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
+              }`}
+            >
+              <GamingErrorBoundary>
+                <AdvancedColorMatcher
+                  colors={allColors}
+                  isDarkMode={isDarkMode}
+                  onColorSelect={showColorHSB}
+                />
               </GamingErrorBoundary>
             </div>
 
@@ -911,6 +966,7 @@ export default function ColorDashboardClient() {
           </ResponsiveLayout>
           </motion.div>
         </ErrorBoundary>
+        </main>
 
         <Footer isDarkMode={isDarkMode} />
 

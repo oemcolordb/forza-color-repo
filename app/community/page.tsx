@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer'
 import PostModal from '@/components/color/PostModal'
 import { useChat } from '@ai-sdk/react'
 import { motion, AnimatePresence } from 'framer-motion'
+import LazyImage from '@/components/ui/LazyImage'
 
 interface Post {
   id: string
@@ -230,7 +231,7 @@ function CommunityPageInner() {
         />
       </div>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6 mt-6 relative z-10">
+      <main id="main-content" tabIndex={-1} className="outline-none flex-1 max-w-7xl w-full mx-auto p-4 flex flex-col md:flex-row gap-6 mt-6 relative z-10">
         {/* Left Sidebar - Navigation */}
         <aside className="w-full md:w-72 flex-shrink-0">
           <motion.div
@@ -323,37 +324,43 @@ function CommunityPageInner() {
               {!isLoadingTrends && !trendsError && communityTrends && (
                 <>
                   {Array.isArray(communityTrends.trends) && communityTrends.trends.length > 0 && (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <div className="text-xs opacity-60 font-black uppercase tracking-widest">
                         Top Community Interactions
                       </div>
 
-                      {communityTrends.trends.slice(0, 3).map((t: any, idx: number) => (
-                        <div
-                          key={t.color_id ?? idx}
-                          className="flex items-center justify-between gap-4 p-2 rounded-lg hover:bg-white/5 transition-colors"
-                        >
-                          <span className="text-[11px] opacity-70 truncate flex items-center gap-2">
-                            <span
-                              className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-black ${
-                                idx === 0
-                                  ? 'bg-yellow-500/20 text-yellow-400'
-                                  : idx === 1
-                                    ? 'bg-gray-400/20 text-gray-300'
-                                    : 'bg-orange-700/20 text-orange-500'
-                              }`}
-                            >
-                              #{idx + 1}
+                      <div className="flex overflow-x-auto md:flex-col gap-3 pb-2 md:pb-0 scroll-smooth">
+                        {communityTrends.trends.map((t: any, idx: number) => (
+                          <div
+                            key={t.color_id ?? idx}
+                            className={`flex items-center justify-between gap-4 p-3 md:p-2 rounded-lg transition-colors shrink-0 min-w-[240px] md:min-w-0 border md:border-transparent md:bg-transparent hover:bg-white/5 ${
+                              isDarkMode ? 'border-white/10 bg-white/5' : 'border-gray-200 bg-white/50'
+                            }`}
+                          >
+                            <span className="text-[11px] opacity-70 truncate flex items-center gap-2">
+                              <span
+                                className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-black shrink-0 ${
+                                  idx === 0
+                                    ? 'bg-yellow-500/20 text-yellow-400'
+                                    : idx === 1
+                                      ? 'bg-gray-400/20 text-gray-300'
+                                      : idx === 2
+                                        ? 'bg-orange-700/20 text-orange-500'
+                                        : 'bg-white/10 text-white/70'
+                                }`}
+                              >
+                                #{idx + 1}
+                              </span>
+                              {t.color_id ?? '—'}
                             </span>
-                            {t.color_id ?? '—'}
-                          </span>
-                          <span className="text-[11px] font-mono font-bold whitespace-nowrap">
-                            {typeof t.score === 'number'
-                              ? t.score.toLocaleString()
-                              : (t.score ?? '—')}
-                          </span>
-                        </div>
-                      ))}
+                            <span className="text-[11px] font-mono font-bold whitespace-nowrap">
+                              {typeof t.score === 'number'
+                                ? t.score.toLocaleString()
+                                : (t.score ?? '—')}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
 
                       <div className="text-[10px] opacity-50 pt-2 border-t border-white/5">
                         {communityTrends.source ? `Source: ${communityTrends.source}` : 'Source: —'}
@@ -379,7 +386,7 @@ function CommunityPageInner() {
         </aside>
 
         {/* Main Content Area */}
-        <section className="flex-1 min-h-[600px] flex flex-col relative">
+        <section className="flex-1 flex flex-col relative min-w-0">
           <AnimatePresence mode="wait">
             {activeTab === 'tunebot' ? (
               <motion.div
@@ -387,7 +394,7 @@ function CommunityPageInner() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -20, opacity: 0 }}
-                className={`flex-1 rounded-3xl shadow-2xl border flex flex-col overflow-hidden backdrop-blur-xl ${
+                className={`w-full h-[600px] md:h-[800px] rounded-3xl shadow-2xl border flex flex-col overflow-hidden backdrop-blur-xl ${
                   isDarkMode ? 'bg-black/40 border-white/10' : 'bg-white border-gray-200'
                 }`}
               >
@@ -405,23 +412,6 @@ function CommunityPageInner() {
                     <p className="text-[10px] uppercase tracking-widest opacity-50 mt-1 font-bold">
                       Professional Racing Intelligence
                     </p>
-                  </div>
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3].map(i => (
-                      <div
-                        key={i}
-                        className={`w-8 h-8 rounded-full border border-white/10 overflow-hidden relative z-10 bg-gradient-to-br ${
-                          i === 0 ? 'from-blue-500 to-purple-600' :
-                          i === 1 ? 'from-emerald-400 to-cyan-500' :
-                          i === 2 ? 'from-orange-500 to-red-500' :
-                          'from-pink-500 to-rose-500'
-                        }`} />
-                    ))}
-                    <div
-                      className={`w-8 h-8 rounded-full border-2 ${isDarkMode ? 'border-gray-900' : 'border-white'} bg-blue-600 flex items-center justify-center text-[10px] font-bold`}
-                    >
-                      +99
-                    </div>
                   </div>
                 </div>
 
@@ -525,8 +515,8 @@ function CommunityPageInner() {
                     <input
                       value={input}
                       onChange={handleInputChange}
-                      placeholder="Ask for tuning adjustments, color codes, or build advice..."
-                      className={`w-full rounded-2xl pl-6 pr-24 py-5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium ${
+                      placeholder="Ask for tuning advice..."
+                      className={`w-full rounded-2xl pl-4 sm:pl-6 pr-[90px] sm:pr-[120px] py-4 sm:py-5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all font-medium text-sm sm:text-base ${
                         isDarkMode
                           ? 'bg-black/60 border border-white/10 text-white placeholder-gray-600'
                           : 'bg-white border border-gray-200 text-gray-900'
@@ -535,7 +525,7 @@ function CommunityPageInner() {
                     <button
                       type="submit"
                       disabled={isLoading || !input.trim()}
-                      className="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-50 hover:to-indigo-500 text-white rounded-xl px-8 font-black italic tracking-tighter text-sm transition-all shadow-xl shadow-blue-600/30 disabled:opacity-30 disabled:cursor-not-allowed group"
+                      className="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-50 hover:to-indigo-500 text-white rounded-xl px-4 sm:px-8 font-black italic tracking-tighter text-xs sm:text-sm transition-all shadow-xl shadow-blue-600/30 disabled:opacity-30 disabled:cursor-not-allowed group"
                     >
                       SEND{' '}
                       <span className="not-italic group-hover:translate-x-1 inline-block transition-transform">
@@ -625,7 +615,7 @@ function CommunityPageInner() {
                 </div>
 
                 {/* Trending Tags */}
-                <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+                <div className="flex gap-2 overflow-x-auto pb-2 scroll-smooth">
                   <button
                     onClick={() => setSelectedTag(null)}
                     className={`text-[10px] font-bold uppercase tracking-wider whitespace-nowrap px-4 py-2 rounded-full border transition-all ${
@@ -694,18 +684,18 @@ function CommunityPageInner() {
                         }`}
                       >
                         <div className="aspect-video relative overflow-hidden">
-                          <img
+                          <LazyImage
                             src={post.image_url}
                             alt={post.caption}
                             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            loading="lazy"
+                            wrapperClassName="w-full h-full"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
                             <div className="text-white">
                               <div className="text-[10px] font-black uppercase tracking-widest text-blue-400">
                                 Share Code
                               </div>
-                              <div className="text-lg font-mono font-bold tracking-wider">
+                              <div className="text-lg font-mono font-bold tracking-wider break-all">
                                 {post.tune_code || '--- --- ---'}
                               </div>
                               <button
@@ -822,6 +812,7 @@ function CommunityPageInner() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onPostSuccess={() => {
+          setActiveTab('feed')
           fetchPosts()
           fetchCommunityTrends()
         }}

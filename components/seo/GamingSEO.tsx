@@ -84,7 +84,7 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
           operatingSystem: 'Web Browser',
           url: 'https://forza-color-repo.vercel.app',
           description:
-            'Complete Forza color sheet database with 10,000+ automotive paint colors from all Forza racing games',
+            'Complete Forza color sheet database with 40,000+ automotive paint colors from all Forza racing games',
           offers: {
             '@type': 'Offer',
             price: '0',
@@ -100,7 +100,7 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
           },
           featureList: [
             'Complete Forza color sheet database',
-            '10,000+ official automotive paint colors',
+            '40,000+ official automotive paint colors',
             'Forza Horizon 5 color reference',
             'Forza Motorsport paint codes',
             'HSB and hex color values',
@@ -120,7 +120,7 @@ export default function GamingSEO({ isDarkMode, deviceInfo }: GamingSEOProps) {
           '@id': 'https://forza-color-repo.vercel.app/#dataset',
           name: 'Forza Automotive Color Database',
           description:
-            'Comprehensive dataset of 10,000+ automotive paint colors extracted from Forza racing games',
+            'Comprehensive dataset of 40,000+ automotive paint colors extracted from Forza racing games',
           url: 'https://forza-color-repo.vercel.app',
           keywords: [
             'forza color sheet',

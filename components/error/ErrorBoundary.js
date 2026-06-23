@@ -33,12 +33,21 @@ class ErrorBoundary extends React.Component {
 }
 
 const DefaultErrorFallback = ({ error, reset }) => {
+  const isWebGLError = error?.message?.toLowerCase().includes('webgl') || error?.message?.toLowerCase().includes('canvas');
+  const isAssetError = error?.message?.toLowerCase().includes('fetch') || error?.message?.toLowerCase().includes('load');
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white p-4">
-      <div className="text-center max-w-md rounded-xl p-6 bamboo-surface-dark border border-red-700/50">
-        <h1 className="text-2xl font-bold mb-4 text-red-300">Something went wrong</h1>
+      <div className="text-center max-w-md rounded-xl p-6 bg-slate-800 border border-red-700/50">
+        <h1 className="text-2xl font-bold mb-4 text-red-300">
+          {isWebGLError ? 'WebGL Initialization Failed' : isAssetError ? 'Failed to Load Asset' : 'Something went wrong'}
+        </h1>
         <p className="text-slate-200 mb-6">
-          {error?.message || 'An unexpected error occurred while loading the color data.'}
+          {isWebGLError 
+            ? 'Your browser encountered an issue rendering the 3D preview. Please ensure hardware acceleration is enabled.' 
+            : isAssetError 
+              ? 'We had trouble loading some required assets. Please check your connection and try again.'
+              : error?.message || 'An unexpected error occurred while loading the color data.'}
         </p>
         <div className="space-y-3">
           <Button onClick={reset} variant="primary" size="md" className="w-full">

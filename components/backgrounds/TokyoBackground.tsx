@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 
 interface TokyoBackgroundProps {
   isDarkMode: boolean
@@ -7,29 +7,29 @@ interface TokyoBackgroundProps {
 }
 
 const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecureAssetUrl }) => {
-  const [imageLoaded, setImageLoaded] = useState(false)
-  const [imageError, setImageError] = useState(false)
-  const [imageSrc, setImageSrc] = useState('')
+  const [mediaLoaded, setMediaLoaded] = useState(false)
+  const [mediaError, setMediaError] = useState(false)
+  const [mediaSrc, setMediaSrc] = useState('')
+  const [isVideo, setIsVideo] = useState(false)
 
   const [selectedMedia, setSelectedMedia] = useState('')
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const mediaFiles = [
-      'assets/images/backrounds/cyberpunk_jdm_highway_1781544037954.png',
-      'assets/images/backrounds/cyberpunk_jdm_garage_1781544024595.png',
-      'assets/images/backrounds/cyberpunk_jdm_street_1781544010932.png',
-      'assets/images/backrounds/jdm_tokyo_street_1781543894124.png',
-      'assets/images/backrounds/jdm_mountain_drift_1781543906338.png',
-      'assets/images/backrounds/jdm_cyberpunk_meet_1781543919984.png',
-      'assets/images/backrounds/tokyo_akihabara_neon_1781543827018.png',
-      'assets/images/backrounds/tokyo_neon_street_1781543800162.png',
-      'assets/images/backrounds/tokyo_sunset_skyline_1781543814077.png',
-      'assets/images/backrounds/neon-shibuya-crossing-tokyo-japan-1140x760.jpg',
-      'assets/images/backrounds/tokyo-panorama.jpg',
-      'assets/images/backrounds/Gemini_Generated_Image_zatbflzatbflzatb.png',
-      'assets/images/backrounds/Screenshot 2026-04-13 032903.png',
-      'assets/images/backrounds/Screenshot 2026-04-13 032927.png',
-      'assets/images/backrounds/v2-jbps6-5b1bc-1-1024x590.png',
+      'assets/videos/tokyo_aerial_looped.mp4',
+      'assets/videos/tokyo_movie.mp4',
+      'assets/images/backgrounds/cyberpunk_jdm_highway_1781544037954.png',
+      'assets/images/backgrounds/cyberpunk_jdm_garage_1781544024595.png',
+      'assets/images/backgrounds/cyberpunk_jdm_street_1781544010932.png',
+      'assets/images/backgrounds/jdm_tokyo_street_1781543894124.png',
+      'assets/images/backgrounds/jdm_mountain_drift_1781543906338.png',
+      'assets/images/backgrounds/jdm_cyberpunk_meet_1781543919984.png',
+      'assets/images/backgrounds/tokyo_akihabara_neon_1781543827018.png',
+      'assets/images/backgrounds/tokyo_neon_street_1781543800162.png',
+      'assets/images/backgrounds/tokyo_sunset_skyline_1781543814077.png',
+      'assets/images/backgrounds/neon-shibuya-crossing-tokyo-japan-1140x760.jpg',
+      'assets/images/backgrounds/tokyo-panorama.jpg',
     ]
 
     const updateBackground = () => {
@@ -50,15 +50,24 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
     if (!selectedMedia) return
 
     const src = getSecureAssetUrl(`/${selectedMedia}`)
-    const img = new Image()
-    img.onload = () => {
-      setImageSrc(src)
-      setImageLoaded(true)
+    setMediaLoaded(false)
+    setMediaError(false)
+    setMediaSrc(src)
+
+    if (selectedMedia.endsWith('.mp4') || selectedMedia.endsWith('.webm')) {
+      setIsVideo(true)
+      // For videos, we rely on the onLoadedData event on the video element itself
+    } else {
+      setIsVideo(false)
+      const img = new Image()
+      img.onload = () => {
+        setMediaLoaded(true)
+      }
+      img.onerror = () => {
+        setMediaError(true)
+      }
+      img.src = src
     }
-    img.onerror = () => {
-      setImageError(true)
-    }
-    img.src = src
   }, [getSecureAssetUrl, selectedMedia])
 
   return (
@@ -70,12 +79,32 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
         style={{ background: '#0a0e14' }}
       />
 
-      {/* Background image fades in after load — no layout shift */}
-      {imageLoaded && !imageError && (
+      {/* Background media fades in after load — no layout shift */}
+      {!mediaError && isVideo && mediaSrc && (
+        <video
+          ref={videoRef}
+          src={mediaSrc}
+          autoPlay
+          muted
+          loop
+          playsInline
+          onLoadedData={() => setMediaLoaded(true)}
+          onError={() => setMediaError(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-in-out ${mediaLoaded ? 'opacity-100' : 'opacity-0'}`}
+          style={{
+            opacity: mediaLoaded ? (isDarkMode ? 0.4 : 0.6) : 0,
+            filter: isDarkMode
+              ? 'brightness(0.8) contrast(1.3)'
+              : 'brightness(1.2) contrast(1.1)',
+          }}
+        />
+      )}
+
+      {mediaLoaded && !mediaError && !isVideo && mediaSrc && (
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('${imageSrc}')`,
+            backgroundImage: `url('${mediaSrc}')`,
             opacity: isDarkMode ? 0.4 : 0.6,
             filter: isDarkMode
               ? 'brightness(0.8) contrast(1.3)'
@@ -126,3 +155,4 @@ const TokyoBackground: React.FC<TokyoBackgroundProps> = ({ isDarkMode, getSecure
 }
 
 export default TokyoBackground
+

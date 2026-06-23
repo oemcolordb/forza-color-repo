@@ -107,13 +107,25 @@ function inferHSBFromName(colorName, colorType) {
     return { h: 0, s: round3(0.04), b: round3(0.14) }
   }
 
+  // ── bugged metal fixes ──
+  if (/acier/.test(n)) return { h: 0.60, s: 0.05, b: 0.50 }
+  if (/panthera/.test(n)) return { h: 0.72, s: round3(0.145), b: 0.08 }
+  if (/rosegold liquid/.test(n)) return { h: 0.04, s: 0.40, b: 0.65 }
+  if (/^dark$/.test(n)) return { h: 0.55, s: 0.06, b: 0.25 }
+  if (/^ultimate$/.test(n)) return { h: 0.00, s: 0.00, b: 0.75 }
+  if (/^gris$/.test(n)) return { h: 0.00, s: 0.00, b: 0.45 }
+  if (/^noir$/.test(n)) return { h: 0.00, s: 0.00, b: 0.10 }
+  if (/precious/.test(n)) return { h: 0.50, s: 0.02, b: 0.45 }
+  if (/^heavy$/.test(n)) return { h: 0.00, s: round3(0.005), b: 0.23 }
+
   // fallback for remaining zero-HSB: very dark near-black
   return { h: 0, s: round3(0.03), b: round3(0.04) }
 }
 
 for (const e of data) {
   if (!e.color1) continue
-  if (e.color1.h === 0 && e.color1.s === 0 && e.color1.b === 0) {
+  const isBuggedMetal = e.colorType === 'Metal' && e.color1.h === 0 && e.color1.s === 0 && e.color1.b === 0.3;
+  if ((e.color1.h === 0 && e.color1.s === 0 && e.color1.b === 0) || isBuggedMetal) {
     const inferred = inferHSBFromName(e.colorName, e.colorType || '')
     log.push(
       `[ZERO-C1] ${e.make} "${e.colorName}" (${e.colorType}) → h:${inferred.h} s:${inferred.s} b:${inferred.b}`

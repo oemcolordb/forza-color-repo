@@ -84,7 +84,7 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
         localStorage.setItem('guest_user_id', guestId)
       }
 
-      await fetch('/api/community/posts', {
+      const postResponse = await fetch('/api/community/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -96,6 +96,12 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
           tune_code: tuneCode,
         }),
       })
+
+      if (!postResponse.ok) {
+        const errorText = await postResponse.text().catch(() => '')
+        console.error('Failed to save post:', postResponse.status, errorText)
+        throw new Error(`Database error: ${errorText || postResponse.statusText}`)
+      }
 
       onPostSuccess()
       onClose()

@@ -1,20 +1,9 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@libsql/client'
+import { getDb, ensureTables } from '@/lib/db/db'
 import { checkBotId } from 'botid/server'
-
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
 
 // GET - Retrieve user favorites from cloud
 export async function GET(request: Request) {
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
-
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
@@ -24,7 +13,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'sessionId required' }, { status: 400 })
     }
 
-    const result = await client.execute({
+    await ensureTables()
+    const db = getDb()
+
+    const result = await db.execute({
       sql: 'SELECT favorites, lastSynced FROM user_favorites WHERE sessionId = ? OR userId = ? ORDER BY lastSynced DESC LIMIT 1',
       args: [sessionId, userId || ''],
     })
@@ -49,8 +41,6 @@ export async function POST(request: Request) {
   const botCheck = await checkBotId()
   if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
 
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
-
   try {
     const ip_address = request.headers.get('x-forwarded-for')?.split(',')[0] || request.headers.get('x-real-ip') || 'unknown'
     const body = await request.json()
@@ -60,8 +50,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'sessionId required' }, { status: 400 })
     }
 
+    await ensureTables()
+    const db = getDb()
+
     // Upsert user favorites
-    await client.execute({
+    await db.execute({
       sql: `INSERT INTO user_favorites (sessionId, userId, favorites, lastSynced, ip_address)
             VALUES (?, ?, ?, datetime('now'), ?)
             ON CONFLICT(sessionId) DO UPDATE SET
@@ -76,7 +69,7 @@ export async function POST(request: Request) {
     if (colorDetails && Array.isArray(colorDetails)) {
       for (const color of colorDetails) {
         // Log the favorite action
-        await client.execute({
+        await db.execute({
           sql: `INSERT INTO favorites_analytics (colorId, colorName, make, model, colorType, userId, sessionId, action, ip_address)
                 VALUES (?, ?, ?, ?, ?, ?, ?, 'add', ?)`,
           args: [
@@ -92,7 +85,7 @@ export async function POST(request: Request) {
         })
 
         // Update ranking
-        await client.execute({
+        await db.execute({
           sql: `INSERT INTO favorites_ranking (colorId, colorName, make, model, colorType, totalFavorites, currentFavorites, lastUpdated)
                 VALUES (?, ?, ?, ?, ?, 1, 1, datetime('now'))
                 ON CONFLICT(colorId) DO UPDATE SET
@@ -123,8 +116,6 @@ export async function POST(request: Request) {
 
 // DELETE - Remove a favorite and track analytics
 export async function DELETE(request: Request) {
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
-
   try {
     const { searchParams } = new URL(request.url)
     const sessionId = searchParams.get('sessionId')
@@ -135,8 +126,11 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'sessionId and colorId required' }, { status: 400 })
     }
 
+    await ensureTables()
+    const db = getDb()
+
     // Log removal action
-    await client.execute({
+    await db.execute({
       sql: `INSERT INTO favorites_analytics (colorId, colorName, make, model, colorType, userId, sessionId, action)
             SELECT ?, colorName, make, model, colorType, ?, ?, 'remove'
             FROM favorites_ranking WHERE colorId = ?`,
@@ -144,13 +138,36 @@ export async function DELETE(request: Request) {
     })
 
     // Decrement current favorites count
-    await client.execute({
+    await db.execute({
       sql: `UPDATE favorites_ranking 
             SET currentFavorites = MAX(0, currentFavorites - 1),
                 lastUpdated = datetime('now')
             WHERE colorId = ?`,
       args: [colorId],
     })
+
+    // Update user_favorites table by removing this colorId from the JSON array
+    const result = await db.execute({
+      sql: 'SELECT favorites FROM user_favorites WHERE sessionId = ? OR userId = ? ORDER BY lastSynced DESC LIMIT 1',
+      args: [sessionId, userId || ''],
+    })
+
+    if (result.rows.length > 0) {
+      try {
+        const currentFavs = JSON.parse(result.rows[0].favorites as string)
+        if (Array.isArray(currentFavs)) {
+          const updatedFavs = currentFavs.filter((id: string) => id !== colorId)
+          await db.execute({
+            sql: `UPDATE user_favorites 
+                  SET favorites = ?, lastSynced = datetime('now') 
+                  WHERE sessionId = ? OR (userId = ? AND userId IS NOT NULL AND userId != '')`,
+            args: [JSON.stringify(updatedFavs), sessionId, userId || ''],
+          })
+        }
+      } catch (e) {
+        console.error('Failed to update user_favorites on delete:', e)
+      }
+    }
 
     return NextResponse.json({ success: true, message: 'Favorite removed' })
   } catch (error) {

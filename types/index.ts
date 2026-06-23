@@ -9,6 +9,7 @@ export interface CarColor {
   color2: HSBColor
   isGenerated?: boolean
   uniqueId?: string
+  original_hex?: string
 }
 
 // Re-export car types

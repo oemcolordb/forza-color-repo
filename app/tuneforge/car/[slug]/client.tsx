@@ -43,6 +43,146 @@ interface TuneData {
   [key: string]: number
 }
 
+function TuneSlider({ label, value, onChange, min, max, step = 0.1, unit = '', isDarkMode = true }: any) {
+  return (
+    <div className="mb-4">
+      <div className="flex justify-between items-center mb-1">
+        <label className="text-sm font-medium opacity-90">{label}</label>
+        <div className="flex items-center gap-2">
+          <input 
+            type="number" 
+            value={value} 
+            onChange={(e) => onChange(Number(e.target.value))} 
+            step={step}
+            className={`w-20 px-2 py-1 text-right text-sm rounded border ${isDarkMode ? 'bg-gray-800 border-gray-600' : 'bg-gray-100 border-gray-300'}`}
+          />
+          <span className="text-xs opacity-60 w-8">{unit}</span>
+        </div>
+      </div>
+      <input 
+        type="range" 
+        min={min} max={max} step={step} 
+        value={value} 
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-green-500"
+      />
+    </div>
+  )
+}
+
+function AdvancedTuningControls({ tuneData, setTuneData, isDarkMode, drivetrain }: any) {
+  const handleChange = (key: string, val: number) => {
+    setTuneData((prev: any) => ({ ...prev, [key]: val }))
+  }
+
+  const sections = [
+    {
+      title: 'Tires',
+      items: [
+        { key: 'tire-pressure-front', label: 'Front Tire Pressure', min: 15, max: 55, step: 0.5, unit: 'PSI' },
+        { key: 'tire-pressure-rear', label: 'Rear Tire Pressure', min: 15, max: 55, step: 0.5, unit: 'PSI' },
+      ]
+    },
+    {
+      title: 'Gearing',
+      items: [
+        { key: 'final-drive', label: 'Final Drive', min: 2.0, max: 6.0, step: 0.01, unit: '' },
+        ...Array.from({ length: Object.keys(tuneData).filter(k => k.startsWith('gear-')).length || 6 }).map((_, i) => ({
+          key: `gear-${i + 1}`, label: `Gear ${i + 1}`, min: 0.4, max: 6.0, step: 0.01, unit: ''
+        }))
+      ]
+    },
+    {
+      title: 'Alignment',
+      items: [
+        { key: 'camber-front', label: 'Front Camber', min: -5.0, max: 0.0, step: 0.1, unit: '°' },
+        { key: 'camber-rear', label: 'Rear Camber', min: -5.0, max: 0.0, step: 0.1, unit: '°' },
+        { key: 'toe-front', label: 'Front Toe', min: -5.0, max: 5.0, step: 0.1, unit: '°' },
+        { key: 'toe-rear', label: 'Rear Toe', min: -5.0, max: 5.0, step: 0.1, unit: '°' },
+        { key: 'caster', label: 'Front Caster', min: 1.0, max: 7.0, step: 0.1, unit: '°' },
+      ]
+    },
+    {
+      title: 'Anti-roll Bars',
+      items: [
+        { key: 'anti-roll-bar-front', label: 'Front ARB', min: 1.0, max: 65.0, step: 0.1, unit: '' },
+        { key: 'anti-roll-bar-rear', label: 'Rear ARB', min: 1.0, max: 65.0, step: 0.1, unit: '' },
+      ]
+    },
+    {
+      title: 'Springs',
+      items: [
+        { key: 'spring-rate-front', label: 'Front Springs', min: 50, max: 1500, step: 1.0, unit: 'lb/in' },
+        { key: 'spring-rate-rear', label: 'Rear Springs', min: 50, max: 1500, step: 1.0, unit: 'lb/in' },
+        { key: 'ride-height-front', label: 'Front Ride Height', min: 4.0, max: 30.0, step: 0.1, unit: 'cm' },
+        { key: 'ride-height-rear', label: 'Rear Ride Height', min: 4.0, max: 30.0, step: 0.1, unit: 'cm' },
+      ]
+    },
+    {
+      title: 'Damping',
+      items: [
+        { key: 'damping-rebound-front', label: 'Front Rebound', min: 1.0, max: 20.0, step: 0.1, unit: '' },
+        { key: 'damping-rebound-rear', label: 'Rear Rebound', min: 1.0, max: 20.0, step: 0.1, unit: '' },
+        { key: 'damping-bump-front', label: 'Front Bump', min: 1.0, max: 20.0, step: 0.1, unit: '' },
+        { key: 'damping-bump-rear', label: 'Rear Bump', min: 1.0, max: 20.0, step: 0.1, unit: '' },
+      ]
+    },
+    {
+      title: 'Aerodynamics',
+      items: [
+        { key: 'aero-front', label: 'Front Downforce', min: 50, max: 1000, step: 1.0, unit: 'kg' },
+        { key: 'aero-rear', label: 'Rear Downforce', min: 50, max: 1000, step: 1.0, unit: 'kg' },
+      ]
+    },
+    {
+      title: 'Brakes',
+      items: [
+        { key: 'brake-balance', label: 'Brake Balance', min: 0, max: 100, step: 1.0, unit: '%' },
+        { key: 'brake-pressure', label: 'Brake Pressure', min: 0, max: 200, step: 1.0, unit: '%' },
+      ]
+    },
+    {
+      title: 'Differential',
+      items: [
+        ...(drivetrain === 'AWD' || drivetrain === 'FWD' ? [
+          { key: 'differential-front-accel', label: 'Front Accel', min: 0, max: 100, step: 1.0, unit: '%' },
+          { key: 'differential-front-decel', label: 'Front Decel', min: 0, max: 100, step: 1.0, unit: '%' },
+        ] : []),
+        ...(drivetrain === 'AWD' || drivetrain === 'RWD' ? [
+          { key: 'differential-rear-accel', label: 'Rear Accel', min: 0, max: 100, step: 1.0, unit: '%' },
+          { key: 'differential-rear-decel', label: 'Rear Decel', min: 0, max: 100, step: 1.0, unit: '%' },
+        ] : []),
+        ...(drivetrain === 'AWD' ? [
+          { key: 'differential-center', label: 'Center Balance', min: 0, max: 100, step: 1.0, unit: '%' },
+        ] : []),
+      ]
+    }
+  ]
+
+  return (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+      {sections.map((section, idx) => (
+        <div key={idx} className={`p-4 rounded-xl border ${isDarkMode ? 'border-gray-700 bg-gray-800/40' : 'border-gray-300 bg-gray-50'}`}>
+          <h3 className="font-bold text-lg mb-4 text-green-500 border-b border-green-500/30 pb-2">{section.title}</h3>
+          {section.items.map((item, i) => (
+            <TuneSlider 
+              key={i}
+              label={item.label}
+              value={tuneData[item.key] ?? item.min}
+              min={item.min}
+              max={item.max}
+              step={item.step}
+              unit={item.unit}
+              onChange={(val: number) => handleChange(item.key, val)}
+              isDarkMode={isDarkMode}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function TuneCalcClient({ car }: { car: Car }) {
   const router = useRouter()
   const [isDarkMode, setIsDarkMode] = useState(true)
@@ -549,8 +689,44 @@ export default function TuneCalcClient({ car }: { car: Car }) {
           {/* Advanced Tab */}
           {activeTab === 'advanced' && (
             <div className={`p-6 rounded-lg backdrop-blur-sm ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
-              <h2 className="text-2xl font-bold mb-6">Advanced Tuning</h2>
-              <p className="opacity-70">Advanced tuning options coming soon. Use the Quick Tune tab for now.</p>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Advanced Tuning</h2>
+                <button
+                  onClick={calculateTune}
+                  disabled={isCalculating}
+                  className="px-4 py-2 rounded bamboo-button text-white font-bold disabled:opacity-50"
+                >
+                  {isCalculating ? 'Calculating...' : 'Recalculate Base Tune'}
+                </button>
+              </div>
+
+              {Object.keys(tuneData).length === 0 ? (
+                <div className="text-center py-16 px-4">
+                  <div className="text-4xl mb-4">🔧</div>
+                  <h3 className="text-xl font-bold mb-2">No Base Tune Found</h3>
+                  <p className="opacity-70 mb-6 max-w-md mx-auto">
+                    Please calculate a base tune first using the Quick Tune tab to unlock advanced slider overrides. We use the base tune to establish correct spring rates and balance metrics for this specific car.
+                  </p>
+                  <button
+                    onClick={() => setActiveTab('quick')}
+                    className="px-6 py-2 rounded bamboo-button text-white font-medium"
+                  >
+                    Go to Quick Tune
+                  </button>
+                </div>
+              ) : (
+                <div className="animate-fade-in">
+                  <p className="mb-6 opacity-80 text-sm">
+                    Fine-tune your setup manually. These sliders directly modify your active tune data. Any changes made here will be saved if you submit your tune to the Community Database.
+                  </p>
+                  <AdvancedTuningControls 
+                    tuneData={tuneData} 
+                    setTuneData={setTuneData} 
+                    isDarkMode={isDarkMode} 
+                    drivetrain={car.drivetrain} 
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>

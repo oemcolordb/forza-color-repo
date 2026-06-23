@@ -1,0 +1,5 @@
+- `[x]` Define and export `normalizeColorType` in `colorUtils.ts`
+- `[x]` Update `getAdvancedMaterialStyle` in `colorUtils.ts` to use normalized types and support Kevlar/Damascus/Chrome/Metallic
+- `[x]` Update `WebGLPaintPreview.tsx` to use normalized types and map metallic/semigloss/Kevlar/Damascus/Chrome properly
+- `[x]` Update unit tests in `colorDisplay.test.tsx` to assert correct render styles for all types
+- `[x]` Run Jest tests to verify all tests pass

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CarColor } from '@/types'
 import { useWakeLock } from '@/hooks/useWakeLock'
 import { ArrowLeft, Moon, Sun, MonitorSmartphone, Share2 } from 'lucide-react'
+import { getAdvancedMaterialStyle } from '@/lib/utils/colorUtils'
 
 interface CompanionViewProps {
   color: CarColor | null
@@ -180,9 +181,7 @@ ${color.color2 ? `Flake: H: ${Math.round(color.color2.h * 100) / 100}, S: ${Math
           <div className="bg-gray-900 rounded-3xl overflow-hidden border border-gray-800 shadow-2xl relative">
             <div 
               className="h-32 w-full"
-              style={{
-                background: `hsl(${color.color1.h * 360}, ${color.color1.s * 100}%, ${color.color1.b * 100}%)`,
-              }}
+              style={getAdvancedMaterialStyle(color.color1, color.color2, color.colorType)}
             />
             
             <div className="p-6">
@@ -219,9 +218,7 @@ ${color.color2 ? `Flake: H: ${Math.round(color.color2.h * 100) / 100}, S: ${Math
             <div className="bg-gray-900 rounded-3xl overflow-hidden border border-gray-800 shadow-2xl relative mt-6">
               <div 
                 className="h-32 w-full"
-                style={{
-                  background: `hsl(${color.color2.h * 360}, ${color.color2.s * 100}%, ${color.color2.b * 100}%)`,
-                }}
+                style={getAdvancedMaterialStyle(color.color2, null, color.colorType)}
               />
               
               <div className="p-6">

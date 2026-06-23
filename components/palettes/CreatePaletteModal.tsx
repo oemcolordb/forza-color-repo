@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { getAdvancedMaterialStyle } from '@/lib/utils/colorUtils';
 
 interface FavoriteColor {
   colorId: string;
@@ -132,8 +133,6 @@ export default function CreatePaletteModal({ isOpen, onClose, favorites, session
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 max-h-48 overflow-y-auto p-1">
               {favorites.map(color => {
                 const isSelected = selectedColors.some(c => c.colorId === color.colorId);
-                const h1 = color.color1.h * 360, s1 = color.color1.s * 100, b1 = color.color1.b * 100;
-                const h2 = (color.color2?.h ?? color.color1.h) * 360, s2 = (color.color2?.s ?? color.color1.s) * 100, b2 = (color.color2?.b ?? color.color1.b) * 100;
                 
                 return (
                   <button
@@ -146,7 +145,7 @@ export default function CreatePaletteModal({ isOpen, onClose, favorites, session
                   >
                     <div 
                       className="absolute inset-0 z-0" 
-                      style={{ background: `linear-gradient(135deg, hsl(${h1}, ${s1}%, ${b1}%), hsl(${h2}, ${s2}%, ${b2}%))` }}
+                      style={getAdvancedMaterialStyle(color.color1, color.color2, color.colorType)}
                     />
                     {isSelected && (
                       <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">

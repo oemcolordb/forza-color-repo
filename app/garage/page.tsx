@@ -206,7 +206,7 @@ export default function GaragePage() {
         </a>
       </div>
 
-      <div className="max-w-screen-2xl mx-auto px-4 py-4">
+      <main id="main-content" tabIndex={-1} className="max-w-screen-2xl mx-auto px-4 py-4 outline-none">
         <Breadcrumbs isDarkMode={isDarkMode} />
 
         {/* Filters */}
@@ -288,7 +288,7 @@ export default function GaragePage() {
             )}
           </>
         )}
-      </div>
+      </main>
     </div>
     </GamingErrorBoundary>
   )

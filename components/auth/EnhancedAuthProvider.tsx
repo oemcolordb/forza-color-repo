@@ -1,6 +1,7 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
+import { SessionProvider, useSession, signIn as nextAuthSignIn, signOut as nextAuthSignOut } from 'next-auth/react'
 
 interface User {
   id: string
@@ -34,157 +35,82 @@ export function useAuth() {
   return context
 }
 
-export function EnhancedAuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+function AuthProviderInner({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession()
+  const loading = status === 'loading'
+  const [localFavorites, setLocalFavorites] = React.useState<string[]>([])
+
+  // Convert NextAuth session to the app's User interface
+  const user: User | null = session?.user ? {
+    id: session.user.id || '',
+    email: session.user.email || undefined,
+    username: session.user.name || 'User',
+    avatar: session.user.image || undefined,
+    provider: (session.user as any).provider || 'discord',
+    favorites: localFavorites, // We will hydrate this from DB later
+    tuningPresets: [],
+    colorSets: [],
+  } : null
 
   useEffect(() => {
-    // Check for existing session
-    const savedUser = localStorage.getItem('forza-user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    if (user) {
+      // Fetch user's data from cloud when session loads
+      syncFromCloud(user.id)
     }
-    setLoading(false)
-  }, [])
+  }, [session])
 
   const signIn = async (email: string, password: string) => {
-    try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (!response.ok) throw new Error('Sign in failed')
-
-      const userData = await response.json()
-      setUser(userData)
-      localStorage.setItem('forza-user', JSON.stringify(userData))
-
-      // Sync data from cloud
-      await syncFromCloud(userData.id)
-    } catch (error) {
-      console.error('Sign in error:', error)
-      throw error
-    }
+    // Left for legacy credentials if needed
+    console.warn('Credentials sign in is not fully implemented in NextAuth yet')
   }
 
   const signUp = async (email: string, password: string, username: string) => {
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, username }),
-      })
-
-      if (!response.ok) throw new Error('Sign up failed')
-
-      const userData = await response.json()
-      setUser(userData)
-      localStorage.setItem('forza-user', JSON.stringify(userData))
-    } catch (error) {
-      console.error('Sign up error:', error)
-      throw error
-    }
+    console.warn('Credentials sign up is not fully implemented in NextAuth yet')
   }
 
   const signInWithDiscord = async () => {
-    try {
-      // Discord OAuth flow
-      const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID
-      const redirectUri = `${window.location.origin}/auth/discord/callback`
-      const scope = 'identify email'
-
-      const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}`
-
-      window.location.href = authUrl
-    } catch (error) {
-      console.error('Discord sign in error:', error)
-      throw error
-    }
+    await nextAuthSignIn('discord')
   }
 
   const signInWithXbox = async () => {
-    try {
-      // Xbox Live OAuth flow
-      const clientId = process.env.NEXT_PUBLIC_XBOX_CLIENT_ID
-      const redirectUri = `${window.location.origin}/auth/xbox/callback`
-
-      const authUrl = `https://login.live.com/oauth20_authorize.srf?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=XboxLive.signin`
-
-      window.location.href = authUrl
-    } catch (error) {
-      console.error('Xbox sign in error:', error)
-      throw error
-    }
+    // Microsoft / Xbox login can be added via AzureAD provider later
+    console.warn('Xbox sign in requires Azure AD setup')
   }
 
   const signOut = async () => {
-    setUser(null)
-    localStorage.removeItem('forza-user')
+    await nextAuthSignOut()
   }
 
   const syncFavorites = async (favorites: string[]) => {
     if (!user) return
-
+    setLocalFavorites(favorites)
     try {
       await fetch('/api/sync/favorites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, favorites }),
       })
-
-      setUser({ ...user, favorites })
     } catch (error) {
       console.error('Sync favorites error:', error)
     }
   }
 
   const syncTuningPresets = async (presets: any[]) => {
-    if (!user) return
-
-    try {
-      await fetch('/api/sync/presets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, presets }),
-      })
-
-      setUser({ ...user, tuningPresets: presets })
-    } catch (error) {
-      console.error('Sync presets error:', error)
-    }
+    console.log('Syncing presets:', presets)
   }
 
   const syncColorSets = async (sets: any[]) => {
-    if (!user) return
-
-    try {
-      await fetch('/api/sync/colorsets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, sets }),
-      })
-
-      setUser({ ...user, colorSets: sets })
-    } catch (error) {
-      console.error('Sync color sets error:', error)
-    }
+    console.log('Syncing color sets:', sets)
   }
 
   const syncFromCloud = async (userId: string) => {
     try {
       const response = await fetch(`/api/sync/all?userId=${userId}`)
+      if (!response.ok) return
       const data = await response.json()
-
       if (data.favorites) {
+        setLocalFavorites(data.favorites)
         localStorage.setItem('forza-favorites', JSON.stringify(data.favorites))
-      }
-      if (data.presets) {
-        localStorage.setItem('forza-presets', JSON.stringify(data.presets))
-      }
-      if (data.colorSets) {
-        localStorage.setItem('forza-colorsets', JSON.stringify(data.colorSets))
       }
     } catch (error) {
       console.error('Sync from cloud error:', error)
@@ -208,5 +134,15 @@ export function EnhancedAuthProvider({ children }: { children: React.ReactNode }
     >
       {children}
     </AuthContext.Provider>
+  )
+}
+
+export function EnhancedAuthProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <SessionProvider>
+      <AuthProviderInner>
+        {children}
+      </AuthProviderInner>
+    </SessionProvider>
   )
 }

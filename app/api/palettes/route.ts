@@ -1,44 +1,36 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@libsql/client'
+import { getDb, ensureTables } from '@/lib/db/db'
 import { v4 as uuidv4 } from 'uuid'
 import { checkBotId } from 'botid/server'
 
-const client =
-  process.env.TURSO_DATABASE_URL &&
-  process.env.TURSO_DATABASE_URL !== 'your_turso_database_url_here'
-    ? createClient({
-        url: process.env.TURSO_DATABASE_URL,
-        authToken: process.env.TURSO_AUTH_TOKEN || '',
-      })
-    : null
-
 export async function GET(request: Request) {
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
-
   try {
+    await ensureTables()
+    const db = getDb()
     const { searchParams } = new URL(request.url)
-    const sort = searchParams.get('sort') || 'trending' // trending, newest
+    const sort = searchParams.get('sort') || 'trending' // trending, newest, highest-rated
     const tag = searchParams.get('tag')
     const authorId = searchParams.get('authorId')
     const limit = parseInt(searchParams.get('limit') || '50', 10)
     const offset = parseInt(searchParams.get('offset') || '0', 10)
 
-    let query = 'SELECT * FROM palettes WHERE isPublic = true'
+    let query = 'SELECT * FROM palettes WHERE isPublic = 1'
     const args: any[] = []
 
     if (authorId) {
-      query = 'SELECT * FROM palettes WHERE authorId = ?' // show all for author even if private? Wait, let's keep it simple
+      query = 'SELECT * FROM palettes WHERE authorId = ?'
       args.push(authorId)
     }
 
     if (tag) {
-      // Tags are stored as JSON array string like '["JDM", "Racing"]'
       query += ` AND tags LIKE ?`
       args.push(`%${tag}%`)
     }
 
-    if (sort === 'trending') {
-      query += ` ORDER BY likes DESC, createdAt DESC`
+    if (sort === 'highest-rated') {
+      query += ` ORDER BY rating_avg DESC, rating_count DESC, createdAt DESC`
+    } else if (sort === 'trending') {
+      query += ` ORDER BY likes DESC, rating_avg DESC, createdAt DESC`
     } else {
       query += ` ORDER BY createdAt DESC`
     }
@@ -46,7 +38,7 @@ export async function GET(request: Request) {
     query += ` LIMIT ? OFFSET ?`
     args.push(limit, offset)
 
-    const result = await client.execute({ sql: query, args })
+    const result = await db.execute({ sql: query, args })
 
     // Parse JSON fields
     const palettes = result.rows.map((row: any) => ({
@@ -57,6 +49,8 @@ export async function GET(request: Request) {
       colors: row.colors ? JSON.parse(row.colors as string) : [],
       authorId: row.authorId,
       likes: row.likes,
+      rating_avg: row.rating_avg !== undefined ? Number(row.rating_avg) : 0,
+      rating_count: row.rating_count !== undefined ? Number(row.rating_count) : 0,
       createdAt: row.createdAt,
       isPublic: Boolean(row.isPublic)
     }))
@@ -72,9 +66,9 @@ export async function POST(request: Request) {
   const botCheck = await checkBotId()
   if (botCheck.isBot) return NextResponse.json({ error: 'Access denied' }, { status: 403 })
 
-  if (!client) return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
-
   try {
+    await ensureTables()
+    const db = getDb()
     const body = await request.json()
     const { name, description, tags, colors, authorId } = body
 
@@ -86,16 +80,16 @@ export async function POST(request: Request) {
     const tagsJson = JSON.stringify(tags || [])
     const colorsJson = JSON.stringify(colors)
 
-    await client.execute({
-      sql: `INSERT INTO palettes (id, name, description, tags, colors, authorId, likes, isPublic)
-            VALUES (?, ?, ?, ?, ?, ?, 0, true)`,
+    await db.execute({
+      sql: `INSERT INTO palettes (id, name, description, tags, colors, authorId, likes, isPublic, rating_avg, rating_count)
+            VALUES (?, ?, ?, ?, ?, ?, 0, 1, 0.0, 0)`,
       args: [id, name, description || '', tagsJson, colorsJson, authorId],
     })
 
     return NextResponse.json({
       success: true,
       palette: {
-        id, name, description, tags, colors, authorId, likes: 0
+        id, name, description, tags, colors, authorId, likes: 0, rating_avg: 0.0, rating_count: 0
       }
     })
   } catch (error) {

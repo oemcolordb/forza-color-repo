@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
 
   return (
     <ErrorBoundary>
-      <header className="py-6 text-center bg-transparent relative z-10">
+      <header className="py-6 text-center bg-transparent relative z-[100]">
         <Button
           onClick={onToggleTheme}
           variant="ghost"

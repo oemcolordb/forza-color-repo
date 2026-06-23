@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { getAdvancedMaterialStyle } from '@/lib/utils/colorUtils';
 
 interface PaletteColor {
   colorId: string;
@@ -22,19 +23,28 @@ interface Palette {
   colors: PaletteColor[];
   authorId: string;
   likes: number;
+  rating_avg?: number;
+  rating_count?: number;
   createdAt: string;
 }
 
 interface PaletteCardProps {
   palette: Palette;
   sessionId: string;
-  onTagClick?: (tag: string) => void;
+  onTagClick?: (_tag: string) => void;
 }
 
 export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteCardProps) {
   const [likes, setLikes] = useState(palette.likes);
   const [isLiked, setIsLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+
+  // Rating State
+  const [ratingAvg, setRatingAvg] = useState(palette.rating_avg || 0);
+  const [ratingCount, setRatingCount] = useState(palette.rating_count || 0);
+  const [userRating, setUserRating] = useState<number | null>(null);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [isRating, setIsRating] = useState(false);
 
   useEffect(() => {
     // Check initial like status
@@ -49,8 +59,25 @@ export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteC
         console.error('Failed to check like status', err);
       }
     };
+
+    // Check initial rating status
+    const checkRating = async () => {
+      try {
+        const res = await fetch(`/api/palettes/${palette.id}/rate?sessionId=${sessionId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setRatingAvg(data.rating_avg);
+          setRatingCount(data.rating_count);
+          setUserRating(data.userRating);
+        }
+      } catch (err) {
+        console.error('Failed to check rating status', err);
+      }
+    };
+
     if (sessionId) {
       checkLike();
+      checkRating();
     }
   }, [palette.id, sessionId]);
 
@@ -83,31 +110,48 @@ export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteC
     }
   };
 
+  const handleRate = async (ratingVal: number) => {
+    if (isRating || !sessionId) return;
+    setIsRating(true);
+
+    try {
+      const res = await fetch(`/api/palettes/${palette.id}/rate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, rating: ratingVal }),
+      });
+
+      if (!res.ok) throw new Error('Failed to submit rating');
+      const data = await res.json();
+      setRatingAvg(data.rating_avg);
+      setRatingCount(data.rating_count);
+      setUserRating(data.userRating);
+    } catch (err) {
+      console.error('Failed to submit rating', err);
+    } finally {
+      setIsRating(false);
+    }
+  };
+
   return (
     <div className="flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
       {/* Colors Strip */}
       <div className="flex h-32 w-full">
         {palette.colors.map((color, idx) => {
-          const h1 = color.color1.h * 360;
-          const s1 = color.color1.s * 100;
-          const b1 = color.color1.b * 100;
-          
-          const h2 = (color.color2?.h ?? color.color1.h) * 360;
-          const s2 = (color.color2?.s ?? color.color1.s) * 100;
-          const b2 = (color.color2?.b ?? color.color1.b) * 100;
-
-          const bgStyle = {
-            background: `linear-gradient(135deg, hsl(${h1}, ${s1}%, ${b1}%), hsl(${h2}, ${s2}%, ${b2}%))`
-          };
+          const style = getAdvancedMaterialStyle(
+            color.color1,
+            color.color2,
+            color.colorType
+          );
 
           return (
             <div
               key={idx}
               className="group relative flex-1 border-r border-white/10 last:border-0"
-              style={bgStyle}
+              style={style}
             >
               {/* Tooltip */}
-              <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-black/80 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-black/80 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover:opacity-100">
                 {color.colorName} ({color.make})
               </div>
             </div>
@@ -117,7 +161,7 @@ export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteC
 
       <div className="flex flex-1 flex-col p-5">
         <div className="mb-2 flex items-start justify-between">
-          <div>
+          <div className="flex-1">
             <h3 className="font-bold text-gray-900 dark:text-white line-clamp-1" title={palette.name}>
               {palette.name}
             </h3>
@@ -126,6 +170,19 @@ export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteC
                 {palette.description}
               </p>
             )}
+
+            {/* Average rating star display */}
+            <div className="flex items-center gap-1.5 mt-2 text-xs text-gray-500 dark:text-gray-400">
+              <div className="flex text-amber-400">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span key={star} className="text-sm">
+                    {ratingAvg >= star ? '★' : ratingAvg >= star - 0.5 ? '½' : '☆'}
+                  </span>
+                ))}
+              </div>
+              <span className="font-bold text-gray-800 dark:text-gray-200">{ratingAvg ? ratingAvg.toFixed(1) : 'Unrated'}</span>
+              <span>({ratingCount})</span>
+            </div>
           </div>
           <button
             onClick={handleLike}
@@ -141,7 +198,37 @@ export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteC
           </button>
         </div>
 
-        <div className="mt-auto pt-4">
+        {/* Interactive User Rating Stars */}
+        <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-gray-700">
+          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+            {userRating ? 'Your rating:' : 'Rate setup:'}
+          </span>
+          <div className="flex gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => {
+              const active = hoverRating !== null ? hoverRating >= star : (userRating ?? 0) >= star;
+              return (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => handleRate(star)}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(null)}
+                  disabled={!sessionId || isRating}
+                  className={`text-lg transition-all hover:scale-125 focus:outline-none disabled:opacity-50 ${
+                    active
+                      ? 'text-amber-400 font-bold drop-shadow-[0_0_2px_rgba(245,158,11,0.5)]'
+                      : 'text-gray-300 dark:text-gray-600 hover:text-amber-300'
+                  }`}
+                  title={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                >
+                  ★
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700/50">
           <div className="mb-3 flex flex-wrap gap-2">
             {palette.tags.map((tag) => (
               <button

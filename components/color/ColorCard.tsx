@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState, useCallback, useRef } from 'react'
-import { createForzaGradient } from '@/lib/utils/colorUtils'
+import { getAdvancedMaterialStyle } from '@/lib/utils/colorUtils'
 import { CarColor } from '@/types'
+import { BadgeCheck } from 'lucide-react'
 
 // Musical note emojis mapped to 8 hue segments
 const NOTE_EMOJIS = ['♩', '♪', '♫', '♬', '🎵', '🎶', '🎼', '🎹']
@@ -32,6 +33,12 @@ function playNoteForHue(hue: number) {
 
 function getNoteEmojiForHue(hue: number): string {
   return NOTE_EMOJIS[Math.floor((hue / 360) * 8) % 8]
+}
+
+const isDualToneFinish = (type?: string) => {
+  if (!type) return false;
+  const t = type.toLowerCase();
+  return t.includes('flake') || t.includes('pearl') || t.includes('two-tone') || t.includes('two tone') || t.includes('carbon') || t.includes('kevlar');
 }
 
 interface ColorCardProps {
@@ -92,11 +99,13 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
       [color, onSelect]
     )
 
-    const gradient = React.useMemo(() => {
-      const c1 = color.color1 ?? { h: 0, s: 0, b: 0.5 }
-      const c2 = color.color2 ?? { h: 0, s: 0, b: 0.5 }
-      return createForzaGradient(c1, c2)
-    }, [color.color1, color.color2])
+    const swatchStyle = React.useMemo(() => {
+      return getAdvancedMaterialStyle(
+        color.color1,
+        color.color2,
+        color.colorType
+      )
+    }, [color.color1, color.color2, color.colorType])
 
     return (
       <div
@@ -112,17 +121,22 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
           className={`w-full h-20 sm:h-24 relative overflow-hidden ${
             finish === 'matte' ? '' : 'shadow-inner'
           } ${finish === 'chrome' || finish === 'pearlescent' ? 'glow-effect' : ''}`}
-          style={{ background: gradient }}
+          style={swatchStyle}
           role="img"
           aria-label={`Color preview for ${color.colorName}`}
         >
           {/* Color name overlay at top */}
           <div className="absolute top-0 left-0 right-0 px-2 py-1 bg-gradient-to-b from-black/60 to-transparent pointer-events-none z-10">
             <div
-              className="text-[10px] sm:text-xs font-semibold text-white truncate leading-tight"
+              className="text-[10px] sm:text-xs font-semibold text-white truncate leading-tight flex items-center"
               title={color.colorName}
             >
               {color.colorName}
+              {color.original_hex && (
+                <span title={`Validated against Paintlib (${color.original_hex})`} className="ml-1 shrink-0 inline-flex items-center">
+                  <BadgeCheck className="w-3.5 h-3.5 text-green-500" />
+                </span>
+              )}
             </div>
             <div className="flex gap-1 mt-1">
               {isTrending && (
@@ -151,108 +165,6 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
             >
               {noteAnim.emoji}
             </span>
-          )}
-
-          {(finish === 'gloss' || finish === 'semigloss') && (
-            <div
-              className={`absolute inset-0 pointer-events-none ${finish === 'gloss' ? 'opacity-35' : 'opacity-25'}`}
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.55) 38%, rgba(255,255,255,0.85) 48%, rgba(255,255,255,0.55) 58%, rgba(255,255,255,0.0) 100%)',
-              }}
-            />
-          )}
-
-          {finish === 'metallic' && (
-            <>
-              <div
-                className="absolute inset-0 opacity-25 pointer-events-none"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.0) 35%, rgba(0,0,0,0.18) 70%, rgba(255,255,255,0.2) 100%)',
-                  mixBlendMode: 'overlay',
-                }}
-              />
-              <div
-                className="absolute inset-0 opacity-15 pointer-events-none"
-                style={{
-                  backgroundImage:
-                    'radial-gradient(rgba(255,255,255,0.45) 1px, rgba(255,255,255,0) 1.2px)',
-                  backgroundSize: '4px 4px',
-                  mixBlendMode: 'overlay',
-                }}
-              />
-            </>
-          )}
-
-          {finish === 'chrome' && (
-            <>
-              <div
-                className="absolute inset-0 opacity-35 pointer-events-none"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.15) 22%, rgba(0,0,0,0.25) 50%, rgba(255,255,255,0.25) 78%, rgba(255,255,255,0.75) 100%)',
-                  mixBlendMode: 'overlay',
-                }}
-              />
-              <div
-                className="absolute inset-0 opacity-25 pointer-events-none"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.9) 48%, rgba(255,255,255,0.0) 100%)',
-                }}
-              />
-            </>
-          )}
-
-          {finish === 'pearlescent' && (
-            <>
-              <div
-                className="absolute inset-0 opacity-25 pointer-events-none"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(255,0,200,0.22) 0%, rgba(0,180,255,0.18) 35%, rgba(255,255,255,0.0) 55%, rgba(0,255,170,0.18) 75%, rgba(255,240,120,0.22) 100%)',
-                  mixBlendMode: 'screen',
-                }}
-              />
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                <div className="absolute top-2 left-4 w-1 h-1 bg-white rounded-full animate-pulse" />
-                <div
-                  className="absolute top-6 right-6 w-0.5 h-0.5 bg-white rounded-full animate-pulse"
-                  style={{ animationDelay: '0.5s' }}
-                />
-                <div
-                  className="absolute bottom-4 left-8 w-0.5 h-0.5 bg-white rounded-full animate-pulse"
-                  style={{ animationDelay: '1s' }}
-                />
-                <div
-                  className="absolute bottom-2 right-4 w-1 h-1 bg-white rounded-full animate-pulse"
-                  style={{ animationDelay: '1.5s' }}
-                />
-              </div>
-            </>
-          )}
-
-          {finish === 'matte' && (
-            <>
-              <div
-                className="absolute inset-0 opacity-15 pointer-events-none"
-                style={{
-                  background:
-                    'linear-gradient(135deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.0) 35%, rgba(255,255,255,0.08) 100%)',
-                  mixBlendMode: 'multiply',
-                }}
-              />
-              <div
-                className="absolute inset-0 opacity-18 pointer-events-none"
-                style={{
-                  backgroundImage:
-                    'radial-gradient(rgba(255,255,255,0.20) 1px, rgba(255,255,255,0) 1.5px)',
-                  backgroundSize: '3px 3px',
-                  mixBlendMode: 'soft-light',
-                }}
-              />
-            </>
           )}
         </div>
         <div className="px-2 pb-2 pt-1 flex justify-between items-center w-full relative z-10">

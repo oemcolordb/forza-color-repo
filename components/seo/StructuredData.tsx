@@ -14,7 +14,7 @@ const StructuredData: React.FC<StructuredDataProps> = ({ colors, type = 'website
       '@type': 'WebSite',
       name: 'Forza Color Universe',
       description:
-        'Comprehensive database of 10,000+ automotive paint colors from Forza racing games',
+        'Comprehensive database of 40,000+ automotive paint colors from Forza racing games',
       url: 'https://forza-color-repo.vercel.app',
       potentialAction: {
         '@type': 'SearchAction',

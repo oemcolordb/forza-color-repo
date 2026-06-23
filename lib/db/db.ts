@@ -53,6 +53,31 @@ export async function ensureTables(): Promise<void> {
   const db = getDb()
 
   await db.batch([
+    `CREATE TABLE IF NOT EXISTS users (
+      id           TEXT    PRIMARY KEY,
+      name         TEXT,
+      email        TEXT    UNIQUE,
+      image        TEXT,
+      password     TEXT,
+      discord_id   TEXT,
+      discord_username TEXT,
+      xbox_id      TEXT,
+      xbox_gamertag TEXT,
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS user_connections (
+      id           TEXT    PRIMARY KEY,
+      user_id      TEXT    NOT NULL,
+      provider     TEXT    NOT NULL,
+      provider_id  TEXT    NOT NULL,
+      username     TEXT,
+      email        TEXT,
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(user_id, provider),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_connections_user ON user_connections (user_id)`,
+    `CREATE INDEX IF NOT EXISTS idx_connections_provider ON user_connections (provider, provider_id)`,
     `CREATE TABLE IF NOT EXISTS tunes (
       id           TEXT    PRIMARY KEY,
       name         TEXT    NOT NULL,
@@ -73,15 +98,72 @@ export async function ensureTables(): Promise<void> {
       pi_value     INTEGER,
       tune_data    TEXT    NOT NULL,
       votes        INTEGER NOT NULL DEFAULT 0,
+      ip_address   TEXT,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
     `CREATE INDEX IF NOT EXISTS idx_community_tunes_car   ON community_tunes (car_make, car_model)`,
     `CREATE INDEX IF NOT EXISTS idx_community_tunes_votes ON community_tunes (votes DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_community_tunes_ip    ON community_tunes (ip_address)`,
     `CREATE TABLE IF NOT EXISTS favorites (
       id           TEXT    PRIMARY KEY,
       car_id       TEXT    NOT NULL,
+      userId       TEXT,
+      sessionId    TEXT,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
+    `CREATE TABLE IF NOT EXISTS user_favorites (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      sessionId    TEXT    NOT NULL,
+      userId       TEXT,
+      favorites    TEXT    NOT NULL,
+      lastSynced   DATETIME DEFAULT CURRENT_TIMESTAMP,
+      ip_address   TEXT,
+      UNIQUE(sessionId)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_user_favorites_session ON user_favorites(sessionId)`,
+    `CREATE INDEX IF NOT EXISTS idx_user_favorites_ip ON user_favorites(ip_address)`,
+    `CREATE TABLE IF NOT EXISTS favorites_analytics (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      colorId      TEXT    NOT NULL,
+      colorName    TEXT    NOT NULL,
+      make         TEXT    NOT NULL,
+      model        TEXT,
+      colorType    TEXT,
+      userId       TEXT,
+      sessionId    TEXT    NOT NULL,
+      action       TEXT    NOT NULL CHECK(action IN ('add', 'remove')),
+      ip_address   TEXT,
+      createdAt    DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_favorites_color ON favorites_analytics(colorId)`,
+    `CREATE INDEX IF NOT EXISTS idx_favorites_created ON favorites_analytics(createdAt DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_favorites_action ON favorites_analytics(action)`,
+    `CREATE TABLE IF NOT EXISTS favorites_ranking (
+      colorId      TEXT    PRIMARY KEY,
+      colorName    TEXT    NOT NULL,
+      make         TEXT    NOT NULL,
+      model        TEXT,
+      colorType    TEXT,
+      totalFavorites INTEGER DEFAULT 0,
+      currentFavorites INTEGER DEFAULT 0,
+      lastUpdated  DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_ranking_total ON favorites_ranking(totalFavorites DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_ranking_current ON favorites_ranking(currentFavorites DESC)`,
+    `CREATE TABLE IF NOT EXISTS map_progress (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      sessionId    TEXT    NOT NULL,
+      userId       TEXT,
+      visitedLocations TEXT NOT NULL,
+      favoriteLocations TEXT NOT NULL,
+      activeFilters TEXT NOT NULL,
+      lastViewedLocation TEXT,
+      zoomLevel    REAL DEFAULT 1,
+      lastUpdated  DATETIME DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(sessionId)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_progress_session ON map_progress(sessionId)`,
+    `CREATE INDEX IF NOT EXISTS idx_progress_user ON map_progress(userId)`,
     `CREATE TABLE IF NOT EXISTS color_analytics (
       id           INTEGER PRIMARY KEY AUTOINCREMENT,
       color_id     TEXT    NOT NULL,
@@ -112,6 +194,50 @@ export async function ensureTables(): Promise<void> {
       user_id      TEXT    NOT NULL,
       PRIMARY KEY (post_id, user_id),
       FOREIGN KEY (post_id) REFERENCES community_posts(id) ON DELETE CASCADE
-    )`
+    )`,
+    `CREATE TABLE IF NOT EXISTS palettes (
+      id           TEXT    PRIMARY KEY,
+      name         TEXT    NOT NULL,
+      description  TEXT,
+      tags         TEXT,
+      colors       TEXT    NOT NULL,
+      authorId     TEXT,
+      likes        INTEGER DEFAULT 0,
+      isPublic     BOOLEAN DEFAULT 1,
+      rating_avg   REAL DEFAULT 0.0,
+      rating_count INTEGER DEFAULT 0,
+      createdAt    DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS palette_likes (
+      paletteId    TEXT    NOT NULL,
+      sessionId    TEXT    NOT NULL,
+      PRIMARY KEY (paletteId, sessionId),
+      FOREIGN KEY (paletteId) REFERENCES palettes(id) ON DELETE CASCADE
+    )`,
+    `CREATE TABLE IF NOT EXISTS palette_ratings (
+      paletteId    TEXT    NOT NULL,
+      sessionId    TEXT    NOT NULL,
+      rating       INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (paletteId, sessionId),
+      FOREIGN KEY (paletteId) REFERENCES palettes(id) ON DELETE CASCADE
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_palettes_created ON palettes(createdAt DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_palettes_likes ON palettes(likes DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_palettes_rating ON palettes(rating_avg DESC)`
   ], 'deferred')
+
+  // Upgrade existing users table with OAuth columns if they don't exist
+  try {
+    await db.execute('ALTER TABLE users ADD COLUMN discord_id TEXT')
+  } catch (_) {}
+  try {
+    await db.execute('ALTER TABLE users ADD COLUMN discord_username TEXT')
+  } catch (_) {}
+  try {
+    await db.execute('ALTER TABLE users ADD COLUMN xbox_id TEXT')
+  } catch (_) {}
+  try {
+    await db.execute('ALTER TABLE users ADD COLUMN xbox_gamertag TEXT')
+  } catch (_) {}
 }

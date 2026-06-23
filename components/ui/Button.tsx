@@ -39,7 +39,7 @@ const Button = forwardRef<HTMLElement, ButtonProps>(function Button(
 ) {
   const variantClass = variantClasses[variant] || variantClasses.primary
   const sizeClass = sizeClasses[size] || sizeClasses.md
-  const Component = as || 'button'
+  const Component: any = as || 'button'
 
   const componentProps: any = {
     ref,

@@ -1410,7 +1410,7 @@ Bentley Burgundy Pearl Metal Flake 0.98 L 0.65 R 0.18 L 0.98 L 0.66 R 0.22 L
 Bentley Burnt Oak Mica Metal Flake 0.01 L 0.47 R 0.07 L 0.02 L 0.21 R 0.34 L
 Bentley Burnt Orange Metallic Metal Flake 0.06 L 0.91 R 0.57 L 0.06 L 0.84 R 0.67 L
 Bentley Camel Metallic Metal Flake 0.07 L 0.47 R 0.43 L 0.08 L 0.40 R 0.70 L
-Bentley Candy Red Metal Flake 0.99 L 0.91 R 0.38 L 0.99 L 0.81 R 0.49 L By Mulliner
+Bentley Candy Red Two-Tone Polished 0.99 L 0.91 R 0.38 L 0.99 L 0.81 R 0.49 L By Mulliner
 Bentley Cardinal Red Metallic Metal Flake 0.99 L 0.70 R 0.27 L 0.99 L 0.63 R 0.33 L
 Bentley Caribbean Blue Metallic Metal Flake 0.56 L 0.36 R 0.31 L 0.51 L 0.15 R 0.94 L
 Bentley Celeste Pearlescent Metal Flake 0.47 L 0.48 R 0.73 L 0.48 L 0.44 R 0.70 L
@@ -3417,7 +3417,7 @@ Dodge Bright Silver Metal Flake 0.62 L 0.07 R 0.67 L 0.67 L 0.05 L 0.82 R
 Dodge Bright White Normal 0.14 L 0.02 R 0.99 R
 Dodge Brilliant Blue Pearl Metal Flake 0.63 L 0.92 R 0.43 L 0.59 L 1.00 R 0.79 L
 Dodge Butane Blue Metallic Metal Flake 0.56 L 0.21 R 0.38 L 0.54 L 0.16 R 0.65 L
-Dodge Candy Apple Red Metallic Metal Flake 0.97 L 0.95 R 0.36 L 0.96 L 0.98 R 0.51 L
+Dodge Candy Apple Red Metallic Two-Tone Polished 0.97 L 0.95 R 0.36 L 0.96 L 0.98 R 0.51 L
 Dodge Coral Grey Normal 0.02 L 0.14 R 0.80 L
 Dodge Ceramic Blue Normal 0.58 R 0.41 L 0.59 R Paint codes PAG and MAG
 Dodge Ceramic Blue Normal 0.59 R 0.85 L 0.91 L 2015 Viper TA 2.0 and Ceramic Blue Limited Edition
@@ -3599,7 +3599,7 @@ Dodge Y'Orange Normal 0.09 R 0.80 R 0.95 R
 Dodge Yellow Normal 0.14 L 0.39 R 0.93 R
 Dodge Yellow Jacket Normal 0.12 L 0.85 R 0.89 L
 DS Automobiles Green Ametrine Metallic Metal Flake 0.19 L 0.70 R 0.51 R 0.19 L 0.67 R 0.74 R 2018 X E-TENSE
-DuPont Candy Red Metal Flake 0.99 L 0.85 L 0.42 R 0.98 R 0.83 L 0.59 R 1969 Charger Fast and Furious Edition
+DuPont Candy Red Two-Tone Polished 0.99 L 0.85 L 0.42 R 0.98 R 0.83 L 0.59 R 1969 Charger Fast and Furious Edition
 Eagle Banzai Blue Metallic Metal Flake 0.58 L 0.92 R 0.72 L 0.57 L 0.73 R 0.90 L
 Eagle Bright Platinum Metal Flake 0.11 R 0.02 R 0.57 L 0.92 R 0.01 L 0.67 R
 Eagle Grace Silver Metallic Metal Flake 0.58 R 0.08 L 0.80 L 0.59 L 0.07 R 0.90 L
@@ -4029,7 +4029,7 @@ Ford Beryllium Copper Two-Tone Polished 0.15 L 0.99 R 0.99 L 0.06 L 1.00 R 0.94 
 Ford Bimini Blue Metal Flake 0.57 L 0.70 R 0.58 L 0.57 L 0.74 R 0.88 L
 Ford Bionic Blue Normal 0.57 L 0.93 R 0.95 L
 Ford Black Gold Metallic Metal Flake 0.11 L 0.14 R 0.08 L 0.10 L 0.43 R 0.16 L
-Ford Blue Candy Metallic Metal Flake 0.55 L 1.00 R 0.40 L 0.53 L 0.99 R 0.53 L
+Ford Blue Candy Metallic Two-Tone Polished 0.55 L 1.00 R 0.40 L 0.53 L 0.99 R 0.53 L
 Ford Blue Diamond Metal Flake 0.59 L 0.42 R 0.17 L 0.55 L 0.29 R 0.76 L
 Ford Blue Flame Metallic Metal Flake 0.57 L 1.00 R 0.33 L 0.55 L 1.00 R 0.59 L
 Ford Blue Gloss Normal 0.58 L 0.99 R 0.40 R Tractor color
@@ -4068,7 +4068,7 @@ Ford Calypso Coral Normal 0.02 R 0.84 L 0.97 L
 Ford Calypso Green Metal Flake 0.51 L 0.93 R 0.70 L 0.55 L 0.82 R 0.81 L
 Ford Camel Bronze Metal Flake 0.09 L 0.69 R 0.77 R 0.09 R 0.51 R 0.94 L
 Ford Cameo Coral Normal 0.03 L 0.38 L 0.84 R
-Ford Candy Red #2 Metal Flake 0.98 L 0.98 R 0.38 L 0.97 L 0.99 R 0.56 L
+Ford Candy Red #2 Two-Tone Polished 0.98 L 0.98 R 0.38 L 0.97 L 0.99 R 0.56 L
 Ford Canepa Racing Green Normal 0.44 L 0.78 R 0.37 L 2020 GT owned by Bruce Canepa
 Ford Canyon Ridge Metal Flake 0.07 L 0.85 R 0.56 L 0.08 L 0.83 R 0.75 L
 Ford Carbonized Gray Metal Flake 0.56 R 0.11 L 0.30 R 0.59 R 0.09 R 0.46 L
@@ -4319,7 +4319,7 @@ Ford Race Red Normal 0.00 R 0.93 L 0.94 R
 Ford Rangoon Red Normal 1.00 R 0.82 L 0.83 L A1440R (shared with the AC Cobra)
 Ford Rapid Red Metallic Tinted Clearcoat Metal Flake 0.99 L 1.00 R 0.65 L 0.98 L 0.89 R 0.80 R
 Ford Raven Black Normal 0.00 L 0.00 L 0.03 L
-Ford Red Candy Metal Flake 0.98 L 0.97 R 0.39 L 0.96 L 0.97 R 0.58 L
+Ford Red Candy Two-Tone Polished 0.98 L 0.97 R 0.39 L 0.96 L 0.97 R 0.58 L
 Ford Red Carpet Metal Flake 0.99 L 1.00 R 0.65 L 0.98 L 0.89 R 0.80 R
 Ford Redfire Metal Flake 0.98 L 0.95 L 0.57 L 0.99 R 0.95 L 0.83 R
 Ford Reef Blue Metal Flake 0.54 L 0.77 R 0.56 L 0.52 L 0.89 R 0.80 L
@@ -4907,7 +4907,7 @@ Honda British Green Pearl Metal Flake 0.51 L 0.53 R 0.07 L 0.43 L 0.74 R 0.14 L
 Honda Brittany Blue-Green Pearl Metal Flake 0.57 L 0.63 R 0.42 R 0.49 L 0.52 L 0.72 R
 Honda Brownish Amethyst Metallic Metal Flake 0.00 L 0.19 R 0.11 L 0.03 L 0.23 R 0.69 L
 Honda Burgundy Night Pearl Metal Flake 0.66 L 0.17 R 0.02 L 0.95 L 0.46 R 0.19 L
-Honda Candy Moon Glow Yellow Metal Flake 0.12 L 0.98 R 0.97 L 0.13 L 0.67 R 0.97 L
+Honda Candy Moon Glow Yellow Two-Tone Polished 0.12 L 0.98 R 0.97 L 0.13 L 0.67 R 0.97 L
 Honda Cairns Coral Normal 0.98 L 0.85 R 0.75 L
 Honda Caramel Creme Normal 0.09 L 0.42 R 0.79 L
 Honda Carbon Bronze Pearl Metal Flake 0.00 L 0.02 R 0.19 L 0.13 L 0.04 R 0.44 L
@@ -6105,7 +6105,7 @@ Kia Bronze Metallic Metal Flake 0.05 L 0.54 R 0.25 L 0.06 L 0.52 R 0.45 L
 Kia Burnished Copper Metal Flake 0.06 L 0.59 L 0.36 R 0.08 L 0.71 R 0.62 R
 Kia Byte Blue Metallic Metal Flake 0.55 L 1.00 R 0.31 L 0.53 L 0.99 R 0.59 L
 Kia C-Gray Normal 0.60 L 0.11 R 0.27 L
-Kia Candy Red Pearl Metal Flake 0.00 L 0.74 R 0.54 L 0.98 L 0.65 R 0.73 L
+Kia Candy Red Pearl Two-Tone Polished 0.00 L 0.74 R 0.54 L 0.98 L 0.65 R 0.73 L
 Kia Caramel Yellow Metallic Metal Flake 0.06 L 0.65 R 0.33 L 0.07 L 0.63 R 0.66 L
 Kia Carbon Grey Metallic Metal Flake 0.58 L 0.07 R 0.11 L 0.57 L 0.11 R 0.25 L
 Kia Caribbean Blue Metal Flake 0.57 L 0.97 R 0.67 L 0.54 R 0.94 L 0.95 L 2015 Soul Caribbean Blue Special Edition
@@ -7098,7 +7098,7 @@ Lotus Azure Blue Metal Flake 0.66 L 0.69 R 0.42 L 0.65 L 0.79 R 0.78 L
 Lotus British Racing Green Metallic Metal Flake 0.44 L 0.98 R 0.19 L 0.43 L 1.00 R 0.20 L
 Lotus Burnt Orange Metal Flake 0.07 L 0.87 R 0.77 L 0.10 L 0.81 R 0.97 L
 Lotus Calypso Red Normal 0.99 L 1.00 R 0.92 R
-Lotus Candy Red Pearl Metal Flake 0.94 L 0.83 R 0.42 L 0.92 L 0.76 R 0.56 L
+Lotus Candy Red Pearl Two-Tone Polished 0.94 L 0.83 R 0.42 L 0.92 L 0.76 R 0.56 L
 Lotus Canyon Red Mica Metal Flake 0.99 L 0.84 R 0.36 L 0.99 L 0.74 R 0.59 L
 Lotus Carbon Black Metal Flake 0.57 R 0.09 L 0.18 R 0.57 R 0.26 L 0.08 R 2020 Evija
 Lotus Championship Gold Metal Flake 0.09 L 0.53 R 0.41 L 0.10 L 0.46 R 0.83 L
@@ -8682,7 +8682,7 @@ COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
 MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
 Morris Surf Blue Normal 0.54 R 0.68 R 0.81 L
 Morris Tartan Red Normal 1.00 L 0.98 R 0.83 L
-Mosler Candy Red Metal Flake 0.96 R 1.00 R 0.68 L 0.97 L 0.93 L 0.96 R
+Mosler Candy Red Two-Tone Polished 0.96 R 1.00 R 0.68 L 0.97 L 0.93 L 0.96 R
 Mosler Orange Normal 0.06 L 0.89 R 0.89 R
 Mosler Silver Metal Flake 0.58 L 0.08 R 0.71 R 0.58 L 0.07 L 0.87 R
 Mosler White Normal 0.19 R 0.01 L 0.90 L
@@ -10080,13 +10080,13 @@ Rolls-Royce Fux Arctic White Metal Flake 0.00 L 0.00 L 1.00 R 0.00 L 0.00 L 1.00
 
 COLOR 1 (X) COLOR 2 (Y) COMMENTS HOW IT WORKS:
 MAKE COLOUR NAME PAINT TYPE HUE SATURATION BRIGHTNESS HUE SATURATION BRIGHTNESS https://www.gtplanet.net/forum/threads/forza-horizon-4-colour-creation-database-work-in-progress.384407/#post-12589813
-Rolls-Royce Fux Blue Candy Metal Flake 0.60 L 1.00R 0.60 L 0.56 R 0.98 L 0.91 L
+Rolls-Royce Fux Blue Candy Two-Tone Polished 0.60 L 1.00R 0.60 L 0.56 R 0.98 L 0.91 L
 Rolls-Royce Fux Fuxia Metal Flake 0.80 L 0.99 L 0.64 R 0.82 L 0.99 R 0.89 L
 Rolls-Royce Fux Fuxia Pearl Metal Flake 0.23 R 0.02 L 0.90 R 0.00 L 0.00 L 1.00 R
 Rolls-Royce Fux Intense Jade Pearl Metal Flake 0.43 R 0.33 R 0.72 L 0.45 L 0.27 L 0.90 R
 Rolls-Royce Fux Orange Normal 0.03 L 0.97 R 0.98 L
-Rolls-Royce Fux Purple Candy Metal Flake 0.71 L 0.92 R 0.34 L 0.71 R 0.90 L 0.87 R
-Rolls-Royce Fux Red Candy Metal Flake 0.98 L 1.00 R 0.43 L 0.98 R 0.93 L 0.79 R
+Rolls-Royce Fux Purple Candy Two-Tone Polished 0.71 L 0.92 R 0.34 L 0.71 R 0.90 L 0.87 R
+Rolls-Royce Fux Red Candy Two-Tone Polished 0.98 L 1.00 R 0.43 L 0.98 R 0.93 L 0.79 R
 Rolls-Royce Fux Yellow Normal 0.13 R 0.99 R 0.93 L
 Rolls-Royce Iguazu Blue Metal Flake 0.65 L 0.23 R 0.17 L 0.59 L 0.39 R 0.39 L
 Rolls-Royce Imperial Jade Metal Flake 0.52 L 0.57 R 0.16 L 0.47 L 0.55 R 0.37 L
@@ -11225,7 +11225,7 @@ Volkswagen Cadiz Orange Normal 0.07 L 0.96 L 1.00 R
 Volkswagen Cairo Grey Metallic Metal Flake 0.07 L 0.15 R 0.24 L 0.07 L 0.16 R 0.51 L
 Volkswagen Calypso Metallic Metal Flake 0.51 L 0.19 R 0.42 L 0.48 L 0.13 R 0.69 L
 Volkswagen Campanella White Normal 0.13 L 0.08 R 0.91 L
-Volkswagen Candy White Metal Flake 0.00 L 0.00 L 0.85 R 0.00 L 0.00 L 0.97 R
+Volkswagen Candy White Two-Tone Polished 0.00 L 0.00 L 0.85 R 0.00 L 0.00 L 0.97 R
 Volkswagen Canyon Red Metallic Metal Flake 0.03 L 0.71 R 0.33 L 0.03 L 0.62 R 0.47 L
 Volkswagen Capri Green Metallic Metal Flake 0.51 L 0.86 R 0.23 L 0.50 L 0.74 R 0.46 L
 Volkswagen Carbon Steel Grey Metallic Metal Flake 0.61 L 0.13 R 0.09 L 0.56 L 0.14 R 0.23 L

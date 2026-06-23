@@ -917,7 +917,8 @@ function TuneforgePageInner() {
         </div>
       </header>
 
-      <div className="relative z-10">
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        <div className="relative z-10">
         <Breadcrumbs isDarkMode={isDarkMode} />
       </div>
 
@@ -3264,6 +3265,7 @@ function TuneforgePageInner() {
           </div>
         )}
       </div>
+      </main>
     </div>
   )
 }

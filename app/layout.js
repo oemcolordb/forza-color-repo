@@ -2,6 +2,7 @@ import { Outfit } from 'next/font/google'
 import './globals.css'
 import './wrench-scrollbar.css'
 import ErrorBoundary from '@/components/error/ErrorBoundary'
+import AccessibilityController from '@/components/system/AccessibilityController'
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -17,7 +18,7 @@ export const metadata = {
     template: '%s | Forza Color Sheet',
   },
   description:
-    'Official Forza Color Sheet with 10,000+ paint colors from Forza Horizon 5, Forza Motorsport 2019-2024. Complete Forza color database, paint codes, and livery creator tools for all Forza games.',
+    'Official Forza Color Sheet with 40,000+ paint colors from Forza Horizon 5, Forza Motorsport 2019-2024. Complete Forza color database, paint codes, and livery creator tools for all Forza games.',
   keywords: [
     'Forza Color Sheet',
     'forza color sheet 2019',
@@ -74,7 +75,7 @@ export const metadata = {
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
     title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description:
-      'Complete Forza Color Sheet with 24,000+ official paint colors from 228 manufacturers. The ultimate Forza color database and paint codes reference.',
+      'Complete Forza Color Sheet with 40,000+ official paint colors from 228 manufacturers. The ultimate Forza color database and paint codes reference.',
     siteName: 'Forza Color Sheet',
     images: [
       {
@@ -89,7 +90,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Forza Color Sheet 2019-2024 - Official Paint Colors Database',
     description:
-      'Complete Forza Color Sheet with 24,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
+      'Complete Forza Color Sheet with 40,000+ official paint colors from Forza games 2019-2024. The definitive Forza color reference.',
     creator: '@ResinRonin',
     images: ['/og-image.png'],
   },
@@ -121,7 +122,7 @@ export default function RootLayout({ children }) {
     name: 'Forza Color Sheet',
     alternateName: 'Official Forza Color Sheet 2019-2024',
     description:
-      'Complete Forza Color Sheet database with 10,000+ official paint colors from Forza Horizon 5 and Forza Motorsport 2019-2024',
+      'Complete Forza Color Sheet database with 40,000+ official paint colors from Forza Horizon 5 and Forza Motorsport 2019-2024',
     url: process.env.NEXT_PUBLIC_APP_URL || 'https://forza-color-repo.vercel.app',
     applicationCategory: ['GameApplication', 'UtilitiesApplication'],
     operatingSystem: 'Web Browser',
@@ -138,7 +139,7 @@ export default function RootLayout({ children }) {
     },
     featureList: [
       'Complete Forza Color Sheet 2019-2024',
-      '10,000+ official Forza paint colors',
+      '40,000+ official Forza paint colors',
       'Forza Horizon 5 color database',
       'Forza Motorsport color sheet',
       'Official Forza paint codes',
@@ -217,6 +218,7 @@ export default function RootLayout({ children }) {
           Skip to main content
         </a>
         <ErrorBoundary>{children}</ErrorBoundary>
+        <AccessibilityController />
         <Analytics />
       </body>
     </html>

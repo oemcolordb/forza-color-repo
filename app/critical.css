@@ -60,6 +60,12 @@ body {
   }
 }
 
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 /* Focus styles for accessibility */
 .focus-visible:focus {
   outline: 2px solid var(--color-primary);

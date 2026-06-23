@@ -238,6 +238,12 @@ body {
     }
   }
 
+  .reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   /* High contrast mode support */
   @media (prefers-contrast: high) {
     .color-card {
@@ -571,3 +577,77 @@ body {
 .dark .placeholder-contrast-muted::placeholder {
   color: rgba(231, 243, 234, 0.5);
 }
+
+/* Custom High Contrast theme when user manually toggles it or via media query */
+.high-contrast {
+  --bamboo-ink: #000000 !important;
+  --bamboo-ink-secondary: #000000 !important;
+  --bamboo-paper: #ffffff !important;
+  --bamboo-paper-2: #f0f0f0 !important;
+  --bamboo-stalk: #0000ff !important;
+  --bamboo-stalk-2: #000080 !important;
+  --bamboo-moss: #008000 !important;
+  --bamboo-bark: #ffffff !important;
+  --bamboo-border: #000000 !important;
+  --bamboo-shadow: none !important;
+  
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+.high-contrast.dark,
+.high-contrast .dark {
+  --bamboo-ink: #ffffff !important;
+  --bamboo-ink-secondary: #ffffff !important;
+  --bamboo-paper: #000000 !important;
+  --bamboo-paper-2: #121212 !important;
+  --bamboo-stalk: #00ffff !important;
+  --bamboo-stalk-2: #00cccc !important;
+  --bamboo-moss: #00ff00 !important;
+  --bamboo-bark: #000000 !important;
+  --bamboo-border: #ffffff !important;
+  --bamboo-shadow: none !important;
+  
+  color: #ffffff !important;
+  background-color: #000000 !important;
+}
+
+/* Ensure borders and focus rings are highly visible in high contrast mode */
+.high-contrast * {
+  text-shadow: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+.high-contrast .bamboo-surface,
+.high-contrast .bamboo-surface-dark {
+  background: var(--bamboo-paper) !important;
+  border: 2px solid var(--bamboo-border) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.high-contrast .bamboo-button {
+  background: var(--bamboo-paper) !important;
+  color: var(--bamboo-ink) !important;
+  border: 2px solid var(--bamboo-border) !important;
+  outline: none !important;
+}
+
+.high-contrast .bamboo-button:hover,
+.high-contrast .bamboo-button:focus-visible {
+  background: var(--bamboo-ink) !important;
+  color: var(--bamboo-paper) !important;
+  outline: 2px solid var(--bamboo-border) !important;
+}
+
+/* Accessible focus outline for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+.high-contrast *:focus-visible {
+  outline: 3px solid var(--bamboo-border) !important;
+  outline-offset: 3px !important;
+}
+

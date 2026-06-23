@@ -62,12 +62,12 @@ Autogoody PREMIUM SUPER GLOSS METALLIC BLUE Metal Flake 0.61 0.98 0.51 0.61 0.99
 Autogoody Matte Black Two-tone Matte 0.00 0.00 0.16 0.00 0.00 0.08 Added by DWRGDarkKing https://www.autogoody.com/premium-matte-flat-Color-vinyl-film-wrap-sticker-decal-bubble-free-air-release/
 
 Custom Paints
-Custom Paints Candy Cherry Red Metal Flake 0.00 0.99 0.46 0.00 1.00 0.55 Candy Paint Specialist Paints
-Custom Paints Candy Blue Metal Flake 0.54 0.80 0.36 0.54 0.74 0.53 Candy Paint Specialist Paints
-Custom Paints Candy Gold Metal Flake 0.12 0.65 0.48 0.13 0.67 0.70 Candy Paint Specialist Paints
-Custom Paints Candy Fools Gold Metal Flake 0.06 0.70 0.51 0.07 0.81 0.65 Candy Paint Specialist Paints
-Custom Paints Candy Green Metal Flake 0.37 0.45 0.46 0.38 0.47 0.53 Candy Paint Specialist Paints
-Custom Paints Candy Yellow Metal Flake 0.12 0.64 0.48 0.13 0.61 0.55 Candy Paint Specialist Paints
+Custom Paints Candy Cherry Red Two-Tone Polished 0.00 0.99 0.46 0.00 1.00 0.55 Candy Paint Specialist Paints
+Custom Paints Candy Blue Two-Tone Polished 0.54 0.80 0.36 0.54 0.74 0.53 Candy Paint Specialist Paints
+Custom Paints Candy Gold Two-Tone Polished 0.12 0.65 0.48 0.13 0.67 0.70 Candy Paint Specialist Paints
+Custom Paints Candy Fools Gold Two-Tone Polished 0.06 0.70 0.51 0.07 0.81 0.65 Candy Paint Specialist Paints
+Custom Paints Candy Green Two-Tone Polished 0.37 0.45 0.46 0.38 0.47 0.53 Candy Paint Specialist Paints
+Custom Paints Candy Yellow Two-Tone Polished 0.12 0.64 0.48 0.13 0.61 0.55 Candy Paint Specialist Paints
 
 Glasurit
 Glasurit  Mocha Nut Chip Foose Color by Glasurit Glasurit-5 - Chip Foose - Official Home of Foose Design, Inc.

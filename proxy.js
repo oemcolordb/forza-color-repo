@@ -125,7 +125,7 @@ export async function proxy(request) {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src * data: blob:",
-      "connect-src 'self' http://localhost:8000 https://generativelanguage.googleapis.com https://*.turso.io https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+      "connect-src 'self' blob: data: http://localhost:8000 https://generativelanguage.googleapis.com https://*.turso.io https://va.vercel-scripts.com https://vitals.vercel-insights.com https://raw.githack.com https://raw.githubusercontent.com",
       "frame-src 'self'",
     ].join('; ')
   )
