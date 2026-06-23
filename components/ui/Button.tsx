@@ -13,12 +13,13 @@ const sizeClasses: Record<string, string> = {
   sm: 'px-2 py-1 text-xs',
   md: 'px-3 py-2 text-sm',
   lg: 'px-4 py-3 text-base',
+  responsive: 'px-2.5 py-1.5 text-xs sm:px-4 sm:py-3 sm:text-base',
 }
 
 type ButtonProps = {
   as?: ElementType
   variant?: 'primary' | 'ghost' | 'danger' | 'neutral'
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'responsive'
   href?: string
   target?: string
   rel?: string

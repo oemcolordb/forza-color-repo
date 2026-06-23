@@ -1246,7 +1246,7 @@ function TuneforgePageInner() {
           isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'
         }`}
       >
-        <div className={`flex border-b mb-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+        <div className={`flex overflow-x-auto md:overflow-visible whitespace-nowrap scrollbar-hide border-b mb-4 ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
           {[
             { id: 'quick', label: '⚡ Quick', desc: 'Base Tune' },
             { id: 'advanced', label: '🔧 Advanced', desc: 'Fine Tune' },
@@ -1258,12 +1258,12 @@ function TuneforgePageInner() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-2 py-3 flex-1 text-center ${
+              className={`px-3 py-3 flex-1 min-w-[85px] sm:min-w-0 text-center ${
                 activeTab === tab.id ? 'bamboo-button' : 'bamboo-button-ghost'
               }`}
             >
-              <div className="font-medium text-sm">{tab.label}</div>
-              <div className="text-xs opacity-75">{tab.desc}</div>
+              <div className="font-medium text-xs sm:text-sm">{tab.label}</div>
+              <div className="text-[10px] opacity-75 hidden sm:block mt-0.5">{tab.desc}</div>
             </button>
           ))}
         </div>

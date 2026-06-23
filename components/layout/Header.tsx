@@ -38,32 +38,32 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fade-in-up px-6 py-4 rounded-lg inline-block bamboo-surface-dark">
           <span className="text-[color:var(--bamboo-stalk)] neon-text">Forza-Color-Repo</span>
         </h1>
-        <p className="mt-2 text-sm font-medium text-[#00ff00] drop-shadow-md">
+        <p className="mt-2 text-sm font-medium text-[#00ff00] drop-shadow-md max-w-full mx-auto px-4 break-words">
           Made with love by ResiRonin with credits to the legends at GTPLANET
         </p>
 
         {/* Primary nav — always visible */}
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
-          <Button as="a" href="/tuneforge" variant="primary" size="lg" className="hover-lift">
+        <div className="mt-4 flex flex-wrap justify-center gap-2 px-2">
+          <Button as="a" href="/tuneforge" variant="primary" size="responsive" className="hover-lift">
             🔧 TuneForge Lab
           </Button>
-          <Button as="a" href="/garage" variant="primary" size="lg" className="hover-lift">
+          <Button as="a" href="/garage" variant="primary" size="responsive" className="hover-lift">
             🏎️ Car Database
           </Button>
-          <Button as="a" href="https://mapgenie.io/" target="_blank" rel="noopener noreferrer" variant="primary" size="lg" className="hover-lift">
+          <Button as="a" href="https://mapgenie.io/" target="_blank" rel="noopener noreferrer" variant="primary" size="responsive" className="hover-lift">
             📍 Location Finder
           </Button>
-          <Button as="a" href="/palettes" variant="primary" size="lg" className="hover-lift">
+          <Button as="a" href="/palettes" variant="primary" size="responsive" className="hover-lift">
             🎨 Palettes
           </Button>
-          <Button as="a" href="/community" variant="primary" size="lg" className="hover-lift">
+          <Button as="a" href="/community" variant="primary" size="responsive" className="hover-lift">
             🤝 Community
           </Button>
           <Button
             as="a"
             href="/how-to-use"
             variant="primary"
-            size="lg"
+            size="responsive"
             className="hover-lift hidden sm:inline-flex"
           >
             📖 How to Use
@@ -72,7 +72,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
             as="a"
             href="/blog"
             variant="primary"
-            size="lg"
+            size="responsive"
             className="hover-lift hidden sm:inline-flex"
           >
             📝 Color Blog
@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ isDarkMode, onToggleTheme }) => {
               onClick={() => setMoreOpen(prev => !prev)}
               aria-expanded={moreOpen}
               aria-haspopup="true"
-              className="inline-flex items-center gap-1 px-5 py-3 bamboo-button rounded-lg font-medium"
+              className="inline-flex items-center gap-1 px-3 py-2 sm:px-5 sm:py-3 text-xs sm:text-base bamboo-button rounded-lg font-medium"
             >
               More{' '}
               <span className={`transition-transform duration-150 ${moreOpen ? 'rotate-180' : ''}`}>

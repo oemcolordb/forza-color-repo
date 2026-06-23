@@ -314,11 +314,11 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
         </div>
 
         {/* Model selector on the top right, to the left of the Settings button */}
-        <div className="absolute top-2 right-14 z-20">
+        <div className="absolute top-2 right-12 sm:right-14 z-20">
           <select
             value={modelId}
             onChange={(e) => setModelId(e.target.value)}
-            className="bg-black/60 hover:bg-black/80 text-white text-xs rounded-full px-3 py-1.5 backdrop-blur-md border border-white/10 outline-none focus:border-fuchsia-500 transition-colors shadow-lg cursor-pointer font-medium"
+            className="bg-black/60 hover:bg-black/80 text-white text-[10px] sm:text-xs rounded-full px-2 py-1 sm:px-3 sm:py-1.5 backdrop-blur-md border border-white/10 outline-none focus:border-fuchsia-500 transition-colors shadow-lg cursor-pointer font-medium max-w-[85px] sm:max-w-none overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {Object.values(MODEL_CONFIGS).map((m) => (
               <option key={m.id} value={m.id} className="bg-gray-950 text-white font-medium">
@@ -362,20 +362,20 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
       <div className="absolute top-2 right-2 flex flex-col items-end gap-2 z-20">
         <button
           onClick={() => setShowControls(!showControls)}
-          className="bg-black/60 hover:bg-black/80 text-white w-10 h-10 rounded-full backdrop-blur-md transition-colors shadow-lg border border-white/10 text-lg flex items-center justify-center"
+          className="bg-black/60 hover:bg-black/80 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full backdrop-blur-md transition-colors shadow-lg border border-white/10 text-sm sm:text-lg flex items-center justify-center"
           title="3D Viewer Settings"
         >
           ⚙️
         </button>
 
         {showControls && (
-          <div className="bg-black/90 backdrop-blur-xl p-5 rounded-xl shadow-2xl border border-white/20 w-64 text-white text-sm space-y-5">
+          <div className="bg-black/95 backdrop-blur-xl p-3 sm:p-5 rounded-xl shadow-2xl border border-white/20 w-52 sm:w-64 text-white text-xs sm:text-sm space-y-3 sm:space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wider">Lighting Environment</label>
+              <label className="block text-[10px] sm:text-xs font-semibold text-gray-300 mb-1.5 sm:mb-2 uppercase tracking-wider">Lighting Environment</label>
               <select
                 value={environment}
                 onChange={(e) => setEnvironment(e.target.value)}
-                className="w-full bg-white/10 border border-white/20 rounded-lg p-2 text-white outline-none focus:border-fuchsia-500 transition-colors"
+                className="w-full bg-white/10 border border-white/20 rounded-lg p-1.5 sm:p-2 text-white outline-none focus:border-fuchsia-500 transition-colors"
               >
                 <option value="studio_small_03_1k.hdr">Default HDRI</option>
                 <option value="studio">Bright Studio</option>
@@ -386,7 +386,7 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-2 flex justify-between uppercase tracking-wider">
+              <label className="block text-[10px] sm:text-xs font-semibold text-gray-300 mb-1.5 sm:mb-2 flex justify-between uppercase tracking-wider">
                 <span>Sun Light</span><span>{dirIntensity.toFixed(1)}</span>
               </label>
               <input type="range" min="0" max="3" step="0.1"
@@ -395,7 +395,7 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-2 flex justify-between uppercase tracking-wider">
+              <label className="block text-[10px] sm:text-xs font-semibold text-gray-300 mb-1.5 sm:mb-2 flex justify-between uppercase tracking-wider">
                 <span>Fill Light</span><span>{ambientIntensity.toFixed(1)}</span>
               </label>
               <input type="range" min="0" max="2" step="0.1"
