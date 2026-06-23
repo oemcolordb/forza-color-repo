@@ -23,7 +23,7 @@ function getAudioContext() {
 
   // Resume audio context if suspended (browser autoplay policy)
   if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
-    globalAudioCtx.resume()
+    globalAudioCtx.resume().catch(() => {})
   }
 
   return globalAudioCtx
