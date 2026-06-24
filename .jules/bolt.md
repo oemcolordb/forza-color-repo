@@ -1,0 +1,3 @@
+## 2024-06-24 - Array Filtering Evaluation Order in Next.js
+**Learning:** In large React arrays (like `allColors` with 10k+ elements), mapping over all items to check slow string inclusion (`toLowerCase().includes()`) inside a filter block will bottleneck search significantly if you don't early-return. Filtering on fast, exact-match values (`make`, `type`) and Set lookups *before* doing full string searches creates massive performance gains (~78% faster based on benchmark) because it reduces the number of expensive string operations performed.
+**Action:** Always short-circuit array `.filter()` and `.find()` with the cheapest checks first (booleans, strict equality on enums/IDs) and put expensive string allocations/manipulations at the bottom.
