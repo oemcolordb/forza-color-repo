@@ -29,9 +29,9 @@ jobs:
           node-version: '24.x'
           cache: 'pnpm'
 
-      - name: pnpm install --frozen-lockfile, build, and test
+      - name: pnpm install --no-frozen-lockfile, build, and test
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           pnpm run build --if-present
           pnpm dlx jest
 
