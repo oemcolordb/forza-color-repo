@@ -134,19 +134,23 @@ export default function ColorDashboardClient() {
       const searchLower = sanitizedQuery.toLowerCase()
 
       result = allColors.filter(color => {
-        const matchesSearch =
-          !sanitizedQuery ||
-          color.colorName.toLowerCase().includes(searchLower) ||
-          color.make.toLowerCase().includes(searchLower) ||
-          (color.model && color.model.toLowerCase().includes(searchLower))
+        // Fast exact-match conditions and O(1) Set lookups
+        if (selectedMake && color.make !== selectedMake) return false
+        if (selectedColorType && color.colorType !== selectedColorType) return false
 
-        const matchesMake = !selectedMake || color.make === selectedMake
-        const matchesType = !selectedColorType || color.colorType === selectedColorType
+        if (showFavoritesOnly) {
+          const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+          if (!favoritesSet.has(colorId)) return false
+        }
 
-        const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-        const matchesFavorites = !showFavoritesOnly || favoritesSet.has(colorId)
+        // Expensive string operations evaluated last
+        if (sanitizedQuery) {
+          return color.colorName.toLowerCase().includes(searchLower) ||
+                 color.make.toLowerCase().includes(searchLower) ||
+                 (!!color.model && color.model.toLowerCase().includes(searchLower))
+        }
 
-        return matchesSearch && matchesMake && matchesType && matchesFavorites
+        return true
       })
     }
 
