@@ -188,6 +188,7 @@ function FavoritesContent() {
             <button
               type="button"
               onClick={toggleTheme}
+              aria-label="Toggle theme"
               className="rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               {isDarkMode ? '🌙' : '☀️'}
