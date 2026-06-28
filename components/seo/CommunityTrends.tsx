@@ -43,6 +43,27 @@ const CommunityTrends: React.FC<CommunityTrendsProps> = ({ allColors, isDarkMode
 
   return (
     <div className={`p-4 rounded-xl ${isDarkMode ? 'bamboo-surface-dark' : 'bamboo-surface'}`}>
+      <style dangerouslySetInnerHTML={{__html: `
+        .trends-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+        }
+        .trends-scrollbar::-webkit-scrollbar {
+          height: 8px;
+          display: block;
+        }
+        .trends-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+        }
+        .trends-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 10px;
+        }
+        .trends-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+      `}} />
       <div className="flex items-center gap-2 mb-4">
         <span className="text-2xl">🔥</span>
         <h2 className="font-bold uppercase tracking-widest text-sm" style={{ color: 'var(--bamboo-stalk)' }}>
@@ -50,7 +71,10 @@ const CommunityTrends: React.FC<CommunityTrendsProps> = ({ allColors, isDarkMode
         </h2>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+      <div 
+        className="flex gap-4 overflow-x-scroll pb-4 pt-2 snap-x snap-mandatory scroll-smooth trends-scrollbar"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+      >
         {trends.map((trend) => {
           const color = allColors.find(c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === trend.color_id)
           if (!color) return null
@@ -59,7 +83,7 @@ const CommunityTrends: React.FC<CommunityTrendsProps> = ({ allColors, isDarkMode
             <button
               key={trend.color_id}
               onClick={() => onColorSelect(color)}
-              className="flex-shrink-0 w-32 group"
+              className="flex-shrink-0 w-32 group snap-start"
             >
               <div 
                 className="w-full h-16 rounded-lg mb-2 shadow-lg group-hover:scale-105 transition-transform"
