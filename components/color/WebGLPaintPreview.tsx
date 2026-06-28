@@ -4,8 +4,15 @@ import React, { useRef, useMemo, useEffect, useState, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { TGALoader } from 'three-stdlib'
 import { CarColor } from '@/types'
-import { normalizeColorType, hsbToHex } from '@/lib/utils/colorUtils'
+import { hsbToHex } from '@/lib/utils/colorUtils'
+import { getMaterialModel, isDualTonePaint } from '@/lib/utils/materialModels'
+import { blendDualToneFH6, getBlendedHSB, ColorLayer } from '@/lib/utils/colorBlending'
+
+if (typeof window !== 'undefined') {
+  THREE.DefaultLoadingManager.addHandler(/\.tga$/i, new TGALoader())
+}
 
 interface WebGLPaintPreviewProps {
   color: CarColor
@@ -86,33 +93,89 @@ const tyreMat = new THREE.MeshStandardMaterial({ color: '#111111', roughness: 0.
 const rimMat  = new THREE.MeshStandardMaterial({ color: '#c0c0c0', metalness: 0.95, roughness: 0.08 })
 const neutralMat = new THREE.MeshStandardMaterial({ color: '#2a2a2a', roughness: 0.6, metalness: 0.3 })
 
-function buildPaintMaterial(paintProps: Record<string, any>): THREE.MeshPhysicalMaterial {
+/**
+ * Build a THREE.js MeshPhysicalMaterial from FH6 material model + colors.
+ *
+ * For dual-tone paints, this creates a layered material where:
+ * - The base color = absorptive layer (visible in shadows/ambient)
+ * - Specular/sheen = highlight color controlled by saturation-driven blend
+ * - Clearcoat = rendered on top with appropriate tint
+ */
+function buildPaintMaterial(
+  color1: ColorLayer,
+  color2: ColorLayer,
+  colorType?: string
+): THREE.MeshPhysicalMaterial {
   const mat = new THREE.MeshPhysicalMaterial()
-  // Set color first so specularColor/sheenColor (THREE.Color objects) work correctly
-  mat.color = new THREE.Color(paintProps.color)
-  mat.roughness          = paintProps.roughness          ?? 0.15
-  mat.metalness          = paintProps.metalness          ?? 0.0
-  mat.clearcoat          = paintProps.clearcoat          ?? 0.0
-  mat.clearcoatRoughness = paintProps.clearcoatRoughness ?? 0.0
-  if (paintProps.specularColor)  mat.specularColor  = paintProps.specularColor
-  if (paintProps.specularIntensity !== undefined) mat.specularIntensity = paintProps.specularIntensity
-  if (paintProps.sheen !== undefined)       mat.sheen       = paintProps.sheen
-  if (paintProps.sheenColor)                mat.sheenColor  = paintProps.sheenColor
-  if (paintProps.sheenRoughness !== undefined) mat.sheenRoughness = paintProps.sheenRoughness
+
+  if (colorType && isDualTonePaint(colorType)) {
+    const model = getMaterialModel(colorType)
+    const blendResult = blendDualToneFH6(color1, color2, model.blendMode)
+
+    // The blended color is the base diffuse color
+    mat.color = new THREE.Color(hsbToHex(blendResult.blended.h, blendResult.blended.s, blendResult.blended.b))
+
+    // Physical properties from the material model
+    mat.roughness = model.baseRoughness
+    mat.metalness = model.baseMetalness
+    mat.clearcoat = model.baseClearcoat
+    mat.clearcoatRoughness = model.baseClearcoatRoughness
+
+    // Specular highlight: uses the highlight color (the flake/specular layer)
+    const hlHex = hsbToHex(color2.h, color2.s, color2.b)
+
+    // Saturation-driven specular intensity
+    mat.specularColor = new THREE.Color(hlHex)
+    mat.specularIntensity = blendResult.specularIntensity
+
+    // Sheen layer: provides the pearlescent/color-shift effect
+    // The sheen color comes from whichever color dominates the blend
+    if (model.dualColorMapping.sheenFrom === 'highlight') {
+      mat.sheen = 1.0
+      mat.sheenColor = new THREE.Color(hlHex)
+      mat.sheenRoughness = model.baseRoughness
+    } else if (model.dualColorMapping.sheenFrom === 'base') {
+      mat.sheen = 0.5
+      const baseHex = hsbToHex(color1.h, color1.s, color1.b)
+      mat.sheenColor = new THREE.Color(baseHex)
+      mat.sheenRoughness = model.baseRoughness * 0.5
+    }
+
+    // Flake effect: for metal flake, add rough clearcoat with sparkle
+    if (model.hasFlakes) {
+      mat.clearcoat = Math.max(mat.clearcoat, 0.8)
+      mat.clearcoatRoughness = 0.15
+    }
+  } else {
+    // Single-color paint (solid, matte, chrome, etc.)
+    const hex = hsbToHex(color1.h, color1.s, color1.b)
+    mat.color = new THREE.Color(hex)
+    const model = getMaterialModel(colorType)
+    mat.roughness = model.baseRoughness
+    mat.metalness = model.baseMetalness
+    mat.clearcoat = model.baseClearcoat
+    mat.clearcoatRoughness = model.baseClearcoatRoughness
+
+    // Saturation-driven specular intensity
+    mat.specularIntensity = color1.s > 0.7 ? 1.0 : color1.s > 0.4 ? 0.6 : color1.s > 0.2 ? 0.3 : 0.1
+  }
+
   return mat
 }
 
-function CarModel({ paintProps, config }: { paintProps: Record<string, any>; config: ModelConfig }) {
+function CarModel({ color, config }: { color: CarColor; config: ModelConfig }) {
   const { scene } = useGLTF(config.path)
   const paintMatRef = useRef<THREE.MeshPhysicalMaterial | null>(null)
 
-  // Build the scene clone when the model loads or changes
+  const c1 = color.color1 || { h: 0, s: 0, b: 0 }
+  const c2 = color.color2 || color.color1 || { h: 0, s: 0, b: 0 }
+
   const cloned = useMemo(() => {
     const clone = scene.clone(true)
-    const paint = buildPaintMaterial(paintProps)
+    const paint = buildPaintMaterial(c1, c2, color.colorType)
     paintMatRef.current = paint
 
-    console.log('[3D] Building scene clone. Model:', config.name, 'Paint color:', paintProps.color)
+    console.log('[3D] Building scene clone. Model:', config.name, 'Paint type:', color.colorType)
 
     const bodyHits: string[] = []
     const allMeshNames: string[] = []
@@ -169,20 +232,21 @@ function CarModel({ paintProps, config }: { paintProps: Record<string, any>; con
   useEffect(() => {
     const paint = paintMatRef.current
     if (!paint) return
-    paint.color.set(paintProps.color)
-    paint.roughness          = paintProps.roughness          ?? 0.15
-    paint.metalness          = paintProps.metalness          ?? 0.0
-    paint.clearcoat          = paintProps.clearcoat          ?? 0.0
-    paint.clearcoatRoughness = paintProps.clearcoatRoughness ?? 0.0
-    if (paintProps.specularColor)  paint.specularColor.copy(paintProps.specularColor)
-    if (paintProps.specularIntensity !== undefined) paint.specularIntensity = paintProps.specularIntensity
-    paint.sheen          = paintProps.sheen          ?? 0.0
-    if (paintProps.sheenColor)     paint.sheenColor.copy(paintProps.sheenColor)
-    paint.sheenRoughness = paintProps.sheenRoughness ?? 0.0
-    paint.needsUpdate = true
-  }, [paintProps])
 
-  console.log('[3D] Model rendered! Paint props:', paintProps)
+    const newPaint = buildPaintMaterial(c1, c2, color.colorType)
+
+    paint.color.copy(newPaint.color)
+    paint.roughness = newPaint.roughness
+    paint.metalness = newPaint.metalness
+    paint.clearcoat = newPaint.clearcoat
+    paint.clearcoatRoughness = newPaint.clearcoatRoughness
+    paint.specularColor.copy(newPaint.specularColor)
+    paint.specularIntensity = newPaint.specularIntensity
+    paint.sheen = newPaint.sheen
+    if (newPaint.sheenColor) paint.sheenColor.copy(newPaint.sheenColor)
+    paint.sheenRoughness = newPaint.sheenRoughness
+    paint.needsUpdate = true
+  }, [c1.h, c1.s, c1.b, c2.h, c2.s, c2.b, color.colorType])
   return <primitive object={cloned} />
 }
 
@@ -202,64 +266,10 @@ function CarWrapper({ color, modelConfig }: { color: CarColor; modelConfig: Mode
     // Stopped auto-rotation per user request
   })
 
-  // Derive THREE.js-ready paint properties from the Forza color
-  const paintProps = useMemo(() => {
-    const rawType  = color.colorType || ''
-    const normType = normalizeColorType(rawType)
-    const t = (normType + ' ' + (color.colorName || '')).toLowerCase()
-
-    const c1 = color.color1 || { h: 0, s: 0, b: 0 }
-    const c2 = color.color2 || color.color1 || { h: 0, s: 0, b: 0 }
-
-    // Use the same hsbToHex as the 2D swatches (validated, 0-1 normalized inputs)
-    const hex1 = hsbToHex(c1.h, c1.s, c1.b)
-    const hex2 = hsbToHex(c2.h, c2.s, c2.b)
-
-    const paintProfiles: Record<string, Record<string, number>> = {
-      'solid':             { roughness: 0.15, metalness: 0.0,  clearcoat: 1.0 },
-      'gloss':             { roughness: 0.05, metalness: 0.1,  clearcoat: 1.0,  clearcoatRoughness: 0.02 },
-      'matte':             { roughness: 0.95, metalness: 0.0,  clearcoat: 0.0,  clearcoatRoughness: 1.0 },
-      'semigloss':         { roughness: 0.45, metalness: 0.0,  clearcoat: 0.1 },
-      'brushed':           { roughness: 0.35, metalness: 1.0,  clearcoat: 0.0 },
-      'metallic':          { roughness: 0.20, metalness: 0.65, clearcoat: 1.0,  clearcoatRoughness: 0.05 },
-      'polished':          { roughness: 0.08, metalness: 0.9,  clearcoat: 1.0 },
-      'chrome':            { roughness: 0.0,  metalness: 1.0,  clearcoat: 0.0 },
-      'metal-flake':       { roughness: 0.25, metalness: 0.1,  clearcoat: 1.0,  clearcoatRoughness: 0.15 },
-      'metal flake':       { roughness: 0.25, metalness: 0.1,  clearcoat: 1.0,  clearcoatRoughness: 0.15 },
-      'candy':             { roughness: 0.05, metalness: 0.1,  clearcoat: 1.0,  clearcoatRoughness: 0.0 },
-      'pearl':             { roughness: 0.1,  metalness: 0.05, clearcoat: 1.0,  clearcoatRoughness: 0.05 },
-      'carbon-fiber':      { roughness: 0.6,  metalness: 0.2,  clearcoat: 1.0,  clearcoatRoughness: 0.1 },
-      'carbon fiber':      { roughness: 0.6,  metalness: 0.2,  clearcoat: 1.0,  clearcoatRoughness: 0.1 },
-      'kevlar':            { roughness: 0.65, metalness: 0.15, clearcoat: 0.8,  clearcoatRoughness: 0.2 },
-      'damascus':          { roughness: 0.4,  metalness: 0.8,  clearcoat: 0.5 },
-      'two-tone':          { roughness: 0.1,  metalness: 0.05, clearcoat: 1.0 },
-      'two-tone-matte':    { roughness: 0.9,  metalness: 0.0,  clearcoat: 0.0,  clearcoatRoughness: 1.0 },
-      'two-tone-polished': { roughness: 0.08, metalness: 0.05, clearcoat: 1.0 },
-      'two-tone-semigloss':{ roughness: 0.4,  metalness: 0.05, clearcoat: 0.1 },
-    }
-
-    const matchedKey = Object.keys(paintProfiles)
-      .sort((a, b) => b.length - a.length)
-      .find(key => t.includes(key))
-
-    const profile = matchedKey ? paintProfiles[matchedKey] : paintProfiles['solid']
-    const props: Record<string, any> = { color: hex1, ...profile }
-
-    if (t.includes('two') || t.includes('pearl') || t.includes('flake') || t.includes('metal') || t.includes('metallic')) {
-      props.specularColor     = new THREE.Color(hex2)
-      props.specularIntensity = profile.roughness > 0.5 ? 0.2 : profile.roughness > 0.3 ? 0.4 : 1.0
-      props.sheen             = 1.0
-      props.sheenColor        = new THREE.Color(hex2)
-      props.sheenRoughness    = profile.roughness
-    }
-
-    return props
-  }, [color])
-
   return (
     <group ref={carGroupRef}>
       <Suspense fallback={<LancerEvoFallback />}>
-        <CarModel paintProps={paintProps} config={modelConfig} />
+        <CarModel color={color} config={modelConfig} />
       </Suspense>
     </group>
   )
@@ -408,3 +418,5 @@ export default function WebGLPaintPreview({ color }: WebGLPaintPreviewProps) {
     </div>
   )
 }
+
+useGLTF.preload('/models/lancer-evo/lancer-evo.glb')

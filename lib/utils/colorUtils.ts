@@ -1,3 +1,6 @@
+import { getMaterialModel, isDualTonePaint } from './materialModels'
+import { blendDualToneFH6, getBlendedHSB } from './colorBlending'
+
 // Convert HSB to RGB (proper conversion)
 export const hsbToRgb = (h: number, s: number, b: number): { r: number; g: number; b: number } => {
   const c = b * s
@@ -41,14 +44,34 @@ export const hsbToRgb = (h: number, s: number, b: number): { r: number; g: numbe
   }
 }
 
+/**
+ * Create a CSS gradient that visualizes the Forza dual-tone effect.
+ *
+ * Uses the FH6 blending engine to compute the blended mid-point color,
+ * creating a three-stop gradient: base → blended → highlight.
+ *
+ * For single-color paints, falls back to the original simple gradient.
+ */
 export const createForzaGradient = (
   color1: { h: number; s: number; b: number },
-  color2: { h: number; s: number; b: number }
+  color2: { h: number; s: number; b: number },
+  colorType?: string
 ): string => {
   const rgb1 = hsbToRgb(color1.h, color1.s, color1.b)
   const rgb2 = hsbToRgb(color2.h, color2.s, color2.b)
   const css1 = `rgb(${rgb1.r}, ${rgb1.g}, ${rgb1.b})`
   const css2 = `rgb(${rgb2.r}, ${rgb2.g}, ${rgb2.b})`
+
+  // If it's a dual-tone paint, add the FH6 blended mid-point
+  if (colorType && isDualTonePaint(colorType)) {
+    const model = getMaterialModel(colorType)
+    const blendResult = blendDualToneFH6(color1, color2, model.blendMode)
+    const blendedRgb = hsbToRgb(blendResult.blended.h, blendResult.blended.s, blendResult.blended.b)
+    const cssMid = `rgb(${blendedRgb.r}, ${blendedRgb.g}, ${blendedRgb.b})`
+    return `linear-gradient(135deg in oklab, ${css1} 0%, ${cssMid} 50%, ${css2} 100%)`
+  }
+
+  // Simple two-stop gradient for non-dual-tone
   return `linear-gradient(135deg in oklab, ${css1} 0%, ${css2} 100%)`
 }
 
@@ -69,14 +92,14 @@ export const hsbToHex = (h: number, s: number, b: number): string => {
 export const normalizeColorType = (type?: string): string => {
   if (!type) return 'normal'
   let t = type.toLowerCase().trim()
-  
+
   // Normalize spelling: fibre -> fiber
   t = t.replace(/fibre/g, 'fiber')
-  
+
   // Normalize space/hyphen/separators for two-tone
   t = t.replace(/two\s+tone/g, 'two-tone')
   t = t.replace(/two-tone\s+/g, 'two-tone-') // e.g. "two-tone polished"
-  
+
   // Normalize semi-gloss
   t = t.replace(/semi\s+gloss/g, 'semigloss')
   t = t.replace(/semi-gloss/g, 'semigloss')
@@ -132,13 +155,28 @@ export const getAdvancedMaterialStyle = (
     }
   }
 
-  // 4. METAL FLAKE & PEARLESCENT & TWO-TONE POLISHED/SEMIGLOSS & METALLIC & CHROME
+  // 4. DUAL-TONE: METAL FLAKE, TWO-TONE, PEARLESCENT — Uses FH6 saturation-driven blending
+  else if (isDualTonePaint(colorType)) {
+    const model = getMaterialModel(colorType)
+    const blendResult = blendDualToneFH6(c1, color2 || c1, model.blendMode)
+    const blendedHex = hsbToHex(blendResult.blended.h, blendResult.blended.s, blendResult.blended.b)
+
+    // Specular highlight intensity based on saturation dominance
+    const specIntensity = blendResult.specularIntensity
+    const specColor = specIntensity > 0.5
+      ? `rgba(255,255,255,${0.3 + specIntensity * 0.5}) 0%, rgba(255,255,255,${0.05 + specIntensity * 0.1}) 12%, transparent 20%`
+      : `rgba(255,255,255,${0.2}) 0%, rgba(255,255,255,0.05) 12%, transparent 20%`
+
+    return {
+      backgroundColor: blendedHex,
+      backgroundImage: `radial-gradient(ellipse at 40% 35%, ${hex2} 0%, transparent 65%), linear-gradient(105deg, ${specColor}), radial-gradient(circle at 50% 150%, rgba(0,0,0,0.8) 0%, transparent 80%)`,
+    }
+  }
+
+  // 5. METALLIC, CHROME, SEMIGLOSS, POLISHED (may also be matched by isDualTonePaint, but catch non-dual-tone variants)
   else if (
-    type.includes('flake') ||
-    type.includes('two-tone') ||
-    type.includes('pearl') ||
-    type.includes('metallic') ||
     type.includes('chrome') ||
+    type.includes('metallic') ||
     type.includes('semigloss') ||
     type.includes('polished')
   ) {

@@ -56,6 +56,86 @@ export interface FavoriteRecord {
   created_at: string
 }
 
+export interface UserGarageItem {
+  id: string
+  user_id: string
+  car_make: string
+  car_model: string
+  applied_color_id: string | null
+  applied_tune_id: string | null
+  created_at: string
+}
+
+export interface ScanHistoryItem {
+  id: string
+  user_id: string
+  image_url: string | null
+  extracted_hex: string
+  matched_forza_hsb: string
+  created_at: string
+}
+
+export interface UserFollow {
+  follower_id: string
+  following_id: string
+  created_at: string
+}
+
+export interface UserAchievement {
+  id: string
+  user_id: string
+  achievement_id: string
+  unlocked_at: string
+}
+
+export interface ColorRequest {
+  id: string
+  user_id: string
+  image_url: string
+  car_reference: string | null
+  description: string | null
+  status: 'open' | 'fulfilled' | 'closed'
+  votes: number
+  created_at: string
+}
+
+export interface ColorSubmission {
+  id: string
+  request_id: string
+  user_id: string
+  proposed_color_id: string
+  votes: number
+  created_at: string
+}
+
+export interface Comment {
+  id: string
+  user_id: string
+  entity_type: string
+  entity_id: string
+  content: string
+  likes: number
+  created_at: string
+}
+
+export interface Challenge {
+  id: string
+  title: string
+  description: string | null
+  start_date: string
+  end_date: string
+  status: 'upcoming' | 'active' | 'completed'
+}
+
+export interface ChallengeEntry {
+  id: string
+  challenge_id: string
+  user_id: string
+  palette_id: string
+  votes: number
+  created_at: string
+}
+
 // ─── Database Service ─────────────────────────────────────────────────────────
 
 class TursoService {
@@ -352,6 +432,75 @@ class TursoService {
       sql: `INSERT INTO aggregated_stats (type, data, updated_at)
             VALUES (?, ?, datetime('now'))`,
       args: [type, JSON.stringify(data)],
+    })
+  }
+
+  // ── Community Engagement ──────────────────────────────────────────────────
+
+  async getTop100Colors(): Promise<Array<{ color_id: string; total_score: number }>> {
+    await this.init()
+    const db = getDb()
+    const result = await db.execute({
+      sql: `
+        SELECT color_id, SUM(views + (favorites * 5) + (copies * 2) + (shares * 3)) as total_score
+        FROM daily_color_stats
+        GROUP BY color_id
+        ORDER BY total_score DESC
+        LIMIT 100
+      `,
+      args: []
+    })
+    return result.rows.map(r => ({ color_id: r.color_id as string, total_score: Number(r.total_score) }))
+  }
+
+  async getGarage(userId: string): Promise<UserGarageItem[]> {
+    await this.init()
+    const db = getDb()
+    const result = await db.execute({ sql: 'SELECT * FROM user_garage WHERE user_id = ? ORDER BY created_at DESC', args: [userId] })
+    return result.rows as unknown as UserGarageItem[]
+  }
+
+  async addGarageItem(item: Omit<UserGarageItem, 'created_at'>): Promise<void> {
+    await this.init()
+    const db = getDb()
+    await db.execute({
+      sql: 'INSERT INTO user_garage (id, user_id, car_make, car_model, applied_color_id, applied_tune_id) VALUES (?, ?, ?, ?, ?, ?)',
+      args: [item.id, item.user_id, item.car_make, item.car_model, item.applied_color_id ?? null, item.applied_tune_id ?? null]
+    })
+  }
+
+  async getComments(entityType: string, entityId: string): Promise<Comment[]> {
+    await this.init()
+    const db = getDb()
+    const result = await db.execute({
+      sql: 'SELECT * FROM comments WHERE entity_type = ? AND entity_id = ? ORDER BY created_at DESC',
+      args: [entityType, entityId]
+    })
+    return result.rows as unknown as Comment[]
+  }
+
+  async addComment(comment: Omit<Comment, 'likes' | 'created_at'>): Promise<void> {
+    await this.init()
+    const db = getDb()
+    await db.execute({
+      sql: 'INSERT INTO comments (id, user_id, entity_type, entity_id, content) VALUES (?, ?, ?, ?, ?)',
+      args: [comment.id, comment.user_id, comment.entity_type, comment.entity_id, comment.content]
+    })
+  }
+
+  async getColorRequests(): Promise<ColorRequest[]> {
+    await this.init()
+    const db = getDb()
+    const result = await db.execute({ sql: 'SELECT * FROM color_requests ORDER BY created_at DESC LIMIT 50', args: [] })
+    return result.rows as unknown as ColorRequest[]
+  }
+
+  async createColorRequest(req: Omit<ColorRequest, 'status' | 'votes' | 'created_at'>): Promise<void> {
+    await this.init()
+    const db = getDb()
+    await db.execute({
+      sql: 'INSERT INTO color_requests (id, user_id, image_url, car_reference, description) VALUES (?, ?, ?, ?, ?)',
+      args: [req.id, req.user_id, req.image_url, req.car_reference ?? null, req.description ?? null]
     })
   }
 

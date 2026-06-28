@@ -92,7 +92,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^9.0.0",
     "eslint-config-next": "15.1.0",
-    "jest": "^30.4.2",
+    "jest": "^25.0.0",
     "jest-environment-jsdom": "^30.2.0",
     "npm-force-resolutions": "^0.0.10",
     "playwright": "^1.59.1",

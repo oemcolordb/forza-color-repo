@@ -52,6 +52,13 @@ export async function ensureTables(): Promise<void> {
   _migrated = true
   const db = getDb()
 
+  // Gracefully handle schema drift for existing local databases before creating indices
+  try { await db.execute('ALTER TABLE community_tunes ADD COLUMN ip_address TEXT') } catch (_) {}
+  try { await db.execute('ALTER TABLE user_favorites ADD COLUMN ip_address TEXT') } catch (_) {}
+  try { await db.execute('ALTER TABLE favorites_analytics ADD COLUMN ip_address TEXT') } catch (_) {}
+  try { await db.execute('ALTER TABLE palettes ADD COLUMN rating_avg REAL DEFAULT 0.0') } catch (_) {}
+  try { await db.execute('ALTER TABLE palettes ADD COLUMN rating_count INTEGER DEFAULT 0') } catch (_) {}
+
   await db.batch([
     `CREATE TABLE IF NOT EXISTS users (
       id           TEXT    PRIMARY KEY,
@@ -178,6 +185,24 @@ export async function ensureTables(): Promise<void> {
       data         TEXT    NOT NULL,
       updated_at   DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
+    `CREATE TABLE IF NOT EXISTS daily_color_stats (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      date_string  TEXT    NOT NULL,
+      color_id     TEXT    NOT NULL,
+      views        INTEGER DEFAULT 0,
+      favorites    INTEGER DEFAULT 0,
+      copies       INTEGER DEFAULT 0,
+      shares       INTEGER DEFAULT 0,
+      UNIQUE(date_string, color_id)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_daily_color_stats_date ON daily_color_stats(date_string DESC)`,
+    `CREATE INDEX IF NOT EXISTS idx_daily_color_stats_color ON daily_color_stats(color_id)`,
+    `CREATE TABLE IF NOT EXISTS daily_usage_stats (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      date_string  TEXT    NOT NULL UNIQUE,
+      active_users INTEGER DEFAULT 0,
+      total_actions INTEGER DEFAULT 0
+    )`,
     `CREATE TABLE IF NOT EXISTS community_posts (
       id           TEXT    PRIMARY KEY,
       user_id      TEXT    NOT NULL,
@@ -224,7 +249,87 @@ export async function ensureTables(): Promise<void> {
     )`,
     `CREATE INDEX IF NOT EXISTS idx_palettes_created ON palettes(createdAt DESC)`,
     `CREATE INDEX IF NOT EXISTS idx_palettes_likes ON palettes(likes DESC)`,
-    `CREATE INDEX IF NOT EXISTS idx_palettes_rating ON palettes(rating_avg DESC)`
+    `CREATE INDEX IF NOT EXISTS idx_palettes_rating ON palettes(rating_avg DESC)`,
+    `CREATE TABLE IF NOT EXISTS user_garage (
+      id               TEXT    PRIMARY KEY,
+      user_id          TEXT    NOT NULL,
+      car_make         TEXT    NOT NULL,
+      car_model        TEXT    NOT NULL,
+      applied_color_id TEXT,
+      applied_tune_id  TEXT,
+      created_at       DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_garage_user ON user_garage(user_id)`,
+    `CREATE TABLE IF NOT EXISTS scan_history (
+      id                 TEXT    PRIMARY KEY,
+      user_id            TEXT    NOT NULL,
+      image_url          TEXT,
+      extracted_hex      TEXT    NOT NULL,
+      matched_forza_hsb  TEXT    NOT NULL,
+      created_at         DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_scan_history_user ON scan_history(user_id)`,
+    `CREATE TABLE IF NOT EXISTS user_follows (
+      follower_id  TEXT NOT NULL,
+      following_id TEXT NOT NULL,
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (follower_id, following_id)
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_follows_following ON user_follows(following_id)`,
+    `CREATE TABLE IF NOT EXISTS user_achievements (
+      id             TEXT    PRIMARY KEY,
+      user_id        TEXT    NOT NULL,
+      achievement_id TEXT    NOT NULL,
+      unlocked_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_achievements_user ON user_achievements(user_id)`,
+    `CREATE TABLE IF NOT EXISTS color_requests (
+      id             TEXT    PRIMARY KEY,
+      user_id        TEXT    NOT NULL,
+      image_url      TEXT    NOT NULL,
+      car_reference  TEXT,
+      description    TEXT,
+      status         TEXT    NOT NULL DEFAULT 'open',
+      votes          INTEGER DEFAULT 0,
+      created_at     DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_requests_status ON color_requests(status)`,
+    `CREATE TABLE IF NOT EXISTS color_submissions (
+      id                TEXT    PRIMARY KEY,
+      request_id        TEXT    NOT NULL,
+      user_id           TEXT    NOT NULL,
+      proposed_color_id TEXT    NOT NULL,
+      votes             INTEGER DEFAULT 0,
+      created_at        DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_submissions_request ON color_submissions(request_id)`,
+    `CREATE TABLE IF NOT EXISTS comments (
+      id          TEXT    PRIMARY KEY,
+      user_id     TEXT    NOT NULL,
+      entity_type TEXT    NOT NULL,
+      entity_id   TEXT    NOT NULL,
+      content     TEXT    NOT NULL,
+      likes       INTEGER DEFAULT 0,
+      created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_comments_entity ON comments(entity_type, entity_id)`,
+    `CREATE TABLE IF NOT EXISTS challenges (
+      id          TEXT    PRIMARY KEY,
+      title       TEXT    NOT NULL,
+      description TEXT,
+      start_date  DATETIME NOT NULL,
+      end_date    DATETIME NOT NULL,
+      status      TEXT    NOT NULL DEFAULT 'active'
+    )`,
+    `CREATE TABLE IF NOT EXISTS challenge_entries (
+      id           TEXT    PRIMARY KEY,
+      challenge_id TEXT    NOT NULL,
+      user_id      TEXT    NOT NULL,
+      palette_id   TEXT    NOT NULL,
+      votes        INTEGER DEFAULT 0,
+      created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE INDEX IF NOT EXISTS idx_entries_challenge ON challenge_entries(challenge_id)`
   ], 'deferred')
 
   // Upgrade existing users table with OAuth columns if they don't exist
