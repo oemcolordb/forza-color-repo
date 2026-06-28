@@ -120,13 +120,13 @@ export async function proxy(request) {
     'Content-Security-Policy',
     [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
-      "script-src-elem 'self' 'unsafe-inline' https://va.vercel-scripts.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://vercel.live",
+      "script-src-elem 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vercel.live",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://vercel.live",
       "font-src 'self' https://fonts.gstatic.com",
-      "img-src * data: blob:",
-      "connect-src 'self' blob: data: http://localhost:8000 https://generativelanguage.googleapis.com https://*.turso.io https://va.vercel-scripts.com https://vitals.vercel-insights.com https://raw.githack.com https://raw.githubusercontent.com",
-      "frame-src 'self'",
+      "img-src * data: blob: https://vercel.com https://vercel.live",
+      "connect-src 'self' blob: data: http://localhost:8000 https://generativelanguage.googleapis.com https://*.turso.io https://va.vercel-scripts.com https://vitals.vercel-insights.com https://raw.githack.com https://raw.githubusercontent.com https://vercel.live wss://*.pusher.com",
+      "frame-src 'self' https://vercel.live https://vercel.com",
     ].join('; ')
   )
 
