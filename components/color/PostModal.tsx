@@ -149,6 +149,7 @@ export default function PostModal({ isOpen, onClose, onPostSuccess, isDarkMode }
               <button
                 onClick={onClose}
                 className="text-2xl opacity-50 hover:opacity-100 transition-opacity"
+                aria-label="Close modal"
               >
                 ×
               </button>

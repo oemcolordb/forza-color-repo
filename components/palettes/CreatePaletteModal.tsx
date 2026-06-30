@@ -113,6 +113,7 @@ export default function CreatePaletteModal({ isOpen, onClose, favorites, session
           <button
             onClick={onClose}
             className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white transition-colors"
+            aria-label="Close modal"
           >
             <X className="h-5 w-5" />
           </button>
