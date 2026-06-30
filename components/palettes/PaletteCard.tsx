@@ -187,6 +187,8 @@ export default function PaletteCard({ palette, sessionId, onTagClick }: PaletteC
           <button
             onClick={handleLike}
             disabled={isLiking || !sessionId}
+            aria-label={isLiked ? `Unlike palette, ${likes} likes` : `Like palette, ${likes} likes`}
+            aria-pressed={isLiked}
             className={`ml-3 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
               isLiked 
                 ? 'bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400' 
