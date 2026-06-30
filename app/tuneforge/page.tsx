@@ -908,7 +908,7 @@ function TuneforgePageInner() {
           <p className="text-xs opacity-75">Tune Build &amp; Sharing Platform</p>
         </div>
         <div className="flex w-full gap-3 sm:w-auto sm:gap-4 sm:justify-end">
-          <button onClick={() => setIsDarkMode(!isDarkMode)} className="text-2xl p-2 rounded bamboo-button-ghost">
+          <button onClick={() => setIsDarkMode(!isDarkMode)} aria-label="Toggle theme" className="text-2xl p-2 rounded bamboo-button-ghost">
             {isDarkMode ? '☀️' : '🌙'}
           </button>
           <a href="/" className="px-4 py-2 bamboo-button rounded text-center">
