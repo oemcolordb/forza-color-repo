@@ -46,7 +46,7 @@ interface ColorCardProps {
   onSelect: (_color: CarColor) => void
   onShowInfo?: (_color: CarColor) => void
   isFavorite?: boolean
-  onToggleFavorite?: () => void
+  onToggleFavorite?: (colorId: string) => void
   isTrending?: boolean
   isCommunityChoice?: boolean
   isDarkMode?: boolean
@@ -184,7 +184,8 @@ const ColorCard: React.FC<ColorCardProps> = React.memo(
                 onClick={e => {
                   e.preventDefault()
                   e.stopPropagation()
-                  onToggleFavorite()
+                  const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+                  onToggleFavorite?.(colorId)
                 }}
                 className={`transition-colors p-2 sm:p-1.5 rounded-full min-w-[44px] min-h-[44px] sm:min-w-[32px] sm:min-h-[32px] flex items-center justify-center bamboo-button-ghost relative z-10 active:scale-95 ${
                   isFavorite ? 'text-red-500' : ''

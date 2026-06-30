@@ -64,6 +64,9 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
     return () => resizeObserver.disconnect()
   }, [])
 
+  // Convert favorites array to a Set for O(1) lookups
+  const favoritesSet = React.useMemo(() => new Set(favorites), [favorites])
+
   // Memoized cell renderer for performance
   const Cell = useCallback(
     ({ columnIndex, rowIndex, style }: { columnIndex: number; rowIndex: number; style: React.CSSProperties }) => {
@@ -73,7 +76,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
       if (!color) return null
 
       const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-      const isFavorite = favorites.includes(colorId)
+      const isFavorite = favoritesSet.has(colorId)
 
       return (
         <div style={style}>
@@ -83,7 +86,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
               onSelect={onColorSelect}
               onShowInfo={onShowInfo}
               isFavorite={isFavorite}
-              onToggleFavorite={() => onToggleFavorite(colorId)}
+              onToggleFavorite={onToggleFavorite}
               isTrending={trendingIds?.has(colorId)}
               isCommunityChoice={communityChoiceIds?.has(colorId)}
               isDarkMode={isDarkMode}
@@ -92,7 +95,7 @@ const VirtualColorGrid: React.FC<VirtualColorGridProps> = ({
         </div>
       )
     },
-    [colors, favorites, onColorSelect, onShowInfo, onToggleFavorite, isDarkMode, columnsCount, trendingIds, communityChoiceIds]
+    [colors, favoritesSet, onColorSelect, onShowInfo, onToggleFavorite, isDarkMode, columnsCount, trendingIds, communityChoiceIds]
   )
 
   if (colors.length === 0) {
