@@ -134,19 +134,25 @@ export default function ColorDashboardClient() {
       const searchLower = sanitizedQuery.toLowerCase()
 
       result = allColors.filter(color => {
-        const matchesSearch =
-          !sanitizedQuery ||
-          color.colorName.toLowerCase().includes(searchLower) ||
-          color.make.toLowerCase().includes(searchLower) ||
-          (color.model && color.model.toLowerCase().includes(searchLower))
+        // ⚡ Bolt: Fast exact-match conditions and Set lookups first
+        if (selectedMake && color.make !== selectedMake) return false
+        if (selectedColorType && color.colorType !== selectedColorType) return false
 
-        const matchesMake = !selectedMake || color.make === selectedMake
-        const matchesType = !selectedColorType || color.colorType === selectedColorType
+        if (showFavoritesOnly) {
+          const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
+          if (!favoritesSet.has(colorId)) return false
+        }
 
-        const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-        const matchesFavorites = !showFavoritesOnly || favoritesSet.has(colorId)
+        // ⚡ Bolt: Expensive string allocations (toLowerCase/includes) evaluated last
+        if (sanitizedQuery) {
+          if (color.colorName.toLowerCase().includes(searchLower)) return true
+          if (color.make.toLowerCase().includes(searchLower)) return true
+          if (color.model && color.model.toLowerCase().includes(searchLower)) return true
 
-        return matchesSearch && matchesMake && matchesType && matchesFavorites
+          return false
+        }
+
+        return true
       })
     }
 
