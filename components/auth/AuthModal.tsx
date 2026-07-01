@@ -57,6 +57,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, isDarkMode }) =>
             </h2>
             <button
               onClick={onClose}
+              aria-label="Close"
               className={`text-gray-500 hover:text-gray-700 ${isDarkMode ? 'hover:text-gray-300' : ''}`}
             >
               ✕
