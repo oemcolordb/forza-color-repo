@@ -70,7 +70,7 @@ function run() {
     paintlibByMake[make].push(pc);
   }
 
-  let results = [];
+  const results = [];
   let matchCount = 0;
 
   for (const originalColor of oemColors) {

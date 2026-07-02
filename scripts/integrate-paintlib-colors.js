@@ -46,7 +46,7 @@ function run() {
   const carColors = JSON.parse(fs.readFileSync(CAR_COLORS_PATH, 'utf8'));
   const report = JSON.parse(fs.readFileSync(REPORT_PATH, 'utf8'));
 
-  let initialCount = carColors.length;
+  const initialCount = carColors.length;
   let updatedCount = 0;
 
   // 1. Add entirely new colors
