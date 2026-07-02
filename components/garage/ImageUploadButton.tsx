@@ -59,10 +59,13 @@ export default function ImageUploadButton({ onUploadSuccess, className = '' }: I
         onChange={handleFileChange}
         accept="image/jpeg, image/png, image/webp"
         className="hidden"
+        aria-label="File upload"
       />
       <button
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
+        aria-label="Upload Screenshot"
+        aria-busy={isUploading}
         className="flex h-10 w-10 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60 focus:outline-none focus:ring-2 focus:ring-white disabled:opacity-50"
         title="Upload Screenshot"
       >
