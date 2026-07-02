@@ -1,0 +1,3 @@
+## 2024-07-02 - Icon-Only Button Accessibility Pattern
+**Learning:** Found multiple instances of icon-only buttons (like modal close buttons and image upload buttons) across the codebase missing `aria-label` attributes. While these buttons often have visual context or tooltips (`title`), they are inaccessible or confusing for screen reader users because they lack an accessible name.
+**Action:** Consistently apply `aria-label` to any button whose content is purely an icon. Additionally, for buttons that trigger asynchronous actions (like the upload button), dynamically setting `aria-busy={isUploading}` improves semantic context for assistive technologies.

@@ -12,7 +12,7 @@ const version = glbBuffer.readUInt32LE(4);
 const length = glbBuffer.readUInt32LE(8);
 console.log('GLB Version:', version, 'Length:', length);
 
-let chunkOffset = 12;
+const chunkOffset = 12;
 const chunkLength = glbBuffer.readUInt32LE(chunkOffset);
 const chunkType = glbBuffer.toString('utf8', chunkOffset + 4, chunkOffset + 8);
 

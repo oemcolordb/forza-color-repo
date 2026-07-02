@@ -225,7 +225,7 @@ function CarModel({ color, config }: { color: CarColor; config: ModelConfig }) {
     clone.position.set(-center.x * scale, -center.y * scale + 0.02, -center.z * scale)
 
     return clone
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  //
   }, [scene, config.id]) // re-clone only when scene changes or model id changes
 
   // Mutate existing paint material when color changes — no re-clone needed
