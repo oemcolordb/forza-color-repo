@@ -134,19 +134,30 @@ export default function ColorDashboardClient() {
       const searchLower = sanitizedQuery.toLowerCase()
 
       result = allColors.filter(color => {
-        const matchesSearch =
-          !sanitizedQuery ||
-          color.colorName.toLowerCase().includes(searchLower) ||
-          color.make.toLowerCase().includes(searchLower) ||
-          (color.model && color.model.toLowerCase().includes(searchLower))
+        // Fast exact-match conditions first to short-circuit
+        if (selectedMake && color.make !== selectedMake) return false;
+        if (selectedColorType && color.colorType !== selectedColorType) return false;
 
-        const matchesMake = !selectedMake || color.make === selectedMake
-        const matchesType = !selectedColorType || color.colorType === selectedColorType
+        // Fast Set lookup
+        if (showFavoritesOnly) {
+          const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`;
+          if (!favoritesSet.has(colorId)) return false;
+        }
 
-        const colorId = `${color.make}-${color.colorName}-${color.year || 'unknown'}`
-        const matchesFavorites = !showFavoritesOnly || favoritesSet.has(colorId)
+        // Expensive string operations last
+        if (sanitizedQuery) {
+          const colorNameLower = color.colorName.toLowerCase();
+          const makeLower = color.make.toLowerCase();
+          const modelLower = color.model ? color.model.toLowerCase() : '';
 
-        return matchesSearch && matchesMake && matchesType && matchesFavorites
+          if (!colorNameLower.includes(searchLower) &&
+              !makeLower.includes(searchLower) &&
+              !modelLower.includes(searchLower)) {
+            return false;
+          }
+        }
+
+        return true;
       })
     }
 
@@ -350,7 +361,9 @@ export default function ColorDashboardClient() {
   // Resolve recently viewed colors from history IDs
   const recentColors = useMemo(() => {
     if (colorHistory.length === 0 || allColors.length === 0) return []
+    // Bolt Optimization: Slice to 8 items *before* running O(N) .find() against the 40k item allColors array
     return colorHistory
+      .slice(0, 8)
       .map(id => {
         const match = allColors.find(
           c => `${c.make}-${c.colorName}-${c.year || 'unknown'}` === id
@@ -358,7 +371,6 @@ export default function ColorDashboardClient() {
         return match || null
       })
       .filter(Boolean)
-      .slice(0, 8)
   }, [colorHistory, allColors])
 
   // Show color HSB/details (used by child components)
