@@ -28,6 +28,7 @@ jobs:
         with:
           node-version: '24.x'
           cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: pnpm install, build, and test
         run: |
